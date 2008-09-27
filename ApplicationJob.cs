@@ -268,8 +268,17 @@ namespace Ketarin
         public string GetTargetFile(WebResponse netResponse)
         {
             string targetLocation = TargetPath;
+
+            // Allow variables in target locations as well
+            foreach (UrlVariable variable in Variables.Values) {
+                targetLocation = variable.ReplaceInString(targetLocation);
+            }
+
             if (TargetIsFolder)
             {
+                // If directory does not yet exist, create it
+                Directory.CreateDirectory(targetLocation);
+
                 string fileName = Path.GetFileName(netResponse.ResponseUri.AbsolutePath);
                 fileName = fileName.Replace("%20", " ");
                 targetLocation = Path.Combine(targetLocation, fileName);
