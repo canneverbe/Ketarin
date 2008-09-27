@@ -253,6 +253,19 @@ namespace Ketarin
             }
         }
 
+        private void cmnuOpenFile_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                ApplicationJob job = olvJobs.SelectedObject as ApplicationJob;
+                System.Diagnostics.Process.Start(job.PreviousLocation);
+            }
+            catch (Exception)
+            {
+                // ignore if fails for whatever reason
+            }
+        }
+
         private void cmuUpdate_Click(object sender, EventArgs e)
         {
             if (m_Updater.IsBusy) return;
@@ -300,6 +313,7 @@ namespace Ketarin
             cmnuEdit.Enabled = (job != null);
             cmnuDelete.Enabled = (olvJobs.SelectedIndices.Count > 0 && !m_Updater.IsBusy);
             cmnuUpdate.Enabled = (!m_Updater.IsBusy);
+            cmnuOpenFile.Enabled = (job != null && !string.IsNullOrEmpty(job.PreviousLocation) && File.Exists(job.PreviousLocation));
         }
 
         private void olvJobs_SelectedIndexChanged(object sender, EventArgs e)
@@ -343,6 +357,7 @@ namespace Ketarin
         }
 
         #endregion
+
 
 
     }

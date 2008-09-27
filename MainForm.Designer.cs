@@ -32,6 +32,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.imlStatus = new System.Windows.Forms.ImageList(this.components);
             this.cmnuJobs = new System.Windows.Forms.ContextMenu();
+            this.cmnuUpdate = new System.Windows.Forms.MenuItem();
             this.menuItem4 = new System.Windows.Forms.MenuItem();
             this.cmnuEdit = new System.Windows.Forms.MenuItem();
             this.cmnuDelete = new System.Windows.Forms.MenuItem();
@@ -46,7 +47,7 @@
             this.bAbout = new System.Windows.Forms.Button();
             this.bRun = new System.Windows.Forms.Button();
             this.bAddNew = new System.Windows.Forms.Button();
-            this.cmnuUpdate = new System.Windows.Forms.MenuItem();
+            this.cmnuOpenFile = new System.Windows.Forms.MenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.olvJobs)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.m_VistaMenu)).BeginInit();
             this.SuspendLayout();
@@ -61,6 +62,7 @@
             // 
             this.cmnuJobs.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.cmnuUpdate,
+            this.cmnuOpenFile,
             this.menuItem4,
             this.cmnuEdit,
             this.cmnuDelete,
@@ -68,35 +70,42 @@
             this.cmnuShowGroups});
             this.cmnuJobs.Popup += new System.EventHandler(this.cmnuJobs_Popup);
             // 
+            // cmnuUpdate
+            // 
+            this.m_VistaMenu.SetImage(this.cmnuUpdate, global::Ketarin.Properties.Resources.Restart);
+            this.cmnuUpdate.Index = 0;
+            this.cmnuUpdate.Text = "&Update";
+            this.cmnuUpdate.Click += new System.EventHandler(this.cmuUpdate_Click);
+            // 
             // menuItem4
             // 
-            this.menuItem4.Index = 1;
+            this.menuItem4.Index = 2;
             this.menuItem4.Text = "-";
             // 
             // cmnuEdit
             // 
             this.cmnuEdit.Enabled = false;
-            this.cmnuEdit.Index = 2;
+            this.cmnuEdit.Index = 3;
             this.cmnuEdit.Text = "&Edit";
             this.cmnuEdit.Click += new System.EventHandler(this.cmnuEdit_Click);
             // 
             // cmnuDelete
             // 
             this.cmnuDelete.Enabled = false;
-            this.cmnuDelete.Index = 3;
+            this.cmnuDelete.Index = 4;
             this.cmnuDelete.Shortcut = System.Windows.Forms.Shortcut.Del;
             this.cmnuDelete.Text = "&Delete";
             this.cmnuDelete.Click += new System.EventHandler(this.cmnuDelete_Click);
             // 
             // sepView
             // 
-            this.sepView.Index = 4;
+            this.sepView.Index = 5;
             this.sepView.Text = "-";
             // 
             // cmnuShowGroups
             // 
             this.cmnuShowGroups.Checked = true;
-            this.cmnuShowGroups.Index = 5;
+            this.cmnuShowGroups.Index = 6;
             this.cmnuShowGroups.Text = "&Show groups";
             this.cmnuShowGroups.Click += new System.EventHandler(this.cmnuShowGroups_Click);
             // 
@@ -207,12 +216,12 @@
             this.bAddNew.UseVisualStyleBackColor = true;
             this.bAddNew.Click += new System.EventHandler(this.bAddNew_Click);
             // 
-            // cmnuUpdate
+            // cmnuOpenFile
             // 
-            this.m_VistaMenu.SetImage(this.cmnuUpdate, global::Ketarin.Properties.Resources.Restart);
-            this.cmnuUpdate.Index = 0;
-            this.cmnuUpdate.Text = "&Update";
-            this.cmnuUpdate.Click += new System.EventHandler(this.cmuUpdate_Click);
+            this.cmnuOpenFile.Enabled = false;
+            this.cmnuOpenFile.Index = 1;
+            this.cmnuOpenFile.Text = "&Open file";
+            this.cmnuOpenFile.Click += new System.EventHandler(this.cmnuOpenFile_Click);
             // 
             // MainForm
             // 
@@ -252,6 +261,7 @@
         private CDBurnerXP.Controls.OLVColumn colProgress;
         private CDBurnerXP.Controls.OLVColumn colTarget;
         private System.Windows.Forms.Button bAbout;
+        private System.Windows.Forms.MenuItem cmnuOpenFile;
     }
 }
 
