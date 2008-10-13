@@ -255,6 +255,8 @@ namespace Ketarin
 
         private void cmnuOpenFile_Click(object sender, EventArgs e)
         {
+            if (m_Updater.IsBusy) return;
+
             try
             {
                 ApplicationJob job = olvJobs.SelectedObject as ApplicationJob;
@@ -313,7 +315,26 @@ namespace Ketarin
             cmnuEdit.Enabled = (job != null);
             cmnuDelete.Enabled = (olvJobs.SelectedIndices.Count > 0 && !m_Updater.IsBusy);
             cmnuUpdate.Enabled = (!m_Updater.IsBusy);
-            cmnuOpenFile.Enabled = (job != null && !string.IsNullOrEmpty(job.PreviousLocation) && File.Exists(job.PreviousLocation));
+            cmnuOpenFile.Enabled = (job != null && !m_Updater.IsBusy && !string.IsNullOrEmpty(job.PreviousLocation) && File.Exists(job.PreviousLocation));
+            cmnuRename.Enabled = cmnuOpenFile.Enabled;
+        }
+
+        private void cmnuRename_Click(object sender, EventArgs e)
+        {
+            if (m_Updater.IsBusy) return;
+            
+            ApplicationJob job = olvJobs.SelectedObject as ApplicationJob;
+
+            using (RenameFileDialog dialog = new RenameFileDialog())
+            {
+                dialog.FileName = job.PreviousLocation;
+                if (dialog.ShowDialog(this) == DialogResult.OK)
+                {
+                    File.Move(job.PreviousLocation, dialog.FileName);
+                    job.PreviousLocation = dialog.FileName;
+                    job.Save();
+                }
+            }
         }
 
         private void olvJobs_SelectedIndexChanged(object sender, EventArgs e)
@@ -357,6 +378,7 @@ namespace Ketarin
         }
 
         #endregion
+
 
     }
 }

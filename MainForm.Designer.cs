@@ -33,21 +33,22 @@
             this.imlStatus = new System.Windows.Forms.ImageList(this.components);
             this.cmnuJobs = new System.Windows.Forms.ContextMenu();
             this.cmnuUpdate = new System.Windows.Forms.MenuItem();
+            this.cmnuOpenFile = new System.Windows.Forms.MenuItem();
+            this.cmnuRename = new System.Windows.Forms.MenuItem();
             this.menuItem4 = new System.Windows.Forms.MenuItem();
             this.cmnuEdit = new System.Windows.Forms.MenuItem();
             this.cmnuDelete = new System.Windows.Forms.MenuItem();
             this.sepView = new System.Windows.Forms.MenuItem();
             this.cmnuShowGroups = new System.Windows.Forms.MenuItem();
+            this.bAbout = new System.Windows.Forms.Button();
+            this.bRun = new System.Windows.Forms.Button();
+            this.bAddNew = new System.Windows.Forms.Button();
             this.olvJobs = new CDBurnerXP.Controls.ObjectListView();
             this.colName = new CDBurnerXP.Controls.OLVColumn();
             this.colLastUpdate = new CDBurnerXP.Controls.OLVColumn();
             this.colProgress = new CDBurnerXP.Controls.OLVColumn();
             this.colTarget = new CDBurnerXP.Controls.OLVColumn();
             this.m_VistaMenu = new CDBurnerXP.Controls.VistaMenu(this.components);
-            this.bAbout = new System.Windows.Forms.Button();
-            this.bRun = new System.Windows.Forms.Button();
-            this.bAddNew = new System.Windows.Forms.Button();
-            this.cmnuOpenFile = new System.Windows.Forms.MenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.olvJobs)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.m_VistaMenu)).BeginInit();
             this.SuspendLayout();
@@ -63,6 +64,7 @@
             this.cmnuJobs.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.cmnuUpdate,
             this.cmnuOpenFile,
+            this.cmnuRename,
             this.menuItem4,
             this.cmnuEdit,
             this.cmnuDelete,
@@ -77,37 +79,89 @@
             this.cmnuUpdate.Text = "&Update";
             this.cmnuUpdate.Click += new System.EventHandler(this.cmuUpdate_Click);
             // 
+            // cmnuOpenFile
+            // 
+            this.cmnuOpenFile.Enabled = false;
+            this.cmnuOpenFile.Index = 1;
+            this.cmnuOpenFile.Text = "&Open file";
+            this.cmnuOpenFile.Click += new System.EventHandler(this.cmnuOpenFile_Click);
+            // 
+            // cmnuRename
+            // 
+            this.cmnuRename.Enabled = false;
+            this.cmnuRename.Index = 2;
+            this.cmnuRename.Shortcut = System.Windows.Forms.Shortcut.F2;
+            this.cmnuRename.Text = "&Rename file";
+            this.cmnuRename.Click += new System.EventHandler(this.cmnuRename_Click);
+            // 
             // menuItem4
             // 
-            this.menuItem4.Index = 2;
+            this.menuItem4.Index = 3;
             this.menuItem4.Text = "-";
             // 
             // cmnuEdit
             // 
             this.cmnuEdit.Enabled = false;
-            this.cmnuEdit.Index = 3;
+            this.cmnuEdit.Index = 4;
             this.cmnuEdit.Text = "&Edit";
             this.cmnuEdit.Click += new System.EventHandler(this.cmnuEdit_Click);
             // 
             // cmnuDelete
             // 
             this.cmnuDelete.Enabled = false;
-            this.cmnuDelete.Index = 4;
+            this.cmnuDelete.Index = 5;
             this.cmnuDelete.Shortcut = System.Windows.Forms.Shortcut.Del;
             this.cmnuDelete.Text = "&Delete";
             this.cmnuDelete.Click += new System.EventHandler(this.cmnuDelete_Click);
             // 
             // sepView
             // 
-            this.sepView.Index = 5;
+            this.sepView.Index = 6;
             this.sepView.Text = "-";
             // 
             // cmnuShowGroups
             // 
             this.cmnuShowGroups.Checked = true;
-            this.cmnuShowGroups.Index = 6;
+            this.cmnuShowGroups.Index = 7;
             this.cmnuShowGroups.Text = "&Show groups";
             this.cmnuShowGroups.Click += new System.EventHandler(this.cmnuShowGroups_Click);
+            // 
+            // bAbout
+            // 
+            this.bAbout.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.bAbout.Image = global::Ketarin.Properties.Resources.Symbol_Information;
+            this.bAbout.Location = new System.Drawing.Point(640, 302);
+            this.bAbout.Name = "bAbout";
+            this.bAbout.Size = new System.Drawing.Size(30, 24);
+            this.bAbout.TabIndex = 3;
+            this.bAbout.UseVisualStyleBackColor = true;
+            this.bAbout.Click += new System.EventHandler(this.bAbout_Click);
+            // 
+            // bRun
+            // 
+            this.bRun.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.bRun.Image = global::Ketarin.Properties.Resources.Restart;
+            this.bRun.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.bRun.Location = new System.Drawing.Point(168, 302);
+            this.bRun.Name = "bRun";
+            this.bRun.Size = new System.Drawing.Size(107, 24);
+            this.bRun.TabIndex = 2;
+            this.bRun.Text = "&Update now";
+            this.bRun.UseVisualStyleBackColor = true;
+            this.bRun.Click += new System.EventHandler(this.bRun_Click);
+            // 
+            // bAddNew
+            // 
+            this.bAddNew.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.bAddNew.Image = global::Ketarin.Properties.Resources.AddSmall;
+            this.bAddNew.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.bAddNew.Location = new System.Drawing.Point(12, 302);
+            this.bAddNew.Name = "bAddNew";
+            this.bAddNew.Size = new System.Drawing.Size(150, 24);
+            this.bAddNew.TabIndex = 1;
+            this.bAddNew.Text = "&Add new application";
+            this.bAddNew.UseVisualStyleBackColor = true;
+            this.bAddNew.Click += new System.EventHandler(this.bAddNew_Click);
             // 
             // olvJobs
             // 
@@ -140,7 +194,7 @@
             this.olvJobs.Location = new System.Drawing.Point(12, 12);
             this.olvJobs.Name = "olvJobs";
             this.olvJobs.OwnerDraw = true;
-            this.olvJobs.Size = new System.Drawing.Size(658, 313);
+            this.olvJobs.Size = new System.Drawing.Size(658, 284);
             this.olvJobs.SmallImageList = this.imlStatus;
             this.olvJobs.TabIndex = 0;
             this.olvJobs.UseCompatibleStateImageBehavior = false;
@@ -179,55 +233,11 @@
             // 
             this.m_VistaMenu.ContainerControl = this;
             // 
-            // bAbout
-            // 
-            this.bAbout.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.bAbout.Image = global::Ketarin.Properties.Resources.Symbol_Information;
-            this.bAbout.Location = new System.Drawing.Point(640, 331);
-            this.bAbout.Name = "bAbout";
-            this.bAbout.Size = new System.Drawing.Size(30, 24);
-            this.bAbout.TabIndex = 3;
-            this.bAbout.UseVisualStyleBackColor = true;
-            this.bAbout.Click += new System.EventHandler(this.bAbout_Click);
-            // 
-            // bRun
-            // 
-            this.bRun.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bRun.Image = global::Ketarin.Properties.Resources.Restart;
-            this.bRun.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.bRun.Location = new System.Drawing.Point(168, 331);
-            this.bRun.Name = "bRun";
-            this.bRun.Size = new System.Drawing.Size(107, 24);
-            this.bRun.TabIndex = 2;
-            this.bRun.Text = "&Update now";
-            this.bRun.UseVisualStyleBackColor = true;
-            this.bRun.Click += new System.EventHandler(this.bRun_Click);
-            // 
-            // bAddNew
-            // 
-            this.bAddNew.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bAddNew.Image = global::Ketarin.Properties.Resources.AddSmall;
-            this.bAddNew.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.bAddNew.Location = new System.Drawing.Point(12, 331);
-            this.bAddNew.Name = "bAddNew";
-            this.bAddNew.Size = new System.Drawing.Size(150, 24);
-            this.bAddNew.TabIndex = 1;
-            this.bAddNew.Text = "&Add new application";
-            this.bAddNew.UseVisualStyleBackColor = true;
-            this.bAddNew.Click += new System.EventHandler(this.bAddNew_Click);
-            // 
-            // cmnuOpenFile
-            // 
-            this.cmnuOpenFile.Enabled = false;
-            this.cmnuOpenFile.Index = 1;
-            this.cmnuOpenFile.Text = "&Open file";
-            this.cmnuOpenFile.Click += new System.EventHandler(this.cmnuOpenFile_Click);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(682, 366);
+            this.ClientSize = new System.Drawing.Size(682, 337);
             this.Controls.Add(this.bAbout);
             this.Controls.Add(this.bRun);
             this.Controls.Add(this.bAddNew);
@@ -262,6 +272,7 @@
         private CDBurnerXP.Controls.OLVColumn colTarget;
         private System.Windows.Forms.Button bAbout;
         private System.Windows.Forms.MenuItem cmnuOpenFile;
+        private System.Windows.Forms.MenuItem cmnuRename;
     }
 }
 
