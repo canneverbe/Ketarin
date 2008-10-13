@@ -97,6 +97,12 @@
     <Compile Include="Forms\NewVariableDialog.Designer.cs">
       <DependentUpon>NewVariableDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\RenameFileDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\RenameFileDialog.Designer.cs">
+      <DependentUpon>RenameFileDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="M:\CsLib\CDBurnerXP\Controls\ListView.cs">
       <Link>CDBurnerXP\ListView.cs</Link>
       <SubType>Component</SubType>
@@ -162,6 +168,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\NewVariableDialog.resx">
       <DependentUpon>NewVariableDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\RenameFileDialog.resx">
+      <DependentUpon>RenameFileDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
