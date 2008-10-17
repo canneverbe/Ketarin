@@ -4,6 +4,7 @@ using System.Text;
 using System.IO;
 using System.Data;
 using System.Data.SQLite;
+using System.Windows.Forms;
 
 namespace Ketarin
 {
@@ -18,6 +19,19 @@ namespace Ketarin
                 if (m_DbConn == null)
                 {
                     string path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Ketarin\\jobs.db";
+                    // Is a special path set in the registry?
+                    string regPath = CDBurnerXP.Settings.GetValue("Ketarin", "DatabasePath", "") as string;
+                    if (!string.IsNullOrEmpty(regPath) && File.Exists(regPath))
+                    {
+                        path = regPath;
+                    }
+                    // Or is there a database file in the startup directory?
+                    string localPath = Path.Combine(Application.StartupPath, "jobs.db");
+                    if (File.Exists(localPath))
+                    {
+                        path = localPath;
+                    }
+
                     Directory.CreateDirectory(Path.GetDirectoryName(path));
                     string connString = string.Format("Data Source={0};Version=3;", path);
                     if (!File.Exists(path))
