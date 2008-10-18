@@ -78,6 +78,12 @@ namespace Ketarin
                 page = client.DownloadString(m_Url);
             }
 
+            // Use whole page if either start or end is missing
+            if (string.IsNullOrEmpty(m_StartText) || string.IsNullOrEmpty(m_EndText))
+            {
+                return url.Replace(find, page);
+            }
+
             // Normalise line-breaks
             page = page.Replace("\r\n", "\n");
             page = page.Replace("\r", "\n");
