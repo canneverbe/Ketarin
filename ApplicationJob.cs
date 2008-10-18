@@ -329,9 +329,12 @@ namespace Ketarin
             }
 
             // Remote date must be greater than our local date
-            
+            // However, if the remote date is very close to DateTime.Now, it is incorrect (scripts)
+            TimeSpan toNowDiff = DateTime.Now - GetLastModified(netResponse);
+            bool disregardDate = Math.Abs(toNowDiff.TotalSeconds) <= 0.1;
+
             TimeSpan diff = GetLastModified(netResponse) - current.LastWriteTime;
-            return (current.Length != netResponse.ContentLength || diff > TimeSpan.Zero);
+            return (current.Length != netResponse.ContentLength || (!disregardDate && diff > TimeSpan.Zero));
         }
 
         /// <summary>
