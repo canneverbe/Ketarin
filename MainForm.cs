@@ -173,6 +173,7 @@ namespace Ketarin
 
             cmnuShowGroups.Checked = Convert.ToBoolean(Settings.GetValue("Ketarin", "ShowGroups", true));
             olvJobs.ShowGroups = cmnuShowGroups.Checked;
+            Bounds = (Rectangle) Settings.GetValue("Ketarin", "MainWindow", Bounds);
 
             UpdateList();
         }
@@ -187,6 +188,7 @@ namespace Ketarin
             }
 
             Settings.SetValue("Ketarin", "ShowGroups", olvJobs.ShowGroups);
+            Settings.SetValue("Ketarin", "MainWindow", Bounds);
         }
 
         private void bAddNew_Click(object sender, EventArgs e)
