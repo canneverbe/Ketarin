@@ -280,6 +280,19 @@ namespace Ketarin
                 Directory.CreateDirectory(targetLocation);
 
                 string fileName = Path.GetFileName(netResponse.ResponseUri.AbsolutePath);
+
+                // Look for alternative file name
+                string disposition = netResponse.Headers.Get("content-disposition") as string;
+                if (!string.IsNullOrEmpty(disposition))
+                {
+                    string token = "filename=";
+                    int pos = disposition.IndexOf(token);
+                    if (pos >= 0)
+                    {
+                        fileName = disposition.Substring(pos + token.Length);
+                    }
+                }
+
                 fileName = fileName.Replace("%20", " ");
                 targetLocation = Path.Combine(targetLocation, fileName);
             }
