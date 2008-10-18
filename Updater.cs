@@ -253,11 +253,22 @@ namespace Ketarin
                     throw new NonBinaryFileException(response.ContentType);
                 }
 
+                string targetFileName = job.GetTargetFile(response);
+
                 // Only download, if the file size or date has changed
                 if (!job.RequiresDownload(response))
                 {
                     m_Status[job] = Status.Success;
                     OnStatusChanged(job);
+
+                    // If file already exists (created by user),
+                    // the download is not necessary. We still need to
+                    // set the file name.
+                    if (string.IsNullOrEmpty(job.PreviousLocation))
+                    {
+                        job.PreviousLocation = targetFileName;
+                        job.Save();
+                    }
                     return;
                 }
 
@@ -304,7 +315,6 @@ namespace Ketarin
                 }
 
                 File.SetLastWriteTime(tmpLocation, ApplicationJob.GetLastModified(response));
-                string targetFileName = job.GetTargetFile(response);
                 File.Copy(tmpLocation, targetFileName, true);
                 File.Delete(tmpLocation);
 
