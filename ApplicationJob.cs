@@ -6,6 +6,7 @@ using System.Data.SQLite;
 using System.IO;
 using System.Net;
 using System.Security.Cryptography;
+using CDBurnerXP.IO;
 
 namespace Ketarin
 {
@@ -290,6 +291,11 @@ namespace Ketarin
                     if (pos >= 0)
                     {
                         fileName = disposition.Substring(pos + token.Length);
+                        fileName = fileName.Replace("\"", "");
+                        // Make sure that no relative paths are being injected (security issue)
+                        fileName = Path.GetFileName(fileName);
+
+                        fileName = PathEx.ReplaceInvalidFileNameChars(fileName);
                     }
                 }
 
