@@ -123,6 +123,9 @@
       <Link>CDBurnerXP\WebLink.cs</Link>
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="M:\CsLib\CDBurnerXP\GenericEventArgs.cs">
+      <Link>CDBurnerXP\GenericEventArgs.cs</Link>
+    </Compile>
     <Compile Include="M:\CsLib\CDBurnerXP\IO\FormatFileSize.cs">
       <Link>CDBurnerXP\FormatFileSize.cs</Link>
     </Compile>
