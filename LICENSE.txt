@@ -5,7 +5,6 @@ source code of Ketarin is licensed under the GNU GPL version 2.
 
 
 
-
 		    GNU GENERAL PUBLIC LICENSE
 		       Version 2, June 1991
 
