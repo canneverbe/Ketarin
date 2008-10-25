@@ -49,6 +49,7 @@
             this.colProgress = new CDBurnerXP.Controls.OLVColumn();
             this.colTarget = new CDBurnerXP.Controls.OLVColumn();
             this.m_VistaMenu = new CDBurnerXP.Controls.VistaMenu(this.components);
+            this.colCategory = new CDBurnerXP.Controls.OLVColumn();
             ((System.ComponentModel.ISupportInitialize)(this.olvJobs)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.m_VistaMenu)).BeginInit();
             this.SuspendLayout();
@@ -169,10 +170,7 @@
             this.olvJobs.AllColumns.Add(this.colLastUpdate);
             this.olvJobs.AllColumns.Add(this.colProgress);
             this.olvJobs.AllColumns.Add(this.colTarget);
-            this.olvJobs.AllColumns.Add(this.colName);
-            this.olvJobs.AllColumns.Add(this.colLastUpdate);
-            this.olvJobs.AllColumns.Add(this.colProgress);
-            this.olvJobs.AllColumns.Add(this.colTarget);
+            this.olvJobs.AllColumns.Add(this.colCategory);
             this.olvJobs.AlternateRowBackColor = System.Drawing.Color.Empty;
             this.olvJobs.AlwaysGroupByColumn = null;
             this.olvJobs.AlwaysGroupBySortOrder = System.Windows.Forms.SortOrder.None;
@@ -183,7 +181,8 @@
             this.colName,
             this.colLastUpdate,
             this.colProgress,
-            this.colTarget});
+            this.colTarget,
+            this.colCategory});
             this.olvJobs.EmptyListMsg = "No applications have been added yet.";
             this.olvJobs.FullRowSelect = true;
             this.olvJobs.HideSelection = false;
@@ -233,6 +232,12 @@
             // 
             this.m_VistaMenu.ContainerControl = this;
             // 
+            // colCategory
+            // 
+            this.colCategory.AspectName = "Category";
+            this.colCategory.Text = "Category";
+            this.colCategory.Width = 80;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -273,6 +278,7 @@
         private System.Windows.Forms.Button bAbout;
         private System.Windows.Forms.MenuItem cmnuOpenFile;
         private System.Windows.Forms.MenuItem cmnuRename;
+        private CDBurnerXP.Controls.OLVColumn colCategory;
     }
 }
 

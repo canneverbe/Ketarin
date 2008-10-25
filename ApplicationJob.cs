@@ -24,6 +24,7 @@ namespace Ketarin
         private SourceType m_SourceType = SourceType.FixedUrl;
         private Dictionary<string, UrlVariable> m_Variables = null;
         private string m_ExecuteCommand = string.Empty;
+        private string m_Category = string.Empty;
 
         public enum SourceType
         {
@@ -62,10 +63,20 @@ namespace Ketarin
             }
         }
 
+        /// <summary>
+        /// A command to be executed after downloading.
+        /// {file} is a placeholder for PreviousLocation.
+        /// </summary>
         public string ExecuteCommand
         {
             get { return m_ExecuteCommand; }
             set { m_ExecuteCommand = value; }
+        }
+
+        public string Category
+        {
+            get { return m_Category; }
+            set { m_Category = value; }
         }
 
         internal SourceType DownloadSourceType
@@ -181,7 +192,8 @@ namespace Ketarin
                                                    DeletePreviousFile = @DeletePreviousFile,
                                                    PreviousLocation = @PreviousLocation,
                                                    SourceType = @SourceType,
-                                                   ExecuteCommand = @ExecuteCommand
+                                                   ExecuteCommand = @ExecuteCommand,
+                                                   Category = @Category
                                              WHERE JobId = @JobId";
 
                     command.Parameters.Add(new SQLiteParameter("@ApplicationName", Name));
@@ -194,6 +206,7 @@ namespace Ketarin
                     command.Parameters.Add(new SQLiteParameter("@PreviousLocation", m_PreviousLocation));
                     command.Parameters.Add(new SQLiteParameter("@SourceType", m_SourceType));
                     command.Parameters.Add(new SQLiteParameter("@ExecuteCommand", m_ExecuteCommand));
+                    command.Parameters.Add(new SQLiteParameter("@Category", m_Category));
                     command.Parameters.Add(new SQLiteParameter("@JobId", m_Id));
                     
                     command.ExecuteNonQuery();
@@ -205,8 +218,8 @@ namespace Ketarin
                 using (IDbCommand command = DbManager.Connection.CreateCommand())
                 {
                     command.Transaction = transaction;
-                    command.CommandText = @"INSERT INTO jobs (ApplicationName, FixedDownloadUrl, DateAdded, TargetPath, LastUpdated, IsEnabled, FileHippoId, DeletePreviousFile, SourceType, ExecuteCommand)
-                                                 VALUES (@ApplicationName, @FixedDownloadUrl, @DateAdded, @TargetPath, @LastUpdated, @IsEnabled, @FileHippoId, @DeletePreviousFile, @SourceType, @ExecuteCommand)";
+                    command.CommandText = @"INSERT INTO jobs (ApplicationName, FixedDownloadUrl, DateAdded, TargetPath, LastUpdated, IsEnabled, FileHippoId, DeletePreviousFile, SourceType, ExecuteCommand, Category)
+                                                 VALUES (@ApplicationName, @FixedDownloadUrl, @DateAdded, @TargetPath, @LastUpdated, @IsEnabled, @FileHippoId, @DeletePreviousFile, @SourceType, @ExecuteCommand, @Category)";
 
                     command.Parameters.Add(new SQLiteParameter("@ApplicationName", Name));
                     command.Parameters.Add(new SQLiteParameter("@FixedDownloadUrl", m_FixedDownloadUrl));
@@ -218,6 +231,7 @@ namespace Ketarin
                     command.Parameters.Add(new SQLiteParameter("@FileHippoId", m_FileHippoId));
                     command.Parameters.Add(new SQLiteParameter("@SourceType", m_SourceType));
                     command.Parameters.Add(new SQLiteParameter("@ExecuteCommand", m_ExecuteCommand));
+                    command.Parameters.Add(new SQLiteParameter("@Category", m_Category));
                     command.ExecuteNonQuery();
                 }
 
@@ -274,6 +288,7 @@ namespace Ketarin
             m_PreviousLocation = reader["PreviousLocation"] as string;
             m_SourceType = (SourceType)Convert.ToByte(reader["SourceType"]);
             m_ExecuteCommand = reader["ExecuteCommand"] as string;
+            m_Category = reader["Category"] as string;
         }
 
         public string GetTargetFile(WebResponse netResponse)

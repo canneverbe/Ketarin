@@ -103,6 +103,14 @@ namespace Ketarin
                     command.ExecuteNonQuery();
                 }
             }
+            if (!columns.Contains("Category"))
+            {
+                using (IDbCommand command = Connection.CreateCommand())
+                {
+                    command.CommandText = "ALTER TABLE jobs ADD Category TEXT";
+                    command.ExecuteNonQuery();
+                }
+            }
         }
 
 
@@ -120,6 +128,28 @@ namespace Ketarin
                     yield return job;
                 }
             }
+        }
+
+        public static string[] GetCategories()
+        {
+            IDbCommand command = Connection.CreateCommand();
+            command.CommandText = "SELECT DISTINCT Category FROM jobs ORDER BY Category";
+
+            List<string> categories = new List<string>();
+
+            using (IDataReader reader = command.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    string cat = reader["Category"] as string;
+                    if (!string.IsNullOrEmpty(cat))
+                    {
+                        categories.Add(cat);
+                    }
+                }
+            }
+
+            return categories.ToArray();
         }
     }
 }

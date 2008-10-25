@@ -45,11 +45,13 @@
             this.rbFileName = new System.Windows.Forms.RadioButton();
             this.chkEnabled = new System.Windows.Forms.CheckBox();
             this.chkDeletePrevious = new System.Windows.Forms.CheckBox();
+            this.txtCommand = new System.Windows.Forms.TextBox();
+            this.lblExecuteCommand = new System.Windows.Forms.Label();
+            this.lblCategory = new System.Windows.Forms.Label();
+            this.cboCategory = new System.Windows.Forms.ComboBox();
             this.sepOptions = new CDBurnerXP.Controls.Separator();
             this.sepTarget = new CDBurnerXP.Controls.Separator();
             this.sepDownload = new CDBurnerXP.Controls.Separator();
-            this.txtCommand = new System.Windows.Forms.TextBox();
-            this.lblExecuteCommand = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.pnlTarget.SuspendLayout();
             this.SuspendLayout();
@@ -58,7 +60,7 @@
             // 
             this.bCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.bCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.bCancel.Location = new System.Drawing.Point(294, 289);
+            this.bCancel.Location = new System.Drawing.Point(294, 317);
             this.bCancel.Name = "bCancel";
             this.bCancel.Size = new System.Drawing.Size(75, 23);
             this.bCancel.TabIndex = 100;
@@ -69,7 +71,7 @@
             // 
             this.bOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.bOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.bOK.Location = new System.Drawing.Point(213, 289);
+            this.bOK.Location = new System.Drawing.Point(213, 317);
             this.bOK.Name = "bOK";
             this.bOK.Size = new System.Drawing.Size(75, 23);
             this.bOK.TabIndex = 99;
@@ -104,7 +106,7 @@
             this.panel1.Controls.Add(this.rbFileHippo);
             this.panel1.Controls.Add(this.txtFixedUrl);
             this.panel1.Controls.Add(this.rbFixedUrl);
-            this.panel1.Location = new System.Drawing.Point(12, 64);
+            this.panel1.Location = new System.Drawing.Point(12, 90);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(365, 54);
             this.panel1.TabIndex = 3;
@@ -115,7 +117,7 @@
             this.bVariables.Location = new System.Drawing.Point(282, 0);
             this.bVariables.Name = "bVariables";
             this.bVariables.Size = new System.Drawing.Size(75, 23);
-            this.bVariables.TabIndex = 5;
+            this.bVariables.TabIndex = 13;
             this.bVariables.Text = "&Variables";
             this.bVariables.UseVisualStyleBackColor = true;
             this.bVariables.Click += new System.EventHandler(this.bVariables_Click);
@@ -127,7 +129,7 @@
             this.txtFileHippoId.Location = new System.Drawing.Point(95, 28);
             this.txtFileHippoId.Name = "txtFileHippoId";
             this.txtFileHippoId.Size = new System.Drawing.Size(262, 20);
-            this.txtFileHippoId.TabIndex = 7;
+            this.txtFileHippoId.TabIndex = 15;
             this.txtFileHippoId.TextChanged += new System.EventHandler(this.txtFileHippoId_TextChanged);
             // 
             // rbFileHippo
@@ -136,7 +138,7 @@
             this.rbFileHippo.Location = new System.Drawing.Point(3, 29);
             this.rbFileHippo.Name = "rbFileHippo";
             this.rbFileHippo.Size = new System.Drawing.Size(86, 17);
-            this.rbFileHippo.TabIndex = 6;
+            this.rbFileHippo.TabIndex = 14;
             this.rbFileHippo.Text = "File&Hippo ID:";
             this.rbFileHippo.UseVisualStyleBackColor = true;
             // 
@@ -147,7 +149,7 @@
             this.txtFixedUrl.Location = new System.Drawing.Point(95, 2);
             this.txtFixedUrl.Name = "txtFixedUrl";
             this.txtFixedUrl.Size = new System.Drawing.Size(181, 20);
-            this.txtFixedUrl.TabIndex = 4;
+            this.txtFixedUrl.TabIndex = 12;
             this.txtFixedUrl.TextChanged += new System.EventHandler(this.txtFixedUrl_TextChanged);
             // 
             // rbFixedUrl
@@ -157,7 +159,7 @@
             this.rbFixedUrl.Location = new System.Drawing.Point(3, 3);
             this.rbFixedUrl.Name = "rbFixedUrl";
             this.rbFixedUrl.Size = new System.Drawing.Size(50, 17);
-            this.rbFixedUrl.TabIndex = 3;
+            this.rbFixedUrl.TabIndex = 11;
             this.rbFixedUrl.TabStop = true;
             this.rbFixedUrl.Text = "&URL:";
             this.rbFixedUrl.UseVisualStyleBackColor = true;
@@ -170,7 +172,7 @@
             this.pnlTarget.Controls.Add(this.txtTarget);
             this.pnlTarget.Controls.Add(this.rbFolder);
             this.pnlTarget.Controls.Add(this.rbFileName);
-            this.pnlTarget.Location = new System.Drawing.Point(8, 141);
+            this.pnlTarget.Location = new System.Drawing.Point(8, 167);
             this.pnlTarget.Name = "pnlTarget";
             this.pnlTarget.Size = new System.Drawing.Size(369, 53);
             this.pnlTarget.TabIndex = 9;
@@ -181,7 +183,7 @@
             this.bBrowseFile.Location = new System.Drawing.Point(329, 24);
             this.bBrowseFile.Name = "bBrowseFile";
             this.bBrowseFile.Size = new System.Drawing.Size(32, 23);
-            this.bBrowseFile.TabIndex = 12;
+            this.bBrowseFile.TabIndex = 24;
             this.bBrowseFile.Text = "...";
             this.bBrowseFile.UseVisualStyleBackColor = true;
             this.bBrowseFile.Click += new System.EventHandler(this.bBrowseFile_Click);
@@ -192,10 +194,10 @@
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.txtTarget.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.txtTarget.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.FileSystem;
-            this.txtTarget.Location = new System.Drawing.Point(3, 26);
+            this.txtTarget.Location = new System.Drawing.Point(7, 26);
             this.txtTarget.Name = "txtTarget";
-            this.txtTarget.Size = new System.Drawing.Size(320, 20);
-            this.txtTarget.TabIndex = 11;
+            this.txtTarget.Size = new System.Drawing.Size(316, 20);
+            this.txtTarget.TabIndex = 23;
             // 
             // rbFolder
             // 
@@ -203,7 +205,7 @@
             this.rbFolder.Location = new System.Drawing.Point(91, 3);
             this.rbFolder.Name = "rbFolder";
             this.rbFolder.Size = new System.Drawing.Size(90, 17);
-            this.rbFolder.TabIndex = 10;
+            this.rbFolder.TabIndex = 22;
             this.rbFolder.Text = "Save in f&older";
             this.rbFolder.UseVisualStyleBackColor = true;
             this.rbFolder.CheckedChanged += new System.EventHandler(this.radioButton2_CheckedChanged);
@@ -215,7 +217,7 @@
             this.rbFileName.Location = new System.Drawing.Point(7, 3);
             this.rbFileName.Name = "rbFileName";
             this.rbFileName.Size = new System.Drawing.Size(78, 17);
-            this.rbFileName.TabIndex = 9;
+            this.rbFileName.TabIndex = 21;
             this.rbFileName.TabStop = true;
             this.rbFileName.Text = "&Save to file";
             this.rbFileName.UseVisualStyleBackColor = true;
@@ -226,32 +228,69 @@
             this.chkEnabled.AutoSize = true;
             this.chkEnabled.Checked = true;
             this.chkEnabled.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkEnabled.Location = new System.Drawing.Point(15, 215);
+            this.chkEnabled.Location = new System.Drawing.Point(15, 241);
             this.chkEnabled.Name = "chkEnabled";
             this.chkEnabled.Size = new System.Drawing.Size(65, 17);
-            this.chkEnabled.TabIndex = 14;
+            this.chkEnabled.TabIndex = 31;
             this.chkEnabled.Text = "&Enabled";
             this.chkEnabled.UseVisualStyleBackColor = true;
             // 
             // chkDeletePrevious
             // 
             this.chkDeletePrevious.AutoSize = true;
-            this.chkDeletePrevious.Location = new System.Drawing.Point(86, 215);
+            this.chkDeletePrevious.Location = new System.Drawing.Point(86, 241);
             this.chkDeletePrevious.Name = "chkDeletePrevious";
             this.chkDeletePrevious.Size = new System.Drawing.Size(218, 17);
-            this.chkDeletePrevious.TabIndex = 15;
+            this.chkDeletePrevious.TabIndex = 32;
             this.chkDeletePrevious.Text = "Always &delete previously downloaded file";
             this.chkDeletePrevious.UseVisualStyleBackColor = true;
+            // 
+            // txtCommand
+            // 
+            this.txtCommand.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtCommand.Location = new System.Drawing.Point(15, 283);
+            this.txtCommand.Name = "txtCommand";
+            this.txtCommand.Size = new System.Drawing.Size(354, 20);
+            this.txtCommand.TabIndex = 34;
+            // 
+            // lblExecuteCommand
+            // 
+            this.lblExecuteCommand.AutoSize = true;
+            this.lblExecuteCommand.Location = new System.Drawing.Point(12, 267);
+            this.lblExecuteCommand.Name = "lblExecuteCommand";
+            this.lblExecuteCommand.Size = new System.Drawing.Size(247, 13);
+            this.lblExecuteCommand.TabIndex = 33;
+            this.lblExecuteCommand.Text = "E&xecute the following command after downloading:";
+            // 
+            // lblCategory
+            // 
+            this.lblCategory.AutoSize = true;
+            this.lblCategory.Location = new System.Drawing.Point(13, 41);
+            this.lblCategory.Name = "lblCategory";
+            this.lblCategory.Size = new System.Drawing.Size(52, 13);
+            this.lblCategory.TabIndex = 2;
+            this.lblCategory.Text = "&Category:";
+            // 
+            // cboCategory
+            // 
+            this.cboCategory.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
+            this.cboCategory.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+            this.cboCategory.FormattingEnabled = true;
+            this.cboCategory.Location = new System.Drawing.Point(109, 38);
+            this.cboCategory.Name = "cboCategory";
+            this.cboCategory.Size = new System.Drawing.Size(260, 21);
+            this.cboCategory.TabIndex = 3;
             // 
             // sepOptions
             // 
             this.sepOptions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.sepOptions.ForeColor = System.Drawing.SystemColors.ActiveCaption;
-            this.sepOptions.Location = new System.Drawing.Point(5, 189);
+            this.sepOptions.Location = new System.Drawing.Point(5, 215);
             this.sepOptions.Name = "sepOptions";
             this.sepOptions.Size = new System.Drawing.Size(371, 23);
-            this.sepOptions.TabIndex = 13;
+            this.sepOptions.TabIndex = 30;
             this.sepOptions.Text = "Options";
             this.sepOptions.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -260,10 +299,10 @@
             this.sepTarget.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.sepTarget.ForeColor = System.Drawing.SystemColors.ActiveCaption;
-            this.sepTarget.Location = new System.Drawing.Point(5, 117);
+            this.sepTarget.Location = new System.Drawing.Point(5, 143);
             this.sepTarget.Name = "sepTarget";
             this.sepTarget.Size = new System.Drawing.Size(371, 23);
-            this.sepTarget.TabIndex = 8;
+            this.sepTarget.TabIndex = 20;
             this.sepTarget.Text = "Download location";
             this.sepTarget.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -272,36 +311,20 @@
             this.sepDownload.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.sepDownload.ForeColor = System.Drawing.SystemColors.ActiveCaption;
-            this.sepDownload.Location = new System.Drawing.Point(5, 38);
+            this.sepDownload.Location = new System.Drawing.Point(5, 64);
             this.sepDownload.Name = "sepDownload";
             this.sepDownload.Size = new System.Drawing.Size(371, 23);
-            this.sepDownload.TabIndex = 2;
+            this.sepDownload.TabIndex = 10;
             this.sepDownload.Text = "Download source";
             this.sepDownload.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // txtCommand
-            // 
-            this.txtCommand.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtCommand.Location = new System.Drawing.Point(15, 257);
-            this.txtCommand.Name = "txtCommand";
-            this.txtCommand.Size = new System.Drawing.Size(354, 20);
-            this.txtCommand.TabIndex = 17;
-            // 
-            // lblExecuteCommand
-            // 
-            this.lblExecuteCommand.AutoSize = true;
-            this.lblExecuteCommand.Location = new System.Drawing.Point(12, 241);
-            this.lblExecuteCommand.Name = "lblExecuteCommand";
-            this.lblExecuteCommand.Size = new System.Drawing.Size(247, 13);
-            this.lblExecuteCommand.TabIndex = 16;
-            this.lblExecuteCommand.Text = "E&xecute the following command after downloading:";
             // 
             // ApplicationJobDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(381, 324);
+            this.ClientSize = new System.Drawing.Size(381, 352);
+            this.Controls.Add(this.cboCategory);
+            this.Controls.Add(this.lblCategory);
             this.Controls.Add(this.lblExecuteCommand);
             this.Controls.Add(this.txtCommand);
             this.Controls.Add(this.chkDeletePrevious);
@@ -355,5 +378,7 @@
         private System.Windows.Forms.Button bVariables;
         private System.Windows.Forms.TextBox txtCommand;
         private System.Windows.Forms.Label lblExecuteCommand;
+        private System.Windows.Forms.Label lblCategory;
+        private System.Windows.Forms.ComboBox cboCategory;
     }
 }
