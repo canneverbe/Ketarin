@@ -58,6 +58,7 @@ namespace Ketarin
                                          DateAdded          DATE,
                                          LastUpdated        DATE,
                                          PreviousLocation   TEXT,
+                                         ExecuteCommand     TEXT,
                                          DeletePreviousFile INTEGER,
                                          SourceType         INTEGER,
                                          IsEnabled          INTEGER);";
@@ -73,6 +74,34 @@ namespace Ketarin
                                          StartText          TEXT,
                                          EndText            TEXT);";
                 command.ExecuteNonQuery();
+            }
+
+            // Upgrade tables
+            List<string> columns = new List<string>();
+            using (IDbCommand command = Connection.CreateCommand())
+            {
+                command.CommandText = "PRAGMA table_info(jobs)";
+                IDataReader reader = command.ExecuteReader();
+                try
+                {
+                    while (reader.Read())
+                    {
+                        columns.Add(reader.GetString(1));
+                    }
+                }
+                finally
+                {
+                    reader.Close();
+                }
+            }
+
+            if (!columns.Contains("ExecuteCommand"))
+            {
+                using (IDbCommand command = Connection.CreateCommand())
+                {
+                    command.CommandText = "ALTER TABLE jobs ADD ExecuteCommand TEXT";
+                    command.ExecuteNonQuery();
+                }
             }
         }
 

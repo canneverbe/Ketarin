@@ -6,6 +6,7 @@ using System.Net;
 using System.IO;
 using System.ComponentModel;
 using CDBurnerXP.IO;
+using System.Diagnostics;
 
 namespace Ketarin
 {
@@ -191,6 +192,11 @@ namespace Ketarin
                         m_Errors.Add(new ApplicationJobError(job, ex));
                         m_Status[job] = Status.Failure;
                     }
+                    catch (FileNotFoundException ex)
+                    {
+                        // Executing command failed
+                        m_Errors.Add(new ApplicationJobError(job, ex));
+                    }
                     catch (IOException ex)
                     {
                         m_Errors.Add(new ApplicationJobError(job, ex));
@@ -205,6 +211,11 @@ namespace Ketarin
                     {
                         m_Errors.Add(new ApplicationJobError(job, ex));
                         m_Status[job] = Status.Failure;
+                    }
+                    catch (Win32Exception ex)
+                    {
+                        // Executing command failed
+                        m_Errors.Add(new ApplicationJobError(job, ex));
                     }
 
                     m_Progress[job] = 100;
@@ -322,7 +333,20 @@ namespace Ketarin
                 job.LastUpdated = DateTime.Now;
                 job.PreviousLocation = targetFileName;
             }
+
             job.Save();
+
+            // Do we need to execute a command after downloading?
+            if (!string.IsNullOrEmpty(job.ExecuteCommand))
+            {
+                // Replace variable: file
+                string command = job.ExecuteCommand.Replace("{file}", job.PreviousLocation);
+                // Tell cmd to execute the given command (/c)
+                ProcessStartInfo processInfo = new ProcessStartInfo("cmd", "/c " + command);
+                processInfo.UseShellExecute = false;
+                processInfo.CreateNoWindow = true;
+                Process.Start(processInfo);
+            }
         }
 
         protected virtual void OnUpdateCompleted()
