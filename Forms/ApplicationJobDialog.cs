@@ -60,6 +60,7 @@ namespace Ketarin.Forms
             chkEnabled.Checked = m_ApplicationJob.Enabled;
             rbFolder.Checked = m_ApplicationJob.TargetIsFolder;
             chkDeletePrevious.Checked = m_ApplicationJob.DeletePreviousFile;
+            txtCommand.Text = m_ApplicationJob.ExecuteCommand;
         }
 
         /// <summary>
@@ -73,6 +74,7 @@ namespace Ketarin.Forms
             m_ApplicationJob.Enabled = chkEnabled.Checked;
             m_ApplicationJob.FileHippoId = txtFileHippoId.Text;
             m_ApplicationJob.DeletePreviousFile = chkDeletePrevious.Checked;
+            m_ApplicationJob.ExecuteCommand = txtCommand.Text;
             m_ApplicationJob.DownloadSourceType = (rbFixedUrl.Checked) ? ApplicationJob.SourceType.FixedUrl : ApplicationJob.SourceType.FileHippo;
         }
 

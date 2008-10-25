@@ -48,6 +48,8 @@
             this.sepOptions = new CDBurnerXP.Controls.Separator();
             this.sepTarget = new CDBurnerXP.Controls.Separator();
             this.sepDownload = new CDBurnerXP.Controls.Separator();
+            this.txtCommand = new System.Windows.Forms.TextBox();
+            this.lblExecuteCommand = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.pnlTarget.SuspendLayout();
             this.SuspendLayout();
@@ -56,7 +58,7 @@
             // 
             this.bCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.bCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.bCancel.Location = new System.Drawing.Point(294, 242);
+            this.bCancel.Location = new System.Drawing.Point(294, 289);
             this.bCancel.Name = "bCancel";
             this.bCancel.Size = new System.Drawing.Size(75, 23);
             this.bCancel.TabIndex = 100;
@@ -67,7 +69,7 @@
             // 
             this.bOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.bOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.bOK.Location = new System.Drawing.Point(213, 242);
+            this.bOK.Location = new System.Drawing.Point(213, 289);
             this.bOK.Name = "bOK";
             this.bOK.Size = new System.Drawing.Size(75, 23);
             this.bOK.TabIndex = 99;
@@ -277,11 +279,31 @@
             this.sepDownload.Text = "Download source";
             this.sepDownload.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // txtCommand
+            // 
+            this.txtCommand.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtCommand.Location = new System.Drawing.Point(15, 257);
+            this.txtCommand.Name = "txtCommand";
+            this.txtCommand.Size = new System.Drawing.Size(354, 20);
+            this.txtCommand.TabIndex = 17;
+            // 
+            // lblExecuteCommand
+            // 
+            this.lblExecuteCommand.AutoSize = true;
+            this.lblExecuteCommand.Location = new System.Drawing.Point(12, 241);
+            this.lblExecuteCommand.Name = "lblExecuteCommand";
+            this.lblExecuteCommand.Size = new System.Drawing.Size(247, 13);
+            this.lblExecuteCommand.TabIndex = 16;
+            this.lblExecuteCommand.Text = "E&xecute the following command after downloading:";
+            // 
             // ApplicationJobDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(381, 277);
+            this.ClientSize = new System.Drawing.Size(381, 324);
+            this.Controls.Add(this.lblExecuteCommand);
+            this.Controls.Add(this.txtCommand);
             this.Controls.Add(this.chkDeletePrevious);
             this.Controls.Add(this.chkEnabled);
             this.Controls.Add(this.sepOptions);
@@ -331,5 +353,7 @@
         private System.Windows.Forms.RadioButton rbFileHippo;
         private System.Windows.Forms.CheckBox chkDeletePrevious;
         private System.Windows.Forms.Button bVariables;
+        private System.Windows.Forms.TextBox txtCommand;
+        private System.Windows.Forms.Label lblExecuteCommand;
     }
 }
