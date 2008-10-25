@@ -340,7 +340,7 @@ namespace Ketarin
             if (!string.IsNullOrEmpty(job.ExecuteCommand))
             {
                 // Replace variable: file
-                string command = job.ExecuteCommand.Replace("{file}", job.PreviousLocation);
+                string command = job.ExecuteCommand.Replace("{file}", "\"" + job.PreviousLocation + "\"");
                 // Tell cmd to execute the given command (/c)
                 ProcessStartInfo processInfo = new ProcessStartInfo("cmd", "/c " + command);
                 processInfo.UseShellExecute = false;
