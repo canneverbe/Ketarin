@@ -44,6 +44,8 @@ namespace Ketarin.Forms
             InitializeComponent();
             AcceptButton = bOK;
             CancelButton = bCancel;
+
+            cboCategory.DataSource = DbManager.GetCategories();
         }
 
         /// <summary>
@@ -61,6 +63,7 @@ namespace Ketarin.Forms
             rbFolder.Checked = m_ApplicationJob.TargetIsFolder;
             chkDeletePrevious.Checked = m_ApplicationJob.DeletePreviousFile;
             txtCommand.Text = m_ApplicationJob.ExecuteCommand;
+            cboCategory.Text = m_ApplicationJob.Category;
         }
 
         /// <summary>
@@ -76,6 +79,7 @@ namespace Ketarin.Forms
             m_ApplicationJob.DeletePreviousFile = chkDeletePrevious.Checked;
             m_ApplicationJob.ExecuteCommand = txtCommand.Text;
             m_ApplicationJob.DownloadSourceType = (rbFixedUrl.Checked) ? ApplicationJob.SourceType.FixedUrl : ApplicationJob.SourceType.FileHippo;
+            m_ApplicationJob.Category = cboCategory.Text;
         }
 
         private void bBrowseFile_Click(object sender, EventArgs e)
