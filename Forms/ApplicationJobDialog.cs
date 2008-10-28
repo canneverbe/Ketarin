@@ -63,7 +63,7 @@ namespace Ketarin.Forms
             rbFolder.Checked = m_ApplicationJob.TargetIsFolder;
             chkDeletePrevious.Checked = m_ApplicationJob.DeletePreviousFile;
             txtCommand.Text = m_ApplicationJob.ExecuteCommand;
-            cboCategory.Text = m_ApplicationJob.Category;
+            cboCategory.Text = string.IsNullOrEmpty(m_ApplicationJob.Category) ? null : m_ApplicationJob.Category;
         }
 
         /// <summary>
