@@ -20,6 +20,7 @@ namespace Ketarin
         private bool m_IsBusy = false;
         protected int m_LastProgress = -1;
         private List<ApplicationJobError> m_Errors;
+        private byte m_NoProgressCounter = 0;
 
         #region Properties
 
@@ -374,6 +375,18 @@ namespace Ketarin
         /// <param name="job">Current ApplicationJob</param>
         protected virtual void OnProgressChanged(long pos, long length, ApplicationJob job)
         {
+            if (length == -1)
+            {
+                // Cannot report progress if no info given
+                if (ProgressChanged != null)
+                {
+                    if (m_NoProgressCounter > 100) m_NoProgressCounter = 0;
+                    m_Progress[job] = m_NoProgressCounter;
+                    ProgressChanged(this, new JobProgressChangedEventArgs(m_NoProgressCounter++, job));
+                }
+                return;
+            }
+
             double progress = (double)pos / length * 100.0;
             byte progressInt = Convert.ToByte(Math.Round(progress));
 
