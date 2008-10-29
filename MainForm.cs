@@ -92,12 +92,19 @@ namespace Ketarin
                 // If available and idle, use the program icon
                 if (m_Updater.GetStatus(job) == Updater.Status.Idle && !string.IsNullOrEmpty(job.PreviousLocation))
                 {
-                    if (!imlStatus.Images.ContainsKey(job.PreviousLocation) && File.Exists(job.PreviousLocation))
+                    try
                     {
-                        Icon programIcon = IconReader.GetFileIcon(job.PreviousLocation, IconReader.IconSize.Small, false);
-                        imlStatus.Images.Add(job.PreviousLocation, programIcon);
+                        if (!imlStatus.Images.ContainsKey(job.PreviousLocation) && File.Exists(job.PreviousLocation))
+                        {
+                            Icon programIcon = IconReader.GetFileIcon(job.PreviousLocation, IconReader.IconSize.Small, false);
+                            imlStatus.Images.Add(job.PreviousLocation, programIcon);
+                        }
+                        return job.PreviousLocation;
                     }
-                    return job.PreviousLocation;
+                    catch (ArgumentException)
+                    {
+                        // no icon could be determined, use default
+                    }
                 }
                 
                 return (int)m_Updater.GetStatus(job);
