@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using System.Text;
 using System.Data;
 using System.Net;
+using System.Xml;
+using System.Xml.Serialization;
 
 namespace Ketarin
 {
-    class UrlVariable
+    [XmlRoot("UrlVariable")]
+    public class UrlVariable
     {
         private string m_Url;
         private string m_StartText;
@@ -16,24 +19,28 @@ namespace Ketarin
 
         #region Properties
 
+        [XmlElement("Url")]
         public string Url
         {
             get { return m_Url; }
             set { m_Url = value; }
         }
 
+        [XmlElement("StartText")]
         public string StartText
         {
             get { return m_StartText; }
             set { m_StartText = value; }
         }
 
+        [XmlElement("EndText")]
         public string EndText
         {
             get { return m_EndText; }
             set { m_EndText = value; }
         }
 
+        [XmlElement("Name")]
         public string Name
         {
             get { return m_Name; }

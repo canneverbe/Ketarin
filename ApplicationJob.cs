@@ -5,11 +5,14 @@ using System.Data;
 using System.Data.SQLite;
 using System.IO;
 using System.Net;
+using System.Xml;
+using System.Xml.Serialization;
 using System.Security.Cryptography;
 using CDBurnerXP.IO;
 
 namespace Ketarin
 {
+    [XmlRoot("ApplicationJob")]
     public class ApplicationJob
     {
         private string m_Name;
@@ -22,9 +25,10 @@ namespace Ketarin
         private bool m_DeletePreviousFile = false;
         private string m_PreviousLocation = string.Empty;
         private SourceType m_SourceType = SourceType.FixedUrl;
-        private Dictionary<string, UrlVariable> m_Variables = null;
+        private SerializableDictionary<string, UrlVariable> m_Variables = null;
         private string m_ExecuteCommand = string.Empty;
         private string m_Category = string.Empty;
+        private Guid m_Guid = Guid.Empty;
 
         public enum SourceType
         {
@@ -34,13 +38,27 @@ namespace Ketarin
 
         #region Properties
 
-        internal Dictionary<string, UrlVariable> Variables
+        [XmlAttribute("Guid")]
+        public Guid Guid
+        {
+            get
+            {
+                return m_Guid;
+            }
+            set
+            {
+                m_Guid = value;
+            }
+        }
+
+        [XmlElement("Variables")]
+        public SerializableDictionary<string, UrlVariable> Variables
         {
             get {
                 // Load variables on demand
                 if (m_Variables == null)
                 {
-                    m_Variables = new Dictionary<string, UrlVariable>();
+                    m_Variables = new SerializableDictionary<string, UrlVariable>();
                     if (m_Id != 0)
                     {
                         using (IDbCommand command = DbManager.Connection.CreateCommand())
@@ -61,25 +79,35 @@ namespace Ketarin
                 }
                 return m_Variables;
             }
+            set
+            {
+                if (value != null)
+                {
+                    m_Variables = value;
+                }
+            }
         }
 
         /// <summary>
         /// A command to be executed after downloading.
         /// {file} is a placeholder for PreviousLocation.
         /// </summary>
+        [XmlElement("ExecuteCommand")]
         public string ExecuteCommand
         {
             get { return m_ExecuteCommand; }
             set { m_ExecuteCommand = value; }
         }
 
+        [XmlElement("Category")]
         public string Category
         {
             get { return m_Category; }
             set { m_Category = value; }
         }
 
-        internal SourceType DownloadSourceType
+        [XmlElement("SourceType")]
+        public SourceType DownloadSourceType
         {
             get { return m_SourceType; }
             set { m_SourceType = value; }
@@ -91,12 +119,14 @@ namespace Ketarin
             set { m_PreviousLocation = value; }
         }
 
+        [XmlElement("DeletePreviousFile")]
         public bool DeletePreviousFile
         {
             get { return m_DeletePreviousFile; }
             set { m_DeletePreviousFile = value; }
         }
 
+        [XmlElement("Enabled")]
         public bool Enabled
         {
             get { return m_Enabled; }
@@ -113,30 +143,35 @@ namespace Ketarin
             }
         }
 
+        [XmlElement("FileHippoId")]
         public string FileHippoId
         {
             get { return m_FileHippoId; }
             set { m_FileHippoId = value; }
         }
 
+        [XmlElement("LastUpdated")]
         public DateTime? LastUpdated
         {
             get { return m_LastUpdated; }
             set { m_LastUpdated = value; }
         }
 
+        [XmlElement("TargetPath")]
         public string TargetPath
         {
             get { return m_TargetPath; }
             set { m_TargetPath = value; }
         }
 
+        [XmlElement("FixedDownloadUrl")]
         public string FixedDownloadUrl
         {
             get { return m_FixedDownloadUrl; }
             set { m_FixedDownloadUrl = value; }
         }
 
+        [XmlElement("Name")]
         public string Name
         {
             get { return m_Name; }
@@ -172,8 +207,23 @@ namespace Ketarin
             transaction.Commit();
         }
 
+        public void SetIdByGuid(Guid guid)
+        {
+            using (IDbCommand command = DbManager.Connection.CreateCommand())
+            {
+                command.CommandText = "SELECT JobId FROM jobs WHERE JobGuid = @JobGuid";
+                command.Parameters.Add(new SQLiteParameter("@JobGuid", guid.ToString()));
+                m_Id = Convert.ToInt32(command.ExecuteScalar());
+            }
+        }
+
         public void Save()
         {
+            if (m_Guid == Guid.Empty)
+            {
+                m_Guid = Guid.NewGuid();
+            }
+
             SQLiteTransaction transaction = DbManager.Connection.BeginTransaction();
 
             if (m_Id > 0)
@@ -193,7 +243,8 @@ namespace Ketarin
                                                    PreviousLocation = @PreviousLocation,
                                                    SourceType = @SourceType,
                                                    ExecuteCommand = @ExecuteCommand,
-                                                   Category = @Category
+                                                   Category = @Category,
+                                                   JobGuid = @JobGuid
                                              WHERE JobId = @JobId";
 
                     command.Parameters.Add(new SQLiteParameter("@ApplicationName", Name));
@@ -207,6 +258,7 @@ namespace Ketarin
                     command.Parameters.Add(new SQLiteParameter("@SourceType", m_SourceType));
                     command.Parameters.Add(new SQLiteParameter("@ExecuteCommand", m_ExecuteCommand));
                     command.Parameters.Add(new SQLiteParameter("@Category", m_Category));
+                    command.Parameters.Add(new SQLiteParameter("@JobGuid", m_Guid.ToString()));
                     command.Parameters.Add(new SQLiteParameter("@JobId", m_Id));
                     
                     command.ExecuteNonQuery();
@@ -218,8 +270,8 @@ namespace Ketarin
                 using (IDbCommand command = DbManager.Connection.CreateCommand())
                 {
                     command.Transaction = transaction;
-                    command.CommandText = @"INSERT INTO jobs (ApplicationName, FixedDownloadUrl, DateAdded, TargetPath, LastUpdated, IsEnabled, FileHippoId, DeletePreviousFile, SourceType, ExecuteCommand, Category)
-                                                 VALUES (@ApplicationName, @FixedDownloadUrl, @DateAdded, @TargetPath, @LastUpdated, @IsEnabled, @FileHippoId, @DeletePreviousFile, @SourceType, @ExecuteCommand, @Category)";
+                    command.CommandText = @"INSERT INTO jobs (ApplicationName, FixedDownloadUrl, DateAdded, TargetPath, LastUpdated, IsEnabled, FileHippoId, DeletePreviousFile, SourceType, ExecuteCommand, Category, JobGuid)
+                                                 VALUES (@ApplicationName, @FixedDownloadUrl, @DateAdded, @TargetPath, @LastUpdated, @IsEnabled, @FileHippoId, @DeletePreviousFile, @SourceType, @ExecuteCommand, @Category, @JobGuid)";
 
                     command.Parameters.Add(new SQLiteParameter("@ApplicationName", Name));
                     command.Parameters.Add(new SQLiteParameter("@FixedDownloadUrl", m_FixedDownloadUrl));
@@ -232,6 +284,7 @@ namespace Ketarin
                     command.Parameters.Add(new SQLiteParameter("@SourceType", m_SourceType));
                     command.Parameters.Add(new SQLiteParameter("@ExecuteCommand", m_ExecuteCommand));
                     command.Parameters.Add(new SQLiteParameter("@Category", m_Category));
+                    command.Parameters.Add(new SQLiteParameter("@JobGuid", m_Guid.ToString()));
                     command.ExecuteNonQuery();
                 }
 
@@ -289,6 +342,12 @@ namespace Ketarin
             m_SourceType = (SourceType)Convert.ToByte(reader["SourceType"]);
             m_ExecuteCommand = reader["ExecuteCommand"] as string;
             m_Category = reader["Category"] as string;
+
+            string guid = reader["JobGuid"] as string;
+            if (!string.IsNullOrEmpty(guid))
+            {
+                m_Guid = new Guid(guid);
+            }
         }
 
         public string GetTargetFile(WebResponse netResponse)

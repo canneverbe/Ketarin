@@ -59,6 +59,7 @@ namespace Ketarin
                                          LastUpdated        DATE,
                                          PreviousLocation   TEXT,
                                          ExecuteCommand     TEXT,
+                                         JobGuid            TEXT UNIQUE,
                                          DeletePreviousFile INTEGER,
                                          SourceType         INTEGER,
                                          IsEnabled          INTEGER);";
@@ -108,6 +109,14 @@ namespace Ketarin
                 using (IDbCommand command = Connection.CreateCommand())
                 {
                     command.CommandText = "ALTER TABLE jobs ADD Category TEXT";
+                    command.ExecuteNonQuery();
+                }
+            }
+            if (!columns.Contains("JobGuid"))
+            {
+                using (IDbCommand command = Connection.CreateCommand())
+                {
+                    command.CommandText = "ALTER TABLE jobs ADD JobGuid TEXT";
                     command.ExecuteNonQuery();
                 }
             }

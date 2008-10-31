@@ -28,6 +28,8 @@ using Microsoft.Win32;
 using System.IO;
 using CDBurnerXP.IO;
 using CDBurnerXP;
+using System.Xml;
+using System.Xml.Serialization;
 
 namespace Ketarin
 {
@@ -228,14 +230,6 @@ namespace Ketarin
             }
         }
 
-        private void bAbout_Click(object sender, EventArgs e)
-        {
-            using (AboutDialog dialog = new AboutDialog())
-            {
-                dialog.ShowDialog(this);
-            }
-        }
-
         private void RunJobs(ApplicationJob[] jobs)
         {
             bRun.Text = "Cancel";
@@ -388,6 +382,104 @@ namespace Ketarin
 
         #endregion
 
+        #region Main menu
+
+        private void mnuAbout_Click(object sender, EventArgs e)
+        {
+            using (AboutDialog dialog = new AboutDialog())
+            {
+                dialog.ShowDialog(this);
+            }
+        }
+
+        private void mnuExit_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        private void mnuAddNew_Click(object sender, EventArgs e)
+        {
+            bAddNew.PerformClick();
+        }
+
+        private void mnuExport_Click(object sender, EventArgs e)
+        {
+            if (olvJobs.SelectedIndices.Count == 0)
+            {
+                MessageBox.Show(this, "You did not select any jobs to export.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            using (SaveFileDialog dialog = new SaveFileDialog())
+            {
+                dialog.Filter = "XML file|*.xml";
+                if (dialog.ShowDialog() != DialogResult.OK) return;
+
+                try
+                {
+                    XmlSerializer serializer = new XmlSerializer(typeof(ApplicationJob));
+                    using (XmlWriter xmlWriter = XmlWriter.Create(dialog.FileName))
+                    {
+                        xmlWriter.WriteStartElement("Jobs");
+                        foreach (ApplicationJob job in olvJobs.SelectedObjects)
+                        {
+                            // Before exporting, make sure that it got a Guid
+                            if (job.Guid == Guid.Empty) job.Save();
+                            serializer.Serialize(xmlWriter, job);
+                        }
+                        xmlWriter.WriteEndElement();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(this, "Failed to save the file: " + ex.Message, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+        private void mnuImport_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog dialog = new OpenFileDialog())
+            {
+                dialog.Filter = "XML file|*.xml";
+                if (dialog.ShowDialog() != DialogResult.OK) return;
+
+                try
+                {
+                    using (XmlReader reader = XmlReader.Create(dialog.FileName))
+                    {
+                        XmlSerializer serializer = new XmlSerializer(typeof(ApplicationJob));
+                        // Find the start position
+                        while (reader.Read())
+                        {
+                            if (reader.NodeType == XmlNodeType.Element && reader.Name == "ApplicationJob")
+                            {
+                                break;
+                            }
+                        }
+
+                        // Read each job
+                        while (true)
+                        {
+                            ApplicationJob importedJob = (ApplicationJob)serializer.Deserialize(reader);
+                            if (importedJob == null) break;
+
+                            // If a job already exists, only update it!
+                            importedJob.SetIdByGuid(importedJob.Guid);
+                            importedJob.Save();
+                        }
+
+                        UpdateList();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(this, "Failed to import the file: " + ex.Message, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+        #endregion
 
     }
 }
