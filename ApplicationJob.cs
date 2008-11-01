@@ -314,14 +314,15 @@ namespace Ketarin
                 using (IDbCommand command = DbManager.Connection.CreateCommand())
                 {
                     command.Transaction = transaction;
-                    command.CommandText = @"INSERT INTO variables (JobId, VariableName, Url, StartText, EndText)
-                                                 VALUES (@JobId, @VariableName, @Url, @StartText, @EndText)";
+                    command.CommandText = @"INSERT INTO variables (JobId, VariableName, Url, StartText, EndText, RegularExpression)
+                                                 VALUES (@JobId, @VariableName, @Url, @StartText, @EndText, @RegularExpression)";
 
                     command.Parameters.Add(new SQLiteParameter("@JobId", m_Id));
                     command.Parameters.Add(new SQLiteParameter("@VariableName", pair.Key));
                     command.Parameters.Add(new SQLiteParameter("@Url", pair.Value.Url));
                     command.Parameters.Add(new SQLiteParameter("@StartText", pair.Value.StartText));
                     command.Parameters.Add(new SQLiteParameter("@EndText", pair.Value.EndText));
+                    command.Parameters.Add(new SQLiteParameter("@RegularExpression", pair.Value.Regex));
                     command.ExecuteNonQuery();
                 }
             }

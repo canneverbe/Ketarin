@@ -73,15 +73,48 @@ namespace Ketarin
                                          VariableName       TEXT,
                                          Url                TEXT,
                                          StartText          TEXT,
+                                         RegularExpression  TEXT,
                                          EndText            TEXT);";
                 command.ExecuteNonQuery();
             }
 
             // Upgrade tables
+            List<string> columns = GetColumns("jobs");
+
+            Dictionary<string, string> addColumns = new Dictionary<string, string>();
+            addColumns.Add("ExecuteCommand", "ALTER TABLE jobs ADD ExecuteCommand TEXT");
+            addColumns.Add("Category", "ALTER TABLE jobs ADD Category TEXT");
+            addColumns.Add("JobGuid", "ALTER TABLE jobs ADD JobGuid TEXT");
+
+            foreach (KeyValuePair<string, string> column in addColumns)
+            {
+                if (!columns.Contains(column.Key))
+                {
+                    using (IDbCommand command = Connection.CreateCommand())
+                    {
+                        command.CommandText = column.Value;
+                        command.ExecuteNonQuery();
+                    }
+                }
+            }
+
+            columns = GetColumns("variables");
+            if (!columns.Contains("RegularExpression"))
+            {
+                using (IDbCommand command = Connection.CreateCommand())
+                {
+                    command.CommandText = "ALTER TABLE variables ADD RegularExpression TEXT";
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
+
+        private static List<string> GetColumns(string table)
+        {
             List<string> columns = new List<string>();
             using (IDbCommand command = Connection.CreateCommand())
             {
-                command.CommandText = "PRAGMA table_info(jobs)";
+                command.CommandText = "PRAGMA table_info(" + table +")";
                 IDataReader reader = command.ExecuteReader();
                 try
                 {
@@ -95,31 +128,7 @@ namespace Ketarin
                     reader.Close();
                 }
             }
-
-            if (!columns.Contains("ExecuteCommand"))
-            {
-                using (IDbCommand command = Connection.CreateCommand())
-                {
-                    command.CommandText = "ALTER TABLE jobs ADD ExecuteCommand TEXT";
-                    command.ExecuteNonQuery();
-                }
-            }
-            if (!columns.Contains("Category"))
-            {
-                using (IDbCommand command = Connection.CreateCommand())
-                {
-                    command.CommandText = "ALTER TABLE jobs ADD Category TEXT";
-                    command.ExecuteNonQuery();
-                }
-            }
-            if (!columns.Contains("JobGuid"))
-            {
-                using (IDbCommand command = Connection.CreateCommand())
-                {
-                    command.CommandText = "ALTER TABLE jobs ADD JobGuid TEXT";
-                    command.ExecuteNonQuery();
-                }
-            }
+            return columns;
         }
 
 
