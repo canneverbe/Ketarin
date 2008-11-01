@@ -45,6 +45,8 @@
             this.lblFind = new System.Windows.Forms.Label();
             this.txtFind = new System.Windows.Forms.TextBox();
             this.lblDesc = new System.Windows.Forms.Label();
+            this.txtRegularExpression = new System.Windows.Forms.TextBox();
+            this.lblRegex = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // lblVariables
@@ -88,6 +90,7 @@
             this.bOK.TabIndex = 20;
             this.bOK.Text = "OK";
             this.bOK.UseVisualStyleBackColor = true;
+            this.bOK.Click += new System.EventHandler(this.bOK_Click);
             // 
             // lblUrl
             // 
@@ -121,11 +124,11 @@
             this.rtfContent.Enabled = false;
             this.rtfContent.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.rtfContent.HideSelection = false;
-            this.rtfContent.Location = new System.Drawing.Point(126, 124);
+            this.rtfContent.Location = new System.Drawing.Point(126, 154);
             this.rtfContent.Name = "rtfContent";
             this.rtfContent.ReadOnly = true;
-            this.rtfContent.Size = new System.Drawing.Size(474, 251);
-            this.rtfContent.TabIndex = 8;
+            this.rtfContent.Size = new System.Drawing.Size(474, 221);
+            this.rtfContent.TabIndex = 10;
             this.rtfContent.Text = "";
             this.rtfContent.WordWrap = false;
             this.rtfContent.SelectionChanged += new System.EventHandler(this.rtfContent_SelectionChanged);
@@ -232,11 +235,34 @@
             this.lblDesc.TabIndex = 0;
             this.lblDesc.Text = resources.GetString("lblDesc.Text");
             // 
+            // txtRegularExpression
+            // 
+            this.txtRegularExpression.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtRegularExpression.Enabled = false;
+            this.txtRegularExpression.Location = new System.Drawing.Point(247, 124);
+            this.txtRegularExpression.Name = "txtRegularExpression";
+            this.txtRegularExpression.Size = new System.Drawing.Size(290, 20);
+            this.txtRegularExpression.TabIndex = 9;
+            this.txtRegularExpression.TextChanged += new System.EventHandler(this.txtRegularExpression_TextChanged);
+            // 
+            // lblRegex
+            // 
+            this.lblRegex.AutoSize = true;
+            this.lblRegex.Enabled = false;
+            this.lblRegex.Location = new System.Drawing.Point(123, 127);
+            this.lblRegex.Name = "lblRegex";
+            this.lblRegex.Size = new System.Drawing.Size(117, 13);
+            this.lblRegex.TabIndex = 8;
+            this.lblRegex.Text = "Use regular e&xpression:";
+            // 
             // EditVariablesDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(612, 435);
+            this.Controls.Add(this.txtRegularExpression);
+            this.Controls.Add(this.lblRegex);
             this.Controls.Add(this.lblDesc);
             this.Controls.Add(this.txtFind);
             this.Controls.Add(this.lblFind);
@@ -282,5 +308,7 @@
         private System.Windows.Forms.Label lblFind;
         private System.Windows.Forms.TextBox txtFind;
         private System.Windows.Forms.Label lblDesc;
+        private System.Windows.Forms.TextBox txtRegularExpression;
+        private System.Windows.Forms.Label lblRegex;
     }
 }

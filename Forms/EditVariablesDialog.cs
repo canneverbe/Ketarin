@@ -6,11 +6,14 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using System.Net;
+using System.Text.RegularExpressions;
+using CDBurnerXP.Forms;
 
 namespace Ketarin.Forms
 {
     public partial class EditVariablesDialog : Form
     {
+        private SerializableDictionary<string, UrlVariable> m_Variables = new SerializableDictionary<string,UrlVariable>();
         private ApplicationJob m_Job = null;
 
         #region Properties
@@ -20,9 +23,9 @@ namespace Ketarin.Forms
             get
             {
                 string name = lbVariables.SelectedItem as string;
-                if (m_Job.Variables.ContainsKey(name))
+                if (m_Variables.ContainsKey(name))
                 {
-                    return m_Job.Variables[name];
+                    return m_Variables[name];
                 }
                 return null;
             }
@@ -35,8 +38,13 @@ namespace Ketarin.Forms
             InitializeComponent();
             AcceptButton = bOK;
             CancelButton = bCancel;
-            
+
             m_Job = job;
+            // Get a copy of all variables
+            foreach (KeyValuePair<string, UrlVariable> pair in job.Variables)
+            {
+                m_Variables.Add(pair.Key, pair.Value.Clone() as UrlVariable);
+            }
 
             RefreshListBox();
         }
@@ -44,7 +52,7 @@ namespace Ketarin.Forms
         private void RefreshListBox()
         {
             lbVariables.Items.Clear();
-            foreach (KeyValuePair<string, UrlVariable> pair in m_Job.Variables)
+            foreach (KeyValuePair<string, UrlVariable> pair in m_Variables)
             {
                 lbVariables.Items.Add(pair.Key);
             }
@@ -63,11 +71,14 @@ namespace Ketarin.Forms
             rtfContent.Enabled = enable;
             bUseAsStart.Enabled = enable;
             bUseAsEnd.Enabled = enable;
+            lblRegex.Enabled = enable;
+            txtRegularExpression.Enabled = enable;
 
             if (enable)
             {
                 txtUrl.Focus();
                 txtUrl.Text = CurrentVar.Url;
+                txtRegularExpression.Text = CurrentVar.Regex;
                 if (string.IsNullOrEmpty(CurrentVar.TempContent) && !string.IsNullOrEmpty(txtUrl.Text))
                 {
                     bLoad.PerformClick();
@@ -86,13 +97,13 @@ namespace Ketarin.Forms
             {
                 if (dialog.ShowDialog(this) == DialogResult.OK)
                 {
-                    if (m_Job.Variables.ContainsKey(dialog.VariableName))
+                    if (m_Variables.ContainsKey(dialog.VariableName))
                     {
                         string msg = string.Format("The variable name '{0}' already exists.", dialog.VariableName);
                         MessageBox.Show(this, msg, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
-                    m_Job.Variables.Add(dialog.VariableName, new UrlVariable(dialog.VariableName));
+                    m_Variables.Add(dialog.VariableName, new UrlVariable(dialog.VariableName));
                     RefreshListBox();
                     lbVariables.SelectedItem = dialog.VariableName;
                 }
@@ -199,45 +210,69 @@ namespace Ketarin.Forms
         {
             if (string.IsNullOrEmpty(rtfContent.Text)) return;
 
-            rtfContent.SelectionStart = 0;
-            rtfContent.SelectionLength = rtfContent.Text.Length;
-            rtfContent.SelectionColor = SystemColors.WindowText;
-            rtfContent.SelectionFont = rtfContent.Font;
-            rtfContent.SelectionLength = 0;
+            using (new ControlRedrawLock(this))
+            {
+                rtfContent.SelectionStart = 0;
+                rtfContent.SelectionLength = rtfContent.Text.Length;
+                rtfContent.SelectionColor = SystemColors.WindowText;
+                rtfContent.SelectionFont = rtfContent.Font;
+                rtfContent.SelectionLength = 0;
 
-            // Highlight StartText if specified
-            if (string.IsNullOrEmpty(CurrentVar.StartText)) return;
-            int pos = rtfContent.Text.IndexOf(CurrentVar.StartText);
-            rtfContent.SelectionStart = pos;
-            rtfContent.SelectionLength = CurrentVar.StartText.Length;
-            rtfContent.SelectionColor = Color.Blue;
+                if (!string.IsNullOrEmpty(CurrentVar.Regex))
+                {
+                    Regex regex = new Regex(CurrentVar.Regex, RegexOptions.IgnoreCase | RegexOptions.Singleline);
+                    Match match = regex.Match(rtfContent.Text);
 
-            int boldStart = pos + CurrentVar.StartText.Length;
+                    rtfContent.SelectionStart = match.Index;
+                    rtfContent.SelectionLength = match.Length;
+                    rtfContent.SelectionColor = Color.Red;
 
-            // Highlight EndText if specified
-            if (string.IsNullOrEmpty(CurrentVar.EndText)) return;
-            pos = rtfContent.Text.IndexOf(CurrentVar.EndText, boldStart);
-            if (pos < 0) return;
-            rtfContent.SelectionStart = pos;
-            rtfContent.SelectionLength = CurrentVar.EndText.Length;
+                    if (match.Groups.Count > 1)
+                    {
+                        rtfContent.SelectionStart = match.Groups[1].Index;
+                        rtfContent.SelectionLength = match.Groups[1].Length;
+                        rtfContent.SelectionColor = Color.Blue;
+                    }
 
-            rtfContent.SelectionColor = Color.Red;
+                    rtfContent.SelectionLength = 0;
+                }
+                else
+                {
+                    // Highlight StartText if specified
+                    if (string.IsNullOrEmpty(CurrentVar.StartText)) return;
+                    int pos = rtfContent.Text.IndexOf(CurrentVar.StartText);
+                    rtfContent.SelectionStart = pos;
+                    rtfContent.SelectionLength = CurrentVar.StartText.Length;
+                    rtfContent.SelectionColor = Color.Blue;
 
-            rtfContent.SelectionStart = boldStart;
-            rtfContent.SelectionLength = pos - boldStart;
-            rtfContent.SelectionFont = new Font(rtfContent.SelectionFont, FontStyle.Bold);
-            rtfContent.SelectionLength = 0;
+                    int boldStart = pos + CurrentVar.StartText.Length;
+
+                    // Highlight EndText if specified
+                    if (string.IsNullOrEmpty(CurrentVar.EndText)) return;
+                    pos = rtfContent.Text.IndexOf(CurrentVar.EndText, boldStart);
+                    if (pos < 0) return;
+                    rtfContent.SelectionStart = pos;
+                    rtfContent.SelectionLength = CurrentVar.EndText.Length;
+
+                    rtfContent.SelectionColor = Color.Red;
+
+                    rtfContent.SelectionStart = boldStart;
+                    rtfContent.SelectionLength = pos - boldStart;
+                    rtfContent.SelectionFont = new Font(rtfContent.SelectionFont, FontStyle.Bold);
+                    rtfContent.SelectionLength = 0;
+                }
+            }
         }
 
         private void rtfContent_SelectionChanged(object sender, EventArgs e)
         {
-            bool enable = (rtfContent.SelectionLength > 0);
+            bool enable = (rtfContent.SelectionLength > 0 && string.IsNullOrEmpty(CurrentVar.Regex));
             bUseAsEnd.Enabled = bUseAsStart.Enabled = enable;
         }
 
         private void bRemove_Click(object sender, EventArgs e)
         {
-            m_Job.Variables.Remove(CurrentVar.Name);
+            m_Variables.Remove(CurrentVar.Name);
             RefreshListBox();
 
             if (lbVariables.Items.Count > 0)
@@ -249,6 +284,43 @@ namespace Ketarin.Forms
                 lbVariables.SelectedIndex = -1;
             }
             lbVariables_SelectedIndexChanged(this, null);
+        }
+
+        private void txtRegularExpression_TextChanged(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(txtRegularExpression.Text))
+            {
+                bUseAsStart.Enabled = true;
+                bUseAsEnd.Enabled = true;
+                CurrentVar.Regex = string.Empty;
+                RefreshRtfFormatting();
+                return;
+            }
+
+            // We cannot (or rather don't want to) combine those to for now
+            bUseAsEnd.Enabled = false;
+            bUseAsStart.Enabled = false;
+
+            try
+            {
+                Regex regex = new Regex(txtRegularExpression.Text, RegexOptions.IgnoreCase | RegexOptions.Singleline);
+                CurrentVar.Regex = regex.ToString();
+            }
+            catch (ArgumentException)
+            {
+                txtRegularExpression.BackColor = Color.Tomato;
+                return;
+            }
+
+            txtRegularExpression.BackColor = Color.White;
+            
+            RefreshRtfFormatting();
+        }
+
+        private void bOK_Click(object sender, EventArgs e)
+        {
+            // Save results
+            m_Job.Variables = m_Variables;
         }
 
     }
