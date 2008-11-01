@@ -7,6 +7,7 @@ using System.IO;
 using System.ComponentModel;
 using CDBurnerXP.IO;
 using System.Diagnostics;
+using System.Windows.Forms;
 
 namespace Ketarin
 {
@@ -342,6 +343,12 @@ namespace Ketarin
             {
                 // Replace variable: file
                 string command = job.ExecuteCommand.Replace("{file}", "\"" + job.PreviousLocation + "\"");
+                // Replace variable: root
+                try
+                {
+                    command = command.Replace("{root}", Path.GetPathRoot(Application.StartupPath));
+                }
+                catch (ArgumentException) { }
                 // Tell cmd to execute the given command (/c)
                 ProcessStartInfo processInfo = new ProcessStartInfo("cmd", "/c " + command);
                 processInfo.UseShellExecute = false;

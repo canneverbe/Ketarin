@@ -6,6 +6,7 @@ using System.Data.SQLite;
 using System.IO;
 using System.Net;
 using System.Xml;
+using System.Windows.Forms;
 using System.Xml.Serialization;
 using System.Security.Cryptography;
 using CDBurnerXP.IO;
@@ -358,6 +359,13 @@ namespace Ketarin
             foreach (UrlVariable variable in Variables.Values) {
                 targetLocation = variable.ReplaceInString(targetLocation);
             }
+
+            // If carried on a USB stick, allow using the drive name
+            try
+            {
+                targetLocation = targetLocation.Replace("{root}", Path.GetPathRoot(Application.StartupPath));
+            }
+            catch (ArgumentException) { }
 
             if (TargetIsFolder)
             {
