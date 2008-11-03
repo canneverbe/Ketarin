@@ -129,7 +129,7 @@ namespace Ketarin
             using (IDbCommand command = Connection.CreateCommand())
             {
                 command.CommandText = @"CREATE TABLE IF NOT EXISTS settings  
-                                        (SettingPath        TEXT,
+                                        (SettingPath        TEXT UNIQUE,
                                          SettingValue       TEXT);";
                 command.ExecuteNonQuery();
             }
