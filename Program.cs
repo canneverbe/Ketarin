@@ -18,6 +18,7 @@
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using CDBurnerXP;
 
 namespace Ketarin
 {
@@ -32,6 +33,8 @@ namespace Ketarin
             try
             {
                 DbManager.LoadOrCreateDatabase();
+
+                Settings.Provider = new DbManager.SettingsProvider();
             }
             catch (Exception ex)
             {
