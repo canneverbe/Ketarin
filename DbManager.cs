@@ -5,11 +5,59 @@ using System.IO;
 using System.Data;
 using System.Data.SQLite;
 using System.Windows.Forms;
+using CDBurnerXP;
 
 namespace Ketarin
 {
     class DbManager
     {
+        #region SettingsProvider
+
+        /// <summary>
+        /// Saves all of Ketarin's settings to the database to be more self contained.
+        /// </summary>
+        public class SettingsProvider : ISettingsProvider
+        {
+            #region ISettingsProvider Member
+
+            private string GetPath(string[] path)
+            {
+                return String.Join("/", path);
+            }
+
+            public object GetValue(params string[] path)
+            {
+                using (IDbCommand command = Connection.CreateCommand())
+                {
+                    command.CommandText = "SELECT SettingValue FROM settings WHERE SettingPath = @SettingPath";
+                    command.Parameters.Add(new SQLiteParameter("@SettingPath", GetPath(path)));
+                    return command.ExecuteScalar();
+                }
+            }
+
+            public void SetValue(string value, params string[] path)
+            {
+                using (IDbCommand command = Connection.CreateCommand())
+                {
+                    command.CommandText = "UPDATE settings SET SettingValue = @SettingValue WHERE SettingPath = @SettingPath";
+                    command.Parameters.Add(new SQLiteParameter("@SettingValue", value));
+                    command.Parameters.Add(new SQLiteParameter("@SettingPath", GetPath(path)));
+                    if (command.ExecuteNonQuery() == 0)
+                    {
+                        command.CommandText = @"INSERT INTO settings (SettingPath, SettingValue)
+                                                 VALUES (@SettingPath, @SettingValue)";
+                        command.Parameters.Add(new SQLiteParameter("@SettingValue", value));
+                        command.Parameters.Add(new SQLiteParameter("@SettingPath", GetPath(path)));
+                        command.ExecuteNonQuery();
+                    }
+                }
+            }
+
+            #endregion
+        }
+
+        #endregion
+
         private static SQLiteConnection m_DbConn;
 
         public static SQLiteConnection Connection
@@ -75,6 +123,14 @@ namespace Ketarin
                                          StartText          TEXT,
                                          RegularExpression  TEXT,
                                          EndText            TEXT);";
+                command.ExecuteNonQuery();
+            }
+
+            using (IDbCommand command = Connection.CreateCommand())
+            {
+                command.CommandText = @"CREATE TABLE IF NOT EXISTS settings  
+                                        (SettingPath        TEXT,
+                                         SettingValue       TEXT);";
                 command.ExecuteNonQuery();
             }
 
@@ -169,5 +225,6 @@ namespace Ketarin
 
             return categories.ToArray();
         }
+
     }
 }
