@@ -418,7 +418,9 @@ namespace Ketarin
                 try
                 {
                     XmlSerializer serializer = new XmlSerializer(typeof(ApplicationJob));
-                    using (XmlWriter xmlWriter = XmlWriter.Create(dialog.FileName))
+                    XmlWriterSettings settings = new XmlWriterSettings();
+                    settings.Indent = true;
+                    using (XmlWriter xmlWriter = XmlWriter.Create(dialog.FileName, settings))
                     {
                         xmlWriter.WriteStartElement("Jobs");
                         foreach (ApplicationJob job in olvJobs.SelectedObjects)
