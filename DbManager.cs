@@ -22,7 +22,7 @@ namespace Ketarin
 
             private string GetPath(string[] path)
             {
-                return String.Join("/", path);
+                return String.Join("/", path).Trim('/');
             }
 
             public object GetValue(params string[] path)
@@ -109,6 +109,8 @@ namespace Ketarin
                                          ExecuteCommand     TEXT,
                                          JobGuid            TEXT UNIQUE,
                                          DeletePreviousFile INTEGER,
+                                         CanBeShared        INTEGER DEFAULT 1,
+                                         ShareApplication   INTEGER,
                                          SourceType         INTEGER,
                                          IsEnabled          INTEGER);";
                 command.ExecuteNonQuery();
@@ -141,7 +143,9 @@ namespace Ketarin
             addColumns.Add("ExecuteCommand", "ALTER TABLE jobs ADD ExecuteCommand TEXT");
             addColumns.Add("Category", "ALTER TABLE jobs ADD Category TEXT");
             addColumns.Add("JobGuid", "ALTER TABLE jobs ADD JobGuid TEXT");
-
+            addColumns.Add("CanBeShared", "ALTER TABLE jobs ADD CanBeShared INTEGER DEFAULT 1");
+            addColumns.Add("ShareApplication", "ALTER TABLE jobs ADD ShareApplication INTEGER DEFAULT 0");
+            
             foreach (KeyValuePair<string, string> column in addColumns)
             {
                 if (!columns.Contains(column.Key))

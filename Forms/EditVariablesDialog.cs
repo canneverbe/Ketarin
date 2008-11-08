@@ -31,6 +31,22 @@ namespace Ketarin.Forms
             }
         }
 
+        public bool ReadOnly
+        {
+            get
+            {
+                return !bAdd.Enabled;
+            }
+            set
+            {
+                bool enable = !value;
+                bAdd.Enabled = enable;
+                bRemove.Enabled = enable;
+                bOK.Enabled = enable;
+                bOK.Visible = enable;
+            }
+        }
+
         #endregion
 
         public EditVariablesDialog(ApplicationJob job) : base()

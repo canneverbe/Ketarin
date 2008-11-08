@@ -7,6 +7,9 @@ using System.Text;
 using System.Windows.Forms;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.Threading;
+using CookComputing.XmlRpc;
+using CDBurnerXP;
 
 namespace Ketarin.Forms
 {
@@ -37,6 +40,30 @@ namespace Ketarin.Forms
             }
         }
 
+        public bool ReadOnly 
+        {
+            get
+            {
+                return !txtApplicationName.Enabled;
+            }
+            set
+            {
+                bool enable = !value;
+                txtApplicationName.ReadOnly = value;
+                txtCommand.ReadOnly = value;
+                txtFixedUrl.ReadOnly = value;
+                txtTarget.ReadOnly = value;
+                txtFileHippoId.ReadOnly = value;
+                cboCategory.Enabled = enable;
+                chkDeletePrevious.Enabled = enable;
+                chkEnabled.Enabled = enable;
+                chkShareOnline.Enabled = enable;
+                bBrowseFile.Enabled = enable;
+                bOK.Enabled = enable;
+                bOK.Visible = enable;
+            }
+        }
+
         #endregion
 
         public ApplicationJobDialog()
@@ -64,6 +91,8 @@ namespace Ketarin.Forms
             chkDeletePrevious.Checked = m_ApplicationJob.DeletePreviousFile;
             txtCommand.Text = m_ApplicationJob.ExecuteCommand;
             cboCategory.Text = string.IsNullOrEmpty(m_ApplicationJob.Category) ? null : m_ApplicationJob.Category;
+            chkShareOnline.Checked = m_ApplicationJob.ShareApplication;
+            chkShareOnline.Enabled = m_ApplicationJob.CanBeShared;
         }
 
         /// <summary>
@@ -80,6 +109,7 @@ namespace Ketarin.Forms
             m_ApplicationJob.ExecuteCommand = txtCommand.Text;
             m_ApplicationJob.DownloadSourceType = (rbFixedUrl.Checked) ? ApplicationJob.SourceType.FixedUrl : ApplicationJob.SourceType.FileHippo;
             m_ApplicationJob.Category = cboCategory.Text;
+            m_ApplicationJob.ShareApplication = chkShareOnline.Checked;
         }
 
         private void bBrowseFile_Click(object sender, EventArgs e)
@@ -124,7 +154,7 @@ namespace Ketarin.Forms
             txtTarget.AutoCompleteSource = AutoCompleteSource.FileSystem;
         }
 
-        private void radioButton2_CheckedChanged(object sender, EventArgs e)
+        private void rbDirectory_CheckedChanged(object sender, EventArgs e)
         {
             txtTarget.AutoCompleteSource = AutoCompleteSource.FileSystemDirectories;
         }
@@ -160,6 +190,32 @@ namespace Ketarin.Forms
                 DialogResult = DialogResult.None;
                 return;
             }
+
+            // All good. If necessary, now start a thread
+            // which is going to share the application online.
+            if (this.ApplicationJob.ShareApplication)
+            {
+                Thread thread = new Thread(new ParameterizedThreadStart(ShareOnline));
+                thread.IsBackground = true;
+                thread.Start(this.ApplicationJob);
+            }
+        }
+
+        private static void ShareOnline(object argument)
+        {
+            try
+            {
+                ApplicationJob job = argument as ApplicationJob;
+                if (job == null) return;
+
+                IKetarinRpc proxy = XmlRpcProxyGen.Create<IKetarinRpc>();
+                proxy.Timeout = 10000;
+                proxy.SaveApplication(job.GetXml(), Settings.GetValue("AuthorGuid") as string);
+            }
+            catch (Exception)
+            {
+                // No internet, server down, whatever. We don't have to care.
+            }
         }
 
         private void txtFileHippoId_TextChanged(object sender, EventArgs e)
@@ -183,6 +239,7 @@ namespace Ketarin.Forms
         {
             using (EditVariablesDialog dialog = new EditVariablesDialog(m_ApplicationJob))
             {
+                dialog.ReadOnly = ReadOnly;
                 dialog.ShowDialog(this);
             }
         }

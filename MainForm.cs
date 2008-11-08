@@ -151,7 +151,7 @@ namespace Ketarin
             {
                 bRun.Text = "&Update now";
                 bRun.Image = Properties.Resources.Restart;
-                bAddNew.Enabled = true;
+                sbAddApplication.Enabled = true;
 
                 if (m_Updater.Errors.Length > 0)
                 {
@@ -185,6 +185,11 @@ namespace Ketarin
             Bounds = (Rectangle) Settings.GetValue("Ketarin", "MainWindow", Bounds);
 
             UpdateList();
+
+            if ((bool)Settings.GetValue("UpdateAtStartup", false))
+            {
+                RunJobs(m_Jobs);
+            }
         }
 
         protected override void OnClosing(CancelEventArgs e)
@@ -200,7 +205,20 @@ namespace Ketarin
             Settings.SetValue("Ketarin", "MainWindow", Bounds);
         }
 
-        private void bAddNew_Click(object sender, EventArgs e)
+        private void UpdateList()
+        {
+            m_Jobs = new List<ApplicationJob>(DbManager.GetJobs()).ToArray();
+            olvJobs.SetObjects(m_Jobs);
+        }
+
+        #region Add button
+
+        private void sbAddApplication_Click(object sender, EventArgs e)
+        {
+            cmnuAdd.PerformClick();
+        }
+
+        private void cmnuAdd_Click(object sender, EventArgs e)
         {
             using (ApplicationJobDialog dialog = new ApplicationJobDialog())
             {
@@ -212,11 +230,23 @@ namespace Ketarin
             }
         }
 
-        private void UpdateList()
+        private void cmnuImport_Click(object sender, EventArgs e)
         {
-            m_Jobs = new List<ApplicationJob>(DbManager.GetJobs()).ToArray();
-            olvJobs.SetObjects(m_Jobs);
+            mnuImport.PerformClick();
         }
+
+        private void cmnuImportOnline_Click(object sender, EventArgs e)
+        {
+            using (ApplicationDatabaseDialog dialog = new ApplicationDatabaseDialog())
+            {
+                if (dialog.ShowDialog(this) == DialogResult.OK)
+                {
+                    UpdateList();
+                }
+            }
+        }
+
+        #endregion
 
         private void bRun_Click(object sender, EventArgs e)
         {
@@ -234,7 +264,7 @@ namespace Ketarin
         {
             bRun.Text = "Cancel";
             bRun.Image = null;
-            bAddNew.Enabled = false;
+            sbAddApplication.Enabled = false;
 
             m_Updater.Run(jobs);
         }
@@ -399,7 +429,7 @@ namespace Ketarin
 
         private void mnuAddNew_Click(object sender, EventArgs e)
         {
-            bAddNew.PerformClick();
+            cmnuAdd.PerformClick();
         }
 
         private void mnuExport_Click(object sender, EventArgs e)
@@ -417,20 +447,7 @@ namespace Ketarin
 
                 try
                 {
-                    XmlSerializer serializer = new XmlSerializer(typeof(ApplicationJob));
-                    XmlWriterSettings settings = new XmlWriterSettings();
-                    settings.Indent = true;
-                    using (XmlWriter xmlWriter = XmlWriter.Create(dialog.FileName, settings))
-                    {
-                        xmlWriter.WriteStartElement("Jobs");
-                        foreach (ApplicationJob job in olvJobs.SelectedObjects)
-                        {
-                            // Before exporting, make sure that it got a Guid
-                            if (job.Guid == Guid.Empty) job.Save();
-                            serializer.Serialize(xmlWriter, job);
-                        }
-                        xmlWriter.WriteEndElement();
-                    }
+                    File.WriteAllText(dialog.FileName, ApplicationJob.GetXml(olvJobs.SelectedObjects));
                 }
                 catch (Exception ex)
                 {
@@ -448,31 +465,9 @@ namespace Ketarin
 
                 try
                 {
-                    using (XmlReader reader = XmlReader.Create(dialog.FileName))
-                    {
-                        XmlSerializer serializer = new XmlSerializer(typeof(ApplicationJob));
-                        // Find the start position
-                        while (reader.Read())
-                        {
-                            if (reader.NodeType == XmlNodeType.Element && reader.Name == "ApplicationJob")
-                            {
-                                break;
-                            }
-                        }
+                    ApplicationJob.ImportFromXml(dialog.FileName);
 
-                        // Read each job
-                        while (true)
-                        {
-                            ApplicationJob importedJob = (ApplicationJob)serializer.Deserialize(reader);
-                            if (importedJob == null) break;
-
-                            // If a job already exists, only update it!
-                            importedJob.SetIdByGuid(importedJob.Guid);
-                            importedJob.Save();
-                        }
-
-                        UpdateList();
-                    }
+                    UpdateList();
                 }
                 catch (Exception ex)
                 {
@@ -481,7 +476,14 @@ namespace Ketarin
             }
         }
 
-        #endregion
+        private void mnuSettings_Click(object sender, EventArgs e)
+        {
+            using (SettingsDialog dialog = new SettingsDialog())
+            {
+                dialog.ShowDialog(this);
+            }
+        }
 
+        #endregion
     }
 }
