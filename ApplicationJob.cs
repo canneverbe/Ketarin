@@ -30,6 +30,8 @@ namespace Ketarin
         private string m_ExecuteCommand = string.Empty;
         private string m_Category = string.Empty;
         private Guid m_Guid = Guid.Empty;
+        private bool m_CanBeShared = true;
+        private bool m_ShareApplication = false;
 
         public enum SourceType
         {
@@ -38,6 +40,29 @@ namespace Ketarin
         }
 
         #region Properties
+
+        /// <summary>
+        /// Determines whether or not a user can
+        /// share this application online.
+        /// This is the case for all applications a user
+        /// downloaded, which are not his own.
+        /// </summary>
+        /// <remarks>The actual permission check is done on the
+        /// remote server, so this is not a security measure.</remarks>
+        public bool CanBeShared
+        {
+            get { return m_CanBeShared; }
+            set { m_CanBeShared = value; }
+        }
+
+        public bool ShareApplication
+        {
+            get { return m_ShareApplication; }
+            set
+            {
+                m_ShareApplication = value && CanBeShared;
+            }
+        }
 
         [XmlAttribute("Guid")]
         public Guid Guid
@@ -208,14 +233,125 @@ namespace Ketarin
             transaction.Commit();
         }
 
-        public void SetIdByGuid(Guid guid)
+        public bool SetIdByGuid(Guid guid)
         {
             using (IDbCommand command = DbManager.Connection.CreateCommand())
             {
                 command.CommandText = "SELECT JobId FROM jobs WHERE JobGuid = @JobGuid";
                 command.Parameters.Add(new SQLiteParameter("@JobGuid", guid.ToString()));
                 m_Id = Convert.ToInt32(command.ExecuteScalar());
+                return (m_Id > 0);
             }
+        }
+
+        /// <summary>
+        /// Imports one or more ApplicationJobs from an XML file.
+        /// </summary>
+        /// <returns>The last imported ApplicationJob</returns>
+        public static ApplicationJob ImportFromXml(string fileName)
+        {
+            using (XmlReader reader = XmlReader.Create(fileName))
+            {
+                return ImportFromXml(reader, true);
+            }
+        }
+
+        /// <summary>
+        /// Imports one or more ApplicationJobs from a piece of XML.
+        /// </summary>
+        /// <returns>The last imported ApplicationJob</returns>
+        public static ApplicationJob ImportFromXmlString(string xml)
+        {
+            using (StringReader textReader = new StringReader(xml))
+            {
+                using (XmlReader reader = XmlReader.Create(textReader))
+                {
+                    return ImportFromXml(reader, true);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Returns an XML document containing this application job.
+        /// </summary>
+        public string GetXml()
+        {
+            return GetXml(new ApplicationJob[] { this });
+        }
+
+        /// <summary>
+        /// Returns an XML document from the given jobs.
+        /// </summary>
+        /// <param name="jobs"></param>
+        public static string GetXml(System.Collections.IEnumerable jobs)
+        {
+            XmlSerializer serializer = new XmlSerializer(typeof(ApplicationJob));
+            XmlWriterSettings settings = new XmlWriterSettings();
+            settings.Indent = true;
+
+            StringBuilder output = new StringBuilder();
+
+            using (XmlWriter xmlWriter = XmlWriter.Create(output, settings))
+            {
+                xmlWriter.WriteStartElement("Jobs");
+                foreach (ApplicationJob job in jobs)
+                {
+                    // Before exporting, make sure that it got a Guid
+                    if (job.Guid == Guid.Empty) job.Save();
+                    serializer.Serialize(xmlWriter, job);
+                }
+                xmlWriter.WriteEndElement();
+            }
+
+            return output.ToString();
+        }
+
+        /// <summary>
+        /// Creates one application job from the given XML,
+        /// without saving it.
+        /// </summary>
+        /// <returns>The last imported ApplicationJob</returns>
+        public static ApplicationJob LoadFromXml(string xml)
+        {
+            using (StringReader textReader = new StringReader(xml))
+            {
+                using (XmlReader reader = XmlReader.Create(textReader))
+                {
+                    return ImportFromXml(reader, false);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Imports one or more ApplicationJobs from a piece of XML, 
+        /// provided by an XmlReader.
+        /// </summary>
+        /// <returns>The last imported ApplicationJob</returns>
+        private static ApplicationJob ImportFromXml(XmlReader reader, bool save)
+        {
+            XmlSerializer serializer = new XmlSerializer(typeof(ApplicationJob));
+            // Find the start position
+            while (reader.Read())
+            {
+                if (reader.NodeType == XmlNodeType.Element && reader.Name == "ApplicationJob")
+                {
+                    break;
+                }
+            }
+
+            // Read each job
+            while (true)
+            {
+                ApplicationJob importedJob = (ApplicationJob)serializer.Deserialize(reader);
+                if (importedJob == null) break;
+
+                // If a job already exists, only update it!
+                importedJob.SetIdByGuid(importedJob.Guid);
+                if (save) importedJob.Save();
+                return importedJob;
+            }
+
+            return null;
         }
 
         public void Save()
@@ -229,6 +365,20 @@ namespace Ketarin
 
             if (m_Id > 0)
             {
+                // Important: Once CanBeShared is set to false,
+                // it can never be true again (ownership does not change)
+                using (IDbCommand command = DbManager.Connection.CreateCommand())
+                {
+                    command.Transaction = transaction;
+                    command.CommandText = "SELECT CanBeShared FROM jobs WHERE JobId = @JobId";
+                    command.Parameters.Add(new SQLiteParameter("@JobId", m_Id));
+                    bool canBeShared = Convert.ToBoolean(command.ExecuteScalar());
+                    if (!canBeShared)
+                    {
+                        m_CanBeShared = false;
+                    }
+                }
+
                 // Update existing job
                 using (IDbCommand command = DbManager.Connection.CreateCommand())
                 {
@@ -245,7 +395,9 @@ namespace Ketarin
                                                    SourceType = @SourceType,
                                                    ExecuteCommand = @ExecuteCommand,
                                                    Category = @Category,
-                                                   JobGuid = @JobGuid
+                                                   JobGuid = @JobGuid,
+                                                   CanBeShared = @CanBeShared,
+                                                   ShareApplication = @ShareApplication
                                              WHERE JobId = @JobId";
 
                     command.Parameters.Add(new SQLiteParameter("@ApplicationName", Name));
@@ -260,6 +412,9 @@ namespace Ketarin
                     command.Parameters.Add(new SQLiteParameter("@ExecuteCommand", m_ExecuteCommand));
                     command.Parameters.Add(new SQLiteParameter("@Category", m_Category));
                     command.Parameters.Add(new SQLiteParameter("@JobGuid", m_Guid.ToString()));
+                    command.Parameters.Add(new SQLiteParameter("@CanBeShared", m_CanBeShared));
+                    command.Parameters.Add(new SQLiteParameter("@ShareApplication", m_ShareApplication));
+                    
                     command.Parameters.Add(new SQLiteParameter("@JobId", m_Id));
                     
                     command.ExecuteNonQuery();
@@ -271,8 +426,8 @@ namespace Ketarin
                 using (IDbCommand command = DbManager.Connection.CreateCommand())
                 {
                     command.Transaction = transaction;
-                    command.CommandText = @"INSERT INTO jobs (ApplicationName, FixedDownloadUrl, DateAdded, TargetPath, LastUpdated, IsEnabled, FileHippoId, DeletePreviousFile, SourceType, ExecuteCommand, Category, JobGuid)
-                                                 VALUES (@ApplicationName, @FixedDownloadUrl, @DateAdded, @TargetPath, @LastUpdated, @IsEnabled, @FileHippoId, @DeletePreviousFile, @SourceType, @ExecuteCommand, @Category, @JobGuid)";
+                    command.CommandText = @"INSERT INTO jobs (ApplicationName, FixedDownloadUrl, DateAdded, TargetPath, LastUpdated, IsEnabled, FileHippoId, DeletePreviousFile, SourceType, ExecuteCommand, Category, JobGuid, CanBeShared, ShareApplication)
+                                                 VALUES (@ApplicationName, @FixedDownloadUrl, @DateAdded, @TargetPath, @LastUpdated, @IsEnabled, @FileHippoId, @DeletePreviousFile, @SourceType, @ExecuteCommand, @Category, @JobGuid, @CanBeShared, @ShareApplication)";
 
                     command.Parameters.Add(new SQLiteParameter("@ApplicationName", Name));
                     command.Parameters.Add(new SQLiteParameter("@FixedDownloadUrl", m_FixedDownloadUrl));
@@ -286,6 +441,9 @@ namespace Ketarin
                     command.Parameters.Add(new SQLiteParameter("@ExecuteCommand", m_ExecuteCommand));
                     command.Parameters.Add(new SQLiteParameter("@Category", m_Category));
                     command.Parameters.Add(new SQLiteParameter("@JobGuid", m_Guid.ToString()));
+                    command.Parameters.Add(new SQLiteParameter("@CanBeShared",m_CanBeShared));
+                    command.Parameters.Add(new SQLiteParameter("@ShareApplication", m_ShareApplication));
+                    
                     command.ExecuteNonQuery();
                 }
 
@@ -344,6 +502,7 @@ namespace Ketarin
             m_SourceType = (SourceType)Convert.ToByte(reader["SourceType"]);
             m_ExecuteCommand = reader["ExecuteCommand"] as string;
             m_Category = reader["Category"] as string;
+            m_CanBeShared = Convert.ToBoolean(reader["CanBeShared"]);
 
             string guid = reader["JobGuid"] as string;
             if (!string.IsNullOrEmpty(guid))

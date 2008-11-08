@@ -59,6 +59,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -72,6 +73,12 @@
     </Compile>
     <Compile Include="Forms\AboutDialog.Designer.cs">
       <DependentUpon>AboutDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ApplicationDatabaseDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ApplicationDatabaseDialog.Designer.cs">
+      <DependentUpon>ApplicationDatabaseDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\ApplicationJobDialog.cs">
       <SubType>Form</SubType>
@@ -103,6 +110,13 @@
     <Compile Include="Forms\RenameFileDialog.Designer.cs">
       <DependentUpon>RenameFileDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\SettingsDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SettingsDialog.Designer.cs">
+      <DependentUpon>SettingsDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="IKetarinRpc.cs" />
     <Compile Include="M:\CsLib\CDBurnerXP\Controls\ListView.cs">
       <Link>CDBurnerXP\ListView.cs</Link>
       <SubType>Component</SubType>
@@ -163,6 +177,9 @@
     <EmbeddedResource Include="Forms\AboutDialog.resx">
       <DependentUpon>AboutDialog.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ApplicationDatabaseDialog.resx">
+      <DependentUpon>ApplicationDatabaseDialog.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\ApplicationJobDialog.resx">
       <DependentUpon>ApplicationJobDialog.cs</DependentUpon>
     </EmbeddedResource>
@@ -177,6 +194,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\RenameFileDialog.resx">
       <DependentUpon>RenameFileDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SettingsDialog.resx">
+      <DependentUpon>SettingsDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
@@ -201,8 +221,63 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="SerializableDictionary.cs" />
+    <Compile Include="SplitButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Updater.cs" />
     <Compile Include="UrlVariable.cs" />
+    <Compile Include="XmlRpc\IHttpRequest.cs" />
+    <Compile Include="XmlRpc\IHttpRequestHandler.cs" />
+    <Compile Include="XmlRpc\IHttpResponse.cs" />
+    <Compile Include="XmlRpc\IXmlRpcProxy.cs" />
+    <Compile Include="XmlRpc\RequestResponseLogger.cs" />
+    <Compile Include="XmlRpc\Tracer.cs" />
+    <Compile Include="XmlRpc\util.cs" />
+    <Compile Include="XmlRpc\XmlRpcAsyncResult.cs" />
+    <Compile Include="XmlRpc\XmlRpcBeginAttribute.cs" />
+    <Compile Include="XmlRpc\XmlRpcBoolean.cs" />
+    <Compile Include="XmlRpc\XmlRpcClientFormatterSink.cs" />
+    <Compile Include="XmlRpc\XmlRpcClientFormatterSinkProvider.cs" />
+    <Compile Include="XmlRpc\XmlRpcClientProtocol.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="XmlRpc\XmlRpcDateTime.cs" />
+    <Compile Include="XmlRpc\XmlRpcDocWriter.cs" />
+    <Compile Include="XmlRpc\XmlRpcDouble.cs" />
+    <Compile Include="XmlRpc\XmlRpcEndAttribute.cs" />
+    <Compile Include="XmlRpc\XmlRpcException.cs" />
+    <Compile Include="XmlRpc\XmlRpcFaultException.cs" />
+    <Compile Include="XmlRpc\XmlRpcHttpRequest.cs" />
+    <Compile Include="XmlRpc\XmlRpcHttpResponse.cs" />
+    <Compile Include="XmlRpc\XmlRpcHttpServerProtocol.cs" />
+    <Compile Include="XmlRpc\XmlRpcInt.cs" />
+    <Compile Include="XmlRpc\XmlRpcListenerRequest.cs" />
+    <Compile Include="XmlRpc\XmlRpcListenerResponse.cs" />
+    <Compile Include="XmlRpc\XmlRpcListenerService.cs" />
+    <Compile Include="XmlRpc\XmlRpcLogger.cs" />
+    <Compile Include="XmlRpc\XmlRpcMemberAttribute.cs" />
+    <Compile Include="XmlRpc\XmlRpcMethodAttribute.cs" />
+    <Compile Include="XmlRpc\XmlRpcMethodInfo.cs" />
+    <Compile Include="XmlRpc\XmlRpcMissingMappingAttribute.cs" />
+    <Compile Include="XmlRpc\XmlRpcNonStandard.cs" />
+    <Compile Include="XmlRpc\XmlRpcParameterAttribute.cs" />
+    <Compile Include="XmlRpc\XmlRpcParameterInfo.cs" />
+    <Compile Include="XmlRpc\XmlRpcProxyCodeGen.cs" />
+    <Compile Include="XmlRpc\XmlRpcProxyGen.cs" />
+    <Compile Include="XmlRpc\XmlRpcRequest.cs" />
+    <Compile Include="XmlRpc\XmlRpcRequestEventArgs.cs" />
+    <Compile Include="XmlRpc\XmlRpcResponse.cs" />
+    <Compile Include="XmlRpc\XmlRpcResponseEventArgs.cs" />
+    <Compile Include="XmlRpc\XmlRpcReturnValueAttribute.cs" />
+    <Compile Include="XmlRpc\XmlRpcSerializer.cs" />
+    <Compile Include="XmlRpc\XmlRpcServerFormatterSink.cs" />
+    <Compile Include="XmlRpc\XmlRpcServerFormatterSinkProvider.cs" />
+    <Compile Include="XmlRpc\XmlRpcServerProtocol.cs" />
+    <Compile Include="XmlRpc\XmlRpcService.cs" />
+    <Compile Include="XmlRpc\XmlRpcServiceAttribute.cs" />
+    <Compile Include="XmlRpc\XmlRpcServiceInfo.cs" />
+    <Compile Include="XmlRpc\XmlRpcStruct.cs" />
+    <Compile Include="XmlRpc\XmlRpcUrlAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AddSmall.png" />

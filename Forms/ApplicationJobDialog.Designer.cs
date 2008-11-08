@@ -52,6 +52,7 @@
             this.sepOptions = new CDBurnerXP.Controls.Separator();
             this.sepTarget = new CDBurnerXP.Controls.Separator();
             this.sepDownload = new CDBurnerXP.Controls.Separator();
+            this.chkShareOnline = new System.Windows.Forms.CheckBox();
             this.panel1.SuspendLayout();
             this.pnlTarget.SuspendLayout();
             this.SuspendLayout();
@@ -60,7 +61,7 @@
             // 
             this.bCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.bCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.bCancel.Location = new System.Drawing.Point(294, 317);
+            this.bCancel.Location = new System.Drawing.Point(294, 337);
             this.bCancel.Name = "bCancel";
             this.bCancel.Size = new System.Drawing.Size(75, 23);
             this.bCancel.TabIndex = 100;
@@ -71,7 +72,7 @@
             // 
             this.bOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.bOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.bOK.Location = new System.Drawing.Point(213, 317);
+            this.bOK.Location = new System.Drawing.Point(213, 337);
             this.bOK.Name = "bOK";
             this.bOK.Size = new System.Drawing.Size(75, 23);
             this.bOK.TabIndex = 99;
@@ -208,7 +209,7 @@
             this.rbFolder.TabIndex = 22;
             this.rbFolder.Text = "Save in f&older";
             this.rbFolder.UseVisualStyleBackColor = true;
-            this.rbFolder.CheckedChanged += new System.EventHandler(this.radioButton2_CheckedChanged);
+            this.rbFolder.CheckedChanged += new System.EventHandler(this.rbDirectory_CheckedChanged);
             // 
             // rbFileName
             // 
@@ -249,18 +250,18 @@
             // 
             this.txtCommand.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtCommand.Location = new System.Drawing.Point(15, 283);
+            this.txtCommand.Location = new System.Drawing.Point(15, 305);
             this.txtCommand.Name = "txtCommand";
             this.txtCommand.Size = new System.Drawing.Size(354, 20);
-            this.txtCommand.TabIndex = 34;
+            this.txtCommand.TabIndex = 35;
             // 
             // lblExecuteCommand
             // 
             this.lblExecuteCommand.AutoSize = true;
-            this.lblExecuteCommand.Location = new System.Drawing.Point(12, 267);
+            this.lblExecuteCommand.Location = new System.Drawing.Point(13, 289);
             this.lblExecuteCommand.Name = "lblExecuteCommand";
             this.lblExecuteCommand.Size = new System.Drawing.Size(247, 13);
-            this.lblExecuteCommand.TabIndex = 33;
+            this.lblExecuteCommand.TabIndex = 34;
             this.lblExecuteCommand.Text = "E&xecute the following command after downloading:";
             // 
             // lblCategory
@@ -318,11 +319,22 @@
             this.sepDownload.Text = "Download source";
             this.sepDownload.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // chkShareOnline
+            // 
+            this.chkShareOnline.AutoSize = true;
+            this.chkShareOnline.Location = new System.Drawing.Point(15, 264);
+            this.chkShareOnline.Name = "chkShareOnline";
+            this.chkShareOnline.Size = new System.Drawing.Size(212, 17);
+            this.chkShareOnline.TabIndex = 33;
+            this.chkShareOnline.Text = "S&hare this application online with others";
+            this.chkShareOnline.UseVisualStyleBackColor = true;
+            // 
             // ApplicationJobDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(381, 352);
+            this.ClientSize = new System.Drawing.Size(381, 372);
+            this.Controls.Add(this.chkShareOnline);
             this.Controls.Add(this.cboCategory);
             this.Controls.Add(this.lblCategory);
             this.Controls.Add(this.lblExecuteCommand);
@@ -380,5 +392,6 @@
         private System.Windows.Forms.Label lblExecuteCommand;
         private System.Windows.Forms.Label lblCategory;
         private System.Windows.Forms.ComboBox cboCategory;
+        private System.Windows.Forms.CheckBox chkShareOnline;
     }
 }

@@ -8,6 +8,7 @@ using System.ComponentModel;
 using CDBurnerXP.IO;
 using System.Diagnostics;
 using System.Windows.Forms;
+using CDBurnerXP;
 
 namespace Ketarin
 {
@@ -338,23 +339,35 @@ namespace Ketarin
 
             job.Save();
 
+            // Execute a default command?
+            string defaultCommand = Settings.GetValue("DefaultCommand") as string;
+            if (!string.IsNullOrEmpty(defaultCommand))
+            {
+                ExecuteCommand(job, defaultCommand);
+            }
+
             // Do we need to execute a command after downloading?
             if (!string.IsNullOrEmpty(job.ExecuteCommand))
             {
-                // Replace variable: file
-                string command = job.ExecuteCommand.Replace("{file}", "\"" + job.PreviousLocation + "\"");
-                // Replace variable: root
-                try
-                {
-                    command = command.Replace("{root}", Path.GetPathRoot(Application.StartupPath));
-                }
-                catch (ArgumentException) { }
-                // Tell cmd to execute the given command (/c)
-                ProcessStartInfo processInfo = new ProcessStartInfo("cmd", "/c " + command);
-                processInfo.UseShellExecute = false;
-                processInfo.CreateNoWindow = true;
-                Process.Start(processInfo);
+                ExecuteCommand(job, job.ExecuteCommand);
             }
+        }
+
+        private static void ExecuteCommand(ApplicationJob job, string baseCommand)
+        {
+            // Replace variable: file
+            string command = baseCommand.Replace("{file}", "\"" + job.PreviousLocation + "\"");
+            // Replace variable: root
+            try
+            {
+                command = command.Replace("{root}", Path.GetPathRoot(Application.StartupPath));
+            }
+            catch (ArgumentException) { }
+            // Tell cmd to execute the given command (/c)
+            ProcessStartInfo processInfo = new ProcessStartInfo("cmd", "/c " + command);
+            processInfo.UseShellExecute = false;
+            processInfo.CreateNoWindow = true;
+            Process.Start(processInfo);
         }
 
         protected virtual void OnUpdateCompleted()
