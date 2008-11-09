@@ -148,6 +148,7 @@ namespace Ketarin
 
         public void Run(IEnumerable<ApplicationJob> jobs)
         {
+            m_IsBusy = true;
             m_Jobs = jobs;
             
             // Initialise progress and status
@@ -168,7 +169,6 @@ namespace Ketarin
 
         private void Run()
         {
-            m_IsBusy = true;
             m_CancelUpdates = false;
             m_Errors = new List<ApplicationJobError>();
 
@@ -262,7 +262,8 @@ namespace Ketarin
             using (WebResponse response = req.GetResponse())
             {
                 // Occasionally, websites are not available and an error page is encountered
-                if (response is HttpWebResponse && response.ContentType.StartsWith("text/"))
+                // For the case that the content type is just plain wrong, ignore it if the size is higher than 500KB
+                if (response is HttpWebResponse && response.ContentType.StartsWith("text/") && response.ContentLength < 500000)
                 {
                     throw new NonBinaryFileException(response.ContentType);
                 }
@@ -273,16 +274,12 @@ namespace Ketarin
                 if (!job.RequiresDownload(response))
                 {
                     m_Status[job] = Status.Success;
-                    OnStatusChanged(job);
 
                     // If file already exists (created by user),
                     // the download is not necessary. We still need to
                     // set the file name.
-                    if (string.IsNullOrEmpty(job.PreviousLocation))
-                    {
-                        job.PreviousLocation = targetFileName;
-                        job.Save();
-                    }
+                    job.PreviousLocation = targetFileName;
+                    job.Save();
                     return;
                 }
 
