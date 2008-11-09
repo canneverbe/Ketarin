@@ -192,10 +192,12 @@ namespace Ketarin
         }
 
 
-        public static IEnumerable<ApplicationJob> GetJobs()
+        public static ApplicationJob[] GetJobs()
         {
             IDbCommand command = Connection.CreateCommand();
             command.CommandText = "SELECT * FROM jobs ORDER BY ApplicationName";
+
+            List<ApplicationJob> result = new List<ApplicationJob>();
 
             using (IDataReader reader = command.ExecuteReader())
             {
@@ -203,9 +205,11 @@ namespace Ketarin
                 {
                     ApplicationJob job = new ApplicationJob();
                     job.Hydrate(reader);
-                    yield return job;
+                    result.Add(job);
                 }
             }
+
+            return result.ToArray();
         }
 
         public static string[] GetCategories()

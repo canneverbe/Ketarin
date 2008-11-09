@@ -19,17 +19,19 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using CDBurnerXP;
+using System.Threading;
 
 namespace Ketarin
 {
     static class Program
     {
         [STAThread]
-        static void Main()
+        static void Main(string[] args)
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
+            // Initialise database
             try
             {
                 DbManager.LoadOrCreateDatabase();
@@ -47,7 +49,43 @@ namespace Ketarin
                 return;
             }
 
-            Application.Run(new MainForm());
+            // Either run silently on command line or launch GUI
+            if (args.Length > 0)
+            {
+                List<string> arguments = new List<string>(args);
+                if (arguments.Contains("/SILENT"))
+                {
+                    ApplicationJob[] jobs = DbManager.GetJobs();
+                    Updater updater = new Updater();
+                    updater.StatusChanged += new EventHandler<Updater.JobStatusChangedEventArgs>(updater_StatusChanged);
+                    updater.ProgressChanged += new EventHandler<Updater.JobProgressChangedEventArgs>(updater_ProgressChanged);
+                    updater.Run(jobs);
+
+                    while (updater.IsBusy)
+                    {
+                        Thread.Sleep(1000);
+                    }
+                }
+            }
+            else
+            {
+                Application.Run(new MainForm());
+            }
         }
+
+        #region Command line updater
+
+        static void updater_ProgressChanged(object sender, Updater.JobProgressChangedEventArgs e)
+        {
+            Console.Write(" " + e.ProgressPercentage + "%");
+        }
+
+        static void updater_StatusChanged(object sender, Updater.JobStatusChangedEventArgs e)
+        {
+            Console.WriteLine();
+            Console.Write(e.ApplicationJob.Name + ": " + e.NewStatus);
+        }
+
+        #endregion
     }
 }
