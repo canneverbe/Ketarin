@@ -201,7 +201,17 @@ namespace Ketarin
         public string Name
         {
             get { return m_Name; }
-            set { m_Name = value; }
+            set
+            {
+                if (value.Length > 255)
+                {
+                    m_Name = value.Substring(0, 255);
+                }
+                else
+                {
+                    m_Name = value;
+                }
+            }
         }
 
         #endregion

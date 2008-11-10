@@ -94,6 +94,7 @@
             this.txtApplicationName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.txtApplicationName.Location = new System.Drawing.Point(109, 12);
+            this.txtApplicationName.MaxLength = 255;
             this.txtApplicationName.Name = "txtApplicationName";
             this.txtApplicationName.Size = new System.Drawing.Size(260, 20);
             this.txtApplicationName.TabIndex = 1;
