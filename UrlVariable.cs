@@ -56,6 +56,7 @@ namespace Ketarin
             set { m_Name = value; }
         }
 
+        [XmlIgnore()]
         public string TempContent
         {
             get { return m_TempContent; }
