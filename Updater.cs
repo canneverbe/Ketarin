@@ -325,7 +325,14 @@ namespace Ketarin
                     PathEx.TryDeleteFiles(job.PreviousLocation);
                 }
 
-                File.SetLastWriteTime(tmpLocation, ApplicationJob.GetLastModified(response));
+                try
+                {
+                    File.SetLastWriteTime(tmpLocation, ApplicationJob.GetLastModified(response));
+                }
+                catch (ArgumentException)
+                {
+                    // Invalid file date. Ignore and just use DateTime.Now
+                }
                 File.Copy(tmpLocation, targetFileName, true);
                 File.Delete(tmpLocation);
 
