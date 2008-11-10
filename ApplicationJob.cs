@@ -554,6 +554,17 @@ namespace Ketarin
                 fileName = fileName.Replace("%20", " ");
                 targetLocation = Path.Combine(targetLocation, fileName);
             }
+
+            // If relative file names are used, add the startup path
+            try
+            {
+                if (!Path.IsPathRooted(targetLocation))
+                {
+                    targetLocation = Path.Combine(Application.StartupPath, targetLocation);
+                }
+            }
+            catch (ArgumentException) { }
+
             return targetLocation;
         }
 
