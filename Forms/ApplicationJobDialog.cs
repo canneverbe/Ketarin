@@ -10,10 +10,11 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using CookComputing.XmlRpc;
 using CDBurnerXP;
+using CDBurnerXP.Forms;
 
 namespace Ketarin.Forms
 {
-    public partial class ApplicationJobDialog : Form
+    public partial class ApplicationJobDialog : PersistentForm
     {
         private ApplicationJob m_ApplicationJob = new ApplicationJob();
 

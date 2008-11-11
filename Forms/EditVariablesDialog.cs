@@ -11,7 +11,7 @@ using CDBurnerXP.Forms;
 
 namespace Ketarin.Forms
 {
-    public partial class EditVariablesDialog : Form
+    public partial class EditVariablesDialog : PersistentForm
     {
         private ApplicationJob.UrlVariableCollection m_Variables = new ApplicationJob.UrlVariableCollection();
         private ApplicationJob m_Job = null;
