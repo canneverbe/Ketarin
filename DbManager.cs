@@ -124,6 +124,7 @@ namespace Ketarin
                                          Url                TEXT,
                                          StartText          TEXT,
                                          RegularExpression  TEXT,
+                                         CachedContent      TEXT,
                                          EndText            TEXT);";
                 command.ExecuteNonQuery();
             }
@@ -164,6 +165,14 @@ namespace Ketarin
                 using (IDbCommand command = Connection.CreateCommand())
                 {
                     command.CommandText = "ALTER TABLE variables ADD RegularExpression TEXT";
+                    command.ExecuteNonQuery();
+                }
+            }
+            if (!columns.Contains("CachedContent"))
+            {
+                using (IDbCommand command = Connection.CreateCommand())
+                {
+                    command.CommandText = "ALTER TABLE variables ADD CachedContent TEXT";
                     command.ExecuteNonQuery();
                 }
             }

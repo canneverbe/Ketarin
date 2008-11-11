@@ -498,8 +498,8 @@ namespace Ketarin
                     using (IDbCommand command = DbManager.Connection.CreateCommand())
                     {
                         command.Transaction = transaction;
-                        command.CommandText = @"INSERT INTO variables (JobId, VariableName, Url, StartText, EndText, RegularExpression)
-                                                 VALUES (@JobId, @VariableName, @Url, @StartText, @EndText, @RegularExpression)";
+                        command.CommandText = @"INSERT INTO variables (JobId, VariableName, Url, StartText, EndText, RegularExpression, CachedContent)
+                                                 VALUES (@JobId, @VariableName, @Url, @StartText, @EndText, @RegularExpression, @CachedContent)";
 
                         command.Parameters.Add(new SQLiteParameter("@JobId", m_Id));
                         command.Parameters.Add(new SQLiteParameter("@VariableName", pair.Key));
@@ -507,6 +507,7 @@ namespace Ketarin
                         command.Parameters.Add(new SQLiteParameter("@StartText", pair.Value.StartText));
                         command.Parameters.Add(new SQLiteParameter("@EndText", pair.Value.EndText));
                         command.Parameters.Add(new SQLiteParameter("@RegularExpression", pair.Value.Regex));
+                        command.Parameters.Add(new SQLiteParameter("@CachedContent", pair.Value.CachedContent));
                         command.ExecuteNonQuery();
                     }
                 }
