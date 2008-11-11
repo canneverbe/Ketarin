@@ -26,7 +26,7 @@ namespace Ketarin
         private bool m_DeletePreviousFile = false;
         private string m_PreviousLocation = string.Empty;
         private SourceType m_SourceType = SourceType.FixedUrl;
-        private SerializableDictionary<string, UrlVariable> m_Variables = null;
+        private UrlVariableCollection m_Variables = null;
         private string m_ExecuteCommand = string.Empty;
         private string m_Category = string.Empty;
         private Guid m_Guid = Guid.Empty;
@@ -77,14 +77,31 @@ namespace Ketarin
             }
         }
 
+        #region UrlVariableCollection
+
+        public class UrlVariableCollection : SerializableDictionary<string, UrlVariable>
+        {
+            public string ReplaceAllInString(string value)
+            {
+                foreach (UrlVariable var in Values)
+                {
+                    value = var.ReplaceInString(value);
+                }
+
+                return value;
+            }
+        }
+
+        #endregion
+
         [XmlElement("Variables")]
-        public SerializableDictionary<string, UrlVariable> Variables
+        public UrlVariableCollection Variables
         {
             get {
                 // Load variables on demand
                 if (m_Variables == null)
                 {
-                    m_Variables = new SerializableDictionary<string, UrlVariable>();
+                    m_Variables = new UrlVariableCollection();
                     if (m_Id != 0)
                     {
                         using (IDbCommand command = DbManager.Connection.CreateCommand())

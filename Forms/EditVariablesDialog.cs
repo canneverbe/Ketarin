@@ -13,7 +13,7 @@ namespace Ketarin.Forms
 {
     public partial class EditVariablesDialog : Form
     {
-        private SerializableDictionary<string, UrlVariable> m_Variables = new SerializableDictionary<string,UrlVariable>();
+        private ApplicationJob.UrlVariableCollection m_Variables = new ApplicationJob.UrlVariableCollection();
         private ApplicationJob m_Job = null;
 
         #region Properties
