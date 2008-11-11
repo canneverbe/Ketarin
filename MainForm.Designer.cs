@@ -64,6 +64,7 @@
             this.m_VistaMenu = new CDBurnerXP.Controls.VistaMenu(this.components);
             this.bRun = new System.Windows.Forms.Button();
             this.sbAddApplication = new wyDay.Controls.SplitButton();
+            this.colCustomValue = new CDBurnerXP.Controls.OLVColumn();
             ((System.ComponentModel.ISupportInitialize)(this.olvJobs)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.m_VistaMenu)).BeginInit();
             this.SuspendLayout();
@@ -246,6 +247,7 @@
             this.olvJobs.AllColumns.Add(this.colProgress);
             this.olvJobs.AllColumns.Add(this.colTarget);
             this.olvJobs.AllColumns.Add(this.colCategory);
+            this.olvJobs.AllColumns.Add(this.colCustomValue);
             this.olvJobs.AlternateRowBackColor = System.Drawing.Color.Empty;
             this.olvJobs.AlwaysGroupByColumn = null;
             this.olvJobs.AlwaysGroupBySortOrder = System.Windows.Forms.SortOrder.None;
@@ -341,6 +343,12 @@
             this.sbAddApplication.UseVisualStyleBackColor = true;
             this.sbAddApplication.Click += new System.EventHandler(this.sbAddApplication_Click);
             // 
+            // colCustomValue
+            // 
+            this.colCustomValue.AspectName = null;
+            this.colCustomValue.IsVisible = false;
+            this.colCustomValue.Text = "Custom Value";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -397,6 +405,7 @@
         private System.Windows.Forms.MenuItem cmnuImportOnline;
         private System.Windows.Forms.MenuItem mnusep2;
         private System.Windows.Forms.MenuItem mnuSettings;
+        private CDBurnerXP.Controls.OLVColumn colCustomValue;
     }
 }
 

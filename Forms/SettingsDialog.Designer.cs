@@ -33,13 +33,15 @@
             this.chkUpdateAtStartup = new System.Windows.Forms.CheckBox();
             this.lblDefaultCommand = new System.Windows.Forms.Label();
             this.txtDefaultCommand = new System.Windows.Forms.TextBox();
+            this.txtCustomColumn = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // bCancel
             // 
             this.bCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.bCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.bCancel.Location = new System.Drawing.Point(283, 141);
+            this.bCancel.Location = new System.Drawing.Point(283, 168);
             this.bCancel.Name = "bCancel";
             this.bCancel.Size = new System.Drawing.Size(75, 23);
             this.bCancel.TabIndex = 11;
@@ -50,7 +52,7 @@
             // 
             this.bOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.bOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.bOK.Location = new System.Drawing.Point(202, 141);
+            this.bOK.Location = new System.Drawing.Point(202, 168);
             this.bOK.Name = "bOK";
             this.bOK.Size = new System.Drawing.Size(75, 23);
             this.bOK.TabIndex = 10;
@@ -90,11 +92,31 @@
             this.txtDefaultCommand.TabIndex = 2;
             this.txtDefaultCommand.WordWrap = false;
             // 
+            // txtCustomColumn
+            // 
+            this.txtCustomColumn.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtCustomColumn.Location = new System.Drawing.Point(155, 132);
+            this.txtCustomColumn.Name = "txtCustomColumn";
+            this.txtCustomColumn.Size = new System.Drawing.Size(203, 20);
+            this.txtCustomColumn.TabIndex = 4;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(12, 135);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(137, 13);
+            this.label1.TabIndex = 3;
+            this.label1.Text = "&Variable for custom column:";
+            // 
             // SettingsDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(370, 176);
+            this.ClientSize = new System.Drawing.Size(370, 203);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.txtCustomColumn);
             this.Controls.Add(this.txtDefaultCommand);
             this.Controls.Add(this.lblDefaultCommand);
             this.Controls.Add(this.chkUpdateAtStartup);
@@ -120,5 +142,7 @@
         private System.Windows.Forms.CheckBox chkUpdateAtStartup;
         private System.Windows.Forms.Label lblDefaultCommand;
         private System.Windows.Forms.TextBox txtDefaultCommand;
+        private System.Windows.Forms.TextBox txtCustomColumn;
+        private System.Windows.Forms.Label label1;
     }
 }

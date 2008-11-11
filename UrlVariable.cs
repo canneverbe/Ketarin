@@ -18,6 +18,7 @@ namespace Ketarin
         private string m_Name;
         private string m_TempContent = string.Empty;
         private string m_Regex = string.Empty;
+        private string m_CachedContent = string.Empty;
 
         #region Properties
 
@@ -56,11 +57,27 @@ namespace Ketarin
             set { m_Name = value; }
         }
 
+        /// <summary>
+        /// Temporarily store content related to this
+        /// variable for short term caching purposes.
+        /// </summary>
         [XmlIgnore()]
-        public string TempContent
+        internal string TempContent
         {
             get { return m_TempContent; }
             set { m_TempContent = value; }
+        }
+
+        /// <summary>
+        /// Stores the content of the variable
+        /// in the database. This can be used for a 
+        /// custom column, without the need for web requests.
+        /// </summary>
+        [XmlIgnore()]
+        public string CachedContent
+        {
+            get { return m_CachedContent; }
+            set { m_CachedContent = value; }
         }
 
         #endregion
@@ -81,6 +98,7 @@ namespace Ketarin
             m_EndText = reader["EndText"] as string;
             m_Url = reader["Url"] as string;
             m_Regex = reader["RegularExpression"] as string;
+            m_CachedContent = reader["CachedContent"] as string;
         }
 
         public string ReplaceInString(string url)
@@ -109,10 +127,12 @@ namespace Ketarin
                 {
                     if (match.Groups.Count == 1)
                     {
+                        m_CachedContent = match.Value;
                         return url.Replace(find, match.Value);
                     }
                     else if (match.Groups.Count == 2)
                     {
+                        m_CachedContent = match.Groups[1].Value;
                         return url.Replace(find, match.Groups[1].Value);
                     }
                 }
@@ -121,6 +141,7 @@ namespace Ketarin
             // Use whole page if either start or end is missing
             if (string.IsNullOrEmpty(m_StartText) || string.IsNullOrEmpty(m_EndText))
             {
+                m_CachedContent = page;
                 return url.Replace(find, page);
             }
 
@@ -134,6 +155,7 @@ namespace Ketarin
 
             string result = page.Substring(endOfStart, endPos - endOfStart);
 
+            m_CachedContent = result;
             url = url.Replace(find, result);
 
             return url;

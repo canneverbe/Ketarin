@@ -38,6 +38,10 @@ namespace Ketarin
     {
         private ApplicationJob[] m_Jobs = null;
         private Updater m_Updater = new Updater();
+        // For caching purposes
+        private string m_CustomColumn = string.Empty;
+
+        #region ProgressRenderer
 
         private class ProgressRenderer : BarRenderer
         {
@@ -75,6 +79,8 @@ namespace Ketarin
                 }
             }
         }
+
+        #endregion
 
         public MainForm()
         {
@@ -132,6 +138,16 @@ namespace Ketarin
 
             colProgress.AspectGetter = delegate(object x) { return m_Updater.GetProgress(x as ApplicationJob); };
             colProgress.Renderer = new ProgressRenderer(m_Updater, 0, 100);
+            colCustomValue.AspectGetter = delegate(object x)
+            {
+                if (string.IsNullOrEmpty(m_CustomColumn)) return null;
+
+                m_CustomColumn = m_CustomColumn.Trim('{', '}');
+                ApplicationJob.UrlVariableCollection vars = ((ApplicationJob)x).Variables;
+                if (!vars.ContainsKey(m_CustomColumn)) return null;
+
+                return vars[m_CustomColumn].CachedContent;
+            };
 
             m_Updater.ProgressChanged += new EventHandler<Updater.JobProgressChangedEventArgs>(m_Updater_ProgressChanged);
             m_Updater.StatusChanged += new EventHandler<Updater.JobStatusChangedEventArgs>(m_Updater_StatusChanged);
@@ -184,6 +200,7 @@ namespace Ketarin
 
             cmnuShowGroups.Checked = Convert.ToBoolean(Settings.GetValue("Ketarin", "ShowGroups", true));
             olvJobs.ShowGroups = cmnuShowGroups.Checked;
+            m_CustomColumn = Settings.GetValue("CustomColumn", "") as string;
 
             UpdateList();
 
@@ -480,7 +497,11 @@ namespace Ketarin
         {
             using (SettingsDialog dialog = new SettingsDialog())
             {
-                dialog.ShowDialog(this);
+                if (dialog.ShowDialog(this) == DialogResult.OK)
+                {
+                    m_CustomColumn = Settings.GetValue("CustomColumn", "") as string;
+                    UpdateList();
+                }
             }
         }
 
