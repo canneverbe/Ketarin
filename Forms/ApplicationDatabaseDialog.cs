@@ -5,11 +5,12 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using CDBurnerXP.Forms;
 using CookComputing.XmlRpc;
 
 namespace Ketarin.Forms
 {
-    public partial class ApplicationDatabaseDialog : Form
+    public partial class ApplicationDatabaseDialog : PersistentForm
     {
         public ApplicationDatabaseDialog()
         {

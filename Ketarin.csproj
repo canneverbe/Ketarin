@@ -140,6 +140,10 @@
     <Compile Include="M:\CsLib\CDBurnerXP\Forms\ControlRedrawLock.cs">
       <Link>CDBurnerXP\ControlRedrawLock.cs</Link>
     </Compile>
+    <Compile Include="M:\CsLib\CDBurnerXP\Forms\PersistentForm.cs">
+      <Link>CDBurnerXP\PersistentForm.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="M:\CsLib\CDBurnerXP\GenericEventArgs.cs">
       <Link>CDBurnerXP\GenericEventArgs.cs</Link>
     </Compile>

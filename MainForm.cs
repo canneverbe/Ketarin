@@ -28,12 +28,13 @@ using Microsoft.Win32;
 using System.IO;
 using CDBurnerXP.IO;
 using CDBurnerXP;
+using CDBurnerXP.Forms;
 using System.Xml;
 using System.Xml.Serialization;
 
 namespace Ketarin
 {
-    public partial class MainForm : Form
+    public partial class MainForm : PersistentForm
     {
         private ApplicationJob[] m_Jobs = null;
         private Updater m_Updater = new Updater();
@@ -108,7 +109,7 @@ namespace Ketarin
                         // no icon could be determined, use default
                     }
                 }
-                
+
                 return (int)m_Updater.GetStatus(job);
             };
 
@@ -183,7 +184,6 @@ namespace Ketarin
 
             cmnuShowGroups.Checked = Convert.ToBoolean(Settings.GetValue("Ketarin", "ShowGroups", true));
             olvJobs.ShowGroups = cmnuShowGroups.Checked;
-            Bounds = (Rectangle) Settings.GetValue("Ketarin", "MainWindow", Bounds);
 
             UpdateList();
 
@@ -203,7 +203,6 @@ namespace Ketarin
             }
 
             Settings.SetValue("Ketarin", "ShowGroups", olvJobs.ShowGroups);
-            Settings.SetValue("Ketarin", "MainWindow", Bounds);
         }
 
         private void UpdateList()

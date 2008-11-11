@@ -5,10 +5,11 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using CDBurnerXP.Forms;
 
 namespace Ketarin.Forms
 {
-    public partial class ErrorsDialog : Form
+    public partial class ErrorsDialog : PersistentForm
     {
         private ApplicationJobError[] m_Errors;
 
