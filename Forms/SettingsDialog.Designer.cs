@@ -39,7 +39,7 @@
             // 
             this.bCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.bCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.bCancel.Location = new System.Drawing.Point(283, 95);
+            this.bCancel.Location = new System.Drawing.Point(283, 141);
             this.bCancel.Name = "bCancel";
             this.bCancel.Size = new System.Drawing.Size(75, 23);
             this.bCancel.TabIndex = 11;
@@ -50,7 +50,7 @@
             // 
             this.bOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.bOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.bOK.Location = new System.Drawing.Point(202, 95);
+            this.bOK.Location = new System.Drawing.Point(202, 141);
             this.bOK.Name = "bOK";
             this.bOK.Size = new System.Drawing.Size(75, 23);
             this.bOK.TabIndex = 10;
@@ -79,18 +79,22 @@
             // 
             // txtDefaultCommand
             // 
+            this.txtDefaultCommand.AcceptsReturn = true;
             this.txtDefaultCommand.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.txtDefaultCommand.Location = new System.Drawing.Point(12, 53);
+            this.txtDefaultCommand.Multiline = true;
             this.txtDefaultCommand.Name = "txtDefaultCommand";
-            this.txtDefaultCommand.Size = new System.Drawing.Size(346, 20);
+            this.txtDefaultCommand.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.txtDefaultCommand.Size = new System.Drawing.Size(346, 73);
             this.txtDefaultCommand.TabIndex = 2;
+            this.txtDefaultCommand.WordWrap = false;
             // 
             // SettingsDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(370, 130);
+            this.ClientSize = new System.Drawing.Size(370, 176);
             this.Controls.Add(this.txtDefaultCommand);
             this.Controls.Add(this.lblDefaultCommand);
             this.Controls.Add(this.chkUpdateAtStartup);

@@ -359,21 +359,32 @@ namespace Ketarin
 
         private static void ExecuteCommand(ApplicationJob job, string baseCommand)
         {
+            baseCommand = baseCommand.Replace("\r\n", "\n");
             baseCommand = job.Variables.ReplaceAllInString(baseCommand);
 
             // Replace variable: file
-            string command = baseCommand.Replace("{file}", "\"" + job.PreviousLocation + "\"");
+            baseCommand = baseCommand.Replace("{file}", "\"" + job.PreviousLocation + "\"");
             // Replace variable: root
             try
             {
-                command = command.Replace("{root}", Path.GetPathRoot(Application.StartupPath));
+                baseCommand = baseCommand.Replace("{root}", Path.GetPathRoot(Application.StartupPath));
             }
             catch (ArgumentException) { }
-            // Tell cmd to execute the given command (/c)
-            ProcessStartInfo processInfo = new ProcessStartInfo("cmd", "/c " + command);
-            processInfo.UseShellExecute = false;
-            processInfo.CreateNoWindow = true;
-            Process.Start(processInfo);
+
+            // Feed cmd.exe with our commands
+            ProcessStartInfo cmdExe = new ProcessStartInfo("cmd.exe");
+            cmdExe.RedirectStandardInput = true;
+            cmdExe.UseShellExecute = false;
+            cmdExe.CreateNoWindow = true;
+
+            using (Process proc = Process.Start(cmdExe))
+            {
+                string[] commands = baseCommand.Split('\n');
+                foreach (string command in commands)
+                {
+                    proc.StandardInput.WriteLine(command);
+                }
+            }
         }
 
         protected virtual void OnUpdateCompleted()
