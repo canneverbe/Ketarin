@@ -251,10 +251,7 @@ namespace Ketarin
             {
                 downloadUrl = job.FixedDownloadUrl;
                 // Now replace variables
-                foreach (UrlVariable var in job.Variables.Values)
-                {
-                    downloadUrl = var.ReplaceInString(downloadUrl);
-                }
+                downloadUrl = job.Variables.ReplaceAllInString(downloadUrl);
             }
             Uri url = new Uri(downloadUrl);
 
@@ -362,6 +359,8 @@ namespace Ketarin
 
         private static void ExecuteCommand(ApplicationJob job, string baseCommand)
         {
+            baseCommand = job.Variables.ReplaceAllInString(baseCommand);
+
             // Replace variable: file
             string command = baseCommand.Replace("{file}", "\"" + job.PreviousLocation + "\"");
             // Replace variable: root
