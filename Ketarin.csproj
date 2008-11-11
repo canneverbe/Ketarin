@@ -288,6 +288,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Download.ico" />
+    <None Include="Resources\New.png" />
     <None Include="Resources\Symbol Information.png" />
     <None Include="Resources\Document Restricted.png" />
     <None Include="Resources\Symbol Delete.png" />

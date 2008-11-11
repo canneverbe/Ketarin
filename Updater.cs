@@ -48,7 +48,8 @@ namespace Ketarin
         {
             Idle,
             Downloading,
-            Success,
+            UpdateSuccessful,
+            NoUpdate,
             Failure
         }
 
@@ -187,8 +188,7 @@ namespace Ketarin
 
                     try
                     {
-                        DoDownload(job);
-                        m_Status[job] = Status.Success;
+                        m_Status[job] = DoDownload(job) ? Status.UpdateSuccessful : Status.NoUpdate;
                     }
                     catch (WebException ex)
                     {
@@ -239,7 +239,8 @@ namespace Ketarin
         /// but takes care of proper cleanup.
         /// </summary>
         /// <param name="job">The job to process</param>
-        protected void DoDownload(ApplicationJob job)
+        /// <returns>true, if a new uodate has been found and downloaded, false otherwise</returns>
+        protected bool DoDownload(ApplicationJob job)
         {
             string downloadUrl = string.Empty;
             if (job.DownloadSourceType == ApplicationJob.SourceType.FileHippo)
@@ -273,14 +274,14 @@ namespace Ketarin
                 // Only download, if the file size or date has changed
                 if (!job.RequiresDownload(response))
                 {
-                    m_Status[job] = Status.Success;
+                    m_Status[job] = Status.UpdateSuccessful;
 
                     // If file already exists (created by user),
                     // the download is not necessary. We still need to
                     // set the file name.
                     job.PreviousLocation = targetFileName;
                     job.Save();
-                    return;
+                    return false;
                 }
 
                 // Read all file contents to a temporary location
@@ -314,7 +315,7 @@ namespace Ketarin
                     m_Status[job] = Status.Failure;
                     m_Progress[job] = 0;
                     OnStatusChanged(job);
-                    return;
+                    return false;
                 }
 
                 // If each version has a different file name (version number),
@@ -355,6 +356,8 @@ namespace Ketarin
             {
                 ExecuteCommand(job, job.ExecuteCommand);
             }
+
+            return true;
         }
 
         private static void ExecuteCommand(ApplicationJob job, string baseCommand)
