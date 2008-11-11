@@ -36,8 +36,8 @@
             this.lblLicense = new System.Windows.Forms.Label();
             this.lblImagesExcluded = new System.Windows.Forms.Label();
             this.lblWebsite = new System.Windows.Forms.Label();
-            this.lnkKetarin = new System.Windows.Forms.LinkLabel();
             this.lnkGPL = new CDBurnerXP.Controls.WebLink();
+            this.webLink1 = new CDBurnerXP.Controls.WebLink();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -78,13 +78,13 @@
             this.tableLayoutPanel1.ColumnCount = 2;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel1.Controls.Add(this.webLink1, 1, 3);
             this.tableLayoutPanel1.Controls.Add(this.lblVersionDesc, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.lblVersion, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.lnkGPL, 1, 1);
             this.tableLayoutPanel1.Controls.Add(this.lblLicense, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.lblImagesExcluded, 1, 2);
             this.tableLayoutPanel1.Controls.Add(this.lblWebsite, 0, 3);
-            this.tableLayoutPanel1.Controls.Add(this.lnkKetarin, 1, 3);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(12, 26);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 4;
@@ -119,7 +119,7 @@
             this.lblImagesExcluded.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblImagesExcluded.Location = new System.Drawing.Point(60, 34);
+            this.lblImagesExcluded.Location = new System.Drawing.Point(60, 38);
             this.lblImagesExcluded.Name = "lblImagesExcluded";
             this.lblImagesExcluded.Size = new System.Drawing.Size(182, 32);
             this.lblImagesExcluded.TabIndex = 5;
@@ -128,35 +128,38 @@
             // lblWebsite
             // 
             this.lblWebsite.AutoSize = true;
-            this.lblWebsite.Location = new System.Drawing.Point(3, 66);
+            this.lblWebsite.Location = new System.Drawing.Point(3, 70);
             this.lblWebsite.Name = "lblWebsite";
             this.lblWebsite.Padding = new System.Windows.Forms.Padding(0, 2, 2, 2);
             this.lblWebsite.Size = new System.Drawing.Size(51, 17);
             this.lblWebsite.TabIndex = 6;
             this.lblWebsite.Text = "Website:";
             // 
-            // lnkKetarin
-            // 
-            this.lnkKetarin.AutoSize = true;
-            this.lnkKetarin.Location = new System.Drawing.Point(60, 66);
-            this.lnkKetarin.Name = "lnkKetarin";
-            this.lnkKetarin.Padding = new System.Windows.Forms.Padding(0, 2, 2, 2);
-            this.lnkKetarin.Size = new System.Drawing.Size(155, 17);
-            this.lnkKetarin.TabIndex = 7;
-            this.lnkKetarin.TabStop = true;
-            this.lnkKetarin.Text = "http://ketarin.canneverbe.com";
-            // 
             // lnkGPL
             // 
             this.lnkGPL.AutoSize = true;
+            this.lnkGPL.LinkArea = new System.Windows.Forms.LinkArea(0, 29);
             this.lnkGPL.Location = new System.Drawing.Point(60, 17);
             this.lnkGPL.Name = "lnkGPL";
             this.lnkGPL.Padding = new System.Windows.Forms.Padding(0, 2, 2, 2);
-            this.lnkGPL.Size = new System.Drawing.Size(75, 17);
+            this.lnkGPL.Size = new System.Drawing.Size(75, 21);
             this.lnkGPL.TabIndex = 4;
             this.lnkGPL.TabStop = true;
             this.lnkGPL.Text = "GNU GPL v.2";
             this.lnkGPL.Url = "http://www.gnu.org/licenses/gpl-2.0.txt";
+            this.lnkGPL.UseCompatibleTextRendering = true;
+            // 
+            // webLink1
+            // 
+            this.webLink1.AutoSize = true;
+            this.webLink1.Location = new System.Drawing.Point(60, 70);
+            this.webLink1.Name = "webLink1";
+            this.webLink1.Padding = new System.Windows.Forms.Padding(0, 2, 0, 0);
+            this.webLink1.Size = new System.Drawing.Size(153, 15);
+            this.webLink1.TabIndex = 7;
+            this.webLink1.TabStop = true;
+            this.webLink1.Text = "http://ketarin.canneverbe.com";
+            this.webLink1.Url = "http://ketarin.canneverbe.com";
             // 
             // AboutDialog
             // 
@@ -192,6 +195,6 @@
         private System.Windows.Forms.Label lblLicense;
         private System.Windows.Forms.Label lblImagesExcluded;
         private System.Windows.Forms.Label lblWebsite;
-        private System.Windows.Forms.LinkLabel lnkKetarin;
+        private CDBurnerXP.Controls.WebLink webLink1;
     }
 }
