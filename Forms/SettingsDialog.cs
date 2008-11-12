@@ -25,6 +25,7 @@ namespace Ketarin.Forms
             txtDefaultCommand.Text = Settings.GetValue("DefaultCommand", "") as string;
             chkUpdateAtStartup.Checked = (bool)Settings.GetValue("UpdateAtStartup", false);
             txtCustomColumn.Text = Settings.GetValue("CustomColumn", "") as string;
+            chkAvoidBeta.Checked = (bool)Settings.GetValue("AvoidFileHippoBeta", false);
         }
 
         private void bOK_Click(object sender, EventArgs e)
@@ -32,6 +33,7 @@ namespace Ketarin.Forms
             Settings.SetValue("DefaultCommand", txtDefaultCommand.Text);
             Settings.SetValue("UpdateAtStartup", chkUpdateAtStartup.Checked);
             Settings.SetValue("CustomColumn", txtCustomColumn.Text);
+            Settings.SetValue("AvoidFileHippoBeta", chkAvoidBeta.Checked);
         }
     }
 }

@@ -245,7 +245,7 @@ namespace Ketarin
             string downloadUrl = string.Empty;
             if (job.DownloadSourceType == ApplicationJob.SourceType.FileHippo)
             {
-                downloadUrl = ExternalServices.FileHippoDownloadUrl(job.FileHippoId);
+                downloadUrl = ExternalServices.FileHippoDownloadUrl(job.FileHippoId, (bool)Settings.GetValue("AvoidFileHippoBeta", false));
             }
             else
             {
