@@ -9,6 +9,8 @@ using CDBurnerXP.IO;
 using System.Diagnostics;
 using System.Windows.Forms;
 using CDBurnerXP;
+using System.Security.Cryptography.X509Certificates;
+using System.Net.Security;
 
 namespace Ketarin
 {
@@ -255,8 +257,36 @@ namespace Ketarin
             }
             Uri url = new Uri(downloadUrl);
 
+            // Lower security policies
+            ServicePointManager.CheckCertificateRevocationList = false;
+            ServicePointManager.ServerCertificateValidationCallback = delegate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
+            {
+                return true;
+            };
+
             WebRequest req = WebRequest.CreateDefault(url);
             req.Timeout = 10000; // 10 seconds
+
+            HttpWebRequest httpRequest = req as HttpWebRequest;
+            if (httpRequest != null)
+            {
+                // If we have an HTTP request, some sites may require a correct referer
+                // for the download.
+                // If there there are variables defined (from which most likely the download link
+                // or version is being extracted), we'll just use the first variable's URL as referer.
+                // The user still has the option to set a custom referer.
+                foreach (UrlVariable urlVar in job.Variables.Values)
+                {
+                    httpRequest.Referer = urlVar.Url;
+                    break;
+                }
+
+                if (!string.IsNullOrEmpty(job.HttpReferer))
+                {
+                    httpRequest.Referer = job.HttpReferer;
+                }
+            }
+
             using (WebResponse response = req.GetResponse())
             {
                 // Occasionally, websites are not available and an error page is encountered
