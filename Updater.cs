@@ -291,9 +291,10 @@ namespace Ketarin
             {
                 // Occasionally, websites are not available and an error page is encountered
                 // For the case that the content type is just plain wrong, ignore it if the size is higher than 500KB
-                if (response is HttpWebResponse && response.ContentType.StartsWith("text/") && response.ContentLength < 500000)
+                HttpWebResponse httpResponse = response as HttpWebResponse;
+                if (httpResponse != null && response.ContentType.StartsWith("text/") && response.ContentLength < 500000)
                 {
-                    throw new NonBinaryFileException(response.ContentType);
+                    throw NonBinaryFileException.Create(response.ContentType, HttpStatusCode.SeeOther);
                 }
 
                 string targetFileName = job.GetTargetFile(response);
