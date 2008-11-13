@@ -367,6 +367,8 @@ namespace Ketarin
             cmnuUpdate.Enabled = (!m_Updater.IsBusy);
             cmnuOpenFile.Enabled = (job != null && !m_Updater.IsBusy && !string.IsNullOrEmpty(job.PreviousLocation) && File.Exists(job.PreviousLocation));
             cmnuRename.Enabled = cmnuOpenFile.Enabled;
+            cmnuCopy.Enabled = (job != null);
+            cmnuPaste.Enabled = SafeClipboard.IsDataPresent(DataFormats.Text);
         }
 
         private void cmnuRename_Click(object sender, EventArgs e)
@@ -385,6 +387,29 @@ namespace Ketarin
                     job.Save();
                 }
             }
+        }
+
+        private void cmnuCopy_Click(object sender, EventArgs e)
+        {
+            ApplicationJob job = olvJobs.SelectedObject as ApplicationJob;
+            if (job == null) return;
+
+            SafeClipboard.SetData(job.GetXml(), false);
+        }
+
+        private void cmnuPaste_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                ApplicationJob job = ApplicationJob.ImportFromXmlString(SafeClipboard.GetData(DataFormats.Text) as string);
+                job.Guid = Guid.NewGuid();
+                job.SetIdByGuid(job.Guid);
+                job.Save();
+
+                olvJobs.AddObject(job);
+                olvJobs.SelectedObject = job;
+            }
+            catch (Exception) { }
         }
 
         private void olvJobs_SelectedIndexChanged(object sender, EventArgs e)
@@ -506,5 +531,7 @@ namespace Ketarin
         }
 
         #endregion
+
+
     }
 }
