@@ -32,6 +32,7 @@ namespace Ketarin
         private Guid m_Guid = Guid.Empty;
         private bool m_CanBeShared = true;
         private bool m_ShareApplication = false;
+        private string m_HttpReferer = string.Empty;
 
         public enum SourceType
         {
@@ -62,6 +63,12 @@ namespace Ketarin
             {
                 m_ShareApplication = value && CanBeShared;
             }
+        }
+
+        public string HttpReferer
+        {
+            get { return m_HttpReferer; }
+            set { m_HttpReferer = value; }
         }
 
         [XmlAttribute("Guid")]
@@ -423,7 +430,8 @@ namespace Ketarin
                                                    Category = @Category,
                                                    JobGuid = @JobGuid,
                                                    CanBeShared = @CanBeShared,
-                                                   ShareApplication = @ShareApplication
+                                                   ShareApplication = @ShareApplication,
+                                                   HttpReferer = @HttpReferer
                                              WHERE JobId = @JobId";
 
                         command.Parameters.Add(new SQLiteParameter("@ApplicationName", Name));
@@ -440,7 +448,8 @@ namespace Ketarin
                         command.Parameters.Add(new SQLiteParameter("@JobGuid", m_Guid.ToString()));
                         command.Parameters.Add(new SQLiteParameter("@CanBeShared", m_CanBeShared));
                         command.Parameters.Add(new SQLiteParameter("@ShareApplication", m_ShareApplication));
-
+                        command.Parameters.Add(new SQLiteParameter("@HttpReferer", m_HttpReferer));
+                        
                         command.Parameters.Add(new SQLiteParameter("@JobId", m_Id));
 
                         command.ExecuteNonQuery();
@@ -452,8 +461,8 @@ namespace Ketarin
                     using (IDbCommand command = DbManager.Connection.CreateCommand())
                     {
                         command.Transaction = transaction;
-                        command.CommandText = @"INSERT INTO jobs (ApplicationName, FixedDownloadUrl, DateAdded, TargetPath, LastUpdated, IsEnabled, FileHippoId, DeletePreviousFile, SourceType, ExecuteCommand, Category, JobGuid, CanBeShared, ShareApplication)
-                                                 VALUES (@ApplicationName, @FixedDownloadUrl, @DateAdded, @TargetPath, @LastUpdated, @IsEnabled, @FileHippoId, @DeletePreviousFile, @SourceType, @ExecuteCommand, @Category, @JobGuid, @CanBeShared, @ShareApplication)";
+                        command.CommandText = @"INSERT INTO jobs (ApplicationName, FixedDownloadUrl, DateAdded, TargetPath, LastUpdated, IsEnabled, FileHippoId, DeletePreviousFile, SourceType, ExecuteCommand, Category, JobGuid, CanBeShared, ShareApplication, HttpReferer)
+                                                 VALUES (@ApplicationName, @FixedDownloadUrl, @DateAdded, @TargetPath, @LastUpdated, @IsEnabled, @FileHippoId, @DeletePreviousFile, @SourceType, @ExecuteCommand, @Category, @JobGuid, @CanBeShared, @ShareApplication, @HttpReferer)";
 
                         command.Parameters.Add(new SQLiteParameter("@ApplicationName", Name));
                         command.Parameters.Add(new SQLiteParameter("@FixedDownloadUrl", m_FixedDownloadUrl));
@@ -469,6 +478,7 @@ namespace Ketarin
                         command.Parameters.Add(new SQLiteParameter("@JobGuid", m_Guid.ToString()));
                         command.Parameters.Add(new SQLiteParameter("@CanBeShared", m_CanBeShared));
                         command.Parameters.Add(new SQLiteParameter("@ShareApplication", m_ShareApplication));
+                        command.Parameters.Add(new SQLiteParameter("@HttpReferer", m_HttpReferer));
 
                         command.ExecuteNonQuery();
                     }

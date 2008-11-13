@@ -107,6 +107,7 @@ namespace Ketarin
                                          LastUpdated        DATE,
                                          PreviousLocation   TEXT,
                                          ExecuteCommand     TEXT,
+                                         HttpReferer        TEXT,
                                          JobGuid            TEXT UNIQUE,
                                          DeletePreviousFile INTEGER,
                                          CanBeShared        INTEGER DEFAULT 1,
@@ -146,6 +147,7 @@ namespace Ketarin
             addColumns.Add("JobGuid", "ALTER TABLE jobs ADD JobGuid TEXT");
             addColumns.Add("CanBeShared", "ALTER TABLE jobs ADD CanBeShared INTEGER DEFAULT 1");
             addColumns.Add("ShareApplication", "ALTER TABLE jobs ADD ShareApplication INTEGER DEFAULT 0");
+            addColumns.Add("HttpReferer", "ALTER TABLE jobs ADD HttpReferer TEXT");
             
             foreach (KeyValuePair<string, string> column in addColumns)
             {
