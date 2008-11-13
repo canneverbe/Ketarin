@@ -65,6 +65,8 @@
             this.m_VistaMenu = new CDBurnerXP.Controls.VistaMenu(this.components);
             this.bRun = new System.Windows.Forms.Button();
             this.sbAddApplication = new wyDay.Controls.SplitButton();
+            this.cmnuCopy = new System.Windows.Forms.MenuItem();
+            this.cmnuPaste = new System.Windows.Forms.MenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.olvJobs)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.m_VistaMenu)).BeginInit();
             this.SuspendLayout();
@@ -84,6 +86,8 @@
             this.menuItem4,
             this.cmnuEdit,
             this.cmnuDelete,
+            this.cmnuCopy,
+            this.cmnuPaste,
             this.sepView,
             this.cmnuShowGroups});
             this.cmnuJobs.Popup += new System.EventHandler(this.cmnuJobs_Popup);
@@ -132,13 +136,13 @@
             // 
             // sepView
             // 
-            this.sepView.Index = 6;
+            this.sepView.Index = 8;
             this.sepView.Text = "-";
             // 
             // cmnuShowGroups
             // 
             this.cmnuShowGroups.Checked = true;
-            this.cmnuShowGroups.Index = 7;
+            this.cmnuShowGroups.Index = 9;
             this.cmnuShowGroups.Text = "&Show groups";
             this.cmnuShowGroups.Click += new System.EventHandler(this.cmnuShowGroups_Click);
             // 
@@ -349,6 +353,20 @@
             this.sbAddApplication.UseVisualStyleBackColor = true;
             this.sbAddApplication.Click += new System.EventHandler(this.sbAddApplication_Click);
             // 
+            // cmnuCopy
+            // 
+            this.cmnuCopy.Index = 6;
+            this.cmnuCopy.Shortcut = System.Windows.Forms.Shortcut.CtrlC;
+            this.cmnuCopy.Text = "&Copy";
+            this.cmnuCopy.Click += new System.EventHandler(this.cmnuCopy_Click);
+            // 
+            // cmnuPaste
+            // 
+            this.cmnuPaste.Index = 7;
+            this.cmnuPaste.Shortcut = System.Windows.Forms.Shortcut.CtrlV;
+            this.cmnuPaste.Text = "&Paste";
+            this.cmnuPaste.Click += new System.EventHandler(this.cmnuPaste_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -406,6 +424,8 @@
         private System.Windows.Forms.MenuItem mnusep2;
         private System.Windows.Forms.MenuItem mnuSettings;
         private CDBurnerXP.Controls.OLVColumn colCustomValue;
+        private System.Windows.Forms.MenuItem cmnuCopy;
+        private System.Windows.Forms.MenuItem cmnuPaste;
     }
 }
 

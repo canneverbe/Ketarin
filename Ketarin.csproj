@@ -153,6 +153,9 @@
     <Compile Include="M:\CsLib\CDBurnerXP\IO\PathEx.cs">
       <Link>CDBurnerXP\PathEx.cs</Link>
     </Compile>
+    <Compile Include="M:\CsLib\CDBurnerXP\IO\SafeClipboard.cs">
+      <Link>CDBurnerXP\SafeClipboard.cs</Link>
+    </Compile>
     <Compile Include="M:\CsLib\CDBurnerXP\Settings.cs">
       <Link>CDBurnerXP\Settings.cs</Link>
     </Compile>
