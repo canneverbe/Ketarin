@@ -54,6 +54,7 @@ namespace Ketarin.Forms
                 txtCommand.ReadOnly = value;
                 txtFixedUrl.ReadOnly = value;
                 txtTarget.ReadOnly = value;
+                txtSpoofReferer.ReadOnly = value;
                 txtFileHippoId.ReadOnly = value;
                 cboCategory.Enabled = enable;
                 chkDeletePrevious.Enabled = enable;
@@ -94,6 +95,7 @@ namespace Ketarin.Forms
             cboCategory.Text = string.IsNullOrEmpty(m_ApplicationJob.Category) ? null : m_ApplicationJob.Category;
             chkShareOnline.Checked = m_ApplicationJob.ShareApplication;
             chkShareOnline.Enabled = m_ApplicationJob.CanBeShared;
+            txtSpoofReferer.Text = m_ApplicationJob.HttpReferer;
         }
 
         /// <summary>
@@ -111,6 +113,7 @@ namespace Ketarin.Forms
             m_ApplicationJob.DownloadSourceType = (rbFixedUrl.Checked) ? ApplicationJob.SourceType.FixedUrl : ApplicationJob.SourceType.FileHippo;
             m_ApplicationJob.Category = cboCategory.Text;
             m_ApplicationJob.ShareApplication = chkShareOnline.Checked;
+            m_ApplicationJob.HttpReferer = txtSpoofReferer.Text;
         }
 
         private void bBrowseFile_Click(object sender, EventArgs e)

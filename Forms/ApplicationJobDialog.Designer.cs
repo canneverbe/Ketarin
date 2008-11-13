@@ -53,6 +53,8 @@
             this.sepTarget = new CDBurnerXP.Controls.Separator();
             this.sepDownload = new CDBurnerXP.Controls.Separator();
             this.chkShareOnline = new System.Windows.Forms.CheckBox();
+            this.lblSpoofReferer = new System.Windows.Forms.Label();
+            this.txtSpoofReferer = new System.Windows.Forms.TextBox();
             this.panel1.SuspendLayout();
             this.pnlTarget.SuspendLayout();
             this.SuspendLayout();
@@ -61,7 +63,7 @@
             // 
             this.bCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.bCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.bCancel.Location = new System.Drawing.Point(294, 337);
+            this.bCancel.Location = new System.Drawing.Point(294, 394);
             this.bCancel.Name = "bCancel";
             this.bCancel.Size = new System.Drawing.Size(75, 23);
             this.bCancel.TabIndex = 100;
@@ -72,7 +74,7 @@
             // 
             this.bOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.bOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.bOK.Location = new System.Drawing.Point(213, 337);
+            this.bOK.Location = new System.Drawing.Point(213, 394);
             this.bOK.Name = "bOK";
             this.bOK.Size = new System.Drawing.Size(75, 23);
             this.bOK.TabIndex = 99;
@@ -108,7 +110,7 @@
             this.panel1.Controls.Add(this.rbFileHippo);
             this.panel1.Controls.Add(this.txtFixedUrl);
             this.panel1.Controls.Add(this.rbFixedUrl);
-            this.panel1.Location = new System.Drawing.Point(12, 90);
+            this.panel1.Location = new System.Drawing.Point(12, 91);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(365, 54);
             this.panel1.TabIndex = 3;
@@ -174,7 +176,7 @@
             this.pnlTarget.Controls.Add(this.txtTarget);
             this.pnlTarget.Controls.Add(this.rbFolder);
             this.pnlTarget.Controls.Add(this.rbFileName);
-            this.pnlTarget.Location = new System.Drawing.Point(8, 167);
+            this.pnlTarget.Location = new System.Drawing.Point(8, 173);
             this.pnlTarget.Name = "pnlTarget";
             this.pnlTarget.Size = new System.Drawing.Size(369, 53);
             this.pnlTarget.TabIndex = 9;
@@ -230,7 +232,7 @@
             this.chkEnabled.AutoSize = true;
             this.chkEnabled.Checked = true;
             this.chkEnabled.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkEnabled.Location = new System.Drawing.Point(15, 241);
+            this.chkEnabled.Location = new System.Drawing.Point(15, 256);
             this.chkEnabled.Name = "chkEnabled";
             this.chkEnabled.Size = new System.Drawing.Size(65, 17);
             this.chkEnabled.TabIndex = 31;
@@ -240,7 +242,7 @@
             // chkDeletePrevious
             // 
             this.chkDeletePrevious.AutoSize = true;
-            this.chkDeletePrevious.Location = new System.Drawing.Point(86, 241);
+            this.chkDeletePrevious.Location = new System.Drawing.Point(86, 256);
             this.chkDeletePrevious.Name = "chkDeletePrevious";
             this.chkDeletePrevious.Size = new System.Drawing.Size(218, 17);
             this.chkDeletePrevious.TabIndex = 32;
@@ -251,7 +253,7 @@
             // 
             this.txtCommand.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtCommand.Location = new System.Drawing.Point(15, 305);
+            this.txtCommand.Location = new System.Drawing.Point(15, 320);
             this.txtCommand.Name = "txtCommand";
             this.txtCommand.Size = new System.Drawing.Size(354, 20);
             this.txtCommand.TabIndex = 35;
@@ -259,7 +261,7 @@
             // lblExecuteCommand
             // 
             this.lblExecuteCommand.AutoSize = true;
-            this.lblExecuteCommand.Location = new System.Drawing.Point(13, 289);
+            this.lblExecuteCommand.Location = new System.Drawing.Point(13, 304);
             this.lblExecuteCommand.Name = "lblExecuteCommand";
             this.lblExecuteCommand.Size = new System.Drawing.Size(247, 13);
             this.lblExecuteCommand.TabIndex = 34;
@@ -289,7 +291,7 @@
             this.sepOptions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.sepOptions.ForeColor = System.Drawing.SystemColors.ActiveCaption;
-            this.sepOptions.Location = new System.Drawing.Point(5, 215);
+            this.sepOptions.Location = new System.Drawing.Point(5, 227);
             this.sepOptions.Name = "sepOptions";
             this.sepOptions.Size = new System.Drawing.Size(371, 23);
             this.sepOptions.TabIndex = 30;
@@ -301,7 +303,7 @@
             this.sepTarget.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.sepTarget.ForeColor = System.Drawing.SystemColors.ActiveCaption;
-            this.sepTarget.Location = new System.Drawing.Point(5, 143);
+            this.sepTarget.Location = new System.Drawing.Point(5, 148);
             this.sepTarget.Name = "sepTarget";
             this.sepTarget.Size = new System.Drawing.Size(371, 23);
             this.sepTarget.TabIndex = 20;
@@ -323,18 +325,38 @@
             // chkShareOnline
             // 
             this.chkShareOnline.AutoSize = true;
-            this.chkShareOnline.Location = new System.Drawing.Point(15, 264);
+            this.chkShareOnline.Location = new System.Drawing.Point(15, 279);
             this.chkShareOnline.Name = "chkShareOnline";
             this.chkShareOnline.Size = new System.Drawing.Size(212, 17);
             this.chkShareOnline.TabIndex = 33;
             this.chkShareOnline.Text = "S&hare this application online with others";
             this.chkShareOnline.UseVisualStyleBackColor = true;
             // 
+            // lblSpoofReferer
+            // 
+            this.lblSpoofReferer.AutoSize = true;
+            this.lblSpoofReferer.Location = new System.Drawing.Point(12, 343);
+            this.lblSpoofReferer.Name = "lblSpoofReferer";
+            this.lblSpoofReferer.Size = new System.Drawing.Size(103, 13);
+            this.lblSpoofReferer.TabIndex = 36;
+            this.lblSpoofReferer.Text = "Sp&oof HTTP referer:";
+            // 
+            // txtSpoofReferer
+            // 
+            this.txtSpoofReferer.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtSpoofReferer.Location = new System.Drawing.Point(15, 359);
+            this.txtSpoofReferer.Name = "txtSpoofReferer";
+            this.txtSpoofReferer.Size = new System.Drawing.Size(354, 20);
+            this.txtSpoofReferer.TabIndex = 37;
+            // 
             // ApplicationJobDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(381, 372);
+            this.ClientSize = new System.Drawing.Size(381, 429);
+            this.Controls.Add(this.txtSpoofReferer);
+            this.Controls.Add(this.lblSpoofReferer);
             this.Controls.Add(this.chkShareOnline);
             this.Controls.Add(this.cboCategory);
             this.Controls.Add(this.lblCategory);
@@ -394,5 +416,7 @@
         private System.Windows.Forms.Label lblCategory;
         private System.Windows.Forms.ComboBox cboCategory;
         private System.Windows.Forms.CheckBox chkShareOnline;
+        private System.Windows.Forms.Label lblSpoofReferer;
+        private System.Windows.Forms.TextBox txtSpoofReferer;
     }
 }
