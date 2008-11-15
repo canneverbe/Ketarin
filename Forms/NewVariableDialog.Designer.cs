@@ -51,6 +51,7 @@
             this.txtVariableName.Name = "txtVariableName";
             this.txtVariableName.Size = new System.Drawing.Size(133, 20);
             this.txtVariableName.TabIndex = 1;
+            this.txtVariableName.TextChanged += new System.EventHandler(this.txtVariableName_TextChanged);
             // 
             // bCancel
             // 

@@ -22,6 +22,8 @@ namespace Ketarin.Forms
 
         #endregion
 
+        private bool m_Updating = false;
+
         public NewVariableDialog()
         {
             InitializeComponent();
@@ -36,6 +38,19 @@ namespace Ketarin.Forms
                 MessageBox.Show(this, "The variable name must not be empty.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 DialogResult = DialogResult.None;
             }
+        }
+
+        private void txtVariableName_TextChanged(object sender, EventArgs e)
+        {
+            if (m_Updating) return;
+
+            int selStart = txtVariableName.SelectionStart;
+            
+            m_Updating = true;
+            txtVariableName.Text = txtVariableName.Text.Trim('{', '}');
+            m_Updating = false;
+
+            txtVariableName.SelectionStart = selStart;
         }
     }
 }
