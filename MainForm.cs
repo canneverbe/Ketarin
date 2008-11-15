@@ -142,7 +142,7 @@ namespace Ketarin
             {
                 if (string.IsNullOrEmpty(m_CustomColumn)) return null;
 
-                m_CustomColumn = m_CustomColumn.Trim('{', '}');
+                m_CustomColumn = SettingsDialog.CustomColumnVariableName;
                 ApplicationJob.UrlVariableCollection vars = ((ApplicationJob)x).Variables;
                 if (!vars.ContainsKey(m_CustomColumn)) return null;
 

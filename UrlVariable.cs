@@ -6,6 +6,7 @@ using System.Net;
 using System.Xml;
 using System.Xml.Serialization;
 using System.Text.RegularExpressions;
+using Ketarin.Forms;
 
 namespace Ketarin
 {
@@ -104,8 +105,10 @@ namespace Ketarin
         public string ReplaceInString(string url)
         {
             string find = "{" + m_Name + "}";
+            string customColumnVariable = "{" + SettingsDialog.CustomColumnVariableName + "}";
             // If variable is unused, don't make any efforts
-            if (!url.Contains(find)) return url;
+            // Unless, of course, the variable is used for the custom column
+            if (!url.Contains(find) && customColumnVariable != find) return url;
 
             string page = string.Empty;
             // Get the content we need to put in

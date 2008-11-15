@@ -11,6 +11,23 @@ namespace Ketarin.Forms
 {
     public partial class SettingsDialog : Form
     {
+        #region Properties
+
+        public static string CustomColumnVariableName
+        {
+            get
+            {
+                string var = Settings.GetValue("CustomColumn") as string;
+                if (!string.IsNullOrEmpty(var))
+                {
+                    return var.Trim('{', '}');
+                }
+                return string.Empty;
+            }
+        }
+
+        #endregion
+
         public SettingsDialog()
         {
             InitializeComponent();
