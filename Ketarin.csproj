@@ -162,6 +162,9 @@
     <Compile Include="M:\CsLib\Win32\IconReader.cs">
       <Link>CDBurnerXP\IconReader.cs</Link>
     </Compile>
+    <Compile Include="M:\CsLib\Win32\Kernel32.cs">
+      <Link>CDBurnerXP\Kernel32.cs</Link>
+    </Compile>
     <Compile Include="M:\CsLib\Win32\Shell32.cs">
       <Link>CDBurnerXP\Shell32.cs</Link>
     </Compile>

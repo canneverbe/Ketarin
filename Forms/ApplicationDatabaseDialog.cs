@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Text;
+using System.Net;
 using System.Windows.Forms;
 using CDBurnerXP.Forms;
 using CookComputing.XmlRpc;
@@ -122,12 +123,15 @@ namespace Ketarin.Forms
             {
                 MessageBox.Show(this, "Failed loading the selected application.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            catch (WebException)
+            {
+                MessageBox.Show(this, "Failed loading the selected application.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
             finally
             {
                 Cursor = Cursors.Default;
             }
         }
-
 
     }
 }
