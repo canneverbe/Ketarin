@@ -92,6 +92,7 @@ namespace Ketarin.Forms
             rbFolder.Checked = m_ApplicationJob.TargetIsFolder;
             chkDeletePrevious.Checked = m_ApplicationJob.DeletePreviousFile;
             txtCommand.Text = m_ApplicationJob.ExecuteCommand;
+            cboCategory.SelectedIndex = -1;
             cboCategory.Text = string.IsNullOrEmpty(m_ApplicationJob.Category) ? null : m_ApplicationJob.Category;
             chkShareOnline.Checked = m_ApplicationJob.ShareApplication;
             chkShareOnline.Enabled = m_ApplicationJob.CanBeShared;
