@@ -20,11 +20,15 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using CDBurnerXP;
 using System.Threading;
+using System.Runtime.InteropServices;
+using Microsoft.Win32;
 
 namespace Ketarin
 {
     static class Program
     {
+        private static NotifyIcon m_Icon = null;
+
         [STAThread]
         static void Main(string[] args)
         {
@@ -55,16 +59,33 @@ namespace Ketarin
                 List<string> arguments = new List<string>(args);
                 if (arguments.Contains("/SILENT"))
                 {
+                    Kernel32.AttachConsole(Kernel32.ATTACH_PARENT_PROCESS);
+
                     ApplicationJob[] jobs = DbManager.GetJobs();
                     Updater updater = new Updater();
                     updater.StatusChanged += new EventHandler<Updater.JobStatusChangedEventArgs>(updater_StatusChanged);
                     updater.ProgressChanged += new EventHandler<Updater.JobProgressChangedEventArgs>(updater_ProgressChanged);
                     updater.Run(jobs);
 
+                    if (arguments.Contains("/NOTIFY"))
+                    {
+                        m_Icon = new NotifyIcon();
+                        m_Icon.Icon = System.Drawing.Icon.FromHandle(Properties.Resources.Restart.GetHicon());
+                        m_Icon.Text = "Ketarin is working...";
+                        m_Icon.Visible = true;
+                    }
+
                     while (updater.IsBusy)
                     {
                         Thread.Sleep(1000);
                     }
+
+                    if (m_Icon != null)
+                    {
+                        m_Icon.Dispose();
+                    }
+
+                    Kernel32.FreeConsole();
                 }
             }
             else
@@ -82,8 +103,36 @@ namespace Ketarin
 
         static void updater_StatusChanged(object sender, Updater.JobStatusChangedEventArgs e)
         {
+            if (e.NewStatus == Updater.Status.Downloading)
+            {
+                // No status of interest
+                return;
+            }
+
+            string status = e.ApplicationJob.Name + ": ";
+
+            switch (e.NewStatus)
+            {
+                case Updater.Status.Failure:
+                    status += "Failed.";
+                    break;
+
+                case Updater.Status.NoUpdate:
+                    status += "No update available.";
+                    break;
+
+                case Updater.Status.UpdateSuccessful:
+                    status += "Update successful.";
+                    break;
+            }
+
             Console.WriteLine();
-            Console.Write(e.ApplicationJob.Name + ": " + e.NewStatus);
+            Console.Write(status);
+
+            if (m_Icon != null)
+            {
+                m_Icon.ShowBalloonTip(2000, "Ketarin", status, (e.NewStatus == Updater.Status.Failure ? ToolTipIcon.Error : ToolTipIcon.Info));
+            }
         }
 
         #endregion
