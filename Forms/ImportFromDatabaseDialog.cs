@@ -4,21 +4,30 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Text;
-using System.Net;
 using System.Windows.Forms;
-using CDBurnerXP.Forms;
 using CookComputing.XmlRpc;
 
 namespace Ketarin.Forms
 {
-    public partial class ApplicationDatabaseDialog : PersistentForm
+    public partial class ImportFromDatabaseDialog : ApplicationDatabaseBaseDialog
     {
-        public ApplicationDatabaseDialog()
+        private ApplicationJob m_ImportedApplication;
+
+        #region Properties
+
+        public ApplicationJob ImportedApplication
+        {
+            get
+            {
+                return m_ImportedApplication;
+            }
+        }
+
+        #endregion
+
+        public ImportFromDatabaseDialog()
         {
             InitializeComponent();
-
-            AcceptButton = bImport;
-            CancelButton = bCancel;
         }
 
         private void bSearch_Click(object sender, EventArgs e)
@@ -28,7 +37,7 @@ namespace Ketarin.Forms
             try
             {
                 IKetarinRpc proxy = XmlRpcProxyGen.Create<IKetarinRpc>();
-                olvApplications.SetObjects(proxy.GetApplications(txtSearchSubject.Text));
+                Applications = proxy.GetApplications(txtSearchSubject.Text);
                 olvApplications.EmptyListMsg = "No applications found";
             }
             catch (XmlRpcException ex)
@@ -41,23 +50,14 @@ namespace Ketarin.Forms
             }
         }
 
-        private void olvApplications_SelectedIndexChanged(object sender, EventArgs e)
+        protected override void OnSelectedApplicationChanged(object sender, EventArgs e)
         {
-            bImport.Enabled = (olvApplications.SelectedIndices.Count > 0);
-            AcceptButton = bImport.Enabled ? bImport : bSearch;
+            base.OnSelectedApplicationChanged(sender, e);
+
+            AcceptButton = bOK.Enabled ? bOK : bSearch;
         }
 
-        private void txtSearchSubject_TextChanged(object sender, EventArgs e)
-        {
-            AcceptButton = bSearch;
-        }
-
-        private void olvApplications_MouseDoubleClick(object sender, MouseEventArgs e)
-        {
-            bImport.PerformClick();
-        }
-
-        private void bImport_Click(object sender, EventArgs e)
+        private void bOK_Click(object sender, EventArgs e)
         {
             Cursor = Cursors.WaitCursor;
 
@@ -76,6 +76,7 @@ namespace Ketarin.Forms
                     }
 
                     resultJob.Save();
+                    m_ImportedApplication = resultJob;
 
                     // Real value is determined while saving
                     if (!resultJob.CanBeShared)
@@ -98,39 +99,9 @@ namespace Ketarin.Forms
             }
         }
 
-        private void cmnuProperties_Click(object sender, EventArgs e)
+        private void txtSearchSubject_TextChanged(object sender, EventArgs e)
         {
-            if (olvApplications.SelectedObject == null) return;
-
-            Cursor = Cursors.WaitCursor;
-
-            try
-            {
-                RpcApplication app = (RpcApplication)olvApplications.SelectedObject;
-
-                IKetarinRpc proxy = XmlRpcProxyGen.Create<IKetarinRpc>();
-                string xml = proxy.GetApplication(app.ShareId);
-                ApplicationJob resultJob = ApplicationJob.LoadFromXml(xml);
-
-                using (ApplicationJobDialog dialog = new ApplicationJobDialog())
-                {
-                    dialog.ApplicationJob = resultJob;
-                    dialog.ReadOnly = true;
-                    dialog.ShowDialog(this);
-                }
-            }
-            catch (XmlRpcException)
-            {
-                MessageBox.Show(this, "Failed loading the selected application.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            catch (WebException)
-            {
-                MessageBox.Show(this, "Failed loading the selected application.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            finally
-            {
-                Cursor = Cursors.Default;
-            }
+            AcceptButton = bSearch;
         }
 
     }

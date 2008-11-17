@@ -74,11 +74,11 @@
     <Compile Include="Forms\AboutDialog.Designer.cs">
       <DependentUpon>AboutDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\ApplicationDatabaseDialog.cs">
+    <Compile Include="Forms\ApplicationDatabaseBaseDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\ApplicationDatabaseDialog.Designer.cs">
-      <DependentUpon>ApplicationDatabaseDialog.cs</DependentUpon>
+    <Compile Include="Forms\ApplicationDatabaseBaseDialog.Designer.cs">
+      <DependentUpon>ApplicationDatabaseBaseDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\ApplicationJobDialog.cs">
       <SubType>Form</SubType>
@@ -98,6 +98,12 @@
     <Compile Include="Forms\ErrorsDialog.Designer.cs">
       <DependentUpon>ErrorsDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\ImportFromDatabaseDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ImportFromDatabaseDialog.Designer.cs">
+      <DependentUpon>ImportFromDatabaseDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\NewVariableDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -115,6 +121,12 @@
     </Compile>
     <Compile Include="Forms\SettingsDialog.Designer.cs">
       <DependentUpon>SettingsDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\SimilarApplicationsDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SimilarApplicationsDialog.Designer.cs">
+      <DependentUpon>SimilarApplicationsDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="IKetarinRpc.cs" />
     <Compile Include="M:\CsLib\CDBurnerXP\Controls\ListView.cs">
@@ -187,8 +199,8 @@
     <EmbeddedResource Include="Forms\AboutDialog.resx">
       <DependentUpon>AboutDialog.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\ApplicationDatabaseDialog.resx">
-      <DependentUpon>ApplicationDatabaseDialog.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\ApplicationDatabaseBaseDialog.resx">
+      <DependentUpon>ApplicationDatabaseBaseDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ApplicationJobDialog.resx">
       <DependentUpon>ApplicationJobDialog.cs</DependentUpon>
@@ -199,6 +211,9 @@
     <EmbeddedResource Include="Forms\ErrorsDialog.resx">
       <DependentUpon>ErrorsDialog.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ImportFromDatabaseDialog.resx">
+      <DependentUpon>ImportFromDatabaseDialog.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\NewVariableDialog.resx">
       <DependentUpon>NewVariableDialog.cs</DependentUpon>
     </EmbeddedResource>
@@ -207,6 +222,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\SettingsDialog.resx">
       <DependentUpon>SettingsDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SimilarApplicationsDialog.resx">
+      <DependentUpon>SimilarApplicationsDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
