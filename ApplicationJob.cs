@@ -88,8 +88,35 @@ namespace Ketarin
 
         public class UrlVariableCollection : SerializableDictionary<string, UrlVariable>
         {
+            public string ReplaceAllInString(string value, DateTime fileDate)
+            {
+                value = ReplaceAllInString(value);
+
+                // Some date/time variables, only if they were not user defined
+                string[] dateTimeVars = new string[] { "dd", "ddd", "dddd", "hh", "HH", "mm", "MM", "MMM", "MMMM", "ss", "tt", "yy", "yyyy", "zz", "zzz" };
+                foreach (string dateTimeVar in dateTimeVars)
+                {
+                    if (!ContainsKey(dateTimeVar))
+                    {
+                        value = value.Replace("{f:" + dateTimeVar + "}", fileDate.ToString(dateTimeVar));
+                    }
+                }
+
+                return value;
+            }
+
             public string ReplaceAllInString(string value)
             {
+                // Some date/time variables, only if they were not user defined
+                string[] dateTimeVars = new string[] { "dd", "ddd", "dddd", "hh", "HH", "mm", "MM", "MMM", "MMMM", "ss", "tt", "yy", "yyyy", "zz", "zzz" };
+                foreach (string dateTimeVar in dateTimeVars)
+                {
+                    if (!ContainsKey(dateTimeVar))
+                    {
+                        value = value.Replace("{" + dateTimeVar + "}", DateTime.Now.ToString(dateTimeVar));
+                    }
+                }
+
                 foreach (UrlVariable var in Values)
                 {
                     value = var.ReplaceInString(value);
@@ -189,7 +216,7 @@ namespace Ketarin
             {
                 if (string.IsNullOrEmpty(m_TargetPath)) return false;
 
-                return Directory.Exists(m_TargetPath);
+                return Directory.Exists(m_TargetPath) || TargetPath.EndsWith("\\");
             }
         }
 
@@ -554,9 +581,7 @@ namespace Ketarin
             string targetLocation = TargetPath;
 
             // Allow variables in target locations as well
-            foreach (UrlVariable variable in Variables.Values) {
-                targetLocation = variable.ReplaceInString(targetLocation);
-            }
+            targetLocation = Variables.ReplaceAllInString(targetLocation, GetLastModified(netResponse));
 
             // If carried on a USB stick, allow using the drive name
             try
