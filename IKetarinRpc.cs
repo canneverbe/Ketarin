@@ -9,7 +9,10 @@ namespace Ketarin
     public interface IKetarinRpc : IXmlRpcProxy
     {
         [XmlRpcMethod("ketarin.GetApplications")]
-        RpcApplication[] GetApplications(string searchSubject);        
+        RpcApplication[] GetApplications(string searchSubject);
+
+        [XmlRpcMethod("ketarin.GetSimilarApplications")]
+        RpcApplication[] GetSimilarApplications(string searchSubject, string appGuid);     
 
         [XmlRpcMethod("ketarin.GetApplication")]
         string GetApplication(int shareId);

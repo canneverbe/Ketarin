@@ -41,6 +41,13 @@ namespace Ketarin
         // For caching purposes
         private string m_CustomColumn = string.Empty;
 
+        private static MainForm m_Instance;
+
+        public static MainForm Instance
+        {
+            get { return m_Instance; }
+        }
+
         #region ProgressRenderer
 
         private class ProgressRenderer : BarRenderer
@@ -86,6 +93,7 @@ namespace Ketarin
         {
             InitializeComponent();
             olvJobs.ContextMenu = cmnuJobs;
+            m_Instance = this;
 
             colName.AspectGetter = delegate(object x) { return ((ApplicationJob)x).Name; };
             colName.GroupKeyGetter = delegate(object x) {
@@ -254,11 +262,13 @@ namespace Ketarin
 
         private void cmnuImportOnline_Click(object sender, EventArgs e)
         {
-            using (ApplicationDatabaseDialog dialog = new ApplicationDatabaseDialog())
+            using (ImportFromDatabaseDialog dialog = new ImportFromDatabaseDialog())
             {
-                if (dialog.ShowDialog(this) == DialogResult.OK)
+                if (dialog.ShowDialog(this) == DialogResult.OK && dialog.ImportedApplication != null)
                 {
-                    UpdateList();
+                    olvJobs.AddObject(dialog.ImportedApplication);
+                    olvJobs.SelectedObject = dialog.ImportedApplication;
+                    olvJobs.SelectedItem.EnsureVisible();
                 }
             }
         }

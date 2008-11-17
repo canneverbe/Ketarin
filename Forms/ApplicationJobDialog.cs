@@ -10,6 +10,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using CookComputing.XmlRpc;
 using CDBurnerXP;
+using CDBurnerXP.IO;
 using CDBurnerXP.Forms;
 
 namespace Ketarin.Forms
@@ -107,6 +108,10 @@ namespace Ketarin.Forms
             m_ApplicationJob.Name = txtApplicationName.Text;
             m_ApplicationJob.FixedDownloadUrl = txtFixedUrl.Text;
             m_ApplicationJob.TargetPath = txtTarget.Text;
+            if (rbFolder.Checked)
+            {
+                m_ApplicationJob.TargetPath = PathEx.QualifyPath(m_ApplicationJob.TargetPath);
+            }
             m_ApplicationJob.Enabled = chkEnabled.Checked;
             m_ApplicationJob.FileHippoId = txtFileHippoId.Text;
             m_ApplicationJob.DeletePreviousFile = chkDeletePrevious.Checked;
@@ -215,7 +220,23 @@ namespace Ketarin.Forms
 
                 IKetarinRpc proxy = XmlRpcProxyGen.Create<IKetarinRpc>();
                 proxy.Timeout = 10000;
-                proxy.SaveApplication(job.GetXml(), Settings.GetValue("AuthorGuid") as string);
+
+                RpcApplication[] existingApps = proxy.GetSimilarApplications(job.Name, job.Guid.ToString());
+                if (existingApps.Length > 0)
+                {
+                    System.Threading.Thread.Sleep(2000);
+                    // Prevent similar entries by asking the author
+                    // to reconsider his choice of name.
+                    MainForm.Instance.BeginInvoke((MethodInvoker)delegate() {
+                        SimilarApplicationsDialog dialog = new SimilarApplicationsDialog();
+                        dialog.Applications = existingApps;
+                        dialog.ShowDialog(MainForm.Instance);
+                    });
+                }
+                else
+                {
+                    proxy.SaveApplication(job.GetXml(), Settings.GetValue("AuthorGuid") as string);
+                }
             }
             catch (Exception)
             {
