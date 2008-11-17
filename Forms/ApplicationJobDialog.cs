@@ -27,7 +27,6 @@ namespace Ketarin.Forms
         internal ApplicationJob ApplicationJob
         {
             get {
-                WriteApplication();
                 return m_ApplicationJob;
             }
             set {
@@ -201,13 +200,43 @@ namespace Ketarin.Forms
                 return;
             }
 
+            WriteApplication();
+
             // All good. If necessary, now start a thread
             // which is going to share the application online.
-            if (this.ApplicationJob.ShareApplication)
+            ApplicationJob job = this.ApplicationJob;
+            if (job.ShareApplication)
             {
-                Thread thread = new Thread(new ParameterizedThreadStart(ShareOnline));
-                thread.IsBackground = true;
-                thread.Start(this.ApplicationJob);
+                Cursor = Cursors.WaitCursor;
+
+                try
+                {
+                    IKetarinRpc proxy = XmlRpcProxyGen.Create<IKetarinRpc>();
+                    proxy.Timeout = 10000;
+
+                    RpcApplication[] existingApps = proxy.GetSimilarApplications(job.Name, job.Guid.ToString());
+                    if (existingApps.Length > 0)
+                    {
+                        // Prevent similar entries by asking the author
+                        // to reconsider his choice of name.
+                        SimilarApplicationsDialog dialog = new SimilarApplicationsDialog();
+                        dialog.ApplicationJob = job;
+                        dialog.Applications = existingApps;
+                        if (dialog.ShowDialog(MainForm.Instance) != DialogResult.OK)
+                        {
+                            return;
+                        }
+                    }
+
+                    // Everything is fine, upload now.
+                    Thread thread = new Thread(new ParameterizedThreadStart(ShareOnline));
+                    thread.IsBackground = true;
+                    thread.Start(job);
+                }
+                finally
+                {
+                    Cursor = Cursors.Default;
+                }
             }
         }
 
@@ -220,23 +249,7 @@ namespace Ketarin.Forms
 
                 IKetarinRpc proxy = XmlRpcProxyGen.Create<IKetarinRpc>();
                 proxy.Timeout = 10000;
-
-                RpcApplication[] existingApps = proxy.GetSimilarApplications(job.Name, job.Guid.ToString());
-                if (existingApps.Length > 0)
-                {
-                    System.Threading.Thread.Sleep(2000);
-                    // Prevent similar entries by asking the author
-                    // to reconsider his choice of name.
-                    MainForm.Instance.BeginInvoke((MethodInvoker)delegate() {
-                        SimilarApplicationsDialog dialog = new SimilarApplicationsDialog();
-                        dialog.Applications = existingApps;
-                        dialog.ShowDialog(MainForm.Instance);
-                    });
-                }
-                else
-                {
-                    proxy.SaveApplication(job.GetXml(), Settings.GetValue("AuthorGuid") as string);
-                }
+                proxy.SaveApplication(job.GetXml(), Settings.GetValue("AuthorGuid") as string);
             }
             catch (Exception)
             {
