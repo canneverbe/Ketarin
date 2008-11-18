@@ -265,7 +265,7 @@ namespace Ketarin
             };
 
             WebRequest req = WebRequest.CreateDefault(url);
-            req.Timeout = 10000; // 10 seconds
+            req.Timeout = Convert.ToInt32((decimal)Settings.GetValue("ConnectionTimeout", 10.0) * 1000); // 10 seconds by default
 
             HttpWebRequest httpRequest = req as HttpWebRequest;
             if (httpRequest != null)
