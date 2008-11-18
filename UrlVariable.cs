@@ -110,6 +110,9 @@ namespace Ketarin
             // Unless, of course, the variable is used for the custom column
             if (!url.Contains(find) && customColumnVariable != find) return url;
 
+            // Ignore missing URLs
+            if (string.IsNullOrEmpty(m_Url)) return url;
+
             string page = string.Empty;
             // Get the content we need to put in
             using (WebClient client = new WebClient())

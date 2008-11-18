@@ -335,6 +335,17 @@ namespace Ketarin.Forms
 
         private void bOK_Click(object sender, EventArgs e)
         {
+            // Delete empty variables
+            List<string> toDelete = new List<string>();
+            foreach (KeyValuePair<string, UrlVariable> pair in m_Variables) 
+            {
+                if (string.IsNullOrEmpty(pair.Value.Url))
+                {
+                    toDelete.Add(pair.Key);
+                }
+            }
+            while (toDelete.Count > 0) { m_Variables.Remove(toDelete[0]); toDelete.RemoveAt(0); }
+
             // Save results
             m_Job.Variables = m_Variables;
         }
