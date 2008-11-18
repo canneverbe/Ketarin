@@ -43,6 +43,7 @@ namespace Ketarin.Forms
             chkUpdateAtStartup.Checked = (bool)Settings.GetValue("UpdateAtStartup", false);
             txtCustomColumn.Text = Settings.GetValue("CustomColumn", "") as string;
             chkAvoidBeta.Checked = (bool)Settings.GetValue("AvoidFileHippoBeta", false);
+            nConnectionTimeout.Value = Convert.ToDecimal(Settings.GetValue("ConnectionTimeout", 10.0));
         }
 
         private void bOK_Click(object sender, EventArgs e)
@@ -51,6 +52,7 @@ namespace Ketarin.Forms
             Settings.SetValue("UpdateAtStartup", chkUpdateAtStartup.Checked);
             Settings.SetValue("CustomColumn", txtCustomColumn.Text);
             Settings.SetValue("AvoidFileHippoBeta", chkAvoidBeta.Checked);
+            Settings.SetValue("ConnectionTimeout", nConnectionTimeout.Value);
         }
     }
 }

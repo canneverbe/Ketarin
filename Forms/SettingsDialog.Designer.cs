@@ -36,13 +36,17 @@
             this.txtCustomColumn = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.chkAvoidBeta = new System.Windows.Forms.CheckBox();
+            this.lblConnectionTimeout = new System.Windows.Forms.Label();
+            this.nConnectionTimeout = new System.Windows.Forms.NumericUpDown();
+            this.lblSeconds = new System.Windows.Forms.Label();
+            ((System.ComponentModel.ISupportInitialize)(this.nConnectionTimeout)).BeginInit();
             this.SuspendLayout();
             // 
             // bCancel
             // 
             this.bCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.bCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.bCancel.Location = new System.Drawing.Point(283, 190);
+            this.bCancel.Location = new System.Drawing.Point(283, 220);
             this.bCancel.Name = "bCancel";
             this.bCancel.Size = new System.Drawing.Size(75, 23);
             this.bCancel.TabIndex = 11;
@@ -53,7 +57,7 @@
             // 
             this.bOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.bOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.bOK.Location = new System.Drawing.Point(202, 190);
+            this.bOK.Location = new System.Drawing.Point(202, 220);
             this.bOK.Name = "bOK";
             this.bOK.Size = new System.Drawing.Size(75, 23);
             this.bOK.TabIndex = 10;
@@ -121,11 +125,56 @@
             this.chkAvoidBeta.Text = "Avoid &beta versions on FileHippo";
             this.chkAvoidBeta.UseVisualStyleBackColor = true;
             // 
+            // lblConnectionTimeout
+            // 
+            this.lblConnectionTimeout.AutoSize = true;
+            this.lblConnectionTimeout.Location = new System.Drawing.Point(12, 183);
+            this.lblConnectionTimeout.Name = "lblConnectionTimeout";
+            this.lblConnectionTimeout.Size = new System.Drawing.Size(101, 13);
+            this.lblConnectionTimeout.TabIndex = 6;
+            this.lblConnectionTimeout.Text = "&Connection timeout:";
+            // 
+            // nConnectionTimeout
+            // 
+            this.nConnectionTimeout.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.nConnectionTimeout.Location = new System.Drawing.Point(155, 181);
+            this.nConnectionTimeout.Maximum = new decimal(new int[] {
+            999,
+            0,
+            0,
+            0});
+            this.nConnectionTimeout.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nConnectionTimeout.Name = "nConnectionTimeout";
+            this.nConnectionTimeout.Size = new System.Drawing.Size(152, 20);
+            this.nConnectionTimeout.TabIndex = 7;
+            this.nConnectionTimeout.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // lblSeconds
+            // 
+            this.lblSeconds.AutoSize = true;
+            this.lblSeconds.Location = new System.Drawing.Point(313, 183);
+            this.lblSeconds.Name = "lblSeconds";
+            this.lblSeconds.Size = new System.Drawing.Size(47, 13);
+            this.lblSeconds.TabIndex = 12;
+            this.lblSeconds.Text = "seconds";
+            // 
             // SettingsDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(370, 225);
+            this.ClientSize = new System.Drawing.Size(370, 255);
+            this.Controls.Add(this.lblSeconds);
+            this.Controls.Add(this.nConnectionTimeout);
+            this.Controls.Add(this.lblConnectionTimeout);
             this.Controls.Add(this.chkAvoidBeta);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.txtCustomColumn);
@@ -142,6 +191,7 @@
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Settings";
+            ((System.ComponentModel.ISupportInitialize)(this.nConnectionTimeout)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -157,5 +207,8 @@
         private System.Windows.Forms.TextBox txtCustomColumn;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.CheckBox chkAvoidBeta;
+        private System.Windows.Forms.Label lblConnectionTimeout;
+        private System.Windows.Forms.NumericUpDown nConnectionTimeout;
+        private System.Windows.Forms.Label lblSeconds;
     }
 }
