@@ -241,7 +241,7 @@ namespace Ketarin
         /// but takes care of proper cleanup.
         /// </summary>
         /// <param name="job">The job to process</param>
-        /// <returns>true, if a new uodate has been found and downloaded, false otherwise</returns>
+        /// <returns>true, if a new update has been found and downloaded, false otherwise</returns>
         protected bool DoDownload(ApplicationJob job)
         {
             string downloadUrl = string.Empty;

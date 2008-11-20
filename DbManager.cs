@@ -6,6 +6,7 @@ using System.Data;
 using System.Data.SQLite;
 using System.Windows.Forms;
 using CDBurnerXP;
+using System.Net;
 
 namespace Ketarin
 {
@@ -60,6 +61,44 @@ namespace Ketarin
 
         private static SQLiteConnection m_DbConn;
 
+        /// <summary>
+        /// Builds a new proxy object from the settings.
+        /// Returns null if no valid proxy exists.
+        /// </summary>
+        public static WebProxy Proxy
+        {
+            get
+            {
+                string server = Settings.GetValue("ProxyServer") as string;
+                Int16 port = Convert.ToInt16(Settings.GetValue("ProxyPort", 0));
+
+                if (string.IsNullOrEmpty(server) || port <= 0) return null;
+
+                string username = Settings.GetValue("ProxyUser") as string;
+                string password = Settings.GetValue("ProxyPassword") as string;
+
+                string address = "http://" + server + ":" + port;
+
+                try
+                {
+                    if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+                    {
+                        return new WebProxy(address, true);
+                    }
+                    else
+                    {
+                        NetworkCredential credentials = new NetworkCredential(username, password);
+
+                        return new WebProxy(address, true, null, credentials);
+                    }
+                }
+                catch (UriFormatException)
+                {
+                    return null;
+                }
+            }
+        }
+
         public static SQLiteConnection Connection
         {
             get
@@ -88,6 +127,8 @@ namespace Ketarin
                     }
                     m_DbConn = new SQLiteConnection(connString);
                     m_DbConn.Open();
+
+                    WebRequest.DefaultWebProxy = Proxy;
                 }
                 return m_DbConn;
             }

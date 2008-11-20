@@ -34,22 +34,31 @@
             this.lblDefaultCommand = new System.Windows.Forms.Label();
             this.txtDefaultCommand = new System.Windows.Forms.TextBox();
             this.txtCustomColumn = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
+            this.lblCustomColumn = new System.Windows.Forms.Label();
             this.chkAvoidBeta = new System.Windows.Forms.CheckBox();
             this.lblConnectionTimeout = new System.Windows.Forms.Label();
             this.nConnectionTimeout = new System.Windows.Forms.NumericUpDown();
             this.lblSeconds = new System.Windows.Forms.Label();
+            this.sepProxy = new CDBurnerXP.Controls.Separator();
+            this.lblServer = new System.Windows.Forms.Label();
+            this.txtProxyServer = new System.Windows.Forms.TextBox();
+            this.nProxyPort = new System.Windows.Forms.NumericUpDown();
+            this.lblProxyUser = new System.Windows.Forms.Label();
+            this.txtProxyUser = new System.Windows.Forms.TextBox();
+            this.lblProxyPassword = new System.Windows.Forms.Label();
+            this.txtProxyPassword = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.nConnectionTimeout)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nProxyPort)).BeginInit();
             this.SuspendLayout();
             // 
             // bCancel
             // 
             this.bCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.bCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.bCancel.Location = new System.Drawing.Point(283, 220);
+            this.bCancel.Location = new System.Drawing.Point(283, 334);
             this.bCancel.Name = "bCancel";
             this.bCancel.Size = new System.Drawing.Size(75, 23);
-            this.bCancel.TabIndex = 11;
+            this.bCancel.TabIndex = 22;
             this.bCancel.Text = "Cancel";
             this.bCancel.UseVisualStyleBackColor = true;
             // 
@@ -57,10 +66,10 @@
             // 
             this.bOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.bOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.bOK.Location = new System.Drawing.Point(202, 220);
+            this.bOK.Location = new System.Drawing.Point(202, 334);
             this.bOK.Name = "bOK";
             this.bOK.Size = new System.Drawing.Size(75, 23);
-            this.bOK.TabIndex = 10;
+            this.bOK.TabIndex = 21;
             this.bOK.Text = "OK";
             this.bOK.UseVisualStyleBackColor = true;
             this.bOK.Click += new System.EventHandler(this.bOK_Click);
@@ -106,14 +115,14 @@
             this.txtCustomColumn.Size = new System.Drawing.Size(203, 20);
             this.txtCustomColumn.TabIndex = 5;
             // 
-            // label1
+            // lblCustomColumn
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 158);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(137, 13);
-            this.label1.TabIndex = 4;
-            this.label1.Text = "&Variable for custom column:";
+            this.lblCustomColumn.AutoSize = true;
+            this.lblCustomColumn.Location = new System.Drawing.Point(12, 158);
+            this.lblCustomColumn.Name = "lblCustomColumn";
+            this.lblCustomColumn.Size = new System.Drawing.Size(137, 13);
+            this.lblCustomColumn.TabIndex = 4;
+            this.lblCustomColumn.Text = "&Variable for custom column:";
             // 
             // chkAvoidBeta
             // 
@@ -167,16 +176,104 @@
             this.lblSeconds.TabIndex = 12;
             this.lblSeconds.Text = "seconds";
             // 
+            // sepProxy
+            // 
+            this.sepProxy.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.sepProxy.ForeColor = System.Drawing.SystemColors.ActiveCaption;
+            this.sepProxy.Location = new System.Drawing.Point(9, 215);
+            this.sepProxy.Name = "sepProxy";
+            this.sepProxy.Size = new System.Drawing.Size(351, 23);
+            this.sepProxy.TabIndex = 13;
+            this.sepProxy.Text = "HTTP proxy settings";
+            this.sepProxy.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // lblServer
+            // 
+            this.lblServer.AutoSize = true;
+            this.lblServer.Location = new System.Drawing.Point(21, 246);
+            this.lblServer.Name = "lblServer";
+            this.lblServer.Size = new System.Drawing.Size(41, 13);
+            this.lblServer.TabIndex = 14;
+            this.lblServer.Text = "&Server:";
+            // 
+            // txtProxyServer
+            // 
+            this.txtProxyServer.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtProxyServer.Location = new System.Drawing.Point(88, 243);
+            this.txtProxyServer.Name = "txtProxyServer";
+            this.txtProxyServer.Size = new System.Drawing.Size(189, 20);
+            this.txtProxyServer.TabIndex = 15;
+            // 
+            // nProxyPort
+            // 
+            this.nProxyPort.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.nProxyPort.Location = new System.Drawing.Point(283, 243);
+            this.nProxyPort.Maximum = new decimal(new int[] {
+            65535,
+            0,
+            0,
+            0});
+            this.nProxyPort.Name = "nProxyPort";
+            this.nProxyPort.Size = new System.Drawing.Size(77, 20);
+            this.nProxyPort.TabIndex = 16;
+            // 
+            // lblProxyUser
+            // 
+            this.lblProxyUser.AutoSize = true;
+            this.lblProxyUser.Location = new System.Drawing.Point(21, 272);
+            this.lblProxyUser.Name = "lblProxyUser";
+            this.lblProxyUser.Size = new System.Drawing.Size(61, 13);
+            this.lblProxyUser.TabIndex = 17;
+            this.lblProxyUser.Text = "Us&er name:";
+            // 
+            // txtProxyUser
+            // 
+            this.txtProxyUser.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtProxyUser.Location = new System.Drawing.Point(88, 269);
+            this.txtProxyUser.Name = "txtProxyUser";
+            this.txtProxyUser.Size = new System.Drawing.Size(272, 20);
+            this.txtProxyUser.TabIndex = 18;
+            // 
+            // lblProxyPassword
+            // 
+            this.lblProxyPassword.AutoSize = true;
+            this.lblProxyPassword.Location = new System.Drawing.Point(21, 298);
+            this.lblProxyPassword.Name = "lblProxyPassword";
+            this.lblProxyPassword.Size = new System.Drawing.Size(56, 13);
+            this.lblProxyPassword.TabIndex = 19;
+            this.lblProxyPassword.Text = "&Password:";
+            // 
+            // txtProxyPassword
+            // 
+            this.txtProxyPassword.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtProxyPassword.Location = new System.Drawing.Point(88, 295);
+            this.txtProxyPassword.Name = "txtProxyPassword";
+            this.txtProxyPassword.Size = new System.Drawing.Size(272, 20);
+            this.txtProxyPassword.TabIndex = 20;
+            this.txtProxyPassword.UseSystemPasswordChar = true;
+            // 
             // SettingsDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(370, 255);
+            this.ClientSize = new System.Drawing.Size(370, 369);
+            this.Controls.Add(this.txtProxyPassword);
+            this.Controls.Add(this.lblProxyPassword);
+            this.Controls.Add(this.txtProxyUser);
+            this.Controls.Add(this.lblProxyUser);
+            this.Controls.Add(this.nProxyPort);
+            this.Controls.Add(this.txtProxyServer);
+            this.Controls.Add(this.lblServer);
+            this.Controls.Add(this.sepProxy);
             this.Controls.Add(this.lblSeconds);
             this.Controls.Add(this.nConnectionTimeout);
             this.Controls.Add(this.lblConnectionTimeout);
             this.Controls.Add(this.chkAvoidBeta);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.lblCustomColumn);
             this.Controls.Add(this.txtCustomColumn);
             this.Controls.Add(this.txtDefaultCommand);
             this.Controls.Add(this.lblDefaultCommand);
@@ -192,6 +289,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Settings";
             ((System.ComponentModel.ISupportInitialize)(this.nConnectionTimeout)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nProxyPort)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -205,10 +303,18 @@
         private System.Windows.Forms.Label lblDefaultCommand;
         private System.Windows.Forms.TextBox txtDefaultCommand;
         private System.Windows.Forms.TextBox txtCustomColumn;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label lblCustomColumn;
         private System.Windows.Forms.CheckBox chkAvoidBeta;
         private System.Windows.Forms.Label lblConnectionTimeout;
         private System.Windows.Forms.NumericUpDown nConnectionTimeout;
         private System.Windows.Forms.Label lblSeconds;
+        private CDBurnerXP.Controls.Separator sepProxy;
+        private System.Windows.Forms.Label lblServer;
+        private System.Windows.Forms.TextBox txtProxyServer;
+        private System.Windows.Forms.NumericUpDown nProxyPort;
+        private System.Windows.Forms.Label lblProxyUser;
+        private System.Windows.Forms.TextBox txtProxyUser;
+        private System.Windows.Forms.Label lblProxyPassword;
+        private System.Windows.Forms.TextBox txtProxyPassword;
     }
 }
