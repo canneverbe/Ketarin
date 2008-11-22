@@ -88,6 +88,27 @@ namespace Ketarin
 
         public class UrlVariableCollection : SerializableDictionary<string, UrlVariable>
         {
+            private ApplicationJob m_Parent;
+
+            #region Properties
+
+            public ApplicationJob Parent
+            {
+                get { return m_Parent; }
+                set { m_Parent = value; }
+            }
+
+            #endregion
+
+            public UrlVariableCollection()
+            {
+            }
+
+            public UrlVariableCollection(ApplicationJob parent)
+            {
+                m_Parent = parent;
+            }
+
             public string ReplaceAllInString(string value, DateTime fileDate)
             {
                 value = ReplaceAllInString(value);
@@ -117,6 +138,12 @@ namespace Ketarin
                     }
                 }
 
+                // Job-specific data
+                if (!string.IsNullOrEmpty(m_Parent.Category))
+                {
+                    value = value.Replace("{category}", m_Parent.Category);
+                }
+
                 foreach (UrlVariable var in Values)
                 {
                     value = var.ReplaceInString(value);
@@ -135,7 +162,7 @@ namespace Ketarin
                 // Load variables on demand
                 if (m_Variables == null)
                 {
-                    m_Variables = new UrlVariableCollection();
+                    m_Variables = new UrlVariableCollection(this);
                     if (m_Id != 0)
                     {
                         using (IDbCommand command = DbManager.Connection.CreateCommand())
@@ -161,6 +188,7 @@ namespace Ketarin
                 if (value != null)
                 {
                     m_Variables = value;
+                    m_Variables.Parent = this;
                 }
             }
         }
