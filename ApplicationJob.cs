@@ -339,10 +339,7 @@ namespace Ketarin
         /// <returns>The last imported ApplicationJob</returns>
         public static ApplicationJob ImportFromXml(string fileName)
         {
-            using (XmlReader reader = XmlReader.Create(fileName))
-            {
-                return ImportFromXml(reader, true);
-            }
+            return ImportFromXmlString(File.ReadAllText(fileName));
         }
 
         /// <summary>
@@ -428,6 +425,8 @@ namespace Ketarin
                 }
             }
 
+            ApplicationJob lastJob = null;
+
             // Read each job
             while (true)
             {
@@ -437,10 +436,10 @@ namespace Ketarin
                 // If a job already exists, only update it!
                 importedJob.SetIdByGuid(importedJob.Guid);
                 if (save) importedJob.Save();
-                return importedJob;
+                lastJob = importedJob;
             }
 
-            return null;
+            return lastJob;
         }
 
         public void Save()
