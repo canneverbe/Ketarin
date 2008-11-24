@@ -214,7 +214,7 @@ namespace Ketarin
 
             if ((bool)Settings.GetValue("UpdateAtStartup", false))
             {
-                RunJobs(m_Jobs);
+                RunJobs();
             }
         }
 
@@ -283,8 +283,29 @@ namespace Ketarin
             }
             else
             {
-                RunJobs(m_Jobs);
+                RunJobs();
             }
+        }
+
+        /// <summary>
+        /// Updates all items, using the same order as the
+        /// items in the list (considers sorting).
+        /// </summary>
+        private void RunJobs()
+        {
+            List<ApplicationJob> jobs = new List<ApplicationJob>();
+            OLVListItem startItem = null;
+
+            do
+            {
+                startItem = olvJobs.GetNextItem(startItem) as OLVListItem;
+                if (startItem != null)
+                {
+                    jobs.Add(startItem.RowObject as ApplicationJob);
+                }
+            } while (startItem != null);
+
+            RunJobs(jobs.ToArray());
         }
 
         private void RunJobs(ApplicationJob[] jobs)
@@ -334,7 +355,7 @@ namespace Ketarin
 
             if (olvJobs.SelectedObjects.Count == 0)
             {
-                RunJobs(m_Jobs);
+                RunJobs();
             }
             else
             {
