@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.Xml.Serialization;
 using System.Security.Cryptography;
 using CDBurnerXP.IO;
+using CDBurnerXP;
 
 namespace Ketarin
 {
@@ -686,7 +687,7 @@ namespace Ketarin
             // If using FileHippo, and previous file is available, check MD5
             if (!string.IsNullOrEmpty(m_FileHippoId) && m_SourceType == SourceType.FileHippo && !string.IsNullOrEmpty(m_PreviousLocation) && File.Exists(m_PreviousLocation))
             {
-                string serverMd5 = ExternalServices.FileHippoMd5(m_FileHippoId);
+                string serverMd5 = ExternalServices.FileHippoMd5(m_FileHippoId, (bool)Settings.GetValue("AvoidFileHippoBeta", false));
                 return string.Compare(serverMd5, GetMd5OfFile(m_PreviousLocation), true) != 0;
             }
 

@@ -23,21 +23,7 @@ namespace Ketarin
 
             if (avoidBeta && FileHippoIsBeta(overviewPage))
             {
-                // Find the most recent version which is not a beta
-                string[] otherUrls = FileHippoGetAllVersions(overviewPage, fileId);
-
-                foreach (string altUrl in otherUrls)
-                {
-                    using (WebClient altUrlDownloader = new WebClient())
-                    {
-                        string newPage = altUrlDownloader.DownloadString(altUrl);
-                        if (!FileHippoIsBeta(newPage))
-                        {
-                            overviewPage = newPage;
-                            break;
-                        }
-                    }
-                }
+                overviewPage = GetNonBetaPageContent(overviewPage, fileId);
             }
 
             string findUrl = string.Format("/download_{0}/download/", fileId);
@@ -63,21 +49,47 @@ namespace Ketarin
             return redirectUrl;
         }
 
-        public static string FileHippoMd5(string fileId)
+        private static string GetNonBetaPageContent(string overviewPage, string fileId)
+        {
+            // Find the most recent version which is not a beta
+            string[] otherUrls = FileHippoGetAllVersions(overviewPage, fileId);
+
+            foreach (string altUrl in otherUrls)
+            {
+                using (WebClient altUrlDownloader = new WebClient())
+                {
+                    string newPage = altUrlDownloader.DownloadString(altUrl);
+                    if (!FileHippoIsBeta(newPage))
+                    {
+                        return newPage;
+                    }
+                }
+            }
+
+            return overviewPage;
+        }
+
+        public static string FileHippoMd5(string fileId, bool avoidBeta)
         {
             fileId = fileId.ToLower();
             string url = string.Format("http://www.filehippo.com/download_{0}/tech/", fileId);
 
             
-            string md5 = string.Empty;
+            string md5Page = string.Empty;
             using (WebClient client = new WebClient())
             {
-                md5 = client.DownloadString(url);
+                md5Page = client.DownloadString(url);
+
+                if (avoidBeta && FileHippoIsBeta(md5Page))
+                {
+                    md5Page = GetNonBetaPageContent(md5Page, fileId);
+                }
+
                 string find = "MD5 Checksum:</b></td><td>";
-                int pos = md5.IndexOf(find);
+                int pos = md5Page.IndexOf(find);
                 if (pos < 0) return string.Empty;
 
-                return md5.Substring(pos + find.Length, 32);
+                return md5Page.Substring(pos + find.Length, 32);
             }
         }
 
@@ -88,14 +100,19 @@ namespace Ketarin
 
         public static string[] FileHippoGetAllVersions(string pageContent, string fileId)
         {
-            Regex regex = new Regex(string.Format(@"/download_{0}/(\d+)", fileId), RegexOptions.IgnoreCase);
+            Regex regex = new Regex(string.Format(@"/download_{0}/(tech/)?(\d+)", fileId), RegexOptions.IgnoreCase);
             MatchCollection matches = regex.Matches(pageContent);
 
             List<string> urls = new List<string>();
 
             foreach (Match match in matches)
             {
-                string url = string.Format("http://filehippo.com/download_{0}/{1}/", fileId, match.Groups[1].Value);
+                string idPart = fileId;
+                if (!string.IsNullOrEmpty(match.Groups[1].Value))
+                {
+                    idPart += "/tech";
+                }
+                string url = string.Format("http://filehippo.com/download_{0}/{1}/", idPart, match.Groups[2].Value);
                 urls.Add(url);
             }
 
