@@ -222,7 +222,7 @@ namespace Ketarin.Forms
                         SimilarApplicationsDialog dialog = new SimilarApplicationsDialog();
                         dialog.ApplicationJob = job;
                         dialog.Applications = existingApps;
-                        if (dialog.ShowDialog(MainForm.Instance) != DialogResult.OK)
+                        if (dialog.ShowDialog(this) != DialogResult.OK)
                         {
                             return;
                         }

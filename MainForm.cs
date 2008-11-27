@@ -31,6 +31,7 @@ using CDBurnerXP;
 using CDBurnerXP.Forms;
 using System.Xml;
 using System.Xml.Serialization;
+using System.Drawing.Imaging;
 
 namespace Ketarin
 {
@@ -40,13 +41,6 @@ namespace Ketarin
         private Updater m_Updater = new Updater();
         // For caching purposes
         private string m_CustomColumn = string.Empty;
-
-        private static MainForm m_Instance;
-
-        public static MainForm Instance
-        {
-            get { return m_Instance; }
-        }
 
         #region ProgressRenderer
 
@@ -89,11 +83,48 @@ namespace Ketarin
 
         #endregion
 
+        public static Bitmap MakeGrayscale(Bitmap original)
+        {
+            //create a blank bitmap the same size as original
+            Bitmap newBitmap =
+               new Bitmap(original.Width, original.Height);
+
+            //get a graphics object from the new image
+            Graphics g = Graphics.FromImage(newBitmap);
+
+            //create the grayscale ColorMatrix
+            ColorMatrix colorMatrix = new ColorMatrix(
+               new float[][]
+              {
+                 new float[] {.3f, .3f, .3f, 0, 0},
+                 new float[] {.59f, .59f, .59f, 0, 0},
+                 new float[] {.11f, .11f, .11f, 0, 0},
+                 new float[] {0, 0, 0, 1, 0},
+                 new float[] {0, 0, 0, 0, 1}
+              });
+
+            //create some image attributes
+            ImageAttributes attributes = new ImageAttributes();
+
+            //set the color matrix attribute
+            attributes.SetColorMatrix(colorMatrix);
+
+            //draw the original image on the new image
+            //using the grayscale color matrix
+            g.DrawImage(original,
+               new Rectangle(0, 0, original.Width, original.Height),
+               0, 0, original.Width, original.Height,
+               GraphicsUnit.Pixel, attributes);
+
+            //dispose the Graphics object
+            g.Dispose();
+            return newBitmap;
+        }
+
         public MainForm()
         {
             InitializeComponent();
             olvJobs.ContextMenu = cmnuJobs;
-            m_Instance = this;
 
             colName.AspectGetter = delegate(object x) { return ((ApplicationJob)x).Name; };
             colName.GroupKeyGetter = delegate(object x) {
@@ -101,18 +132,53 @@ namespace Ketarin
                 if (job.Name.Length == 0) return string.Empty;
                 return job.Name[0].ToString().ToUpper();
             };
+            // Gray out disabled jobs
+            olvJobs.RowFormatter = delegate(OLVListItem item)
+            {
+                if (!((ApplicationJob)item.RowObject).Enabled)
+                {
+                    item.ForeColor = Color.Gray;
+                }
+                else
+                {
+                    item.ForeColor = olvJobs.ForeColor;
+                }
+            };
             colName.ImageGetter = delegate(object x) {
                 ApplicationJob job = (ApplicationJob)x;
-                // "No" icon if disabled
-                if (!job.Enabled) return 4;
+                
+                // Gray icon if disabled
+                if (!job.Enabled && !string.IsNullOrEmpty(job.PreviousLocation))
+                {
+                    try
+                    {
+                        string disabledKey = job.PreviousLocation + "|Disabled";
+                        if (!imlStatus.Images.ContainsKey(disabledKey))
+                        {
+                            // No icon if no file exists
+                            if (!File.Exists(job.PreviousLocation)) return 0;
+
+                            Icon programIcon = IconReader.GetFileIcon(job.PreviousLocation, IconReader.IconSize.Small, false);
+                            imlStatus.Images.Add(disabledKey, MakeGrayscale(programIcon.ToBitmap()));
+                        }
+                        return disabledKey;
+                    }
+                    catch (ArgumentException)
+                    {
+                        // no icon could be determined, use default
+                    }
+                }
 
                 // If available and idle, use the program icon
                 if (m_Updater.GetStatus(job) == Updater.Status.Idle && !string.IsNullOrEmpty(job.PreviousLocation))
                 {
                     try
                     {
-                        if (!imlStatus.Images.ContainsKey(job.PreviousLocation) && File.Exists(job.PreviousLocation))
+                        if (!imlStatus.Images.ContainsKey(job.PreviousLocation))
                         {
+                            // No icon if no file exists
+                            if (!File.Exists(job.PreviousLocation)) return 0;
+
                             Icon programIcon = IconReader.GetFileIcon(job.PreviousLocation, IconReader.IconSize.Small, false);
                             imlStatus.Images.Add(job.PreviousLocation, programIcon);
                         }
