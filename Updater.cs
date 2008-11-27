@@ -189,7 +189,7 @@ namespace Ketarin
                     // Wait until we can start a new thread
                     while (m_Threads.Count >= m_ThreadLimit)
                     {
-                        Thread.Sleep(1000);
+                        Thread.Sleep(200);
 
                         foreach (Thread activeThread in m_Threads)
                         {
@@ -212,7 +212,7 @@ namespace Ketarin
                 // Now, wait until all threads have finished
                 while (m_Threads.Count > 0)
                 {
-                    Thread.Sleep(250);
+                    Thread.Sleep(200);
 
                     foreach (Thread activeThread in m_Threads)
                     {
