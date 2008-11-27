@@ -257,9 +257,16 @@ namespace Ketarin.Forms
                     // Highlight StartText if specified
                     if (string.IsNullOrEmpty(CurrentVar.StartText)) return;
                     int pos = rtfContent.Text.IndexOf(CurrentVar.StartText);
-                    rtfContent.SelectionStart = pos;
-                    rtfContent.SelectionLength = CurrentVar.StartText.Length;
-                    rtfContent.SelectionColor = Color.Blue;
+                    if (pos == -1)
+                    {
+                        pos = 0;
+                    }
+                    else
+                    {
+                        rtfContent.SelectionStart = pos;
+                        rtfContent.SelectionLength = CurrentVar.StartText.Length;
+                        rtfContent.SelectionColor = Color.Blue;
+                    }
 
                     int boldStart = pos + CurrentVar.StartText.Length;
 

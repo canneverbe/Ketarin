@@ -178,6 +178,9 @@ namespace Ketarin
                 bRun.Text = "&Update now";
                 bRun.Image = Properties.Resources.Restart;
                 sbAddApplication.Enabled = true;
+                mnuExport.Enabled = true;
+                mnuImport.Enabled = true;
+                olvJobs.Refresh();
 
                 if (m_Updater.Errors.Length > 0)
                 {
@@ -191,7 +194,11 @@ namespace Ketarin
         {
             this.BeginInvoke((MethodInvoker)delegate() {
                 olvJobs.RefreshObject(e.ApplicationJob);
-                olvJobs.EnsureVisible(olvJobs.IndexOf(e.ApplicationJob));
+                int index = olvJobs.IndexOf(e.ApplicationJob);
+                if (index >= 0)
+                {
+                    olvJobs.EnsureVisible(index);
+                }
             });
         }
 
@@ -250,7 +257,9 @@ namespace Ketarin
                 if (dialog.ShowDialog(this) == DialogResult.OK)
                 {
                     dialog.ApplicationJob.Save();
-                    UpdateList();
+                    olvJobs.AddObject(dialog.ApplicationJob);
+                    olvJobs.SelectedObject = dialog.ApplicationJob;
+                    olvJobs.EnsureVisible(olvJobs.SelectedIndex);
                 }
             }
         }
@@ -313,6 +322,8 @@ namespace Ketarin
             bRun.Text = "Cancel";
             bRun.Image = null;
             sbAddApplication.Enabled = false;
+            mnuExport.Enabled = false;
+            mnuImport.Enabled = false;
 
             m_Updater.Run(jobs);
         }
@@ -556,7 +567,7 @@ namespace Ketarin
                 if (dialog.ShowDialog(this) == DialogResult.OK)
                 {
                     m_CustomColumn = Settings.GetValue("CustomColumn", "") as string;
-                    UpdateList();
+                    olvJobs.RefreshObjects(m_Jobs);
                 }
             }
         }

@@ -28,28 +28,34 @@ namespace Ketarin
 
             public object GetValue(params string[] path)
             {
-                using (IDbCommand command = Connection.CreateCommand())
+                lock (Connection)
                 {
-                    command.CommandText = "SELECT SettingValue FROM settings WHERE SettingPath = @SettingPath";
-                    command.Parameters.Add(new SQLiteParameter("@SettingPath", GetPath(path)));
-                    return command.ExecuteScalar();
+                    using (IDbCommand command = Connection.CreateCommand())
+                    {
+                        command.CommandText = "SELECT SettingValue FROM settings WHERE SettingPath = @SettingPath";
+                        command.Parameters.Add(new SQLiteParameter("@SettingPath", GetPath(path)));
+                        return command.ExecuteScalar();
+                    }
                 }
             }
 
             public void SetValue(string value, params string[] path)
             {
-                using (IDbCommand command = Connection.CreateCommand())
+                lock (Connection)
                 {
-                    command.CommandText = "UPDATE settings SET SettingValue = @SettingValue WHERE SettingPath = @SettingPath";
-                    command.Parameters.Add(new SQLiteParameter("@SettingValue", value));
-                    command.Parameters.Add(new SQLiteParameter("@SettingPath", GetPath(path)));
-                    if (command.ExecuteNonQuery() == 0)
+                    using (IDbCommand command = Connection.CreateCommand())
                     {
-                        command.CommandText = @"INSERT INTO settings (SettingPath, SettingValue)
-                                                 VALUES (@SettingPath, @SettingValue)";
+                        command.CommandText = "UPDATE settings SET SettingValue = @SettingValue WHERE SettingPath = @SettingPath";
                         command.Parameters.Add(new SQLiteParameter("@SettingValue", value));
                         command.Parameters.Add(new SQLiteParameter("@SettingPath", GetPath(path)));
-                        command.ExecuteNonQuery();
+                        if (command.ExecuteNonQuery() == 0)
+                        {
+                            command.CommandText = @"INSERT INTO settings (SettingPath, SettingValue)
+                                                 VALUES (@SettingPath, @SettingValue)";
+                            command.Parameters.Add(new SQLiteParameter("@SettingValue", value));
+                            command.Parameters.Add(new SQLiteParameter("@SettingPath", GetPath(path)));
+                            command.ExecuteNonQuery();
+                        }
                     }
                 }
             }
@@ -60,6 +66,7 @@ namespace Ketarin
         #endregion
 
         private static SQLiteConnection m_DbConn;
+        private static string m_DatabasePath;
 
         /// <summary>
         /// Builds a new proxy object from the settings.
@@ -105,6 +112,25 @@ namespace Ketarin
             {
                 if (m_DbConn == null)
                 {
+                    m_DbConn = NewConnection;
+                    WebRequest.DefaultWebProxy = Proxy;
+                }
+                return m_DbConn;
+            }
+        }
+
+        /// <summary>
+        /// For all database operations that might be executed at the same
+        /// time within different threads (for example, .Save() for multiple
+        /// application jobs), we need a "unique" connection.
+        /// </summary>
+        public static SQLiteConnection NewConnection
+        {
+            get
+            {
+                if (m_DatabasePath == null)
+                {
+                    // Only determine the path once
                     string path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Ketarin\\jobs.db";
                     // Is a special path set in the registry?
                     string regPath = CDBurnerXP.Settings.GetValue("Ketarin", "DatabasePath", "") as string;
@@ -120,17 +146,18 @@ namespace Ketarin
                     }
 
                     Directory.CreateDirectory(Path.GetDirectoryName(path));
-                    string connString = string.Format("Data Source={0};Version=3;", path);
-                    if (!File.Exists(path))
-                    {
-                        connString += "New=True;";
-                    }
-                    m_DbConn = new SQLiteConnection(connString);
-                    m_DbConn.Open();
-
-                    WebRequest.DefaultWebProxy = Proxy;
+                    m_DatabasePath = path;
                 }
-                return m_DbConn;
+
+                SQLiteConnection connection;
+                string connString = string.Format("Data Source={0};Version=3;", m_DatabasePath);
+                if (!File.Exists(m_DatabasePath))
+                {
+                    connString += "New=True;";
+                }
+                connection = new SQLiteConnection(connString);
+                connection.Open();
+                return connection;
             }
         }
 
