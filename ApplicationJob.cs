@@ -160,23 +160,29 @@ namespace Ketarin
         public UrlVariableCollection Variables
         {
             get {
-                // Load variables on demand
-                if (m_Variables == null)
+                lock (this)
                 {
-                    m_Variables = new UrlVariableCollection(this);
-                    if (m_Id != 0)
+                    // Load variables on demand
+                    if (m_Variables == null)
                     {
-                        using (IDbCommand command = DbManager.Connection.CreateCommand())
+                        m_Variables = new UrlVariableCollection(this);
+                        if (m_Id != 0)
                         {
-                            command.CommandText = @"SELECT * FROM variables WHERE JobId = @JobId";
-                            command.Parameters.Add(new SQLiteParameter("@JobId", m_Id));
-                            using (IDataReader reader = command.ExecuteReader())
+                            using (SQLiteConnection conn = DbManager.NewConnection)
                             {
-                                while (reader.Read())
+                                using (IDbCommand command = conn.CreateCommand())
                                 {
-                                    UrlVariable variable = new UrlVariable();
-                                    variable.Hydrate(reader);
-                                    m_Variables.Add(variable.Name, variable);
+                                    command.CommandText = @"SELECT * FROM variables WHERE JobId = @JobId";
+                                    command.Parameters.Add(new SQLiteParameter("@JobId", m_Id));
+                                    using (IDataReader reader = command.ExecuteReader())
+                                    {
+                                        while (reader.Read())
+                                        {
+                                            UrlVariable variable = new UrlVariable();
+                                            variable.Hydrate(reader);
+                                            m_Variables.Add(variable.Name, variable);
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -452,28 +458,32 @@ namespace Ketarin
                     m_Guid = Guid.NewGuid();
                 }
 
-                using (SQLiteTransaction transaction = DbManager.Connection.BeginTransaction())
+                using (SQLiteConnection conn = DbManager.NewConnection)
                 {
-                    if (m_Id > 0)
-                    {
-                        // Important: Once CanBeShared is set to false,
-                        // it can never be true again (ownership does not change)
-                        using (IDbCommand command = DbManager.Connection.CreateCommand())
-                        {
-                            command.CommandText = "SELECT CanBeShared FROM jobs WHERE JobId = @JobId";
-                            command.Parameters.Add(new SQLiteParameter("@JobId", m_Id));
-                            bool canBeShared = Convert.ToBoolean(command.ExecuteScalar());
-                            if (!canBeShared)
-                            {
-                                m_CanBeShared = false;
-                            }
-                        }
 
-                        // Update existing job
-                        using (IDbCommand command = DbManager.Connection.CreateCommand())
+                    using (SQLiteTransaction transaction = conn.BeginTransaction())
+                    {
+                        if (m_Id > 0)
                         {
-                            command.Transaction = transaction;
-                            command.CommandText = @"UPDATE jobs
+                            // Important: Once CanBeShared is set to false,
+                            // it can never be true again (ownership does not change)
+                            using (IDbCommand command = conn.CreateCommand())
+                            {
+                                command.Transaction = transaction;
+                                command.CommandText = "SELECT CanBeShared FROM jobs WHERE JobId = @JobId";
+                                command.Parameters.Add(new SQLiteParameter("@JobId", m_Id));
+                                bool canBeShared = Convert.ToBoolean(command.ExecuteScalar());
+                                if (!canBeShared)
+                                {
+                                    m_CanBeShared = false;
+                                }
+                            }
+
+                            // Update existing job
+                            using (IDbCommand command = conn.CreateCommand())
+                            {
+                                command.Transaction = transaction;
+                                command.CommandText = @"UPDATE jobs
                                                SET ApplicationName = @ApplicationName,
                                                    FixedDownloadUrl = @FixedDownloadUrl,
                                                    TargetPath = @TargetPath,
@@ -491,95 +501,96 @@ namespace Ketarin
                                                    HttpReferer = @HttpReferer
                                              WHERE JobId = @JobId";
 
-                            command.Parameters.Add(new SQLiteParameter("@ApplicationName", Name));
-                            command.Parameters.Add(new SQLiteParameter("@FixedDownloadUrl", m_FixedDownloadUrl));
-                            command.Parameters.Add(new SQLiteParameter("@TargetPath", m_TargetPath));
-                            command.Parameters.Add(new SQLiteParameter("@LastUpdated", m_LastUpdated));
-                            command.Parameters.Add(new SQLiteParameter("@IsEnabled", m_Enabled));
-                            command.Parameters.Add(new SQLiteParameter("@FileHippoId", m_FileHippoId));
-                            command.Parameters.Add(new SQLiteParameter("@DeletePreviousFile", m_DeletePreviousFile));
-                            command.Parameters.Add(new SQLiteParameter("@PreviousLocation", m_PreviousLocation));
-                            command.Parameters.Add(new SQLiteParameter("@SourceType", m_SourceType));
-                            command.Parameters.Add(new SQLiteParameter("@ExecuteCommand", m_ExecuteCommand));
-                            command.Parameters.Add(new SQLiteParameter("@Category", m_Category));
-                            command.Parameters.Add(new SQLiteParameter("@JobGuid", m_Guid.ToString()));
-                            command.Parameters.Add(new SQLiteParameter("@CanBeShared", m_CanBeShared));
-                            command.Parameters.Add(new SQLiteParameter("@ShareApplication", m_ShareApplication));
-                            command.Parameters.Add(new SQLiteParameter("@HttpReferer", m_HttpReferer));
+                                command.Parameters.Add(new SQLiteParameter("@ApplicationName", Name));
+                                command.Parameters.Add(new SQLiteParameter("@FixedDownloadUrl", m_FixedDownloadUrl));
+                                command.Parameters.Add(new SQLiteParameter("@TargetPath", m_TargetPath));
+                                command.Parameters.Add(new SQLiteParameter("@LastUpdated", m_LastUpdated));
+                                command.Parameters.Add(new SQLiteParameter("@IsEnabled", m_Enabled));
+                                command.Parameters.Add(new SQLiteParameter("@FileHippoId", m_FileHippoId));
+                                command.Parameters.Add(new SQLiteParameter("@DeletePreviousFile", m_DeletePreviousFile));
+                                command.Parameters.Add(new SQLiteParameter("@PreviousLocation", m_PreviousLocation));
+                                command.Parameters.Add(new SQLiteParameter("@SourceType", m_SourceType));
+                                command.Parameters.Add(new SQLiteParameter("@ExecuteCommand", m_ExecuteCommand));
+                                command.Parameters.Add(new SQLiteParameter("@Category", m_Category));
+                                command.Parameters.Add(new SQLiteParameter("@JobGuid", m_Guid.ToString()));
+                                command.Parameters.Add(new SQLiteParameter("@CanBeShared", m_CanBeShared));
+                                command.Parameters.Add(new SQLiteParameter("@ShareApplication", m_ShareApplication));
+                                command.Parameters.Add(new SQLiteParameter("@HttpReferer", m_HttpReferer));
 
-                            command.Parameters.Add(new SQLiteParameter("@JobId", m_Id));
+                                command.Parameters.Add(new SQLiteParameter("@JobId", m_Id));
 
-                            command.ExecuteNonQuery();
+                                command.ExecuteNonQuery();
+                            }
                         }
-                    }
-                    else
-                    {
-                        // Insert a new job
-                        using (IDbCommand command = DbManager.Connection.CreateCommand())
+                        else
                         {
-                            command.Transaction = transaction;
-                            command.CommandText = @"INSERT INTO jobs (ApplicationName, FixedDownloadUrl, DateAdded, TargetPath, LastUpdated, IsEnabled, FileHippoId, DeletePreviousFile, SourceType, ExecuteCommand, Category, JobGuid, CanBeShared, ShareApplication, HttpReferer)
+                            // Insert a new job
+                            using (IDbCommand command = conn.CreateCommand())
+                            {
+                                command.Transaction = transaction;
+                                command.CommandText = @"INSERT INTO jobs (ApplicationName, FixedDownloadUrl, DateAdded, TargetPath, LastUpdated, IsEnabled, FileHippoId, DeletePreviousFile, SourceType, ExecuteCommand, Category, JobGuid, CanBeShared, ShareApplication, HttpReferer)
                                                  VALUES (@ApplicationName, @FixedDownloadUrl, @DateAdded, @TargetPath, @LastUpdated, @IsEnabled, @FileHippoId, @DeletePreviousFile, @SourceType, @ExecuteCommand, @Category, @JobGuid, @CanBeShared, @ShareApplication, @HttpReferer)";
 
-                            command.Parameters.Add(new SQLiteParameter("@ApplicationName", Name));
-                            command.Parameters.Add(new SQLiteParameter("@FixedDownloadUrl", m_FixedDownloadUrl));
-                            command.Parameters.Add(new SQLiteParameter("@DateAdded", DateTime.Now));
-                            command.Parameters.Add(new SQLiteParameter("@LastUpdated", m_LastUpdated));
-                            command.Parameters.Add(new SQLiteParameter("@TargetPath", m_TargetPath));
-                            command.Parameters.Add(new SQLiteParameter("@IsEnabled", m_Enabled));
-                            command.Parameters.Add(new SQLiteParameter("@DeletePreviousFile", m_DeletePreviousFile));
-                            command.Parameters.Add(new SQLiteParameter("@FileHippoId", m_FileHippoId));
-                            command.Parameters.Add(new SQLiteParameter("@SourceType", m_SourceType));
-                            command.Parameters.Add(new SQLiteParameter("@ExecuteCommand", m_ExecuteCommand));
-                            command.Parameters.Add(new SQLiteParameter("@Category", m_Category));
-                            command.Parameters.Add(new SQLiteParameter("@JobGuid", m_Guid.ToString()));
-                            command.Parameters.Add(new SQLiteParameter("@CanBeShared", m_CanBeShared));
-                            command.Parameters.Add(new SQLiteParameter("@ShareApplication", m_ShareApplication));
-                            command.Parameters.Add(new SQLiteParameter("@HttpReferer", m_HttpReferer));
+                                command.Parameters.Add(new SQLiteParameter("@ApplicationName", Name));
+                                command.Parameters.Add(new SQLiteParameter("@FixedDownloadUrl", m_FixedDownloadUrl));
+                                command.Parameters.Add(new SQLiteParameter("@DateAdded", DateTime.Now));
+                                command.Parameters.Add(new SQLiteParameter("@LastUpdated", m_LastUpdated));
+                                command.Parameters.Add(new SQLiteParameter("@TargetPath", m_TargetPath));
+                                command.Parameters.Add(new SQLiteParameter("@IsEnabled", m_Enabled));
+                                command.Parameters.Add(new SQLiteParameter("@DeletePreviousFile", m_DeletePreviousFile));
+                                command.Parameters.Add(new SQLiteParameter("@FileHippoId", m_FileHippoId));
+                                command.Parameters.Add(new SQLiteParameter("@SourceType", m_SourceType));
+                                command.Parameters.Add(new SQLiteParameter("@ExecuteCommand", m_ExecuteCommand));
+                                command.Parameters.Add(new SQLiteParameter("@Category", m_Category));
+                                command.Parameters.Add(new SQLiteParameter("@JobGuid", m_Guid.ToString()));
+                                command.Parameters.Add(new SQLiteParameter("@CanBeShared", m_CanBeShared));
+                                command.Parameters.Add(new SQLiteParameter("@ShareApplication", m_ShareApplication));
+                                command.Parameters.Add(new SQLiteParameter("@HttpReferer", m_HttpReferer));
 
+                                command.ExecuteNonQuery();
+                            }
+
+                            // Get ID
+                            using (IDbCommand command = conn.CreateCommand())
+                            {
+                                command.Transaction = transaction;
+                                command.CommandText = "SELECT last_insert_rowid()";
+                                m_Id = Convert.ToInt32(command.ExecuteScalar());
+                            }
+                        }
+
+                        Dictionary<string, UrlVariable> variables = Variables;
+
+                        // Save variables
+                        using (IDbCommand command = conn.CreateCommand())
+                        {
+                            command.Transaction = transaction;
+                            command.CommandText = "DELETE FROM variables WHERE JobId = @JobId";
+                            command.Parameters.Add(new SQLiteParameter("@JobId", m_Id));
                             command.ExecuteNonQuery();
                         }
 
-                        // Get ID
-                        using (IDbCommand command = DbManager.Connection.CreateCommand())
+                        foreach (KeyValuePair<string, UrlVariable> pair in variables)
                         {
-                            command.Transaction = transaction;
-                            command.CommandText = "SELECT last_insert_rowid()";
-                            m_Id = Convert.ToInt32(command.ExecuteScalar());
-                        }
-                    }
-
-                    Dictionary<string, UrlVariable> variables = Variables;
-
-                    // Save variables
-                    using (IDbCommand command = DbManager.Connection.CreateCommand())
-                    {
-                        command.Transaction = transaction;
-                        command.CommandText = "DELETE FROM variables WHERE JobId = @JobId";
-                        command.Parameters.Add(new SQLiteParameter("@JobId", m_Id));
-                        command.ExecuteNonQuery();
-                    }
-
-                    foreach (KeyValuePair<string, UrlVariable> pair in variables)
-                    {
-                        using (IDbCommand command = DbManager.Connection.CreateCommand())
-                        {
-                            command.Transaction = transaction;
-                            command.CommandText = @"INSERT INTO variables (JobId, VariableName, Url, StartText, EndText, RegularExpression, CachedContent)
+                            using (IDbCommand command = conn.CreateCommand())
+                            {
+                                command.Transaction = transaction;
+                                command.CommandText = @"INSERT INTO variables (JobId, VariableName, Url, StartText, EndText, RegularExpression, CachedContent)
                                                  VALUES (@JobId, @VariableName, @Url, @StartText, @EndText, @RegularExpression, @CachedContent)";
 
-                            command.Parameters.Add(new SQLiteParameter("@JobId", m_Id));
-                            command.Parameters.Add(new SQLiteParameter("@VariableName", pair.Key));
-                            command.Parameters.Add(new SQLiteParameter("@Url", pair.Value.Url));
-                            command.Parameters.Add(new SQLiteParameter("@StartText", pair.Value.StartText));
-                            command.Parameters.Add(new SQLiteParameter("@EndText", pair.Value.EndText));
-                            command.Parameters.Add(new SQLiteParameter("@RegularExpression", pair.Value.Regex));
-                            command.Parameters.Add(new SQLiteParameter("@CachedContent", pair.Value.CachedContent));
-                            command.ExecuteNonQuery();
+                                command.Parameters.Add(new SQLiteParameter("@JobId", m_Id));
+                                command.Parameters.Add(new SQLiteParameter("@VariableName", pair.Key));
+                                command.Parameters.Add(new SQLiteParameter("@Url", pair.Value.Url));
+                                command.Parameters.Add(new SQLiteParameter("@StartText", pair.Value.StartText));
+                                command.Parameters.Add(new SQLiteParameter("@EndText", pair.Value.EndText));
+                                command.Parameters.Add(new SQLiteParameter("@RegularExpression", pair.Value.Regex));
+                                command.Parameters.Add(new SQLiteParameter("@CachedContent", pair.Value.CachedContent));
+                                command.ExecuteNonQuery();
+                            }
                         }
-                    }
 
-                    transaction.Commit();
+                        transaction.Commit();
+                    }
                 }
             }
         }

@@ -25,6 +25,8 @@ namespace Ketarin
         protected int m_LastProgress = -1;
         private List<ApplicationJobError> m_Errors;
         private byte m_NoProgressCounter = 0;
+        private int m_ThreadLimit = 2;
+        private List<Thread> m_Threads = new List<Thread>();
 
         #region Properties
 
@@ -153,7 +155,8 @@ namespace Ketarin
         {
             m_IsBusy = true;
             m_Jobs = jobs;
-            
+            m_ThreadLimit = Convert.ToInt32(Settings.GetValue("ThreadCount", 2));
+
             // Initialise progress and status
             m_Progress = new Dictionary<ApplicationJob, short>();
             m_Status = new Dictionary<ApplicationJob, Status>();
@@ -163,6 +166,7 @@ namespace Ketarin
                 bool res = m_Progress.ContainsKey(job);
                 m_Status[job] = 0;
             }
+            m_Threads.Clear();
 
             Thread thread = new Thread(Run);
             thread.Start();
@@ -179,52 +183,45 @@ namespace Ketarin
             {
                 foreach (ApplicationJob job in m_Jobs)
                 {
-                    // Stop if cancelled
-                    if (m_CancelUpdates) break;
-
                     // Skip if disabled
                     if (!job.Enabled) continue;
 
-                    m_Status[job] = Status.Downloading;
-                    OnStatusChanged(job);
+                    // Wait until we can start a new thread
+                    while (m_Threads.Count >= m_ThreadLimit)
+                    {
+                        Thread.Sleep(1000);
 
-                    try
-                    {
-                        m_Status[job] = DoDownload(job) ? Status.UpdateSuccessful : Status.NoUpdate;
-                    }
-                    catch (WebException ex)
-                    {
-                        m_Errors.Add(new ApplicationJobError(job, ex));
-                        m_Status[job] = Status.Failure;
-                    }
-                    catch (FileNotFoundException ex)
-                    {
-                        // Executing command failed
-                        m_Errors.Add(new ApplicationJobError(job, ex));
-                    }
-                    catch (IOException ex)
-                    {
-                        m_Errors.Add(new ApplicationJobError(job, ex));
-                        m_Status[job] = Status.Failure;
-                    }
-                    catch (UriFormatException ex)
-                    {
-                        m_Errors.Add(new ApplicationJobError(job, ex));
-                        m_Status[job] = Status.Failure;
-                    }
-                    catch (NonBinaryFileException ex)
-                    {
-                        m_Errors.Add(new ApplicationJobError(job, ex));
-                        m_Status[job] = Status.Failure;
-                    }
-                    catch (Win32Exception ex)
-                    {
-                        // Executing command failed
-                        m_Errors.Add(new ApplicationJobError(job, ex));
+                        foreach (Thread activeThread in m_Threads)
+                        {
+                            if (!activeThread.IsAlive)
+                            {
+                                m_Threads.Remove(activeThread);
+                                break;
+                            }
+                        }
                     }
 
-                    m_Progress[job] = 100;
-                    OnStatusChanged(job);
+                    // Stop if cancelled
+                    if (m_CancelUpdates) break;
+
+                    Thread newThread = new Thread(new ParameterizedThreadStart(StartNewThread));
+                    newThread.Start(job);
+                    m_Threads.Add(newThread);
+                }
+
+                // Now, wait until all threads have finished
+                while (m_Threads.Count > 0)
+                {
+                    Thread.Sleep(250);
+
+                    foreach (Thread activeThread in m_Threads)
+                    {
+                        if (!activeThread.IsAlive)
+                        {
+                            m_Threads.Remove(activeThread);
+                            break;
+                        }
+                    }
                 }
             }
             finally
@@ -234,6 +231,52 @@ namespace Ketarin
                 m_Size.Clear();
                 OnUpdateCompleted();
             }
+        }
+
+        private void StartNewThread(object paramJob)
+        {
+            ApplicationJob job = paramJob as ApplicationJob;
+
+            m_Status[job] = Status.Downloading;
+            OnStatusChanged(job);
+
+            try
+            {
+                m_Status[job] = DoDownload(job) ? Status.UpdateSuccessful : Status.NoUpdate;
+            }
+            catch (WebException ex)
+            {
+                m_Errors.Add(new ApplicationJobError(job, ex));
+                m_Status[job] = Status.Failure;
+            }
+            catch (FileNotFoundException ex)
+            {
+                // Executing command failed
+                m_Errors.Add(new ApplicationJobError(job, ex));
+            }
+            catch (IOException ex)
+            {
+                m_Errors.Add(new ApplicationJobError(job, ex));
+                m_Status[job] = Status.Failure;
+            }
+            catch (UriFormatException ex)
+            {
+                m_Errors.Add(new ApplicationJobError(job, ex));
+                m_Status[job] = Status.Failure;
+            }
+            catch (NonBinaryFileException ex)
+            {
+                m_Errors.Add(new ApplicationJobError(job, ex));
+                m_Status[job] = Status.Failure;
+            }
+            catch (Win32Exception ex)
+            {
+                // Executing command failed
+                m_Errors.Add(new ApplicationJobError(job, ex));
+            }
+
+            m_Progress[job] = 100;
+            OnStatusChanged(job);
         }
 
         /// <summary>

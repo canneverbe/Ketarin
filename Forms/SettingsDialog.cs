@@ -45,6 +45,7 @@ namespace Ketarin.Forms
             txtCustomColumn.Text = Settings.GetValue("CustomColumn", "") as string;
             chkAvoidBeta.Checked = (bool)Settings.GetValue("AvoidFileHippoBeta", false);
             nConnectionTimeout.Value = Convert.ToDecimal(Settings.GetValue("ConnectionTimeout", 10.0));
+            nNumThreads.Value = Convert.ToDecimal(Settings.GetValue("ThreadCount", 2));
 
             nProxyPort.Value = Convert.ToInt16(Settings.GetValue("ProxyPort", 0));
             txtProxyServer.Text = Settings.GetValue("ProxyServer", "") as string;
@@ -59,7 +60,8 @@ namespace Ketarin.Forms
             Settings.SetValue("CustomColumn", txtCustomColumn.Text);
             Settings.SetValue("AvoidFileHippoBeta", chkAvoidBeta.Checked);
             Settings.SetValue("ConnectionTimeout", nConnectionTimeout.Value);
-
+            Settings.SetValue("ThreadCount", Convert.ToInt32(nNumThreads.Value));
+            
             Settings.SetValue("ProxyPort", nProxyPort.Value);
             Settings.SetValue("ProxyServer", txtProxyServer.Text);
             Settings.SetValue("ProxyUser", txtProxyUser.Text);
