@@ -27,6 +27,7 @@ namespace Ketarin
         private byte m_NoProgressCounter = 0;
         private int m_ThreadLimit = 2;
         private List<Thread> m_Threads = new List<Thread>();
+        private List<string> m_NoAutoReferer = new List<string>(new string[] {"switch.dl.sourceforge.net"});
 
         #region Properties
 
@@ -318,12 +319,16 @@ namespace Ketarin
                 // If there there are variables defined (from which most likely the download link
                 // or version is being extracted), we'll just use the first variable's URL as referer.
                 // The user still has the option to set a custom referer.
-                foreach (UrlVariable urlVar in job.Variables.Values)
+                // Note: Some websites don't "like" certain referers
+                if (!m_NoAutoReferer.Contains(req.RequestUri.Host))
                 {
-                    httpRequest.Referer = urlVar.Url;
-                    break;
+                    foreach (UrlVariable urlVar in job.Variables.Values)
+                    {
+                        httpRequest.Referer = urlVar.Url;
+                        break;
+                    }
                 }
-
+                
                 if (!string.IsNullOrEmpty(job.HttpReferer))
                 {
                     httpRequest.Referer = job.HttpReferer;
