@@ -645,6 +645,7 @@ namespace Ketarin
             m_Category = reader["Category"] as string;
             m_CanBeShared = Convert.ToBoolean(reader["CanBeShared"]);
             m_FileHippoVersion = reader["FileHippoVersion"] as string;
+            m_HttpReferer = reader["HttpReferer"] as string;
 
             string guid = reader["JobGuid"] as string;
             if (!string.IsNullOrEmpty(guid))
