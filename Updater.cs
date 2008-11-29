@@ -27,7 +27,7 @@ namespace Ketarin
         private byte m_NoProgressCounter = 0;
         private int m_ThreadLimit = 2;
         private List<Thread> m_Threads = new List<Thread>();
-        private List<string> m_NoAutoReferer = new List<string>(new string[] {"switch.dl.sourceforge.net"});
+        private List<string> m_NoAutoReferer = new List<string>(new string[] {"sourceforge.net"});
 
         #region Properties
 
@@ -280,6 +280,17 @@ namespace Ketarin
             OnStatusChanged(job);
         }
 
+        private static string GetBaseHost(Uri uri)
+        {
+            string[] parts = uri.Host.Split('.');
+            if (parts.Length <= 2)
+            {
+                return uri.Host;
+            }
+
+            return parts[parts.Length - 2] + "." + parts[parts.Length - 1];
+        }
+
         /// <summary>
         /// Executes the actual download. Does not handle exceptions,
         /// but takes care of proper cleanup.
@@ -320,7 +331,7 @@ namespace Ketarin
                 // or version is being extracted), we'll just use the first variable's URL as referer.
                 // The user still has the option to set a custom referer.
                 // Note: Some websites don't "like" certain referers
-                if (!m_NoAutoReferer.Contains(req.RequestUri.Host))
+                if (!m_NoAutoReferer.Contains(GetBaseHost(req.RequestUri)))
                 {
                     foreach (UrlVariable urlVar in job.Variables.Values)
                     {
