@@ -24,6 +24,7 @@ namespace Ketarin
         private DateTime? m_LastUpdated = null;
         private bool m_Enabled = true;
         private string m_FileHippoId = string.Empty;
+        private string m_FileHippoVersion = string.Empty;
         private bool m_DeletePreviousFile = false;
         private string m_PreviousLocation = string.Empty;
         private SourceType m_SourceType = SourceType.FixedUrl;
@@ -105,6 +106,18 @@ namespace Ketarin
             {
             }
 
+            public string GetVariableContent(string variableName)
+            {
+                if (m_Parent.DownloadSourceType == SourceType.FileHippo && variableName == "version" && !ContainsKey("version"))
+                {
+                    return m_Parent.FileHippoVersion;
+                }
+
+                if (!ContainsKey(variableName)) return null;
+
+                return this[variableName].CachedContent;
+            }
+            
             public UrlVariableCollection(ApplicationJob parent)
             {
                 m_Parent = parent;
@@ -143,6 +156,13 @@ namespace Ketarin
                 if (!string.IsNullOrEmpty(m_Parent.Category))
                 {
                     value = value.Replace("{category}", m_Parent.Category);
+                }
+
+                // FileHippo version
+                if (m_Parent.DownloadSourceType == SourceType.FileHippo && !ContainsKey("version") && UrlVariable.IsVariableDownloadNeeded("version", value))
+                {
+                    m_Parent.FileHippoVersion = ExternalServices.FileHippoVersion(m_Parent.FileHippoId, (bool)Settings.GetValue("AvoidFileHippoBeta", false));
+                    value = value.Replace("{version}", m_Parent.FileHippoVersion);
                 }
 
                 foreach (UrlVariable var in Values)
@@ -260,6 +280,17 @@ namespace Ketarin
         {
             get { return m_FileHippoId; }
             set { m_FileHippoId = value; }
+        }
+
+        /// <summary>
+        /// Contains the cached version information
+        /// on FileHippo.
+        /// </summary>
+        [XmlIgnore()]
+        public string FileHippoVersion
+        {
+            get { return m_FileHippoVersion; }
+            set { m_FileHippoVersion = value; }
         }
 
         [XmlElement("LastUpdated")]
@@ -498,7 +529,8 @@ namespace Ketarin
                                                    JobGuid = @JobGuid,
                                                    CanBeShared = @CanBeShared,
                                                    ShareApplication = @ShareApplication,
-                                                   HttpReferer = @HttpReferer
+                                                   HttpReferer = @HttpReferer,
+                                                   FileHippoVersion = @FileHippoVersion
                                              WHERE JobId = @JobId";
 
                                 command.Parameters.Add(new SQLiteParameter("@ApplicationName", Name));
@@ -516,7 +548,8 @@ namespace Ketarin
                                 command.Parameters.Add(new SQLiteParameter("@CanBeShared", m_CanBeShared));
                                 command.Parameters.Add(new SQLiteParameter("@ShareApplication", m_ShareApplication));
                                 command.Parameters.Add(new SQLiteParameter("@HttpReferer", m_HttpReferer));
-
+                                command.Parameters.Add(new SQLiteParameter("@FileHippoVersion", m_FileHippoVersion));
+                                
                                 command.Parameters.Add(new SQLiteParameter("@JobId", m_Id));
 
                                 command.ExecuteNonQuery();
@@ -528,8 +561,8 @@ namespace Ketarin
                             using (IDbCommand command = conn.CreateCommand())
                             {
                                 command.Transaction = transaction;
-                                command.CommandText = @"INSERT INTO jobs (ApplicationName, FixedDownloadUrl, DateAdded, TargetPath, LastUpdated, IsEnabled, FileHippoId, DeletePreviousFile, SourceType, ExecuteCommand, Category, JobGuid, CanBeShared, ShareApplication, HttpReferer)
-                                                 VALUES (@ApplicationName, @FixedDownloadUrl, @DateAdded, @TargetPath, @LastUpdated, @IsEnabled, @FileHippoId, @DeletePreviousFile, @SourceType, @ExecuteCommand, @Category, @JobGuid, @CanBeShared, @ShareApplication, @HttpReferer)";
+                                command.CommandText = @"INSERT INTO jobs (ApplicationName, FixedDownloadUrl, DateAdded, TargetPath, LastUpdated, IsEnabled, FileHippoId, DeletePreviousFile, SourceType, ExecuteCommand, Category, JobGuid, CanBeShared, ShareApplication, HttpReferer, FileHippoVersion)
+                                                 VALUES (@ApplicationName, @FixedDownloadUrl, @DateAdded, @TargetPath, @LastUpdated, @IsEnabled, @FileHippoId, @DeletePreviousFile, @SourceType, @ExecuteCommand, @Category, @JobGuid, @CanBeShared, @ShareApplication, @HttpReferer, @FileHippoVersion)";
 
                                 command.Parameters.Add(new SQLiteParameter("@ApplicationName", Name));
                                 command.Parameters.Add(new SQLiteParameter("@FixedDownloadUrl", m_FixedDownloadUrl));
@@ -546,7 +579,8 @@ namespace Ketarin
                                 command.Parameters.Add(new SQLiteParameter("@CanBeShared", m_CanBeShared));
                                 command.Parameters.Add(new SQLiteParameter("@ShareApplication", m_ShareApplication));
                                 command.Parameters.Add(new SQLiteParameter("@HttpReferer", m_HttpReferer));
-
+                                command.Parameters.Add(new SQLiteParameter("@FileHippoVersion", m_FileHippoVersion));
+                                
                                 command.ExecuteNonQuery();
                             }
 
@@ -610,6 +644,7 @@ namespace Ketarin
             m_ExecuteCommand = reader["ExecuteCommand"] as string;
             m_Category = reader["Category"] as string;
             m_CanBeShared = Convert.ToBoolean(reader["CanBeShared"]);
+            m_FileHippoVersion = reader["FileHippoVersion"] as string;
 
             string guid = reader["JobGuid"] as string;
             if (!string.IsNullOrEmpty(guid))

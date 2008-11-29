@@ -102,13 +102,20 @@ namespace Ketarin
             m_CachedContent = reader["CachedContent"] as string;
         }
 
-        public string ReplaceInString(string url)
+        public static bool IsVariableDownloadNeeded(string name, string formatString)
         {
-            string find = "{" + m_Name + "}";
+            string find = "{" + name + "}";
             string customColumnVariable = "{" + SettingsDialog.CustomColumnVariableName + "}";
             // If variable is unused, don't make any efforts
             // Unless, of course, the variable is used for the custom column
-            if (!url.Contains(find) && customColumnVariable != find) return url;
+            return (formatString.Contains(find) || customColumnVariable == find);
+        }
+
+        public virtual string ReplaceInString(string url)
+        {
+            if (!IsVariableDownloadNeeded(m_Name, url)) return url;
+            
+            string find = "{" + m_Name + "}";
 
             // Ignore missing URLs
             if (string.IsNullOrEmpty(m_Url)) return url;

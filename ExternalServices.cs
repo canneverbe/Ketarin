@@ -69,6 +69,31 @@ namespace Ketarin
             return overviewPage;
         }
 
+        public static string FileHippoVersion(string fileId, bool avoidBeta)
+        {
+            if (string.IsNullOrEmpty(fileId)) return null;
+
+            string url = string.Format("http://www.filehippo.com/download_{0}/", fileId);
+
+            string overviewPage = string.Empty;
+            using (WebClient client = new WebClient())
+            {
+                overviewPage = client.DownloadString(url);
+            }
+            
+            if (avoidBeta && FileHippoIsBeta(overviewPage))
+            {
+                overviewPage = GetNonBetaPageContent(overviewPage, fileId);
+            }
+
+            // Extract version from title like: <title>Download Firefox 3.0.4 - FileHippo.com</title>
+            Regex regex = new Regex(@"<title>.+?(\d[\d\.]+.*) - File", RegexOptions.IgnoreCase);
+            Match match = regex.Match(overviewPage);
+            if (!match.Success) return null;
+
+            return match.Groups[1].Value;
+        }
+
         public static string FileHippoMd5(string fileId, bool avoidBeta)
         {
             fileId = fileId.ToLower();

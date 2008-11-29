@@ -58,7 +58,7 @@ namespace Ketarin
             {
                 ApplicationJob job = RowObject as ApplicationJob;
                 // Do not draw anything if the updater is not currently working
-                if (m_Updater.GetProgress(job) == -1)
+                if (m_Updater.GetProgress(job) == -1 || !job.Enabled)
                 {
                     base.DrawBackground(g, r);
                     return;
@@ -217,10 +217,8 @@ namespace Ketarin
                 if (string.IsNullOrEmpty(m_CustomColumn)) return null;
 
                 m_CustomColumn = SettingsDialog.CustomColumnVariableName;
-                ApplicationJob.UrlVariableCollection vars = ((ApplicationJob)x).Variables;
-                if (!vars.ContainsKey(m_CustomColumn)) return null;
 
-                return vars[m_CustomColumn].CachedContent;
+                return ((ApplicationJob)x).Variables.GetVariableContent(m_CustomColumn);
             };
 
             m_Updater.ProgressChanged += new EventHandler<Updater.JobProgressChangedEventArgs>(m_Updater_ProgressChanged);

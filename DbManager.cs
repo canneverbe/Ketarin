@@ -171,6 +171,7 @@ namespace Ketarin
                                          TargetPath         TEXT,
                                          FixedDownloadUrl   TEXT,
                                          FileHippoId        TEXT,
+                                         FileHippoVersion   TEXT,
                                          DateAdded          DATE,
                                          LastUpdated        DATE,
                                          PreviousLocation   TEXT,
@@ -216,6 +217,7 @@ namespace Ketarin
             addColumns.Add("CanBeShared", "ALTER TABLE jobs ADD CanBeShared INTEGER DEFAULT 1");
             addColumns.Add("ShareApplication", "ALTER TABLE jobs ADD ShareApplication INTEGER DEFAULT 0");
             addColumns.Add("HttpReferer", "ALTER TABLE jobs ADD HttpReferer TEXT");
+            addColumns.Add("FileHippoVersion", "ALTER TABLE jobs ADD FileHippoVersion TEXT");
             
             foreach (KeyValuePair<string, string> column in addColumns)
             {
