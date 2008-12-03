@@ -40,8 +40,6 @@ namespace Ketarin
             {
                 DbManager.LoadOrCreateDatabase();
 
-                Settings.Provider = new DbManager.SettingsProvider();
-
                 if (Settings.GetValue("AuthorGuid") == null)
                 {
                     Settings.SetValue("AuthorGuid", Guid.NewGuid().ToString("B"));

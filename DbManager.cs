@@ -113,6 +113,7 @@ namespace Ketarin
                 if (m_DbConn == null)
                 {
                     m_DbConn = NewConnection;
+                    Settings.Provider = new DbManager.SettingsProvider();
                     WebRequest.DefaultWebProxy = Proxy;
                 }
                 return m_DbConn;
