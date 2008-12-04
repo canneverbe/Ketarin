@@ -319,6 +319,10 @@ namespace Ketarin
                 return true;
             };
 
+            // If we want to download multiple files simultaneously
+            // from the same server, we need to "remove" the connection limit.
+            ServicePointManager.DefaultConnectionLimit = 10;
+
             WebRequest req = WebRequest.CreateDefault(url);
             req.Timeout = Convert.ToInt32(Settings.GetValue("ConnectionTimeout", 10)) * 1000; // 10 seconds by default
 
