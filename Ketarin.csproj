@@ -128,6 +128,7 @@
     <Compile Include="Forms\SimilarApplicationsDialog.Designer.cs">
       <DependentUpon>SimilarApplicationsDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="ftplib.cs" />
     <Compile Include="IKetarinRpc.cs" />
     <Compile Include="M:\CsLib\CDBurnerXP\Controls\ListView.cs">
       <Link>CDBurnerXP\ListView.cs</Link>

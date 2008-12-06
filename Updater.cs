@@ -385,7 +385,7 @@ namespace Ketarin
                     {
                         int byteCount = 0;
                         int readBytes = 0;
-                        long length = Convert.ToInt64(response.ContentLength);
+                        long length = GetContentLength(response);
                         m_Size[job] = length;
 
                         do
@@ -450,6 +450,53 @@ namespace Ketarin
             }
 
             return true;
+        }
+
+        /// <summary>
+        /// Determines the actual content length in a more reliable
+        /// way for FTP downloads.
+        /// </summary>
+        /// <returns>-1 if no size could be determined</returns>
+        private static long GetContentLength(WebResponse response)
+        {
+            HttpWebResponse http = response as HttpWebResponse;
+            if (http != null)
+            {
+                return http.ContentLength;
+            }
+
+            FtpWebResponse ftp = response as FtpWebResponse;
+            if (ftp != null)
+            {
+                if (ftp.ContentLength > 0)
+                {
+                    return ftp.ContentLength;
+                }
+                else
+                {
+                    // There is a problem with the .NET FTP implementation:
+                    // "TYPE I" is never sent unless a file is requested, but is sometimes
+                    // required by FTP servers to get the file size (otherwise error 550).
+                    // Thus, we use a custom FTP library from code project for this task.
+                    FTPLib.FTP ftpConnection = null;
+                    try
+                    {
+                        ftpConnection = new FTPLib.FTP(response.ResponseUri.Host, "anonymous", "ketarin@canneverbe.com");
+                        return ftpConnection.GetFileSize(response.ResponseUri.LocalPath);
+                    }
+                    catch (Exception)
+                    {
+                        // Limited trust in this code...
+                        return -1;
+                    }
+                    finally
+                    {
+                        if (ftpConnection != null) ftpConnection.Disconnect();
+                    }
+                }
+            }
+
+            return -1;
         }
 
         private static void ExecuteCommand(ApplicationJob job, string baseCommand)
