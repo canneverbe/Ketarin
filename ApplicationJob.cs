@@ -686,7 +686,7 @@ namespace Ketarin
                         fileName = disposition.Substring(pos + token.Length);
                         fileName = fileName.Replace("\"", "");
                         // Make sure that no relative paths are being injected (security issue)
-                        fileName = Path.GetFileName(fileName);
+                        fileName = Path.GetFileName(fileName.TrimEnd(';'));
 
                         fileName = PathEx.ReplaceInvalidFileNameChars(fileName);
                     }
