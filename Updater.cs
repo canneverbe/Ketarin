@@ -383,8 +383,8 @@ namespace Ketarin
                 {
                     using (FileStream targetFile = File.Create(tmpLocation))
                     {
-                        int resByte = -1;
                         int byteCount = 0;
+                        int readBytes = 0;
                         long length = Convert.ToInt64(response.ContentLength);
                         m_Size[job] = length;
 
@@ -392,12 +392,13 @@ namespace Ketarin
                         {
                             if (m_CancelUpdates) break;
 
-                            resByte = sourceFile.ReadByte();
-                            if (resByte >= 0) targetFile.WriteByte((byte)resByte);
-                            byteCount++;
+                            byte[] buffer = new byte[1024];
+                            readBytes = sourceFile.Read(buffer, 0, 1024);
+                            if (readBytes > 0) targetFile.Write(buffer, 0, readBytes);
+                            byteCount += readBytes;
                             OnProgressChanged(byteCount, length, job);
 
-                        } while (resByte >= 0);
+                        } while (readBytes > 0);
                     }
                 }
 
