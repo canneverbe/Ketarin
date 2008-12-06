@@ -97,6 +97,9 @@ namespace Ketarin.Forms
             chkShareOnline.Checked = m_ApplicationJob.ShareApplication;
             chkShareOnline.Enabled = m_ApplicationJob.CanBeShared;
             txtSpoofReferer.Text = m_ApplicationJob.HttpReferer;
+            rbBetaAvoid.Checked = (ApplicationJob.DownloadBeta == ApplicationJob.DownloadBetaType.Avoid);
+            rbBetaDefault.Checked = (ApplicationJob.DownloadBeta == ApplicationJob.DownloadBetaType.Default);
+            rbAlwaysDownload.Checked = (ApplicationJob.DownloadBeta == ApplicationJob.DownloadBetaType.AlwaysDownload);
         }
 
         /// <summary>
@@ -119,6 +122,19 @@ namespace Ketarin.Forms
             m_ApplicationJob.Category = cboCategory.Text;
             m_ApplicationJob.ShareApplication = chkShareOnline.Checked;
             m_ApplicationJob.HttpReferer = txtSpoofReferer.Text;
+            
+            if (rbAlwaysDownload.Checked)
+            {
+                m_ApplicationJob.DownloadBeta = ApplicationJob.DownloadBetaType.AlwaysDownload;
+            }
+            else if (rbBetaAvoid.Checked)
+            {
+                m_ApplicationJob.DownloadBeta = ApplicationJob.DownloadBetaType.Avoid;
+            }
+            else
+            {
+                m_ApplicationJob.DownloadBeta = ApplicationJob.DownloadBetaType.Default;
+            }
         }
 
         private void bBrowseFile_Click(object sender, EventArgs e)

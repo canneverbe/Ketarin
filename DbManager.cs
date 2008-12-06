@@ -179,10 +179,11 @@ namespace Ketarin
                                          ExecuteCommand     TEXT,
                                          HttpReferer        TEXT,
                                          JobGuid            TEXT UNIQUE,
-                                         DeletePreviousFile INTEGER,
+                                         DeletePreviousFile INTEGER DEFAULT 0,
+                                         DownloadBeta       INTEGER DEFAULT 0,
                                          CanBeShared        INTEGER DEFAULT 1,
-                                         ShareApplication   INTEGER,
-                                         SourceType         INTEGER,
+                                         ShareApplication   INTEGER DEFAULT 0,
+                                         SourceType         INTEGER DEFAULT 0,
                                          IsEnabled          INTEGER);";
                 command.ExecuteNonQuery();
             }
@@ -219,7 +220,8 @@ namespace Ketarin
             addColumns.Add("ShareApplication", "ALTER TABLE jobs ADD ShareApplication INTEGER DEFAULT 0");
             addColumns.Add("HttpReferer", "ALTER TABLE jobs ADD HttpReferer TEXT");
             addColumns.Add("FileHippoVersion", "ALTER TABLE jobs ADD FileHippoVersion TEXT");
-            
+            addColumns.Add("DownloadBeta", "ALTER TABLE jobs ADD DownloadBeta INTEGER DEFAULT 0");
+
             foreach (KeyValuePair<string, string> column in addColumns)
             {
                 if (!columns.Contains(column.Key))

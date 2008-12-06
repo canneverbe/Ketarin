@@ -55,6 +55,10 @@
             this.chkShareOnline = new System.Windows.Forms.CheckBox();
             this.lblSpoofReferer = new System.Windows.Forms.Label();
             this.txtSpoofReferer = new System.Windows.Forms.TextBox();
+            this.rbBetaDefault = new System.Windows.Forms.RadioButton();
+            this.lblBetaVersions = new System.Windows.Forms.Label();
+            this.rbAlwaysDownload = new System.Windows.Forms.RadioButton();
+            this.rbBetaAvoid = new System.Windows.Forms.RadioButton();
             this.panel1.SuspendLayout();
             this.pnlTarget.SuspendLayout();
             this.SuspendLayout();
@@ -63,7 +67,7 @@
             // 
             this.bCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.bCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.bCancel.Location = new System.Drawing.Point(294, 394);
+            this.bCancel.Location = new System.Drawing.Point(294, 419);
             this.bCancel.Name = "bCancel";
             this.bCancel.Size = new System.Drawing.Size(75, 23);
             this.bCancel.TabIndex = 100;
@@ -74,7 +78,7 @@
             // 
             this.bOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.bOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.bOK.Location = new System.Drawing.Point(213, 394);
+            this.bOK.Location = new System.Drawing.Point(213, 419);
             this.bOK.Name = "bOK";
             this.bOK.Size = new System.Drawing.Size(75, 23);
             this.bOK.TabIndex = 99;
@@ -253,18 +257,18 @@
             // 
             this.txtCommand.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtCommand.Location = new System.Drawing.Point(15, 320);
+            this.txtCommand.Location = new System.Drawing.Point(14, 344);
             this.txtCommand.Name = "txtCommand";
             this.txtCommand.Size = new System.Drawing.Size(354, 20);
-            this.txtCommand.TabIndex = 35;
+            this.txtCommand.TabIndex = 40;
             // 
             // lblExecuteCommand
             // 
             this.lblExecuteCommand.AutoSize = true;
-            this.lblExecuteCommand.Location = new System.Drawing.Point(13, 304);
+            this.lblExecuteCommand.Location = new System.Drawing.Point(12, 328);
             this.lblExecuteCommand.Name = "lblExecuteCommand";
             this.lblExecuteCommand.Size = new System.Drawing.Size(247, 13);
-            this.lblExecuteCommand.TabIndex = 34;
+            this.lblExecuteCommand.TabIndex = 39;
             this.lblExecuteCommand.Text = "E&xecute the following command after downloading:";
             // 
             // lblCategory
@@ -335,26 +339,71 @@
             // lblSpoofReferer
             // 
             this.lblSpoofReferer.AutoSize = true;
-            this.lblSpoofReferer.Location = new System.Drawing.Point(12, 343);
+            this.lblSpoofReferer.Location = new System.Drawing.Point(11, 367);
             this.lblSpoofReferer.Name = "lblSpoofReferer";
             this.lblSpoofReferer.Size = new System.Drawing.Size(103, 13);
-            this.lblSpoofReferer.TabIndex = 36;
+            this.lblSpoofReferer.TabIndex = 41;
             this.lblSpoofReferer.Text = "Sp&oof HTTP referer:";
             // 
             // txtSpoofReferer
             // 
             this.txtSpoofReferer.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtSpoofReferer.Location = new System.Drawing.Point(15, 359);
+            this.txtSpoofReferer.Location = new System.Drawing.Point(14, 383);
             this.txtSpoofReferer.Name = "txtSpoofReferer";
             this.txtSpoofReferer.Size = new System.Drawing.Size(354, 20);
-            this.txtSpoofReferer.TabIndex = 37;
+            this.txtSpoofReferer.TabIndex = 42;
+            // 
+            // rbBetaDefault
+            // 
+            this.rbBetaDefault.AutoSize = true;
+            this.rbBetaDefault.Checked = true;
+            this.rbBetaDefault.Location = new System.Drawing.Point(93, 302);
+            this.rbBetaDefault.Name = "rbBetaDefault";
+            this.rbBetaDefault.Size = new System.Drawing.Size(79, 17);
+            this.rbBetaDefault.TabIndex = 36;
+            this.rbBetaDefault.TabStop = true;
+            this.rbBetaDefault.Text = "Use &default";
+            this.rbBetaDefault.UseVisualStyleBackColor = true;
+            // 
+            // lblBetaVersions
+            // 
+            this.lblBetaVersions.AutoSize = true;
+            this.lblBetaVersions.Location = new System.Drawing.Point(13, 304);
+            this.lblBetaVersions.Name = "lblBetaVersions";
+            this.lblBetaVersions.Size = new System.Drawing.Size(74, 13);
+            this.lblBetaVersions.TabIndex = 34;
+            this.lblBetaVersions.Text = "&Beta versions:";
+            // 
+            // rbAlwaysDownload
+            // 
+            this.rbAlwaysDownload.AutoSize = true;
+            this.rbAlwaysDownload.Location = new System.Drawing.Point(236, 302);
+            this.rbAlwaysDownload.Name = "rbAlwaysDownload";
+            this.rbAlwaysDownload.Size = new System.Drawing.Size(108, 17);
+            this.rbAlwaysDownload.TabIndex = 38;
+            this.rbAlwaysDownload.Text = "Download al&ways";
+            this.rbAlwaysDownload.UseVisualStyleBackColor = true;
+            // 
+            // rbBetaAvoid
+            // 
+            this.rbBetaAvoid.AutoSize = true;
+            this.rbBetaAvoid.Location = new System.Drawing.Point(178, 302);
+            this.rbBetaAvoid.Name = "rbBetaAvoid";
+            this.rbBetaAvoid.Size = new System.Drawing.Size(52, 17);
+            this.rbBetaAvoid.TabIndex = 37;
+            this.rbBetaAvoid.Text = "A&void";
+            this.rbBetaAvoid.UseVisualStyleBackColor = true;
             // 
             // ApplicationJobDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(381, 429);
+            this.ClientSize = new System.Drawing.Size(381, 454);
+            this.Controls.Add(this.rbBetaAvoid);
+            this.Controls.Add(this.rbAlwaysDownload);
+            this.Controls.Add(this.lblBetaVersions);
+            this.Controls.Add(this.rbBetaDefault);
             this.Controls.Add(this.txtSpoofReferer);
             this.Controls.Add(this.lblSpoofReferer);
             this.Controls.Add(this.chkShareOnline);
@@ -418,5 +467,9 @@
         private System.Windows.Forms.CheckBox chkShareOnline;
         private System.Windows.Forms.Label lblSpoofReferer;
         private System.Windows.Forms.TextBox txtSpoofReferer;
+        private System.Windows.Forms.RadioButton rbBetaDefault;
+        private System.Windows.Forms.Label lblBetaVersions;
+        private System.Windows.Forms.RadioButton rbAlwaysDownload;
+        private System.Windows.Forms.RadioButton rbBetaAvoid;
     }
 }
