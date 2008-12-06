@@ -459,7 +459,7 @@ namespace FTPLib
 					Console.WriteLine("Resolving host");
 #endif
 
-					data_ipEndPoint = new IPEndPoint(Dns.GetHostByName(server).AddressList[0], port);
+					data_ipEndPoint = new IPEndPoint(Dns.GetHostEntry(server).AddressList[0], port);
 
 					
 #if (FTP_DEBUG)
@@ -657,7 +657,7 @@ namespace FTPLib
 					return;
 
 			main_sock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-			main_ipEndPoint = new IPEndPoint(Dns.GetHostByName(server).AddressList[0], port);
+			main_ipEndPoint = new IPEndPoint(Dns.GetHostEntry(server).AddressList[0], port);
 			
 			try
 			{

@@ -35,6 +35,7 @@ namespace Ketarin
         private bool m_CanBeShared = true;
         private bool m_ShareApplication = false;
         private string m_HttpReferer = string.Empty;
+        private DownloadBetaType m_DownloadBeta = DownloadBetaType.Default;
 
         public enum SourceType
         {
@@ -42,7 +43,20 @@ namespace Ketarin
             FileHippo
         }
 
+        public enum DownloadBetaType
+        {
+            Default = 0,
+            Avoid,
+            AlwaysDownload
+        }
+
         #region Properties
+
+        public DownloadBetaType DownloadBeta
+        {
+            get { return m_DownloadBeta; }
+            set { m_DownloadBeta = value; }
+        }
 
         /// <summary>
         /// Determines whether or not a user can
@@ -161,7 +175,7 @@ namespace Ketarin
                 // FileHippo version
                 if (m_Parent.DownloadSourceType == SourceType.FileHippo && !ContainsKey("version") && UrlVariable.IsVariableDownloadNeeded("version", value))
                 {
-                    m_Parent.FileHippoVersion = ExternalServices.FileHippoVersion(m_Parent.FileHippoId, (bool)Settings.GetValue("AvoidFileHippoBeta", false));
+                    m_Parent.FileHippoVersion = ExternalServices.FileHippoVersion(m_Parent.FileHippoId, m_Parent.AvoidDownloadBeta);
                     value = value.Replace("{version}", m_Parent.FileHippoVersion);
                 }
 
@@ -328,6 +342,25 @@ namespace Ketarin
                 {
                     m_Name = value;
                 }
+            }
+        }
+
+        /// <summary>
+        /// Determines whether or not to download beta versions
+        /// of this application by using the default and per
+        /// application setting.
+        /// </summary>
+        protected bool AvoidDownloadBeta
+        {
+            get
+            {
+                bool defaultValue = (bool)Settings.GetValue("AvoidFileHippoBeta", false);
+                if (m_DownloadBeta == DownloadBetaType.Default)
+                {
+                    return defaultValue;
+                }
+
+                return (m_DownloadBeta == DownloadBetaType.Avoid);
             }
         }
 
@@ -530,7 +563,8 @@ namespace Ketarin
                                                    CanBeShared = @CanBeShared,
                                                    ShareApplication = @ShareApplication,
                                                    HttpReferer = @HttpReferer,
-                                                   FileHippoVersion = @FileHippoVersion
+                                                   FileHippoVersion = @FileHippoVersion,
+                                                   DownloadBeta = @DownloadBeta
                                              WHERE JobId = @JobId";
 
                                 command.Parameters.Add(new SQLiteParameter("@ApplicationName", Name));
@@ -549,7 +583,8 @@ namespace Ketarin
                                 command.Parameters.Add(new SQLiteParameter("@ShareApplication", m_ShareApplication));
                                 command.Parameters.Add(new SQLiteParameter("@HttpReferer", m_HttpReferer));
                                 command.Parameters.Add(new SQLiteParameter("@FileHippoVersion", m_FileHippoVersion));
-                                
+                                command.Parameters.Add(new SQLiteParameter("@DownloadBeta", (int)m_DownloadBeta));
+
                                 command.Parameters.Add(new SQLiteParameter("@JobId", m_Id));
 
                                 command.ExecuteNonQuery();
@@ -561,8 +596,8 @@ namespace Ketarin
                             using (IDbCommand command = conn.CreateCommand())
                             {
                                 command.Transaction = transaction;
-                                command.CommandText = @"INSERT INTO jobs (ApplicationName, FixedDownloadUrl, DateAdded, TargetPath, LastUpdated, IsEnabled, FileHippoId, DeletePreviousFile, SourceType, ExecuteCommand, Category, JobGuid, CanBeShared, ShareApplication, HttpReferer, FileHippoVersion)
-                                                 VALUES (@ApplicationName, @FixedDownloadUrl, @DateAdded, @TargetPath, @LastUpdated, @IsEnabled, @FileHippoId, @DeletePreviousFile, @SourceType, @ExecuteCommand, @Category, @JobGuid, @CanBeShared, @ShareApplication, @HttpReferer, @FileHippoVersion)";
+                                command.CommandText = @"INSERT INTO jobs (ApplicationName, FixedDownloadUrl, DateAdded, TargetPath, LastUpdated, IsEnabled, FileHippoId, DeletePreviousFile, SourceType, ExecuteCommand, Category, JobGuid, CanBeShared, ShareApplication, HttpReferer, FileHippoVersion, DownloadBeta)
+                                                 VALUES (@ApplicationName, @FixedDownloadUrl, @DateAdded, @TargetPath, @LastUpdated, @IsEnabled, @FileHippoId, @DeletePreviousFile, @SourceType, @ExecuteCommand, @Category, @JobGuid, @CanBeShared, @ShareApplication, @HttpReferer, @FileHippoVersion, @DownloadBeta)";
 
                                 command.Parameters.Add(new SQLiteParameter("@ApplicationName", Name));
                                 command.Parameters.Add(new SQLiteParameter("@FixedDownloadUrl", m_FixedDownloadUrl));
@@ -580,6 +615,7 @@ namespace Ketarin
                                 command.Parameters.Add(new SQLiteParameter("@ShareApplication", m_ShareApplication));
                                 command.Parameters.Add(new SQLiteParameter("@HttpReferer", m_HttpReferer));
                                 command.Parameters.Add(new SQLiteParameter("@FileHippoVersion", m_FileHippoVersion));
+                                command.Parameters.Add(new SQLiteParameter("@DownloadBeta", (int)m_DownloadBeta));
                                 
                                 command.ExecuteNonQuery();
                             }
@@ -646,7 +682,11 @@ namespace Ketarin
             m_CanBeShared = Convert.ToBoolean(reader["CanBeShared"]);
             m_FileHippoVersion = reader["FileHippoVersion"] as string;
             m_HttpReferer = reader["HttpReferer"] as string;
-
+            if (reader["DownloadBeta"] != DBNull.Value)
+            {
+                m_DownloadBeta = (DownloadBetaType)Convert.ToInt32(reader["DownloadBeta"]);
+            }
+            
             string guid = reader["JobGuid"] as string;
             if (!string.IsNullOrEmpty(guid))
             {
@@ -734,7 +774,7 @@ namespace Ketarin
             // If using FileHippo, and previous file is available, check MD5
             if (!string.IsNullOrEmpty(m_FileHippoId) && m_SourceType == SourceType.FileHippo && !string.IsNullOrEmpty(m_PreviousLocation) && File.Exists(m_PreviousLocation))
             {
-                string serverMd5 = ExternalServices.FileHippoMd5(m_FileHippoId, (bool)Settings.GetValue("AvoidFileHippoBeta", false));
+                string serverMd5 = ExternalServices.FileHippoMd5(m_FileHippoId, AvoidDownloadBeta);
                 return string.Compare(serverMd5, GetMd5OfFile(m_PreviousLocation), true) != 0;
             }
 
