@@ -503,6 +503,11 @@ namespace Ketarin
             SafeClipboard.SetData(job.GetXml(), false);
         }
 
+        private void mnuSelectAll_Click(object sender, EventArgs e)
+        {
+            olvJobs.SelectAll();
+        }
+
         private void cmnuPaste_Click(object sender, EventArgs e)
         {
             try
@@ -637,7 +642,6 @@ namespace Ketarin
         }
 
         #endregion
-
 
     }
 }

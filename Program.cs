@@ -22,6 +22,7 @@ using CDBurnerXP;
 using System.Threading;
 using System.Runtime.InteropServices;
 using Microsoft.Win32;
+using System.Net;
 
 namespace Ketarin
 {
@@ -40,6 +41,7 @@ namespace Ketarin
             {
                 DbManager.LoadOrCreateDatabase();
 
+                WebRequest.DefaultWebProxy = DbManager.Proxy;
                 if (Settings.GetValue("AuthorGuid") == null)
                 {
                     Settings.SetValue("AuthorGuid", Guid.NewGuid().ToString("B"));
