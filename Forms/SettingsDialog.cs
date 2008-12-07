@@ -37,6 +37,14 @@ namespace Ketarin.Forms
             CancelButton = bCancel;
         }
 
+        protected override void OnClosed(EventArgs e)
+        {
+            base.OnClosed(e);
+
+            // Restore global variables
+            UrlVariable.ReloadGlobalVariables();
+        }
+
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
@@ -51,6 +59,8 @@ namespace Ketarin.Forms
             txtProxyServer.Text = Settings.GetValue("ProxyServer", "") as string;
             txtProxyUser.Text = Settings.GetValue("ProxyUser", "") as string;
             txtProxyPassword.Text = Settings.GetValue("ProxyPassword", "") as string;
+
+            LoadGlobalVariables();
         }
 
         private void bOK_Click(object sender, EventArgs e)
@@ -68,6 +78,109 @@ namespace Ketarin.Forms
             Settings.SetValue("ProxyPassword", txtProxyPassword.Text);
 
             WebRequest.DefaultWebProxy = DbManager.Proxy;
+
+            SaveGlobalVariables();
         }
+
+        #region Global variables
+
+        private void LoadGlobalVariables()
+        {
+            cboGlobalVariables.Items.Clear();
+
+            foreach (UrlVariable var in UrlVariable.GlobalVariables.Values)
+            {
+                cboGlobalVariables.Items.Add(var);
+            }
+
+            if (cboGlobalVariables.Items.Count > 0)
+            {
+                cboGlobalVariables.SelectedIndex = 0;
+            }
+        }
+
+        private void SaveGlobalVariables()
+        {
+            using (IDbTransaction transaction = DbManager.Connection.BeginTransaction())
+            {
+                using (IDbCommand comm = DbManager.Connection.CreateCommand())
+                {
+                    comm.Transaction = transaction;
+                    comm.CommandText = "DELETE FROM variables WHERE JobId = 0";
+                    comm.ExecuteNonQuery();
+                }
+
+                foreach (UrlVariable var in UrlVariable.GlobalVariables.Values)
+                {
+                    var.Save(transaction, 0);
+                }
+
+                transaction.Commit();
+            }
+        }
+
+        private void bAdd_Click(object sender, EventArgs e)
+        {
+            using (NewVariableDialog dialog = new NewVariableDialog())
+            {
+                if (dialog.ShowDialog(this) == DialogResult.OK)
+                {
+                    // Check for duplicate variables
+                    if (UrlVariable.GlobalVariables.ContainsKey(dialog.VariableName))
+                    {
+                        string msg = string.Format("The variable name '{0}' already exists.", dialog.VariableName);
+                        MessageBox.Show(this, msg, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+
+                    UrlVariable newVariable = new UrlVariable(dialog.VariableName);
+                    UrlVariable.GlobalVariables.Add(dialog.VariableName, newVariable);
+
+                    cboGlobalVariables.Items.Add(newVariable);
+                    cboGlobalVariables.SelectedItem = newVariable;
+                }
+            }
+        }
+
+        private void cboGlobalVariables_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UrlVariable current = cboGlobalVariables.SelectedItem as UrlVariable;
+            if (current != null)
+            {
+                txtGlobalVariableValue.Text = current.CachedContent;
+            }
+            bRemove.Enabled = (current != null);
+        }
+
+        private void txtGlobalVariableValue_TextChanged(object sender, EventArgs e)
+        {
+            UrlVariable current = cboGlobalVariables.SelectedItem as UrlVariable;
+            if (current != null)
+            {
+                current.CachedContent = txtGlobalVariableValue.Text;
+            }
+        }
+
+        private void bRemove_Click(object sender, EventArgs e)
+        {
+            UrlVariable current = cboGlobalVariables.SelectedItem as UrlVariable;
+            if (current != null)
+            {
+                cboGlobalVariables.Items.Remove(current);
+                if (cboGlobalVariables.Items.Count > 0)
+                {
+                    cboGlobalVariables.SelectedIndex = 0;
+                }
+                else
+                {
+                    bRemove.Enabled = false;
+                    txtGlobalVariableValue.Text = string.Empty;
+                }
+                
+                UrlVariable.GlobalVariables.Remove(current.Name);
+            }
+        }
+
+        #endregion
     }
 }

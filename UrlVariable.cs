@@ -7,6 +7,7 @@ using System.Xml;
 using System.Xml.Serialization;
 using System.Text.RegularExpressions;
 using Ketarin.Forms;
+using System.Data.SQLite;
 
 namespace Ketarin
 {
@@ -20,8 +21,48 @@ namespace Ketarin
         private string m_TempContent = string.Empty;
         private string m_Regex = string.Empty;
         private string m_CachedContent = string.Empty;
+        private int m_JobId = 0;
+        private static ApplicationJob.UrlVariableCollection m_GlobalVariables = null;
 
         #region Properties
+
+        /// <summary>
+        /// Ensures that the global variables are read from
+        /// the database when they are accessed for the next time.
+        /// </summary>
+        public static void ReloadGlobalVariables()
+        {
+            m_GlobalVariables = null;
+        }
+
+        public static ApplicationJob.UrlVariableCollection GlobalVariables
+        {
+            get
+            {
+                if (m_GlobalVariables == null)
+                {
+                    m_GlobalVariables = new ApplicationJob.UrlVariableCollection();
+
+                    using (SQLiteConnection conn = DbManager.NewConnection)
+                    {
+                        using (IDbCommand command = conn.CreateCommand())
+                        {
+                            command.CommandText = @"SELECT * FROM variables WHERE JobId = 0";
+                            using (IDataReader reader = command.ExecuteReader())
+                            {
+                                while (reader.Read())
+                                {
+                                    UrlVariable variable = new UrlVariable();
+                                    variable.Hydrate(reader);
+                                    m_GlobalVariables.Add(variable.Name, variable);
+                                }
+                            }
+                        }
+                    }
+                }
+                return m_GlobalVariables;
+            }
+        }
 
         [XmlElement("Regex")]
         public string Regex
@@ -100,6 +141,27 @@ namespace Ketarin
             m_Url = reader["Url"] as string;
             m_Regex = reader["RegularExpression"] as string;
             m_CachedContent = reader["CachedContent"] as string;
+            m_JobId = Convert.ToInt32(reader["JobId"]);
+        }
+
+        public void Save(IDbTransaction transaction, long parentJobId)
+        {
+            IDbConnection conn = (transaction != null) ? transaction.Connection : DbManager.NewConnection;
+            using (IDbCommand command = conn.CreateCommand())
+            {
+                command.Transaction = transaction;
+                command.CommandText = @"INSERT INTO variables (JobId, VariableName, Url, StartText, EndText, RegularExpression, CachedContent)
+                                             VALUES (@JobId, @VariableName, @Url, @StartText, @EndText, @RegularExpression, @CachedContent)";
+
+                command.Parameters.Add(new SQLiteParameter("@JobId", parentJobId));
+                command.Parameters.Add(new SQLiteParameter("@VariableName", m_Name));
+                command.Parameters.Add(new SQLiteParameter("@Url", m_Url));
+                command.Parameters.Add(new SQLiteParameter("@StartText", m_StartText));
+                command.Parameters.Add(new SQLiteParameter("@EndText", m_EndText));
+                command.Parameters.Add(new SQLiteParameter("@RegularExpression", m_Regex));
+                command.Parameters.Add(new SQLiteParameter("@CachedContent", m_CachedContent));
+                command.ExecuteNonQuery();
+            }
         }
 
         public static bool IsVariableDownloadNeeded(string name, string formatString)
@@ -116,6 +178,12 @@ namespace Ketarin
             if (!IsVariableDownloadNeeded(m_Name, url)) return url;
             
             string find = "{" + m_Name + "}";
+
+            // Global variable only has static content
+            if (m_JobId == 0)
+            {
+                return url.Replace(find, m_CachedContent);
+            }
 
             // Ignore missing URLs
             if (string.IsNullOrEmpty(m_Url)) return url;
@@ -182,5 +250,10 @@ namespace Ketarin
         }
 
         #endregion
+
+        public override string ToString()
+        {
+            return m_Name;
+        }
     }
 }

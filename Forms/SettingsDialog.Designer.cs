@@ -39,7 +39,6 @@
             this.lblConnectionTimeout = new System.Windows.Forms.Label();
             this.nConnectionTimeout = new System.Windows.Forms.NumericUpDown();
             this.lblSeconds = new System.Windows.Forms.Label();
-            this.sepProxy = new CDBurnerXP.Controls.Separator();
             this.lblServer = new System.Windows.Forms.Label();
             this.txtProxyServer = new System.Windows.Forms.TextBox();
             this.nProxyPort = new System.Windows.Forms.NumericUpDown();
@@ -49,6 +48,14 @@
             this.txtProxyPassword = new System.Windows.Forms.TextBox();
             this.lblNumThreads = new System.Windows.Forms.Label();
             this.nNumThreads = new System.Windows.Forms.NumericUpDown();
+            this.cboGlobalVariables = new System.Windows.Forms.ComboBox();
+            this.txtGlobalVariableValue = new System.Windows.Forms.TextBox();
+            this.lblVarName = new System.Windows.Forms.Label();
+            this.lblvalue = new System.Windows.Forms.Label();
+            this.bAdd = new System.Windows.Forms.Button();
+            this.bRemove = new System.Windows.Forms.Button();
+            this.sepGlobalVariables = new CDBurnerXP.Controls.Separator();
+            this.sepProxy = new CDBurnerXP.Controls.Separator();
             ((System.ComponentModel.ISupportInitialize)(this.nConnectionTimeout)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nProxyPort)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nNumThreads)).BeginInit();
@@ -58,10 +65,10 @@
             // 
             this.bCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.bCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.bCancel.Location = new System.Drawing.Point(283, 354);
+            this.bCancel.Location = new System.Drawing.Point(283, 440);
             this.bCancel.Name = "bCancel";
             this.bCancel.Size = new System.Drawing.Size(75, 23);
-            this.bCancel.TabIndex = 22;
+            this.bCancel.TabIndex = 27;
             this.bCancel.Text = "Cancel";
             this.bCancel.UseVisualStyleBackColor = true;
             // 
@@ -69,10 +76,10 @@
             // 
             this.bOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.bOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.bOK.Location = new System.Drawing.Point(202, 354);
+            this.bOK.Location = new System.Drawing.Point(202, 440);
             this.bOK.Name = "bOK";
             this.bOK.Size = new System.Drawing.Size(75, 23);
-            this.bOK.TabIndex = 21;
+            this.bOK.TabIndex = 26;
             this.bOK.Text = "OK";
             this.bOK.UseVisualStyleBackColor = true;
             this.bOK.Click += new System.EventHandler(this.bOK_Click);
@@ -179,40 +186,28 @@
             this.lblSeconds.TabIndex = 8;
             this.lblSeconds.Text = "seconds";
             // 
-            // sepProxy
-            // 
-            this.sepProxy.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.sepProxy.ForeColor = System.Drawing.SystemColors.ActiveCaption;
-            this.sepProxy.Location = new System.Drawing.Point(7, 236);
-            this.sepProxy.Name = "sepProxy";
-            this.sepProxy.Size = new System.Drawing.Size(351, 23);
-            this.sepProxy.TabIndex = 13;
-            this.sepProxy.Text = "HTTP proxy settings";
-            this.sepProxy.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
             // lblServer
             // 
             this.lblServer.AutoSize = true;
-            this.lblServer.Location = new System.Drawing.Point(19, 267);
+            this.lblServer.Location = new System.Drawing.Point(24, 349);
             this.lblServer.Name = "lblServer";
             this.lblServer.Size = new System.Drawing.Size(41, 13);
-            this.lblServer.TabIndex = 13;
+            this.lblServer.TabIndex = 19;
             this.lblServer.Text = "&Server:";
             // 
             // txtProxyServer
             // 
             this.txtProxyServer.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtProxyServer.Location = new System.Drawing.Point(86, 264);
+            this.txtProxyServer.Location = new System.Drawing.Point(91, 346);
             this.txtProxyServer.Name = "txtProxyServer";
             this.txtProxyServer.Size = new System.Drawing.Size(189, 20);
-            this.txtProxyServer.TabIndex = 14;
+            this.txtProxyServer.TabIndex = 20;
             // 
             // nProxyPort
             // 
             this.nProxyPort.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.nProxyPort.Location = new System.Drawing.Point(283, 264);
+            this.nProxyPort.Location = new System.Drawing.Point(288, 346);
             this.nProxyPort.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -220,43 +215,43 @@
             0});
             this.nProxyPort.Name = "nProxyPort";
             this.nProxyPort.Size = new System.Drawing.Size(77, 20);
-            this.nProxyPort.TabIndex = 16;
+            this.nProxyPort.TabIndex = 21;
             // 
             // lblProxyUser
             // 
             this.lblProxyUser.AutoSize = true;
-            this.lblProxyUser.Location = new System.Drawing.Point(19, 293);
+            this.lblProxyUser.Location = new System.Drawing.Point(24, 375);
             this.lblProxyUser.Name = "lblProxyUser";
             this.lblProxyUser.Size = new System.Drawing.Size(61, 13);
-            this.lblProxyUser.TabIndex = 17;
+            this.lblProxyUser.TabIndex = 22;
             this.lblProxyUser.Text = "Us&er name:";
             // 
             // txtProxyUser
             // 
             this.txtProxyUser.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtProxyUser.Location = new System.Drawing.Point(86, 290);
+            this.txtProxyUser.Location = new System.Drawing.Point(91, 372);
             this.txtProxyUser.Name = "txtProxyUser";
             this.txtProxyUser.Size = new System.Drawing.Size(272, 20);
-            this.txtProxyUser.TabIndex = 18;
+            this.txtProxyUser.TabIndex = 23;
             // 
             // lblProxyPassword
             // 
             this.lblProxyPassword.AutoSize = true;
-            this.lblProxyPassword.Location = new System.Drawing.Point(19, 319);
+            this.lblProxyPassword.Location = new System.Drawing.Point(24, 401);
             this.lblProxyPassword.Name = "lblProxyPassword";
             this.lblProxyPassword.Size = new System.Drawing.Size(56, 13);
-            this.lblProxyPassword.TabIndex = 19;
+            this.lblProxyPassword.TabIndex = 24;
             this.lblProxyPassword.Text = "&Password:";
             // 
             // txtProxyPassword
             // 
             this.txtProxyPassword.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtProxyPassword.Location = new System.Drawing.Point(86, 316);
+            this.txtProxyPassword.Location = new System.Drawing.Point(91, 398);
             this.txtProxyPassword.Name = "txtProxyPassword";
             this.txtProxyPassword.Size = new System.Drawing.Size(272, 20);
-            this.txtProxyPassword.TabIndex = 20;
+            this.txtProxyPassword.TabIndex = 25;
             this.txtProxyPassword.UseSystemPasswordChar = true;
             // 
             // lblNumThreads
@@ -265,7 +260,7 @@
             this.lblNumThreads.Location = new System.Drawing.Point(12, 209);
             this.lblNumThreads.Name = "lblNumThreads";
             this.lblNumThreads.Size = new System.Drawing.Size(97, 13);
-            this.lblNumThreads.TabIndex = 8;
+            this.lblNumThreads.TabIndex = 9;
             this.lblNumThreads.Text = "&Number of threads:";
             // 
             // nNumThreads
@@ -285,18 +280,110 @@
             0});
             this.nNumThreads.Name = "nNumThreads";
             this.nNumThreads.Size = new System.Drawing.Size(205, 20);
-            this.nNumThreads.TabIndex = 9;
+            this.nNumThreads.TabIndex = 10;
             this.nNumThreads.Value = new decimal(new int[] {
             2,
             0,
             0,
             0});
             // 
+            // cboGlobalVariables
+            // 
+            this.cboGlobalVariables.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboGlobalVariables.FormattingEnabled = true;
+            this.cboGlobalVariables.Location = new System.Drawing.Point(63, 260);
+            this.cboGlobalVariables.Name = "cboGlobalVariables";
+            this.cboGlobalVariables.Size = new System.Drawing.Size(106, 21);
+            this.cboGlobalVariables.Sorted = true;
+            this.cboGlobalVariables.TabIndex = 13;
+            this.cboGlobalVariables.SelectedIndexChanged += new System.EventHandler(this.cboGlobalVariables_SelectedIndexChanged);
+            // 
+            // txtGlobalVariableValue
+            // 
+            this.txtGlobalVariableValue.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtGlobalVariableValue.Location = new System.Drawing.Point(224, 260);
+            this.txtGlobalVariableValue.Name = "txtGlobalVariableValue";
+            this.txtGlobalVariableValue.Size = new System.Drawing.Size(136, 20);
+            this.txtGlobalVariableValue.TabIndex = 15;
+            this.txtGlobalVariableValue.TextChanged += new System.EventHandler(this.txtGlobalVariableValue_TextChanged);
+            // 
+            // lblVarName
+            // 
+            this.lblVarName.AutoSize = true;
+            this.lblVarName.Location = new System.Drawing.Point(19, 263);
+            this.lblVarName.Name = "lblVarName";
+            this.lblVarName.Size = new System.Drawing.Size(38, 13);
+            this.lblVarName.TabIndex = 12;
+            this.lblVarName.Text = "&Name:";
+            // 
+            // lblvalue
+            // 
+            this.lblvalue.AutoSize = true;
+            this.lblvalue.Location = new System.Drawing.Point(181, 263);
+            this.lblvalue.Name = "lblvalue";
+            this.lblvalue.Size = new System.Drawing.Size(37, 13);
+            this.lblvalue.TabIndex = 14;
+            this.lblvalue.Text = "&Value:";
+            // 
+            // bAdd
+            // 
+            this.bAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.bAdd.Location = new System.Drawing.Point(202, 286);
+            this.bAdd.Name = "bAdd";
+            this.bAdd.Size = new System.Drawing.Size(75, 23);
+            this.bAdd.TabIndex = 16;
+            this.bAdd.Text = "&Add";
+            this.bAdd.UseVisualStyleBackColor = true;
+            this.bAdd.Click += new System.EventHandler(this.bAdd_Click);
+            // 
+            // bRemove
+            // 
+            this.bRemove.Enabled = false;
+            this.bRemove.Location = new System.Drawing.Point(283, 286);
+            this.bRemove.Name = "bRemove";
+            this.bRemove.Size = new System.Drawing.Size(75, 23);
+            this.bRemove.TabIndex = 17;
+            this.bRemove.Text = "&Remove";
+            this.bRemove.UseVisualStyleBackColor = true;
+            this.bRemove.Click += new System.EventHandler(this.bRemove_Click);
+            // 
+            // sepGlobalVariables
+            // 
+            this.sepGlobalVariables.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.sepGlobalVariables.ForeColor = System.Drawing.SystemColors.ActiveCaption;
+            this.sepGlobalVariables.Location = new System.Drawing.Point(12, 234);
+            this.sepGlobalVariables.Name = "sepGlobalVariables";
+            this.sepGlobalVariables.Size = new System.Drawing.Size(351, 23);
+            this.sepGlobalVariables.TabIndex = 11;
+            this.sepGlobalVariables.Text = "Global variables";
+            this.sepGlobalVariables.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // sepProxy
+            // 
+            this.sepProxy.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.sepProxy.ForeColor = System.Drawing.SystemColors.ActiveCaption;
+            this.sepProxy.Location = new System.Drawing.Point(12, 318);
+            this.sepProxy.Name = "sepProxy";
+            this.sepProxy.Size = new System.Drawing.Size(351, 23);
+            this.sepProxy.TabIndex = 18;
+            this.sepProxy.Text = "HTTP proxy settings";
+            this.sepProxy.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
             // SettingsDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(370, 389);
+            this.ClientSize = new System.Drawing.Size(370, 475);
+            this.Controls.Add(this.bRemove);
+            this.Controls.Add(this.bAdd);
+            this.Controls.Add(this.lblvalue);
+            this.Controls.Add(this.lblVarName);
+            this.Controls.Add(this.txtGlobalVariableValue);
+            this.Controls.Add(this.cboGlobalVariables);
+            this.Controls.Add(this.sepGlobalVariables);
             this.Controls.Add(this.nNumThreads);
             this.Controls.Add(this.lblNumThreads);
             this.Controls.Add(this.txtProxyPassword);
@@ -357,5 +444,12 @@
         private System.Windows.Forms.TextBox txtProxyPassword;
         private System.Windows.Forms.Label lblNumThreads;
         private System.Windows.Forms.NumericUpDown nNumThreads;
+        private CDBurnerXP.Controls.Separator sepGlobalVariables;
+        private System.Windows.Forms.ComboBox cboGlobalVariables;
+        private System.Windows.Forms.TextBox txtGlobalVariableValue;
+        private System.Windows.Forms.Label lblVarName;
+        private System.Windows.Forms.Label lblvalue;
+        private System.Windows.Forms.Button bAdd;
+        private System.Windows.Forms.Button bRemove;
     }
 }

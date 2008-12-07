@@ -167,19 +167,28 @@ namespace Ketarin
                 }
 
                 // Job-specific data
-                if (!string.IsNullOrEmpty(m_Parent.Category))
+                if (m_Parent != null)
                 {
-                    value = value.Replace("{category}", m_Parent.Category);
-                }
+                    if (!string.IsNullOrEmpty(m_Parent.Category))
+                    {
+                        value = value.Replace("{category}", m_Parent.Category);
+                    }
 
-                // FileHippo version
-                if (m_Parent.DownloadSourceType == SourceType.FileHippo && !ContainsKey("version") && UrlVariable.IsVariableDownloadNeeded("version", value))
-                {
-                    m_Parent.FileHippoVersion = ExternalServices.FileHippoVersion(m_Parent.FileHippoId, m_Parent.AvoidDownloadBeta);
-                    value = value.Replace("{version}", m_Parent.FileHippoVersion);
+                    // FileHippo version
+                    if (m_Parent.DownloadSourceType == SourceType.FileHippo && !ContainsKey("version") && UrlVariable.IsVariableDownloadNeeded("version", value))
+                    {
+                        m_Parent.FileHippoVersion = ExternalServices.FileHippoVersion(m_Parent.FileHippoId, m_Parent.AvoidDownloadBeta);
+                        value = value.Replace("{version}", m_Parent.FileHippoVersion);
+                    }
                 }
 
                 foreach (UrlVariable var in Values)
+                {
+                    value = var.ReplaceInString(value);
+                }
+
+                // Global variables
+                foreach (UrlVariable var in UrlVariable.GlobalVariables.Values)
                 {
                     value = var.ReplaceInString(value);
                 }
@@ -524,7 +533,6 @@ namespace Ketarin
 
                 using (SQLiteConnection conn = DbManager.NewConnection)
                 {
-
                     using (SQLiteTransaction transaction = conn.BeginTransaction())
                     {
                         if (m_Id > 0)
@@ -642,21 +650,7 @@ namespace Ketarin
 
                         foreach (KeyValuePair<string, UrlVariable> pair in variables)
                         {
-                            using (IDbCommand command = conn.CreateCommand())
-                            {
-                                command.Transaction = transaction;
-                                command.CommandText = @"INSERT INTO variables (JobId, VariableName, Url, StartText, EndText, RegularExpression, CachedContent)
-                                                 VALUES (@JobId, @VariableName, @Url, @StartText, @EndText, @RegularExpression, @CachedContent)";
-
-                                command.Parameters.Add(new SQLiteParameter("@JobId", m_Id));
-                                command.Parameters.Add(new SQLiteParameter("@VariableName", pair.Key));
-                                command.Parameters.Add(new SQLiteParameter("@Url", pair.Value.Url));
-                                command.Parameters.Add(new SQLiteParameter("@StartText", pair.Value.StartText));
-                                command.Parameters.Add(new SQLiteParameter("@EndText", pair.Value.EndText));
-                                command.Parameters.Add(new SQLiteParameter("@RegularExpression", pair.Value.Regex));
-                                command.Parameters.Add(new SQLiteParameter("@CachedContent", pair.Value.CachedContent));
-                                command.ExecuteNonQuery();
-                            }
+                            pair.Value.Save(transaction, m_Id);
                         }
 
                         transaction.Commit();
