@@ -363,7 +363,7 @@ namespace Ketarin
                 string targetFileName = job.GetTargetFile(response);
 
                 // Only download, if the file size or date has changed
-                if (!job.RequiresDownload(response))
+                if (!job.RequiresDownload(response, targetFileName))
                 {
                     m_Status[job] = Status.UpdateSuccessful;
 

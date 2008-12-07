@@ -766,9 +766,9 @@ namespace Ketarin
         /// </summary>
         /// <param name="netResponse">Response of the webserver containing information about the current file</param>
         /// <returns>true, if downloading is required</returns>
-        public bool RequiresDownload(WebResponse netResponse)
+        public bool RequiresDownload(WebResponse netResponse, string targetFile)
         {
-            FileInfo current = new FileInfo(GetTargetFile(netResponse));
+            FileInfo current = new FileInfo(targetFile);
             if (!current.Exists) return true;
 
             // If using FileHippo, and previous file is available, check MD5
