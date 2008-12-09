@@ -316,7 +316,6 @@
     <None Include="Resources\Restart.png" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Download.ico" />
     <Content Include="ketarin.ico" />
     <None Include="Resources\New.png" />
     <None Include="Resources\Symbol Information.png" />
