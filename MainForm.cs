@@ -193,7 +193,14 @@ namespace Ketarin
                 return (int)m_Updater.GetStatus(job);
             };
 
-            colTarget.AspectGetter = delegate(object x) { return ((ApplicationJob)x).TargetPath; };
+            colTarget.AspectGetter = delegate(object x) {
+                string targetPath = ((ApplicationJob)x).TargetPath;
+                foreach (UrlVariable var in UrlVariable.GlobalVariables.Values)
+                {
+                    targetPath = var.ReplaceInString(targetPath);
+                }
+                return targetPath;
+            };
             colTarget.GroupKeyGetter = delegate(object x) { return ((ApplicationJob)x).TargetPath.ToLower(); };
 
             colLastUpdate.AspectGetter = delegate(object x) { return ((ApplicationJob)x).LastUpdated; };
