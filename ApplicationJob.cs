@@ -52,6 +52,11 @@ namespace Ketarin
 
         #region Properties
 
+        internal long Id
+        {
+            get { return m_Id; }
+        }
+
         public DownloadBetaType DownloadBeta
         {
             get { return m_DownloadBeta; }

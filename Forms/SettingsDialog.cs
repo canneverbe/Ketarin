@@ -133,7 +133,7 @@ namespace Ketarin.Forms
                         return;
                     }
 
-                    UrlVariable newVariable = new UrlVariable(dialog.VariableName);
+                    UrlVariable newVariable = new UrlVariable(dialog.VariableName, 0);
                     UrlVariable.GlobalVariables.Add(dialog.VariableName, newVariable);
 
                     cboGlobalVariables.Items.Add(newVariable);

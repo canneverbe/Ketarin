@@ -21,7 +21,7 @@ namespace Ketarin
         private string m_TempContent = string.Empty;
         private string m_Regex = string.Empty;
         private string m_CachedContent = string.Empty;
-        private int m_JobId = 0;
+        private long m_JobId = 0;
         private static ApplicationJob.UrlVariableCollection m_GlobalVariables = null;
 
         #region Properties
@@ -128,9 +128,10 @@ namespace Ketarin
         {
         }
 
-        public UrlVariable(string name)
+        public UrlVariable(string name, long jobId)
         {
             m_Name = name;
+            m_JobId = jobId;
         }
 
         public void Hydrate(IDataReader reader)

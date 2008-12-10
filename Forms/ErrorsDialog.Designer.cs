@@ -94,7 +94,7 @@
             // 
             // colError
             // 
-            this.colError.AspectName = "Error.Message";
+            this.colError.AspectName = "Message";
             this.colError.FillsFreeSpace = true;
             this.colError.Text = "Error";
             this.colError.Width = 120;
