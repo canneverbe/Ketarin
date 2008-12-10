@@ -488,9 +488,16 @@ namespace Ketarin
                 dialog.FileName = job.PreviousLocation;
                 if (dialog.ShowDialog(this) == DialogResult.OK)
                 {
-                    File.Move(job.PreviousLocation, dialog.FileName);
-                    job.PreviousLocation = dialog.FileName;
-                    job.Save();
+                    try
+                    {
+                        File.Move(job.PreviousLocation, dialog.FileName);
+                        job.PreviousLocation = dialog.FileName;
+                        job.Save();
+                    }
+                    catch (FileNotFoundException ex)
+                    {
+                        MessageBox.Show(this, "The file to be renamed does not exist anymore.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
             }
         }
