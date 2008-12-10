@@ -119,7 +119,7 @@ namespace Ketarin.Forms
                         MessageBox.Show(this, msg, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
-                    m_Variables.Add(dialog.VariableName, new UrlVariable(dialog.VariableName));
+                    m_Variables.Add(dialog.VariableName, new UrlVariable(dialog.VariableName, m_Job.Id));
                     RefreshListBox();
                     lbVariables.SelectedItem = dialog.VariableName;
                 }

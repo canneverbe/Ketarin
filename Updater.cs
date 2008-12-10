@@ -241,13 +241,15 @@ namespace Ketarin
             m_Status[job] = Status.Downloading;
             OnStatusChanged(job);
 
+            string requestedUrl = string.Empty;
+
             try
             {
-                m_Status[job] = DoDownload(job) ? Status.UpdateSuccessful : Status.NoUpdate;
+                m_Status[job] = DoDownload(job, out requestedUrl) ? Status.UpdateSuccessful : Status.NoUpdate;
             }
             catch (WebException ex)
             {
-                m_Errors.Add(new ApplicationJobError(job, ex));
+                m_Errors.Add(new ApplicationJobError(job, ex, requestedUrl));
                 m_Status[job] = Status.Failure;
             }
             catch (FileNotFoundException ex)
@@ -262,12 +264,12 @@ namespace Ketarin
             }
             catch (UriFormatException ex)
             {
-                m_Errors.Add(new ApplicationJobError(job, ex));
+                m_Errors.Add(new ApplicationJobError(job, ex, requestedUrl));
                 m_Status[job] = Status.Failure;
             }
             catch (NonBinaryFileException ex)
             {
-                m_Errors.Add(new ApplicationJobError(job, ex));
+                m_Errors.Add(new ApplicationJobError(job, ex, requestedUrl));
                 m_Status[job] = Status.Failure;
             }
             catch (Win32Exception ex)
@@ -297,7 +299,7 @@ namespace Ketarin
         /// </summary>
         /// <param name="job">The job to process</param>
         /// <returns>true, if a new update has been found and downloaded, false otherwise</returns>
-        protected bool DoDownload(ApplicationJob job)
+        protected bool DoDownload(ApplicationJob job, out string requestedUrl)
         {
             string downloadUrl = string.Empty;
             if (job.DownloadSourceType == ApplicationJob.SourceType.FileHippo)
@@ -310,6 +312,8 @@ namespace Ketarin
                 // Now replace variables
                 downloadUrl = job.Variables.ReplaceAllInString(downloadUrl);
             }
+
+            requestedUrl = downloadUrl;
             Uri url = new Uri(downloadUrl);
 
             // Lower security policies
