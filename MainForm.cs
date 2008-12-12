@@ -501,7 +501,7 @@ namespace Ketarin
                         job.PreviousLocation = dialog.FileName;
                         job.Save();
                     }
-                    catch (FileNotFoundException ex)
+                    catch (FileNotFoundException)
                     {
                         MessageBox.Show(this, "The file to be renamed does not exist anymore.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
