@@ -12,6 +12,8 @@ namespace Ketarin.Forms
     public partial class ImportFromDatabaseDialog : ApplicationDatabaseBaseDialog
     {
         private ApplicationJob m_ImportedApplication;
+        private static RpcApplication[] m_LastLoadedApplications = null;
+        private static string m_LastSearchText = string.Empty;
 
         #region Properties
 
@@ -30,6 +32,17 @@ namespace Ketarin.Forms
             InitializeComponent();
         }
 
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+
+            if (m_LastLoadedApplications != null)
+            {
+                Applications = m_LastLoadedApplications;
+                txtSearchSubject.Text = m_LastSearchText;
+            }
+        }
+
         private void bSearch_Click(object sender, EventArgs e)
         {
             Cursor = Cursors.WaitCursor;
@@ -37,7 +50,9 @@ namespace Ketarin.Forms
             try
             {
                 IKetarinRpc proxy = XmlRpcProxyGen.Create<IKetarinRpc>();
-                Applications = proxy.GetApplications(txtSearchSubject.Text);
+                m_LastLoadedApplications = proxy.GetApplications(txtSearchSubject.Text);
+                m_LastSearchText = txtSearchSubject.Text;
+                Applications = m_LastLoadedApplications;
                 olvApplications.EmptyListMsg = "No applications found";
             }
             catch (XmlRpcException ex)
