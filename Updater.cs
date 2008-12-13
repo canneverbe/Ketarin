@@ -359,7 +359,7 @@ namespace Ketarin
                 // Occasionally, websites are not available and an error page is encountered
                 // For the case that the content type is just plain wrong, ignore it if the size is higher than 500KB
                 HttpWebResponse httpResponse = response as HttpWebResponse;
-                if (httpResponse != null && response.ContentType.StartsWith("text/") && response.ContentLength < 500000)
+                if (httpResponse != null && response.ContentType.StartsWith("text/html") && response.ContentLength < 500000)
                 {
                     throw NonBinaryFileException.Create(response.ContentType, HttpStatusCode.SeeOther);
                 }
