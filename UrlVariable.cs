@@ -162,6 +162,7 @@ namespace Ketarin
                 command.Parameters.Add(new SQLiteParameter("@RegularExpression", m_Regex));
                 command.Parameters.Add(new SQLiteParameter("@CachedContent", m_CachedContent));
                 command.ExecuteNonQuery();
+                m_JobId = parentJobId;
             }
         }
 
