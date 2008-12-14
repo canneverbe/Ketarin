@@ -68,6 +68,7 @@
             this.m_VistaMenu = new CDBurnerXP.Controls.VistaMenu(this.components);
             this.bRun = new System.Windows.Forms.Button();
             this.sbAddApplication = new wyDay.Controls.SplitButton();
+            this.cmnuOpenFolder = new System.Windows.Forms.MenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.olvJobs)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.m_VistaMenu)).BeginInit();
             this.SuspendLayout();
@@ -83,6 +84,7 @@
             this.cmnuJobs.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.cmnuUpdate,
             this.cmnuOpenFile,
+            this.cmnuOpenFolder,
             this.cmnuRename,
             this.menuItem4,
             this.cmnuEdit,
@@ -111,61 +113,61 @@
             // cmnuRename
             // 
             this.cmnuRename.Enabled = false;
-            this.cmnuRename.Index = 2;
+            this.cmnuRename.Index = 3;
             this.cmnuRename.Shortcut = System.Windows.Forms.Shortcut.F2;
             this.cmnuRename.Text = "&Rename file";
             this.cmnuRename.Click += new System.EventHandler(this.cmnuRename_Click);
             // 
             // menuItem4
             // 
-            this.menuItem4.Index = 3;
+            this.menuItem4.Index = 4;
             this.menuItem4.Text = "-";
             // 
             // cmnuEdit
             // 
             this.cmnuEdit.Enabled = false;
-            this.cmnuEdit.Index = 4;
+            this.cmnuEdit.Index = 5;
             this.cmnuEdit.Text = "&Edit";
             this.cmnuEdit.Click += new System.EventHandler(this.cmnuEdit_Click);
             // 
             // cmnuDelete
             // 
             this.cmnuDelete.Enabled = false;
-            this.cmnuDelete.Index = 5;
+            this.cmnuDelete.Index = 6;
             this.cmnuDelete.Shortcut = System.Windows.Forms.Shortcut.Del;
             this.cmnuDelete.Text = "&Delete";
             this.cmnuDelete.Click += new System.EventHandler(this.cmnuDelete_Click);
             // 
             // cmnuCopy
             // 
-            this.cmnuCopy.Index = 6;
+            this.cmnuCopy.Index = 7;
             this.cmnuCopy.Shortcut = System.Windows.Forms.Shortcut.CtrlC;
             this.cmnuCopy.Text = "&Copy";
             this.cmnuCopy.Click += new System.EventHandler(this.cmnuCopy_Click);
             // 
             // cmnuPaste
             // 
-            this.cmnuPaste.Index = 7;
+            this.cmnuPaste.Index = 8;
             this.cmnuPaste.Shortcut = System.Windows.Forms.Shortcut.CtrlV;
             this.cmnuPaste.Text = "&Paste";
             this.cmnuPaste.Click += new System.EventHandler(this.cmnuPaste_Click);
             // 
             // mnuSelectAll
             // 
-            this.mnuSelectAll.Index = 8;
+            this.mnuSelectAll.Index = 9;
             this.mnuSelectAll.Shortcut = System.Windows.Forms.Shortcut.CtrlA;
             this.mnuSelectAll.Text = "Select all";
             this.mnuSelectAll.Click += new System.EventHandler(this.mnuSelectAll_Click);
             // 
             // sepView
             // 
-            this.sepView.Index = 9;
+            this.sepView.Index = 10;
             this.sepView.Text = "-";
             // 
             // cmnuShowGroups
             // 
             this.cmnuShowGroups.Checked = true;
-            this.cmnuShowGroups.Index = 10;
+            this.cmnuShowGroups.Index = 11;
             this.cmnuShowGroups.Text = "&Show groups";
             this.cmnuShowGroups.Click += new System.EventHandler(this.cmnuShowGroups_Click);
             // 
@@ -376,6 +378,12 @@
             this.sbAddApplication.UseVisualStyleBackColor = true;
             this.sbAddApplication.Click += new System.EventHandler(this.sbAddApplication_Click);
             // 
+            // cmnuOpenFolder
+            // 
+            this.cmnuOpenFolder.Index = 2;
+            this.cmnuOpenFolder.Text = "Ope&n folder";
+            this.cmnuOpenFolder.Click += new System.EventHandler(this.cmnuOpenFolder_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -436,6 +444,7 @@
         private System.Windows.Forms.MenuItem cmnuCopy;
         private System.Windows.Forms.MenuItem cmnuPaste;
         private System.Windows.Forms.MenuItem mnuSelectAll;
+        private System.Windows.Forms.MenuItem cmnuOpenFolder;
     }
 }
 

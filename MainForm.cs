@@ -431,6 +431,19 @@ namespace Ketarin
             }
         }
 
+        private void cmnuOpenFolder_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                ApplicationJob job = olvJobs.SelectedObject as ApplicationJob;
+                System.Diagnostics.Process.Start("explorer", " /select," + job.PreviousLocation);
+            }
+            catch (Exception)
+            {
+                // ignore if fails for whatever reason
+            }
+        }
+
         private void cmuUpdate_Click(object sender, EventArgs e)
         {
             if (m_Updater.IsBusy) return;
@@ -479,6 +492,7 @@ namespace Ketarin
             cmnuDelete.Enabled = (olvJobs.SelectedIndices.Count > 0 && !m_Updater.IsBusy);
             cmnuUpdate.Enabled = (!m_Updater.IsBusy);
             cmnuOpenFile.Enabled = (job != null && !m_Updater.IsBusy && !string.IsNullOrEmpty(job.PreviousLocation) && File.Exists(job.PreviousLocation));
+            cmnuOpenFolder.Enabled = (job != null && !string.IsNullOrEmpty(job.PreviousLocation) && File.Exists(job.PreviousLocation));
             cmnuRename.Enabled = cmnuOpenFile.Enabled;
             cmnuCopy.Enabled = (job != null);
             cmnuPaste.Enabled = SafeClipboard.IsDataPresent(DataFormats.Text);
