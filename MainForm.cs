@@ -296,6 +296,18 @@ namespace Ketarin
             }
         }
 
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            switch (keyData)
+            {
+                case (Keys.Control | Keys.Enter):
+                    cmnuOpenFolder.PerformClick();
+                    return true;
+            }
+
+            return base.ProcessCmdKey(ref msg, keyData);
+        }
+
         protected override void OnClosing(CancelEventArgs e)
         {
             base.OnClosing(e);
