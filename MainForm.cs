@@ -484,17 +484,10 @@ namespace Ketarin
 
         private void cmnuDelete_Click(object sender, EventArgs e)
         {
-            string msg = "Do you really want to delete the selected applications from the list?";
-            if (MessageBox.Show(this, msg, Application.ProductName, MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
+            if (DeleteApplicationDialog.Show(this, olvJobs.SelectedObjects))
             {
-                return;
+                UpdateList();
             }
-
-            foreach (ApplicationJob job in olvJobs.SelectedObjects)
-            {
-                job.Delete();
-            }
-            UpdateList();
         }
 
         private void cmnuJobs_Popup(object sender, EventArgs e)

@@ -86,6 +86,12 @@
     <Compile Include="Forms\ApplicationJobDialog.Designer.cs">
       <DependentUpon>ApplicationJobDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\DeleteApplicationDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\DeleteApplicationDialog.Designer.cs">
+      <DependentUpon>DeleteApplicationDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\EditVariablesDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -205,6 +211,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ApplicationJobDialog.resx">
       <DependentUpon>ApplicationJobDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\DeleteApplicationDialog.resx">
+      <DependentUpon>DeleteApplicationDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\EditVariablesDialog.resx">
       <DependentUpon>EditVariablesDialog.cs</DependentUpon>
