@@ -34,6 +34,7 @@
             this.cmnuJobs = new System.Windows.Forms.ContextMenu();
             this.cmnuUpdate = new System.Windows.Forms.MenuItem();
             this.cmnuOpenFile = new System.Windows.Forms.MenuItem();
+            this.cmnuOpenFolder = new System.Windows.Forms.MenuItem();
             this.cmnuRename = new System.Windows.Forms.MenuItem();
             this.menuItem4 = new System.Windows.Forms.MenuItem();
             this.cmnuEdit = new System.Windows.Forms.MenuItem();
@@ -68,7 +69,6 @@
             this.m_VistaMenu = new CDBurnerXP.Controls.VistaMenu(this.components);
             this.bRun = new System.Windows.Forms.Button();
             this.sbAddApplication = new wyDay.Controls.SplitButton();
-            this.cmnuOpenFolder = new System.Windows.Forms.MenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.olvJobs)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.m_VistaMenu)).BeginInit();
             this.SuspendLayout();
@@ -109,6 +109,12 @@
             this.cmnuOpenFile.Index = 1;
             this.cmnuOpenFile.Text = "&Open file";
             this.cmnuOpenFile.Click += new System.EventHandler(this.cmnuOpenFile_Click);
+            // 
+            // cmnuOpenFolder
+            // 
+            this.cmnuOpenFolder.Index = 2;
+            this.cmnuOpenFolder.Text = "Ope&n folder";
+            this.cmnuOpenFolder.Click += new System.EventHandler(this.cmnuOpenFolder_Click);
             // 
             // cmnuRename
             // 
@@ -377,12 +383,6 @@
             this.sbAddApplication.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.sbAddApplication.UseVisualStyleBackColor = true;
             this.sbAddApplication.Click += new System.EventHandler(this.sbAddApplication_Click);
-            // 
-            // cmnuOpenFolder
-            // 
-            this.cmnuOpenFolder.Index = 2;
-            this.cmnuOpenFolder.Text = "Ope&n folder";
-            this.cmnuOpenFolder.Click += new System.EventHandler(this.cmnuOpenFolder_Click);
             // 
             // MainForm
             // 

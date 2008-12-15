@@ -304,7 +304,7 @@ namespace Ketarin
             string downloadUrl = string.Empty;
             if (job.DownloadSourceType == ApplicationJob.SourceType.FileHippo)
             {
-                downloadUrl = ExternalServices.FileHippoDownloadUrl(job.FileHippoId, (bool)Settings.GetValue("AvoidFileHippoBeta", false));
+                downloadUrl = ExternalServices.FileHippoDownloadUrl(job.FileHippoId, job.AvoidDownloadBeta);
             }
             else
             {
@@ -522,6 +522,8 @@ namespace Ketarin
             cmdExe.RedirectStandardInput = true;
             cmdExe.UseShellExecute = false;
             cmdExe.CreateNoWindow = true;
+            cmdExe.RedirectStandardOutput = true;
+            cmdExe.RedirectStandardError = true;
 
             using (Process proc = Process.Start(cmdExe))
             {

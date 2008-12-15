@@ -364,7 +364,7 @@ namespace Ketarin
         /// of this application by using the default and per
         /// application setting.
         /// </summary>
-        protected bool AvoidDownloadBeta
+        public bool AvoidDownloadBeta
         {
             get
             {
