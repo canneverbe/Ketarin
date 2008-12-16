@@ -751,13 +751,16 @@ namespace Ketarin
         private static string GetMd5OfFile(string filename)
         {
             MD5 hash = new MD5CryptoServiceProvider();
-            byte[] localMd5 = hash.ComputeHash(File.ReadAllBytes(filename));
-            StringBuilder result = new StringBuilder(32);
-            for (int i = 0; i < localMd5.Length; i++)
+            using (FileStream stream = File.OpenRead(filename))
             {
-                result.Append(localMd5[i].ToString("X2"));
+                byte[] localMd5 = hash.ComputeHash(stream);
+                StringBuilder result = new StringBuilder(32);
+                for (int i = 0; i < localMd5.Length; i++)
+                {
+                    result.Append(localMd5[i].ToString("X2"));
+                }
+                return result.ToString();
             }
-            return result.ToString();
         }
 
         /// <summary>
