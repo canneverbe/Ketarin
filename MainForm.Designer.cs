@@ -100,6 +100,7 @@
             // 
             this.m_VistaMenu.SetImage(this.cmnuUpdate, global::Ketarin.Properties.Resources.Restart);
             this.cmnuUpdate.Index = 0;
+            this.cmnuUpdate.Shortcut = System.Windows.Forms.Shortcut.CtrlU;
             this.cmnuUpdate.Text = "&Update";
             this.cmnuUpdate.Click += new System.EventHandler(this.cmuUpdate_Click);
             // 
