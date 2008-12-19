@@ -54,6 +54,7 @@ namespace Ketarin.Forms
             chkAvoidBeta.Checked = (bool)Settings.GetValue("AvoidFileHippoBeta", false);
             nConnectionTimeout.Value = Convert.ToDecimal(Settings.GetValue("ConnectionTimeout", 10.0));
             nNumThreads.Value = Convert.ToDecimal(Settings.GetValue("ThreadCount", 2));
+            nNumRetries.Value = Convert.ToDecimal(Settings.GetValue("RetryCount", 1));
 
             nProxyPort.Value = Convert.ToInt16(Settings.GetValue("ProxyPort", 0));
             txtProxyServer.Text = Settings.GetValue("ProxyServer", "") as string;
@@ -71,7 +72,8 @@ namespace Ketarin.Forms
             Settings.SetValue("AvoidFileHippoBeta", chkAvoidBeta.Checked);
             Settings.SetValue("ConnectionTimeout", nConnectionTimeout.Value);
             Settings.SetValue("ThreadCount", Convert.ToInt32(nNumThreads.Value));
-            
+            Settings.SetValue("RetryCount", Convert.ToInt32(nNumRetries.Value));
+
             Settings.SetValue("ProxyPort", nProxyPort.Value);
             Settings.SetValue("ProxyServer", txtProxyServer.Text);
             Settings.SetValue("ProxyUser", txtProxyUser.Text);

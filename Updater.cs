@@ -246,10 +246,33 @@ namespace Ketarin
             OnStatusChanged(job);
 
             string requestedUrl = string.Empty;
+            int numTries = 0;
+            int maxTries = Convert.ToInt32(Settings.GetValue("RetryCount", 1));
 
             try
             {
-                m_Status[job] = DoDownload(job, out requestedUrl) ? Status.UpdateSuccessful : Status.NoUpdate;
+                while (numTries < maxTries)
+                {
+                    try
+                    {
+                        numTries++;
+                        m_Status[job] = DoDownload(job, out requestedUrl) ? Status.UpdateSuccessful : Status.NoUpdate;
+                        // If no exception happened, we immediately leave the loop
+                        break;
+                    }
+                    catch (Exception ex)
+                    {
+                        // Only throw an exception if we have run out of tries
+                        if (numTries == maxTries)
+                        {
+                            throw ex;
+                        }
+                        else
+                        {
+                            LogDialog.Log(job, ex);
+                        }
+                    }
+                }
             }
             catch (WebException ex)
             {

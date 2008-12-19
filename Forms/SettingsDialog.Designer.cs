@@ -56,16 +56,19 @@
             this.bRemove = new System.Windows.Forms.Button();
             this.sepGlobalVariables = new CDBurnerXP.Controls.Separator();
             this.sepProxy = new CDBurnerXP.Controls.Separator();
+            this.nNumRetries = new System.Windows.Forms.NumericUpDown();
+            this.label1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.nConnectionTimeout)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nProxyPort)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nNumThreads)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nNumRetries)).BeginInit();
             this.SuspendLayout();
             // 
             // bCancel
             // 
             this.bCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.bCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.bCancel.Location = new System.Drawing.Point(283, 440);
+            this.bCancel.Location = new System.Drawing.Point(283, 466);
             this.bCancel.Name = "bCancel";
             this.bCancel.Size = new System.Drawing.Size(75, 23);
             this.bCancel.TabIndex = 27;
@@ -76,7 +79,7 @@
             // 
             this.bOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.bOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.bOK.Location = new System.Drawing.Point(202, 440);
+            this.bOK.Location = new System.Drawing.Point(202, 466);
             this.bOK.Name = "bOK";
             this.bOK.Size = new System.Drawing.Size(75, 23);
             this.bOK.TabIndex = 26;
@@ -189,7 +192,7 @@
             // lblServer
             // 
             this.lblServer.AutoSize = true;
-            this.lblServer.Location = new System.Drawing.Point(24, 349);
+            this.lblServer.Location = new System.Drawing.Point(24, 378);
             this.lblServer.Name = "lblServer";
             this.lblServer.Size = new System.Drawing.Size(41, 13);
             this.lblServer.TabIndex = 19;
@@ -199,7 +202,7 @@
             // 
             this.txtProxyServer.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtProxyServer.Location = new System.Drawing.Point(91, 346);
+            this.txtProxyServer.Location = new System.Drawing.Point(91, 375);
             this.txtProxyServer.Name = "txtProxyServer";
             this.txtProxyServer.Size = new System.Drawing.Size(189, 20);
             this.txtProxyServer.TabIndex = 20;
@@ -207,7 +210,7 @@
             // nProxyPort
             // 
             this.nProxyPort.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.nProxyPort.Location = new System.Drawing.Point(288, 346);
+            this.nProxyPort.Location = new System.Drawing.Point(288, 375);
             this.nProxyPort.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -220,7 +223,7 @@
             // lblProxyUser
             // 
             this.lblProxyUser.AutoSize = true;
-            this.lblProxyUser.Location = new System.Drawing.Point(24, 375);
+            this.lblProxyUser.Location = new System.Drawing.Point(24, 404);
             this.lblProxyUser.Name = "lblProxyUser";
             this.lblProxyUser.Size = new System.Drawing.Size(61, 13);
             this.lblProxyUser.TabIndex = 22;
@@ -230,7 +233,7 @@
             // 
             this.txtProxyUser.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtProxyUser.Location = new System.Drawing.Point(91, 372);
+            this.txtProxyUser.Location = new System.Drawing.Point(91, 401);
             this.txtProxyUser.Name = "txtProxyUser";
             this.txtProxyUser.Size = new System.Drawing.Size(272, 20);
             this.txtProxyUser.TabIndex = 23;
@@ -238,7 +241,7 @@
             // lblProxyPassword
             // 
             this.lblProxyPassword.AutoSize = true;
-            this.lblProxyPassword.Location = new System.Drawing.Point(24, 401);
+            this.lblProxyPassword.Location = new System.Drawing.Point(24, 430);
             this.lblProxyPassword.Name = "lblProxyPassword";
             this.lblProxyPassword.Size = new System.Drawing.Size(56, 13);
             this.lblProxyPassword.TabIndex = 24;
@@ -248,7 +251,7 @@
             // 
             this.txtProxyPassword.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtProxyPassword.Location = new System.Drawing.Point(91, 398);
+            this.txtProxyPassword.Location = new System.Drawing.Point(91, 427);
             this.txtProxyPassword.Name = "txtProxyPassword";
             this.txtProxyPassword.Size = new System.Drawing.Size(272, 20);
             this.txtProxyPassword.TabIndex = 25;
@@ -291,7 +294,7 @@
             // 
             this.cboGlobalVariables.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboGlobalVariables.FormattingEnabled = true;
-            this.cboGlobalVariables.Location = new System.Drawing.Point(63, 260);
+            this.cboGlobalVariables.Location = new System.Drawing.Point(63, 287);
             this.cboGlobalVariables.Name = "cboGlobalVariables";
             this.cboGlobalVariables.Size = new System.Drawing.Size(106, 21);
             this.cboGlobalVariables.Sorted = true;
@@ -302,7 +305,7 @@
             // 
             this.txtGlobalVariableValue.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtGlobalVariableValue.Location = new System.Drawing.Point(224, 260);
+            this.txtGlobalVariableValue.Location = new System.Drawing.Point(224, 287);
             this.txtGlobalVariableValue.Name = "txtGlobalVariableValue";
             this.txtGlobalVariableValue.Size = new System.Drawing.Size(136, 20);
             this.txtGlobalVariableValue.TabIndex = 15;
@@ -311,7 +314,7 @@
             // lblVarName
             // 
             this.lblVarName.AutoSize = true;
-            this.lblVarName.Location = new System.Drawing.Point(19, 263);
+            this.lblVarName.Location = new System.Drawing.Point(19, 290);
             this.lblVarName.Name = "lblVarName";
             this.lblVarName.Size = new System.Drawing.Size(38, 13);
             this.lblVarName.TabIndex = 12;
@@ -320,7 +323,7 @@
             // lblvalue
             // 
             this.lblvalue.AutoSize = true;
-            this.lblvalue.Location = new System.Drawing.Point(181, 263);
+            this.lblvalue.Location = new System.Drawing.Point(181, 290);
             this.lblvalue.Name = "lblvalue";
             this.lblvalue.Size = new System.Drawing.Size(37, 13);
             this.lblvalue.TabIndex = 14;
@@ -329,7 +332,7 @@
             // bAdd
             // 
             this.bAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.bAdd.Location = new System.Drawing.Point(202, 286);
+            this.bAdd.Location = new System.Drawing.Point(202, 313);
             this.bAdd.Name = "bAdd";
             this.bAdd.Size = new System.Drawing.Size(75, 23);
             this.bAdd.TabIndex = 16;
@@ -340,7 +343,7 @@
             // bRemove
             // 
             this.bRemove.Enabled = false;
-            this.bRemove.Location = new System.Drawing.Point(283, 286);
+            this.bRemove.Location = new System.Drawing.Point(283, 313);
             this.bRemove.Name = "bRemove";
             this.bRemove.Size = new System.Drawing.Size(75, 23);
             this.bRemove.TabIndex = 17;
@@ -353,7 +356,7 @@
             this.sepGlobalVariables.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.sepGlobalVariables.ForeColor = System.Drawing.SystemColors.ActiveCaption;
-            this.sepGlobalVariables.Location = new System.Drawing.Point(12, 234);
+            this.sepGlobalVariables.Location = new System.Drawing.Point(12, 259);
             this.sepGlobalVariables.Name = "sepGlobalVariables";
             this.sepGlobalVariables.Size = new System.Drawing.Size(351, 23);
             this.sepGlobalVariables.TabIndex = 11;
@@ -365,18 +368,53 @@
             this.sepProxy.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.sepProxy.ForeColor = System.Drawing.SystemColors.ActiveCaption;
-            this.sepProxy.Location = new System.Drawing.Point(12, 318);
+            this.sepProxy.Location = new System.Drawing.Point(12, 347);
             this.sepProxy.Name = "sepProxy";
             this.sepProxy.Size = new System.Drawing.Size(351, 23);
             this.sepProxy.TabIndex = 18;
             this.sepProxy.Text = "HTTP proxy settings";
             this.sepProxy.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // nNumRetries
+            // 
+            this.nNumRetries.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.nNumRetries.Location = new System.Drawing.Point(155, 233);
+            this.nNumRetries.Maximum = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            this.nNumRetries.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nNumRetries.Name = "nNumRetries";
+            this.nNumRetries.Size = new System.Drawing.Size(205, 20);
+            this.nNumRetries.TabIndex = 28;
+            this.nNumRetries.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(12, 235);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(90, 13);
+            this.label1.TabIndex = 29;
+            this.label1.Text = "Number of retrie&s:";
+            // 
             // SettingsDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(370, 475);
+            this.ClientSize = new System.Drawing.Size(370, 501);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.nNumRetries);
             this.Controls.Add(this.bRemove);
             this.Controls.Add(this.bAdd);
             this.Controls.Add(this.lblvalue);
@@ -416,6 +454,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.nConnectionTimeout)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nProxyPort)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nNumThreads)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nNumRetries)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -451,5 +490,7 @@
         private System.Windows.Forms.Label lblvalue;
         private System.Windows.Forms.Button bAdd;
         private System.Windows.Forms.Button bRemove;
+        private System.Windows.Forms.NumericUpDown nNumRetries;
+        private System.Windows.Forms.Label label1;
     }
 }
