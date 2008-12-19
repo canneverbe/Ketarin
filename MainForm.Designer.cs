@@ -53,6 +53,8 @@
             this.mnuSettings = new System.Windows.Forms.MenuItem();
             this.menuItem7 = new System.Windows.Forms.MenuItem();
             this.mnuExit = new System.Windows.Forms.MenuItem();
+            this.mnuView = new System.Windows.Forms.MenuItem();
+            this.mnuLog = new System.Windows.Forms.MenuItem();
             this.mnuHelp = new System.Windows.Forms.MenuItem();
             this.mnuAbout = new System.Windows.Forms.MenuItem();
             this.cmuAdd = new System.Windows.Forms.ContextMenu();
@@ -182,6 +184,7 @@
             // 
             this.mnuMain.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.mnuFile,
+            this.mnuView,
             this.mnuHelp});
             // 
             // mnuFile
@@ -238,9 +241,22 @@
             this.mnuExit.Text = "&Exit";
             this.mnuExit.Click += new System.EventHandler(this.mnuExit_Click);
             // 
+            // mnuView
+            // 
+            this.mnuView.Index = 1;
+            this.mnuView.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.mnuLog});
+            this.mnuView.Text = "&View";
+            // 
+            // mnuLog
+            // 
+            this.mnuLog.Index = 0;
+            this.mnuLog.Text = "&Show log";
+            this.mnuLog.Click += new System.EventHandler(this.mnuLog_Click);
+            // 
             // mnuHelp
             // 
-            this.mnuHelp.Index = 1;
+            this.mnuHelp.Index = 2;
             this.mnuHelp.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.mnuAbout});
             this.mnuHelp.Text = "&Help";
@@ -397,6 +413,7 @@
             this.Menu = this.mnuMain;
             this.MinimumSize = new System.Drawing.Size(400, 200);
             this.Name = "MainForm";
+            this.SavePosition = true;
             this.Text = "Ketarin";
             ((System.ComponentModel.ISupportInitialize)(this.olvJobs)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.m_VistaMenu)).EndInit();
@@ -446,6 +463,8 @@
         private System.Windows.Forms.MenuItem cmnuPaste;
         private System.Windows.Forms.MenuItem mnuSelectAll;
         private System.Windows.Forms.MenuItem cmnuOpenFolder;
+        private System.Windows.Forms.MenuItem mnuView;
+        private System.Windows.Forms.MenuItem mnuLog;
     }
 }
 

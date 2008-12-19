@@ -232,6 +232,11 @@ namespace Ketarin
             m_Updater.StatusChanged += new EventHandler<Updater.JobStatusChangedEventArgs>(m_Updater_StatusChanged);
             m_Updater.UpdateCompleted += new EventHandler(m_Updater_UpdateCompleted);
 
+            LogDialog.Instance.VisibleChanged += new EventHandler(delegate(object sender, EventArgs e)
+            {
+                mnuLog.Checked = LogDialog.Instance.Visible;
+            });
+            
             imlStatus.Images.Add(Properties.Resources.Document);
             imlStatus.Images.Add(Properties.Resources.Import);
             imlStatus.Images.Add(Properties.Resources.New);
@@ -290,6 +295,11 @@ namespace Ketarin
 
             UpdateList();
 
+            if (Convert.ToBoolean(Settings.GetValue("Ketarin", "ShowLog", false)))
+            {
+                mnuLog.PerformClick();
+            }
+
             if ((bool)Settings.GetValue("UpdateAtStartup", false))
             {
                 RunJobs();
@@ -312,12 +322,17 @@ namespace Ketarin
         {
             base.OnClosing(e);
 
+            Settings.SetValue("Ketarin", "ShowGroups", olvJobs.ShowGroups);
+            Settings.SetValue("Ketarin", "ShowLog", mnuLog.Checked);
+
             if (m_Updater.IsBusy)
             {
                 e.Cancel = true;
             }
-
-            Settings.SetValue("Ketarin", "ShowGroups", olvJobs.ShowGroups);
+            else
+            {
+                LogDialog.Instance.Close();
+            }
         }
 
         private void UpdateList()
@@ -674,6 +689,19 @@ namespace Ketarin
             }
         }
 
+        private void mnuLog_Click(object sender, EventArgs e)
+        {
+            if (LogDialog.Instance.Visible)
+            {
+                LogDialog.Instance.Hide();
+            }
+            else
+            {
+                LogDialog.Instance.Show(this);
+            }
+
+            mnuLog.Checked = LogDialog.Instance.Visible;
+        }
         #endregion
 
     }
