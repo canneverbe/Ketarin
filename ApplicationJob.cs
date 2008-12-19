@@ -11,6 +11,7 @@ using System.Xml.Serialization;
 using System.Security.Cryptography;
 using CDBurnerXP.IO;
 using CDBurnerXP;
+using Ketarin.Forms;
 
 namespace Ketarin
 {
@@ -770,14 +771,22 @@ namespace Ketarin
         /// <returns>true, if downloading is required</returns>
         public bool RequiresDownload(WebResponse netResponse, string targetFile)
         {
+            LogDialog.Log(this, "Checking if update is required...");
+
             FileInfo current = new FileInfo(targetFile);
-            if (!current.Exists) return true;
+            if (!current.Exists)
+            {
+                LogDialog.Log(this, string.Format("Update required, '{0}' does not yet exist", targetFile));
+                return true;
+            }
 
             // If using FileHippo, and previous file is available, check MD5
             if (!string.IsNullOrEmpty(m_FileHippoId) && m_SourceType == SourceType.FileHippo && !string.IsNullOrEmpty(m_PreviousLocation) && File.Exists(m_PreviousLocation))
             {
                 string serverMd5 = ExternalServices.FileHippoMd5(m_FileHippoId, AvoidDownloadBeta);
-                return string.Compare(serverMd5, GetMd5OfFile(m_PreviousLocation), true) != 0;
+                bool md5Result = string.Compare(serverMd5, GetMd5OfFile(m_PreviousLocation), true) != 0;
+                LogDialog.Log(this, md5Result ? "Update required, MD5 does not match" : "Update not required");
+                return md5Result;
             }
 
             // Remote date must be greater than our local date
@@ -786,7 +795,13 @@ namespace Ketarin
             bool disregardDate = Math.Abs(toNowDiff.TotalSeconds) <= 0.1;
 
             TimeSpan diff = GetLastModified(netResponse) - current.LastWriteTime;
-            return (current.Length != netResponse.ContentLength || (!disregardDate && diff > TimeSpan.Zero));
+            bool fileSizeMismatch = (current.Length != netResponse.ContentLength);
+            bool dateMismatch = (!disregardDate && diff > TimeSpan.Zero);
+            bool result = (fileSizeMismatch || dateMismatch);
+
+            LogDialog.Log(this, fileSizeMismatch, dateMismatch);
+
+            return result;
         }
 
         /// <summary>

@@ -11,12 +11,13 @@ using System.Windows.Forms;
 using CDBurnerXP;
 using System.Security.Cryptography.X509Certificates;
 using System.Net.Security;
+using Ketarin.Forms;
 
 namespace Ketarin
 {
     class Updater
     {
-        private IEnumerable<ApplicationJob> m_Jobs = null;
+        private ApplicationJob[] m_Jobs = null;
         private Dictionary<ApplicationJob, short> m_Progress = null;
         private Dictionary<ApplicationJob, Status> m_Status = null;
         private Dictionary<ApplicationJob, long> m_Size = new Dictionary<ApplicationJob,long>();
@@ -152,7 +153,7 @@ namespace Ketarin
             return m_Status[job];
         }
 
-        public void Run(IEnumerable<ApplicationJob> jobs)
+        public void Run(ApplicationJob[] jobs)
         {
             m_IsBusy = true;
             m_Jobs = jobs;
@@ -179,6 +180,7 @@ namespace Ketarin
         {
             m_CancelUpdates = false;
             m_Errors = new List<ApplicationJobError>();
+            LogDialog.Log(string.Format("Update started with {0} application(s)", m_Jobs.Length));
 
             try
             {
@@ -224,6 +226,8 @@ namespace Ketarin
                         }
                     }
                 }
+
+                LogDialog.Log("Update finished");
             }
             finally
             {
@@ -249,32 +253,38 @@ namespace Ketarin
             }
             catch (WebException ex)
             {
+                LogDialog.Log(job, ex);
                 m_Errors.Add(new ApplicationJobError(job, ex, requestedUrl));
                 m_Status[job] = Status.Failure;
             }
             catch (FileNotFoundException ex)
             {
                 // Executing command failed
+                LogDialog.Log(job, ex);
                 m_Errors.Add(new ApplicationJobError(job, ex));
             }
             catch (IOException ex)
             {
+                LogDialog.Log(job, ex);
                 m_Errors.Add(new ApplicationJobError(job, ex));
                 m_Status[job] = Status.Failure;
             }
             catch (UriFormatException ex)
             {
+                LogDialog.Log(job, ex);
                 m_Errors.Add(new ApplicationJobError(job, ex, requestedUrl));
                 m_Status[job] = Status.Failure;
             }
             catch (NonBinaryFileException ex)
             {
+                LogDialog.Log(job, ex);
                 m_Errors.Add(new ApplicationJobError(job, ex, requestedUrl));
                 m_Status[job] = Status.Failure;
             }
             catch (Win32Exception ex)
             {
                 // Executing command failed
+                LogDialog.Log(job, ex);
                 m_Errors.Add(new ApplicationJobError(job, ex));
             }
 
@@ -527,11 +537,26 @@ namespace Ketarin
 
             using (Process proc = Process.Start(cmdExe))
             {
-                string[] commands = baseCommand.Split('\n');
-                foreach (string command in commands)
+                // Clean all the cmd.exe headers
+                string clean = string.Empty;
+                do
                 {
-                    proc.StandardInput.WriteLine(command);
+                    clean = proc.StandardOutput.ReadLine();
+                } while (!string.IsNullOrEmpty(clean));
+
+                using (proc.StandardInput)
+                {
+                    string[] commands = baseCommand.Split('\n');
+                    foreach (string command in commands)
+                    {
+                        LogDialog.Log(job, "Executing command: " + command);
+                        proc.StandardInput.WriteLine(command);
+                    }
                 }
+                proc.WaitForExit();
+
+                string result = proc.StandardOutput.ReadToEnd();
+                LogDialog.Log(job, "Command result: " + result);
             }
         }
 

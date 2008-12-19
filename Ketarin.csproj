@@ -110,6 +110,12 @@
     <Compile Include="Forms\ImportFromDatabaseDialog.Designer.cs">
       <DependentUpon>ImportFromDatabaseDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\LogDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\LogDialog.Designer.cs">
+      <DependentUpon>LogDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\NewVariableDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -223,6 +229,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ImportFromDatabaseDialog.resx">
       <DependentUpon>ImportFromDatabaseDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\LogDialog.resx">
+      <DependentUpon>LogDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\NewVariableDialog.resx">
       <DependentUpon>NewVariableDialog.cs</DependentUpon>

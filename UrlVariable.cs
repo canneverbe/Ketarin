@@ -184,6 +184,7 @@ namespace Ketarin
             // Global variable only has static content
             if (m_JobId == 0)
             {
+                LogDialog.Log(this, url, m_CachedContent);
                 return url.Replace(find, m_CachedContent);
             }
 
@@ -211,11 +212,13 @@ namespace Ketarin
                     if (match.Groups.Count == 1)
                     {
                         m_CachedContent = match.Value;
+                        LogDialog.Log(this, url, m_CachedContent);
                         return url.Replace(find, match.Value);
                     }
                     else if (match.Groups.Count == 2)
                     {
                         m_CachedContent = match.Groups[1].Value;
+                        LogDialog.Log(this, url, m_CachedContent);
                         return url.Replace(find, match.Groups[1].Value);
                     }
                 }
@@ -225,6 +228,7 @@ namespace Ketarin
             if (string.IsNullOrEmpty(m_StartText) || string.IsNullOrEmpty(m_EndText))
             {
                 m_CachedContent = page;
+                LogDialog.Log(this, url, m_CachedContent);
                 return url.Replace(find, page);
             }
 
@@ -239,6 +243,7 @@ namespace Ketarin
             string result = page.Substring(endOfStart, endPos - endOfStart);
 
             m_CachedContent = result;
+            LogDialog.Log(this, url, m_CachedContent);
             url = url.Replace(find, result);
 
             return url;
