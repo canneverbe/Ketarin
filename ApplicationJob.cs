@@ -34,6 +34,7 @@ namespace Ketarin
         private string m_Category = string.Empty;
         private Guid m_Guid = Guid.Empty;
         private bool m_CanBeShared = true;
+        private DateTime? m_DownloadDate = null;        
         private bool m_ShareApplication = false;
         private string m_HttpReferer = string.Empty;
         private DownloadBetaType m_DownloadBeta = DownloadBetaType.Default;
@@ -62,6 +63,16 @@ namespace Ketarin
         {
             get { return m_DownloadBeta; }
             set { m_DownloadBeta = value; }
+        }
+
+        /// <summary>
+        /// The last updated date of the application
+        /// in the online database.
+        /// </summary>
+        public DateTime? DownloadDate
+        {
+            get { return m_DownloadDate; }
+            set { m_DownloadDate = value; }
         }
 
         /// <summary>
@@ -143,7 +154,7 @@ namespace Ketarin
                 m_Parent = parent;
             }
 
-            public string ReplaceAllInString(string value, DateTime fileDate)
+            public string ReplaceAllInString(string value, DateTime fileDate, Uri responseUrl)
             {
                 value = ReplaceAllInString(value);
 
@@ -155,6 +166,18 @@ namespace Ketarin
                     {
                         value = value.Replace("{f:" + dateTimeVar + "}", fileDate.ToString(dateTimeVar));
                     }
+                }
+
+                // Provide {url:ext} and {url:basefile}
+                try
+                {
+                    string fileName = Path.GetFileName(responseUrl.AbsolutePath);
+                    value = value.Replace("{url:ext}", Path.GetExtension(fileName).TrimStart('.'));
+                    value = value.Replace("{url:basefile}", Path.GetFileNameWithoutExtension(fileName));
+                }
+                catch (ArgumentException ex)
+                {
+                    LogDialog.Log("Could not determine {url:*} variables", ex);
                 }
 
                 return value;
@@ -420,6 +443,41 @@ namespace Ketarin
         }
 
         /// <summary>
+        /// Updates an application downloaded from the online
+        /// database based on the return value of the web service.
+        /// </summary>
+        /// <returns>true, if the applciation has been updated</returns>
+        public bool UpdateFromXml(string[] xmlValues)
+        {
+            // No update possible
+            if (CanBeShared) return false;
+
+            foreach (string xml in xmlValues)
+            {
+                ApplicationJob job = LoadFromXml(xml);
+                if (job.Guid == Guid)
+                {
+                    // The right job is found, update now
+                    // Basically, we are only interested in properties
+                    // that change if a different method needs to be used
+                    // in order to download the file (changed website for example).
+                    DownloadDate = DateTime.Now;
+                    DownloadSourceType = job.DownloadSourceType;
+                    FileHippoId = job.FileHippoId;
+                    FixedDownloadUrl = job.FixedDownloadUrl;
+                    HttpReferer = job.HttpReferer;
+                    Name = job.Name;
+                    Variables = job.Variables;
+
+                    Save();
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
         /// Imports one or more ApplicationJobs from an XML file.
         /// </summary>
         /// <returns>The last imported ApplicationJob</returns>
@@ -578,7 +636,8 @@ namespace Ketarin
                                                    ShareApplication = @ShareApplication,
                                                    HttpReferer = @HttpReferer,
                                                    FileHippoVersion = @FileHippoVersion,
-                                                   DownloadBeta = @DownloadBeta
+                                                   DownloadBeta = @DownloadBeta,
+                                                   DownloadDate = @DownloadDate
                                              WHERE JobId = @JobId";
 
                                 command.Parameters.Add(new SQLiteParameter("@ApplicationName", Name));
@@ -598,6 +657,14 @@ namespace Ketarin
                                 command.Parameters.Add(new SQLiteParameter("@HttpReferer", m_HttpReferer));
                                 command.Parameters.Add(new SQLiteParameter("@FileHippoVersion", m_FileHippoVersion));
                                 command.Parameters.Add(new SQLiteParameter("@DownloadBeta", (int)m_DownloadBeta));
+                                if (m_DownloadDate.HasValue)
+                                {
+                                    command.Parameters.Add(new SQLiteParameter("@DownloadDate", m_DownloadDate.Value));
+                                }
+                                else
+                                {
+                                    command.Parameters.Add(new SQLiteParameter("@DownloadDate", DBNull.Value));
+                                }
 
                                 command.Parameters.Add(new SQLiteParameter("@JobId", m_Id));
 
@@ -610,8 +677,8 @@ namespace Ketarin
                             using (IDbCommand command = conn.CreateCommand())
                             {
                                 command.Transaction = transaction;
-                                command.CommandText = @"INSERT INTO jobs (ApplicationName, FixedDownloadUrl, DateAdded, TargetPath, LastUpdated, IsEnabled, FileHippoId, DeletePreviousFile, SourceType, ExecuteCommand, Category, JobGuid, CanBeShared, ShareApplication, HttpReferer, FileHippoVersion, DownloadBeta)
-                                                 VALUES (@ApplicationName, @FixedDownloadUrl, @DateAdded, @TargetPath, @LastUpdated, @IsEnabled, @FileHippoId, @DeletePreviousFile, @SourceType, @ExecuteCommand, @Category, @JobGuid, @CanBeShared, @ShareApplication, @HttpReferer, @FileHippoVersion, @DownloadBeta)";
+                                command.CommandText = @"INSERT INTO jobs (ApplicationName, FixedDownloadUrl, DateAdded, TargetPath, LastUpdated, IsEnabled, FileHippoId, DeletePreviousFile, SourceType, ExecuteCommand, Category, JobGuid, CanBeShared, ShareApplication, HttpReferer, FileHippoVersion, DownloadBeta, DownloadDate)
+                                                 VALUES (@ApplicationName, @FixedDownloadUrl, @DateAdded, @TargetPath, @LastUpdated, @IsEnabled, @FileHippoId, @DeletePreviousFile, @SourceType, @ExecuteCommand, @Category, @JobGuid, @CanBeShared, @ShareApplication, @HttpReferer, @FileHippoVersion, @DownloadBeta, @DownloadDate)";
 
                                 command.Parameters.Add(new SQLiteParameter("@ApplicationName", Name));
                                 command.Parameters.Add(new SQLiteParameter("@FixedDownloadUrl", m_FixedDownloadUrl));
@@ -630,7 +697,15 @@ namespace Ketarin
                                 command.Parameters.Add(new SQLiteParameter("@HttpReferer", m_HttpReferer));
                                 command.Parameters.Add(new SQLiteParameter("@FileHippoVersion", m_FileHippoVersion));
                                 command.Parameters.Add(new SQLiteParameter("@DownloadBeta", (int)m_DownloadBeta));
-                                
+                                if (m_DownloadDate.HasValue)
+                                {
+                                    command.Parameters.Add(new SQLiteParameter("@DownloadDate", m_DownloadDate.Value));
+                                }
+                                else
+                                {
+                                    command.Parameters.Add(new SQLiteParameter("@DownloadDate", DBNull.Value));
+                                }
+
                                 command.ExecuteNonQuery();
                             }
 
@@ -686,6 +761,8 @@ namespace Ketarin
             {
                 m_DownloadBeta = (DownloadBetaType)Convert.ToInt32(reader["DownloadBeta"]);
             }
+            // An application has not been downloaded necessarily
+            m_DownloadDate = (reader["DownloadDate"] != DBNull.Value) ? reader["DownloadDate"] as DateTime? : null;
             
             string guid = reader["JobGuid"] as string;
             if (!string.IsNullOrEmpty(guid))
@@ -699,7 +776,7 @@ namespace Ketarin
             string targetLocation = TargetPath;
 
             // Allow variables in target locations as well
-            targetLocation = Variables.ReplaceAllInString(targetLocation, GetLastModified(netResponse));
+            targetLocation = Variables.ReplaceAllInString(targetLocation, GetLastModified(netResponse), netResponse.ResponseUri);
 
             // If carried on a USB stick, allow using the drive name
             try

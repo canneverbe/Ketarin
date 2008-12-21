@@ -96,6 +96,7 @@ namespace Ketarin.Forms
                     // Real value is determined while saving
                     if (!resultJob.CanBeShared)
                     {
+                        resultJob.DownloadDate = app.UpdatedAtDate;
                         resultJob.ExecuteCommand = string.Empty;
                         resultJob.TargetPath = string.Empty;
                         resultJob.PreviousLocation = string.Empty;
