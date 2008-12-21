@@ -12,6 +12,7 @@ using CDBurnerXP;
 using System.Security.Cryptography.X509Certificates;
 using System.Net.Security;
 using Ketarin.Forms;
+using CookComputing.XmlRpc;
 
 namespace Ketarin
 {
@@ -124,6 +125,7 @@ namespace Ketarin
         public event EventHandler<JobProgressChangedEventArgs> ProgressChanged;
         public event EventHandler<JobStatusChangedEventArgs> StatusChanged;
         public event EventHandler UpdateCompleted;
+        public event EventHandler<GenericEventArgs<string[]>> UpdatesFound;
 
         #region Public control methods
 
@@ -153,7 +155,7 @@ namespace Ketarin
             return m_Status[job];
         }
 
-        public void Run(ApplicationJob[] jobs)
+        public void BeginUpdate(ApplicationJob[] jobs)
         {
             m_IsBusy = true;
             m_Jobs = jobs;
@@ -170,13 +172,61 @@ namespace Ketarin
             }
             m_Threads.Clear();
 
-            Thread thread = new Thread(Run);
+            Thread thread = new Thread(UpdateApplications);
             thread.Start();
+        }
+
+        public void BeginCheckForOnlineUpdates(ApplicationJob[] jobs)
+        {
+            DateTime lastUpdate = (DateTime)Settings.GetValue("LastUpdateCheck", DateTime.MinValue);
+            if (lastUpdate.Date == DateTime.Now.Date)
+            {
+                // Only check once a day
+                return;
+            }
+
+            Settings.SetValue("LastUpdateCheck", DateTime.Now);
+            Thread thread = new Thread(new ParameterizedThreadStart(CheckForOnlineUpdates));
+            thread.Start(jobs);
+        }
+
+        private void CheckForOnlineUpdates(object argument)
+        {
+            ApplicationJob[] jobs = argument as ApplicationJob[];
+
+            // Build an array containing all GUIDs and dates
+            List<RpcAppGuidAndDate> sendInfo = new List<RpcAppGuidAndDate>();
+            foreach (ApplicationJob job in jobs)
+            {
+                if (!job.CanBeShared)
+                {
+                    sendInfo.Add(new RpcAppGuidAndDate(job.Guid, job.DownloadDate));
+                }
+            }
+
+            if (sendInfo.Count == 0)
+            {
+                // Nothing to do
+                return;
+            }
+
+            try
+            {
+                IKetarinRpc proxy = XmlRpcProxyGen.Create<IKetarinRpc>();
+                string[] updatedApps = proxy.GetUpdatedApplications(sendInfo.ToArray());
+                OnUpdatesFound(updatedApps);
+            }
+            catch (Exception ex)
+            {
+                // If updating fails, it does not hurt and should not annoy anyone.
+                // Just write a log entry, just in case
+                LogDialog.Log("Failed checking for online database updates", ex);
+            }
         }
 
         #endregion
 
-        private void Run()
+        private void UpdateApplications()
         {
             m_CancelUpdates = false;
             m_Errors = new List<ApplicationJobError>();
@@ -596,6 +646,14 @@ namespace Ketarin
             if (StatusChanged != null)
             {
                 StatusChanged(this, new JobStatusChangedEventArgs(job, GetStatus(job)));
+            }
+        }
+
+        protected virtual void OnUpdatesFound(string[] updatedApps)
+        {
+            if (UpdatesFound != null && updatedApps.Length > 0)
+            {
+                UpdatesFound(this, new GenericEventArgs<string[]>(updatedApps));
             }
         }
 

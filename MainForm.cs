@@ -231,6 +231,7 @@ namespace Ketarin
             m_Updater.ProgressChanged += new EventHandler<Updater.JobProgressChangedEventArgs>(m_Updater_ProgressChanged);
             m_Updater.StatusChanged += new EventHandler<Updater.JobStatusChangedEventArgs>(m_Updater_StatusChanged);
             m_Updater.UpdateCompleted += new EventHandler(m_Updater_UpdateCompleted);
+            m_Updater.UpdatesFound += new EventHandler<GenericEventArgs<string[]>>(m_Updater_UpdatesFound);
 
             LogDialog.Instance.VisibleChanged += new EventHandler(delegate(object sender, EventArgs e)
             {
@@ -247,7 +248,7 @@ namespace Ketarin
 
         #region Updater events
 
-        void m_Updater_UpdateCompleted(object sender, EventArgs e)
+        private void m_Updater_UpdateCompleted(object sender, EventArgs e)
         {
             this.BeginInvoke((MethodInvoker)delegate
             {
@@ -266,7 +267,7 @@ namespace Ketarin
             });
         }
 
-        void m_Updater_StatusChanged(object sender, Updater.JobStatusChangedEventArgs e)
+        private void m_Updater_StatusChanged(object sender, Updater.JobStatusChangedEventArgs e)
         {
             this.BeginInvoke((MethodInvoker)delegate() {
                 olvJobs.RefreshObject(e.ApplicationJob);
@@ -278,9 +279,27 @@ namespace Ketarin
             });
         }
 
-        void m_Updater_ProgressChanged(object sender, Updater.JobProgressChangedEventArgs e)
+        private void m_Updater_ProgressChanged(object sender, Updater.JobProgressChangedEventArgs e)
         {
             olvJobs.RefreshObject(e.ApplicationJob);
+        }
+
+        private void m_Updater_UpdatesFound(object sender, GenericEventArgs<string[]> e)
+        {
+            this.BeginInvoke((MethodInvoker)delegate()
+            {
+                string msg = string.Format("Updates for {0} applications which you added from the online database have been found. Do you want to update these applications now?", e.Value.Length);
+                if (MessageBox.Show(this, msg, "Updates found", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                {
+                    foreach (ApplicationJob job in m_Jobs)
+                    {
+                        if (job.UpdateFromXml(e.Value))
+                        {
+                            olvJobs.RefreshObject(job);
+                        }
+                    }
+                }
+            });
         }
 
         #endregion
@@ -304,6 +323,9 @@ namespace Ketarin
             {
                 RunJobs();
             }
+
+            // Check applications for updates
+            m_Updater.BeginCheckForOnlineUpdates(m_Jobs);
         }
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
@@ -423,7 +445,7 @@ namespace Ketarin
             mnuExport.Enabled = false;
             mnuImport.Enabled = false;
 
-            m_Updater.Run(jobs);
+            m_Updater.BeginUpdate(jobs);
         }
 
         #region Context menu

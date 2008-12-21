@@ -174,6 +174,7 @@ namespace Ketarin
                                          FileHippoVersion   TEXT,
                                          DateAdded          DATE,
                                          LastUpdated        DATE,
+                                         DownloadDate       DATE,
                                          PreviousLocation   TEXT,
                                          ExecuteCommand     TEXT,
                                          HttpReferer        TEXT,
@@ -215,12 +216,13 @@ namespace Ketarin
             addColumns.Add("ExecuteCommand", "ALTER TABLE jobs ADD ExecuteCommand TEXT");
             addColumns.Add("Category", "ALTER TABLE jobs ADD Category TEXT");
             addColumns.Add("JobGuid", "ALTER TABLE jobs ADD JobGuid TEXT");
+            addColumns.Add("DownloadDate", "ALTER TABLE jobs ADD DownloadDate Date");
             addColumns.Add("CanBeShared", "ALTER TABLE jobs ADD CanBeShared INTEGER DEFAULT 1");
             addColumns.Add("ShareApplication", "ALTER TABLE jobs ADD ShareApplication INTEGER DEFAULT 0");
             addColumns.Add("HttpReferer", "ALTER TABLE jobs ADD HttpReferer TEXT");
             addColumns.Add("FileHippoVersion", "ALTER TABLE jobs ADD FileHippoVersion TEXT");
             addColumns.Add("DownloadBeta", "ALTER TABLE jobs ADD DownloadBeta INTEGER DEFAULT 0");
-
+            
             foreach (KeyValuePair<string, string> column in addColumns)
             {
                 if (!columns.Contains(column.Key))

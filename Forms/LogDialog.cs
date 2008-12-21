@@ -50,6 +50,11 @@ namespace Ketarin.Forms
             Log(job.Name + ": Failed, " + ex.Message);
         }
 
+        public static void Log(string text, Exception ex)
+        {
+            Log(text + " (" + ex.Message + ")");
+        }
+
         public static void Log(UrlVariable var, string url, string replacement)
         {
             Log("Replacing {" + var.Name + "} in '" + url + "' with '" + replacement + "'");
