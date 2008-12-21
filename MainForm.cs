@@ -325,7 +325,10 @@ namespace Ketarin
             }
 
             // Check applications for updates
-            m_Updater.BeginCheckForOnlineUpdates(m_Jobs);
+            if ((bool)Settings.GetValue("UpdateOnlineDatabase", true))
+            {
+                m_Updater.BeginCheckForOnlineUpdates(m_Jobs);
+            }
         }
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)

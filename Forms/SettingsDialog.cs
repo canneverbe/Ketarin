@@ -52,6 +52,7 @@ namespace Ketarin.Forms
             chkUpdateAtStartup.Checked = (bool)Settings.GetValue("UpdateAtStartup", false);
             txtCustomColumn.Text = Settings.GetValue("CustomColumn", "") as string;
             chkAvoidBeta.Checked = (bool)Settings.GetValue("AvoidFileHippoBeta", false);
+            chkUpdateOnlineDatabase.Checked = (bool)Settings.GetValue("UpdateOnlineDatabase", true);
             nConnectionTimeout.Value = Convert.ToDecimal(Settings.GetValue("ConnectionTimeout", 10.0));
             nNumThreads.Value = Convert.ToDecimal(Settings.GetValue("ThreadCount", 2));
             nNumRetries.Value = Convert.ToDecimal(Settings.GetValue("RetryCount", 1));
@@ -73,6 +74,7 @@ namespace Ketarin.Forms
             Settings.SetValue("ConnectionTimeout", nConnectionTimeout.Value);
             Settings.SetValue("ThreadCount", Convert.ToInt32(nNumThreads.Value));
             Settings.SetValue("RetryCount", Convert.ToInt32(nNumRetries.Value));
+            Settings.SetValue("UpdateOnlineDatabase", chkUpdateOnlineDatabase.Checked);
 
             Settings.SetValue("ProxyPort", nProxyPort.Value);
             Settings.SetValue("ProxyServer", txtProxyServer.Text);

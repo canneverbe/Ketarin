@@ -187,6 +187,7 @@ namespace Ketarin
 
             Settings.SetValue("LastUpdateCheck", DateTime.Now);
             Thread thread = new Thread(new ParameterizedThreadStart(CheckForOnlineUpdates));
+            thread.IsBackground = true;
             thread.Start(jobs);
         }
 
