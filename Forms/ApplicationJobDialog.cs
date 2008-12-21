@@ -60,9 +60,9 @@ namespace Ketarin.Forms
                 chkDeletePrevious.Enabled = enable;
                 chkEnabled.Enabled = enable;
                 chkShareOnline.Enabled = enable;
-                rbAlwaysDownload.Enabled = false;
-                rbBetaAvoid.Enabled = false;
-                rbBetaDefault.Enabled = false;
+                rbAlwaysDownload.Enabled = enable;
+                rbBetaAvoid.Enabled = enable;
+                rbBetaDefault.Enabled = enable;
                 bBrowseFile.Enabled = enable;
                 bOK.Enabled = enable;
                 bOK.Visible = enable;
