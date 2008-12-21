@@ -11,6 +11,9 @@ namespace Ketarin.Forms
     public partial class LogDialog : CDBurnerXP.Forms.PersistentForm
     {
         private static LogDialog m_Instance;
+        private static Queue<string> m_Log = new Queue<string>();
+
+        #region Properties
 
         public static LogDialog Instance
         {
@@ -24,6 +27,8 @@ namespace Ketarin.Forms
             set { LogDialog.m_Instance = value; }
         }
 
+        #endregion
+
         private LogDialog()
         {
             InitializeComponent();
@@ -36,6 +41,22 @@ namespace Ketarin.Forms
 
             e.Cancel = true;
             Hide();
+        }
+
+        protected override void OnVisibleChanged(EventArgs e)
+        {
+            base.OnVisibleChanged(e);
+
+            if (Visible)
+            {
+                while (m_Log.Count > 0)
+                {
+                    txtLog.AppendText(m_Log.Dequeue());
+                    txtLog.AppendText(Environment.NewLine);
+                }
+
+                m_Instance.txtLog.SelectionStart = m_Instance.txtLog.Text.Length;
+            }
         }
 
         #region Public Log() functions
@@ -81,20 +102,29 @@ namespace Ketarin.Forms
         /// </summary>
         public static void Log(string text)
         {
-            if (m_Instance == null || text == null) return;
+            text = DateTime.Now.ToString() + ": " + text;
+            m_Log.Enqueue(text);
 
-            if (m_Instance.InvokeRequired)
+            m_Instance.AddToTextBox(text);
+        }
+
+        private void AddToTextBox(string text)
+        {
+            if (InvokeRequired)
             {
-                m_Instance.BeginInvoke((MethodInvoker)delegate()
+                BeginInvoke((MethodInvoker)delegate()
                 {
-                    Log(text);
+                    AddToTextBox(text);
                 });
             }
             else
             {
-                m_Instance.txtLog.AppendText(DateTime.Now.ToString() + " " + text.Replace("\r", "\\r").Replace("\n", "\\n"));
-                m_Instance.txtLog.AppendText(Environment.NewLine);
-                m_Instance.txtLog.SelectionStart = m_Instance.txtLog.Text.Length;
+                if (Visible) {
+                    txtLog.AppendText(text);
+                    txtLog.AppendText(Environment.NewLine);
+
+                    txtLog.SelectionStart = m_Instance.txtLog.Text.Length;
+                }
             }
         }
 
