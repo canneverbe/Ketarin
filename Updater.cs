@@ -337,6 +337,12 @@ namespace Ketarin
                 LogDialog.Log(job, ex);
                 m_Errors.Add(new ApplicationJobError(job, ex));
             }
+            catch (Win32Exception ex)
+            {
+                // Executing command failed
+                LogDialog.Log(job, ex);
+                m_Errors.Add(new ApplicationJobError(job, ex));
+            }
             catch (IOException ex)
             {
                 LogDialog.Log(job, ex);
@@ -355,11 +361,11 @@ namespace Ketarin
                 m_Errors.Add(new ApplicationJobError(job, ex, requestedUrl));
                 m_Status[job] = Status.Failure;
             }
-            catch (Win32Exception ex)
+            catch (TargetPathInvalidException ex)
             {
-                // Executing command failed
                 LogDialog.Log(job, ex);
                 m_Errors.Add(new ApplicationJobError(job, ex));
+                m_Status[job] = Status.Failure;
             }
 
             m_Progress[job] = 100;
@@ -514,7 +520,23 @@ namespace Ketarin
                 {
                     // Invalid file date. Ignore and just use DateTime.Now
                 }
-                File.Copy(tmpLocation, targetFileName, true);
+
+                try
+                {
+                    // Copying might fail if variables have been replaced with bad values.
+                    // However, we cannot rely on functions to clean up the path, since they
+                    // might actually parse the path incorrectly and return a even worse path.
+                    File.Copy(tmpLocation, targetFileName, true);
+                }
+                catch (ArgumentException)
+                {
+                    throw new TargetPathInvalidException(targetFileName);
+                }
+                catch (NotSupportedException)
+                {
+                    throw new TargetPathInvalidException(targetFileName);
+                }
+
                 File.Delete(tmpLocation);
 
                 // At this point, the update is complete
