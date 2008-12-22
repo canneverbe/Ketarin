@@ -154,7 +154,7 @@ namespace Ketarin
                 m_Parent = parent;
             }
 
-            public string ReplaceAllInString(string value, DateTime fileDate, Uri responseUrl)
+            public string ReplaceAllInString(string value, DateTime fileDate, string filename)
             {
                 value = ReplaceAllInString(value);
 
@@ -171,9 +171,8 @@ namespace Ketarin
                 // Provide {url:ext} and {url:basefile}
                 try
                 {
-                    string fileName = Path.GetFileName(responseUrl.AbsolutePath);
-                    value = value.Replace("{url:ext}", Path.GetExtension(fileName).TrimStart('.'));
-                    value = value.Replace("{url:basefile}", Path.GetFileNameWithoutExtension(fileName));
+                    value = value.Replace("{url:ext}", Path.GetExtension(filename).TrimStart('.'));
+                    value = value.Replace("{url:basefile}", Path.GetFileNameWithoutExtension(filename));
                 }
                 catch (ArgumentException ex)
                 {
@@ -776,7 +775,7 @@ namespace Ketarin
             string targetLocation = TargetPath;
 
             // Allow variables in target locations as well
-            targetLocation = Variables.ReplaceAllInString(targetLocation, GetLastModified(netResponse), netResponse.ResponseUri);
+            targetLocation = Variables.ReplaceAllInString(targetLocation, GetLastModified(netResponse), GetFileNameFromWebResponse(netResponse));
 
             // If carried on a USB stick, allow using the drive name
             try
@@ -790,26 +789,7 @@ namespace Ketarin
                 // If directory does not yet exist, create it
                 Directory.CreateDirectory(targetLocation);
 
-                string fileName = Path.GetFileName(netResponse.ResponseUri.AbsolutePath);
-
-                // Look for alternative file name
-                string disposition = netResponse.Headers.Get("content-disposition") as string;
-                if (!string.IsNullOrEmpty(disposition))
-                {
-                    string token = "filename=";
-                    int pos = disposition.IndexOf(token);
-                    if (pos >= 0)
-                    {
-                        fileName = disposition.Substring(pos + token.Length);
-                        fileName = fileName.Replace("\"", "");
-                        // Make sure that no relative paths are being injected (security issue)
-                        fileName = Path.GetFileName(fileName.TrimEnd(';'));
-
-                        fileName = PathEx.ReplaceInvalidFileNameChars(fileName);
-                    }
-                }
-
-                fileName = fileName.Replace("%20", " ");
+                string fileName = GetFileNameFromWebResponse(netResponse);
                 targetLocation = Path.Combine(targetLocation, fileName);
             }
 
@@ -824,6 +804,35 @@ namespace Ketarin
             catch (ArgumentException) { }
 
             return targetLocation;
+        }
+
+        /// <summary>
+        /// Returns the result file name of a web response. If possible, the
+        /// content disposition headers are considered as well.
+        /// </summary>
+        private static string GetFileNameFromWebResponse(WebResponse netResponse)
+        {
+            string fileName = Path.GetFileName(netResponse.ResponseUri.AbsolutePath);
+
+            // Look for alternative file name
+            string disposition = netResponse.Headers.Get("content-disposition") as string;
+            if (!string.IsNullOrEmpty(disposition))
+            {
+                string token = "filename=";
+                int pos = disposition.IndexOf(token);
+                if (pos >= 0)
+                {
+                    fileName = disposition.Substring(pos + token.Length);
+                    fileName = fileName.Replace("\"", "");
+                    // Make sure that no relative paths are being injected (security issue)
+                    fileName = Path.GetFileName(fileName.TrimEnd(';'));
+
+                    fileName = PathEx.ReplaceInvalidFileNameChars(fileName);
+                }
+            }
+
+            fileName = fileName.Replace("%20", " ");
+            return fileName;
         }
 
         private static string GetMd5OfFile(string filename)
@@ -850,7 +859,16 @@ namespace Ketarin
         {
             LogDialog.Log(this, "Checking if update is required...");
 
-            FileInfo current = new FileInfo(targetFile);
+            FileInfo current;
+            try
+            {
+                current = new FileInfo(targetFile);
+            }
+            catch (NotSupportedException)
+            {
+                throw new TargetPathInvalidException(targetFile);
+            }
+
             if (!current.Exists)
             {
                 LogDialog.Log(this, string.Format("Update required, '{0}' does not yet exist", targetFile));

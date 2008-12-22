@@ -271,6 +271,7 @@
     <Compile Include="SplitButton.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="TargetPathInvalidException.cs" />
     <Compile Include="Updater.cs" />
     <Compile Include="UrlVariable.cs" />
     <Compile Include="XmlRpc\IHttpRequest.cs" />
