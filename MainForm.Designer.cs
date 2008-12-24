@@ -69,8 +69,11 @@
             this.colCategory = new CDBurnerXP.Controls.OLVColumn();
             this.colCustomValue = new CDBurnerXP.Controls.OLVColumn();
             this.m_VistaMenu = new CDBurnerXP.Controls.VistaMenu(this.components);
-            this.bRun = new System.Windows.Forms.Button();
             this.sbAddApplication = new wyDay.Controls.SplitButton();
+            this.bRun = new wyDay.Controls.SplitButton();
+            this.cmuRun = new System.Windows.Forms.ContextMenu();
+            this.cmnuCheckAndDownload = new System.Windows.Forms.MenuItem();
+            this.cmnuOnlyCheck = new System.Windows.Forms.MenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.olvJobs)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.m_VistaMenu)).BeginInit();
             this.SuspendLayout();
@@ -373,19 +376,6 @@
             // 
             this.m_VistaMenu.ContainerControl = this;
             // 
-            // bRun
-            // 
-            this.bRun.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bRun.Image = global::Ketarin.Properties.Resources.Restart;
-            this.bRun.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.bRun.Location = new System.Drawing.Point(168, 260);
-            this.bRun.Name = "bRun";
-            this.bRun.Size = new System.Drawing.Size(107, 24);
-            this.bRun.TabIndex = 2;
-            this.bRun.Text = "&Update now";
-            this.bRun.UseVisualStyleBackColor = true;
-            this.bRun.Click += new System.EventHandler(this.bRun_Click);
-            // 
             // sbAddApplication
             // 
             this.sbAddApplication.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -400,6 +390,39 @@
             this.sbAddApplication.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.sbAddApplication.UseVisualStyleBackColor = true;
             this.sbAddApplication.Click += new System.EventHandler(this.sbAddApplication_Click);
+            // 
+            // bRun
+            // 
+            this.bRun.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.bRun.AutoSize = true;
+            this.bRun.Image = global::Ketarin.Properties.Resources.Restart;
+            this.bRun.Location = new System.Drawing.Point(168, 260);
+            this.bRun.Name = "bRun";
+            this.bRun.Size = new System.Drawing.Size(116, 24);
+            this.bRun.SplitMenu = this.cmuRun;
+            this.bRun.TabIndex = 4;
+            this.bRun.Text = "&Update now";
+            this.bRun.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.bRun.UseVisualStyleBackColor = true;
+            this.bRun.Click += new System.EventHandler(this.bRun_Click);
+            // 
+            // cmuRun
+            // 
+            this.cmuRun.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.cmnuCheckAndDownload,
+            this.cmnuOnlyCheck});
+            // 
+            // cmnuCheckAndDownload
+            // 
+            this.cmnuCheckAndDownload.Index = 0;
+            this.cmnuCheckAndDownload.Text = "&Check for updates and download";
+            this.cmnuCheckAndDownload.Click += new System.EventHandler(this.cmnuCheckAndDownload_Click);
+            // 
+            // cmnuOnlyCheck
+            // 
+            this.cmnuOnlyCheck.Index = 1;
+            this.cmnuOnlyCheck.Text = "&Only check for updates";
+            this.cmnuOnlyCheck.Click += new System.EventHandler(this.cmnuOnlyCheck_Click);
             // 
             // MainForm
             // 
@@ -425,7 +448,6 @@
         #endregion
 
         private CDBurnerXP.Controls.ObjectListView olvJobs;
-        private System.Windows.Forms.Button bRun;
         private System.Windows.Forms.ImageList imlStatus;
         private CDBurnerXP.Controls.VistaMenu m_VistaMenu;
         private System.Windows.Forms.ContextMenu cmnuJobs;
@@ -465,6 +487,10 @@
         private System.Windows.Forms.MenuItem cmnuOpenFolder;
         private System.Windows.Forms.MenuItem mnuView;
         private System.Windows.Forms.MenuItem mnuLog;
+        private wyDay.Controls.SplitButton bRun;
+        private System.Windows.Forms.ContextMenu cmuRun;
+        private System.Windows.Forms.MenuItem cmnuCheckAndDownload;
+        private System.Windows.Forms.MenuItem cmnuOnlyCheck;
     }
 }
 

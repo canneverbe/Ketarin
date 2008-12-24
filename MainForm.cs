@@ -253,6 +253,7 @@ namespace Ketarin
             this.BeginInvoke((MethodInvoker)delegate
             {
                 bRun.Text = "&Update now";
+                bRun.SplitMenu = cmuRun;
                 bRun.Image = Properties.Resources.Restart;
                 sbAddApplication.Enabled = true;
                 mnuExport.Enabled = true;
@@ -321,7 +322,7 @@ namespace Ketarin
 
             if ((bool)Settings.GetValue("UpdateAtStartup", false))
             {
-                RunJobs();
+                RunJobs(false);
             }
 
             // Check applications for updates
@@ -407,6 +408,8 @@ namespace Ketarin
 
         #endregion
 
+        #region Run button
+
         private void bRun_Click(object sender, EventArgs e)
         {
             if (m_Updater.IsBusy)
@@ -415,15 +418,27 @@ namespace Ketarin
             }
             else
             {
-                RunJobs();
+                RunJobs(false);
             }
         }
+
+        private void cmnuCheckAndDownload_Click(object sender, EventArgs e)
+        {
+            bRun.PerformClick();
+        }
+
+        private void cmnuOnlyCheck_Click(object sender, EventArgs e)
+        {
+            RunJobs(true);
+        }
+
+        #endregion
 
         /// <summary>
         /// Updates all items, using the same order as the
         /// items in the list (considers sorting).
         /// </summary>
-        private void RunJobs()
+        private void RunJobs(bool onlyCheck)
         {
             List<ApplicationJob> jobs = new List<ApplicationJob>();
             OLVListItem startItem = null;
@@ -437,18 +452,19 @@ namespace Ketarin
                 }
             } while (startItem != null);
 
-            RunJobs(jobs.ToArray());
+            RunJobs(jobs.ToArray(), onlyCheck);
         }
 
-        private void RunJobs(ApplicationJob[] jobs)
+        private void RunJobs(ApplicationJob[] jobs, bool onlyCheck)
         {
             bRun.Text = "Cancel";
+            bRun.SplitMenu = null;
             bRun.Image = null;
             sbAddApplication.Enabled = false;
             mnuExport.Enabled = false;
             mnuImport.Enabled = false;
 
-            m_Updater.BeginUpdate(jobs);
+            m_Updater.BeginUpdate(jobs, onlyCheck);
         }
 
         #region Context menu
@@ -502,7 +518,7 @@ namespace Ketarin
 
             if (olvJobs.SelectedObjects.Count == 0)
             {
-                RunJobs();
+                RunJobs(false);
             }
             else
             {
@@ -511,7 +527,7 @@ namespace Ketarin
                 {
                     jobs.Add(job);
                 }
-                RunJobs(jobs.ToArray());
+                RunJobs(jobs.ToArray(), false);
             }
         }
 
