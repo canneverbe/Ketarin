@@ -27,6 +27,7 @@ namespace Ketarin
         protected int m_LastProgress = -1;
         private List<ApplicationJobError> m_Errors;
         private byte m_NoProgressCounter = 0;
+        private bool m_OnlyCheck = false;
         private int m_ThreadLimit = 2;
         private List<Thread> m_Threads = new List<Thread>();
         private List<string> m_NoAutoReferer = new List<string>(new string[] {"sourceforge.net"});
@@ -155,11 +156,12 @@ namespace Ketarin
             return m_Status[job];
         }
 
-        public void BeginUpdate(ApplicationJob[] jobs)
+        public void BeginUpdate(ApplicationJob[] jobs, bool onlyCheck)
         {
             m_IsBusy = true;
             m_Jobs = jobs;
             m_ThreadLimit = Convert.ToInt32(Settings.GetValue("ThreadCount", 2));
+            m_OnlyCheck = onlyCheck;
 
             // Initialise progress and status
             m_Progress = new Dictionary<ApplicationJob, short>();
@@ -451,7 +453,7 @@ namespace Ketarin
                 HttpWebResponse httpResponse = response as HttpWebResponse;
                 if (httpResponse != null && response.ContentType.StartsWith("text/html") && response.ContentLength < 500000)
                 {
-                    throw NonBinaryFileException.Create(response.ContentType, HttpStatusCode.SeeOther);
+                    throw NonBinaryFileException.Create(response.ContentType, HttpStatusCode.NotAcceptable);
                 }
 
                 string targetFileName = job.GetTargetFile(response);
@@ -468,6 +470,9 @@ namespace Ketarin
                     job.Save();
                     return false;
                 }
+
+                // Skip downloading!
+                if (m_OnlyCheck) return true;
 
                 // Read all file contents to a temporary location
                 string tmpLocation = Path.GetTempFileName();
