@@ -195,7 +195,6 @@ namespace Ketarin
             // Get the content we need to put in
             using (WebClient client = new WebClient())
             {
-                client.Headers.Add("User-Agent", DbManager.UserAgent);
                 page = client.DownloadString(m_Url);
             }
 

@@ -274,6 +274,9 @@
     <Compile Include="TargetPathInvalidException.cs" />
     <Compile Include="Updater.cs" />
     <Compile Include="UrlVariable.cs" />
+    <Compile Include="WebClient.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="XmlRpc\IHttpRequest.cs" />
     <Compile Include="XmlRpc\IHttpRequestHandler.cs" />
     <Compile Include="XmlRpc\IHttpResponse.cs" />

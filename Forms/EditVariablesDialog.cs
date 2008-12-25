@@ -143,7 +143,6 @@ namespace Ketarin.Forms
             {
                 using (WebClient client = new WebClient())
                 {
-                    client.Headers.Add("User-Agent", DbManager.UserAgent);
                     rtfContent.Text = client.DownloadString(txtUrl.Text);
                     RefreshRtfFormatting();
                 }
