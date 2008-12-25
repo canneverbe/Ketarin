@@ -18,6 +18,7 @@ namespace Ketarin
             string overviewPage = string.Empty;
             using (WebClient client = new WebClient())
             {
+                client.Headers.Add("User-Agent", DbManager.UserAgent);
                 overviewPage = client.DownloadString(url);
             }
 
@@ -37,6 +38,7 @@ namespace Ketarin
             string downloadPage = string.Empty;
             using (WebClient client = new WebClient())
             {
+                client.Headers.Add("User-Agent", DbManager.UserAgent);
                 downloadPage = client.DownloadString(downloadUrl);
             }
 
@@ -58,6 +60,7 @@ namespace Ketarin
             {
                 using (WebClient altUrlDownloader = new WebClient())
                 {
+                    altUrlDownloader.Headers.Add("User-Agent", DbManager.UserAgent);
                     string newPage = altUrlDownloader.DownloadString(altUrl);
                     if (!FileHippoIsBeta(newPage))
                     {
@@ -78,6 +81,7 @@ namespace Ketarin
             string overviewPage = string.Empty;
             using (WebClient client = new WebClient())
             {
+                client.Headers.Add("User-Agent", DbManager.UserAgent);
                 overviewPage = client.DownloadString(url);
             }
             
@@ -103,6 +107,7 @@ namespace Ketarin
             string md5Page = string.Empty;
             using (WebClient client = new WebClient())
             {
+                client.Headers.Add("User-Agent", DbManager.UserAgent);
                 md5Page = client.DownloadString(url);
 
                 if (avoidBeta && FileHippoIsBeta(md5Page))

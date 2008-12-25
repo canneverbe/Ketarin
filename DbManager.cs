@@ -68,6 +68,13 @@ namespace Ketarin
         private static SQLiteConnection m_DbConn;
         private static string m_DatabasePath;
 
+        public static string UserAgent {
+            get
+            {
+                return "Ketarin/" + Application.ProductVersion + "(Windows; N) MSIE (.NET CLR 2.0)";
+            }
+        }
+
         /// <summary>
         /// Builds a new proxy object from the settings.
         /// Returns null if no valid proxy exists.
