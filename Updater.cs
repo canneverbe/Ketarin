@@ -444,6 +444,8 @@ namespace Ketarin
                 {
                     httpRequest.Referer = job.HttpReferer;
                 }
+
+                httpRequest.UserAgent = DbManager.UserAgent;
             }
 
             using (WebResponse response = req.GetResponse())
