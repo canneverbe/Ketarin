@@ -105,7 +105,14 @@ namespace Ketarin.Forms
             text = DateTime.Now.ToString() + ": " + text;
             m_Log.Enqueue(text);
 
-            m_Instance.AddToTextBox(text);
+            if (m_Instance != null)
+            {
+                m_Instance.AddToTextBox(text);
+            }
+            else
+            {
+                Console.Error.WriteLine(text);
+            }
         }
 
         private void AddToTextBox(string text)
