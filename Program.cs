@@ -126,9 +126,6 @@ namespace Ketarin
                     break;
             }
 
-            Console.WriteLine();
-            Console.Write(status);
-
             if (m_Icon != null)
             {
                 m_Icon.ShowBalloonTip(2000, "Ketarin", status, (e.NewStatus == Updater.Status.Failure ? ToolTipIcon.Error : ToolTipIcon.Info));
