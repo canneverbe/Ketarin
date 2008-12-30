@@ -477,6 +477,34 @@ namespace Ketarin
         }
 
         /// <summary>
+        /// Imports one or more (incomplete) ApplicationJobs from a PAD file.
+        /// </summary>
+        /// <returns>The incomplete ApplicationJob. Completiton by user required.</returns>
+        public static ApplicationJob ImportFromPad(string fileName)
+        {
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(File.ReadAllText(fileName));
+
+            XmlNodeList progNames = doc.GetElementsByTagName("Program_Name");
+            XmlNodeList downloadUrls = doc.GetElementsByTagName("Primary_Download_URL");
+
+            if (progNames.Count == 0 && downloadUrls.Count == 0) return null;
+
+            ApplicationJob job = new ApplicationJob();
+            job.DownloadSourceType = SourceType.FixedUrl;
+            if (progNames.Count > 0)
+            {
+                job.Name = doc.GetElementsByTagName("Program_Name")[0].InnerText;
+            }
+            if (downloadUrls.Count > 0)
+            {
+                job.FixedDownloadUrl = doc.GetElementsByTagName("Primary_Download_URL")[0].InnerText;
+            }
+
+            return job;
+        }
+
+        /// <summary>
         /// Imports one or more ApplicationJobs from an XML file.
         /// </summary>
         /// <returns>The last imported ApplicationJob</returns>
