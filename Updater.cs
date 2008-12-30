@@ -408,6 +408,11 @@ namespace Ketarin
             requestedUrl = downloadUrl;
             Uri url = new Uri(downloadUrl);
 
+            return DoDownload(job, url);
+        }
+
+        protected bool DoDownload(ApplicationJob job, Uri urlToRequest)
+        {
             // Lower security policies
             ServicePointManager.CheckCertificateRevocationList = false;
             ServicePointManager.ServerCertificateValidationCallback = delegate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
@@ -419,7 +424,7 @@ namespace Ketarin
             // from the same server, we need to "remove" the connection limit.
             ServicePointManager.DefaultConnectionLimit = 10;
 
-            WebRequest req = WebRequest.CreateDefault(url);
+            WebRequest req = WebRequest.CreateDefault(urlToRequest);
             req.Timeout = Convert.ToInt32(Settings.GetValue("ConnectionTimeout", 10)) * 1000; // 10 seconds by default
 
             HttpWebRequest httpRequest = req as HttpWebRequest;
@@ -453,9 +458,21 @@ namespace Ketarin
                 // Occasionally, websites are not available and an error page is encountered
                 // For the case that the content type is just plain wrong, ignore it if the size is higher than 500KB
                 HttpWebResponse httpResponse = response as HttpWebResponse;
-                if (httpResponse != null && response.ContentType.StartsWith("text/html") && response.ContentLength < 500000)
+                if (httpResponse != null && response.ContentLength < 500000)
                 {
-                    throw NonBinaryFileException.Create(response.ContentType, HttpStatusCode.NotAcceptable);
+                    if (response.ContentType.StartsWith("text/xml") || response.ContentType.StartsWith("application/xml"))
+                    {
+                        // If an XML file is served, maybe we have a PAD file
+                        ApplicationJob padJob = ApplicationJob.ImportFromPad(httpResponse);
+                        if (padJob != null)
+                        {
+                            return DoDownload(job, new Uri(padJob.FixedDownloadUrl));
+                        }
+                    }
+                    if (response.ContentType.StartsWith("text/html") )
+                    {
+                        throw NonBinaryFileException.Create(response.ContentType, HttpStatusCode.NotAcceptable);
+                    }
                 }
 
                 string targetFileName = job.GetTargetFile(response);
