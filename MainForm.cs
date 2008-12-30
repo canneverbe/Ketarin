@@ -380,12 +380,17 @@ namespace Ketarin
             {
                 if (dialog.ShowDialog(this) == DialogResult.OK)
                 {
-                    dialog.ApplicationJob.Save();
-                    olvJobs.AddObject(dialog.ApplicationJob);
-                    olvJobs.SelectedObject = dialog.ApplicationJob;
-                    olvJobs.EnsureVisible(olvJobs.SelectedIndex);
+                    SaveAndShowJob(dialog.ApplicationJob);
                 }
             }
+        }
+
+        private void SaveAndShowJob(ApplicationJob job)
+        {
+            job.Save();
+            olvJobs.AddObject(job);
+            olvJobs.SelectedObject = job;
+            olvJobs.EnsureVisible(olvJobs.SelectedIndex);
         }
 
         private void cmnuImport_Click(object sender, EventArgs e)
@@ -465,6 +470,7 @@ namespace Ketarin
             mnuImport.Enabled = false;
 
             m_Updater.BeginUpdate(jobs, onlyCheck);
+            olvJobs.RefreshObjects(m_Jobs);
         }
 
         #region Context menu
@@ -707,6 +713,18 @@ namespace Ketarin
 
                 try
                 {
+                    ApplicationJob padImport = ApplicationJob.ImportFromPad(dialog.FileName);
+                    if (padImport != null)
+                    {
+                        ApplicationJobDialog newJob = new ApplicationJobDialog();
+                        newJob.ApplicationJob = padImport;
+                        if (newJob.ShowDialog(this) == DialogResult.OK)
+                        {
+                            SaveAndShowJob(newJob.ApplicationJob);
+                        }
+                        return;
+                    }
+
                     ApplicationJob.ImportFromXml(dialog.FileName);
 
                     UpdateList();
