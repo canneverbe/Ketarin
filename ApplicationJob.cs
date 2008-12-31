@@ -823,7 +823,7 @@ namespace Ketarin
 
         public string GetTargetFile(WebResponse netResponse)
         {
-            string targetLocation = TargetPath;
+            string targetLocation = Environment.ExpandEnvironmentVariables(TargetPath);
 
             // Allow variables in target locations as well
             targetLocation = Variables.ReplaceAllInString(targetLocation, GetLastModified(netResponse), GetFileNameFromWebResponse(netResponse));
