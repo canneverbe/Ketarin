@@ -159,10 +159,16 @@ namespace Ketarin.Forms
             {
                 using (FolderBrowserDialog dialog = new FolderBrowserDialog())
                 {
+                    string defaultTargetDir = Settings.GetValue("DefaultTargetDir") as string;
+
                     // Folder browser doesn't like file names
-                    if (File.Exists(txtTarget.Text))
+                    if (Directory.Exists(txtTarget.Text))
                     {
                         dialog.SelectedPath = Path.GetDirectoryName(txtTarget.Text);
+                    }
+                    else if (!string.IsNullOrEmpty(defaultTargetDir))
+                    {
+                        dialog.SelectedPath = defaultTargetDir;
                     }
                     else
                     {
@@ -172,6 +178,7 @@ namespace Ketarin.Forms
                     if (dialog.ShowDialog() == DialogResult.OK)
                     {
                         txtTarget.Text = dialog.SelectedPath;
+                        Settings.SetValue("DefaultTargetDir", dialog.SelectedPath);
                     }
                 }
             }
