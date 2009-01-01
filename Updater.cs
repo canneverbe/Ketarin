@@ -655,6 +655,9 @@ namespace Ketarin
             cmdExe.RedirectStandardOutput = true;
             cmdExe.RedirectStandardError = true;
 
+            bool executeBackground = baseCommand.EndsWith("&");
+            baseCommand = baseCommand.TrimEnd('&');
+
             using (Process proc = Process.Start(cmdExe))
             {
                 // Clean all the cmd.exe headers
@@ -664,6 +667,7 @@ namespace Ketarin
                     clean = proc.StandardOutput.ReadLine();
                 } while (!string.IsNullOrEmpty(clean));
 
+                // Input commands
                 using (proc.StandardInput)
                 {
                     string[] commands = baseCommand.Split('\n');
@@ -673,10 +677,15 @@ namespace Ketarin
                         proc.StandardInput.WriteLine(command);
                     }
                 }
-                proc.WaitForExit();
 
-                string result = proc.StandardOutput.ReadToEnd();
-                LogDialog.Log(job, "Command result: " + result);
+                // Read output
+                if (!executeBackground)
+                {
+                    proc.WaitForExit();
+
+                    string result = proc.StandardOutput.ReadToEnd();
+                    LogDialog.Log(job, "Command result: " + result);
+                }
             }
         }
 
