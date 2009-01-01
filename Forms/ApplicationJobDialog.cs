@@ -275,7 +275,14 @@ namespace Ketarin.Forms
 
                 IKetarinRpc proxy = XmlRpcProxyGen.Create<IKetarinRpc>();
                 proxy.Timeout = 10000;
-                proxy.SaveApplication(job.GetXml(), Settings.GetValue("AuthorGuid") as string);
+                try
+                {
+                    proxy.SaveApplication(job.GetXml(), Settings.GetValue("AuthorGuid") as string);
+                }
+                catch (XmlRpcFaultException ex)
+                {
+                    LogDialog.Log("Could not submit '" + job.Name + "' to the online database: " + ex.FaultString);
+                }
             }
             catch (Exception)
             {
