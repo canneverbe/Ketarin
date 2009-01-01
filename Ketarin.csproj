@@ -282,6 +282,7 @@
     <Compile Include="XmlRpc\IHttpResponse.cs" />
     <Compile Include="XmlRpc\IXmlRpcProxy.cs" />
     <Compile Include="XmlRpc\RequestResponseLogger.cs" />
+    <Compile Include="XmlRpc\SystemMethodsBase.cs" />
     <Compile Include="XmlRpc\Tracer.cs" />
     <Compile Include="XmlRpc\util.cs" />
     <Compile Include="XmlRpc\XmlRpcAsyncResult.cs" />
