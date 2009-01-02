@@ -194,12 +194,8 @@ namespace Ketarin
             };
 
             colTarget.AspectGetter = delegate(object x) {
-                string targetPath = ((ApplicationJob)x).TargetPath;
-                foreach (UrlVariable var in UrlVariable.GlobalVariables.Values)
-                {
-                    targetPath = var.ReplaceInString(targetPath);
-                }
-                return targetPath;
+                ApplicationJob job = x as ApplicationJob;
+                return job.Variables.ReplaceAllInString(job.TargetPath, true);
             };
             colTarget.GroupKeyGetter = delegate(object x) { return ((ApplicationJob)x).TargetPath.ToLower(); };
 
