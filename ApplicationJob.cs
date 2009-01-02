@@ -156,7 +156,7 @@ namespace Ketarin
 
             public string ReplaceAllInString(string value, DateTime fileDate, string filename)
             {
-                value = ReplaceAllInString(value);
+                value = ReplaceAllInString(value, false);
 
                 // Some date/time variables, only if they were not user defined
                 string[] dateTimeVars = new string[] { "dd", "ddd", "dddd", "hh", "HH", "mm", "MM", "MMM", "MMMM", "ss", "tt", "yy", "yyyy", "zz", "zzz" };
@@ -184,6 +184,11 @@ namespace Ketarin
 
             public string ReplaceAllInString(string value)
             {
+                return ReplaceAllInString(value, false);
+            }
+
+            public string ReplaceAllInString(string value, bool onlyCachedContent)
+            {
                 // Some date/time variables, only if they were not user defined
                 string[] dateTimeVars = new string[] { "dd", "ddd", "dddd", "hh", "HH", "mm", "MM", "MMM", "MMMM", "ss", "tt", "yy", "yyyy", "zz", "zzz" };
                 foreach (string dateTimeVar in dateTimeVars)
@@ -205,14 +210,17 @@ namespace Ketarin
                     // FileHippo version
                     if (m_Parent.DownloadSourceType == SourceType.FileHippo && !ContainsKey("version") && UrlVariable.IsVariableDownloadNeeded("version", value))
                     {
-                        m_Parent.FileHippoVersion = ExternalServices.FileHippoVersion(m_Parent.FileHippoId, m_Parent.AvoidDownloadBeta);
+                        if (!onlyCachedContent)
+                        {
+                            m_Parent.FileHippoVersion = ExternalServices.FileHippoVersion(m_Parent.FileHippoId, m_Parent.AvoidDownloadBeta);
+                        }
                         value = value.Replace("{version}", m_Parent.FileHippoVersion);
                     }
                 }
 
                 foreach (UrlVariable var in Values)
                 {
-                    value = var.ReplaceInString(value);
+                    value = var.ReplaceInString(value, onlyCachedContent);
                 }
 
                 // Global variables
