@@ -56,6 +56,7 @@
             this.mnuView = new System.Windows.Forms.MenuItem();
             this.mnuLog = new System.Windows.Forms.MenuItem();
             this.mnuHelp = new System.Windows.Forms.MenuItem();
+            this.mnuTutorial = new System.Windows.Forms.MenuItem();
             this.mnuAbout = new System.Windows.Forms.MenuItem();
             this.cmuAdd = new System.Windows.Forms.ContextMenu();
             this.cmnuAdd = new System.Windows.Forms.MenuItem();
@@ -261,12 +262,19 @@
             // 
             this.mnuHelp.Index = 2;
             this.mnuHelp.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.mnuTutorial,
             this.mnuAbout});
             this.mnuHelp.Text = "&Help";
             // 
+            // mnuTutorial
+            // 
+            this.mnuTutorial.Index = 0;
+            this.mnuTutorial.Text = "&Tutorial";
+            this.mnuTutorial.Click += new System.EventHandler(this.mnuTutorial_Click);
+            // 
             // mnuAbout
             // 
-            this.mnuAbout.Index = 0;
+            this.mnuAbout.Index = 1;
             this.mnuAbout.Text = "&About";
             this.mnuAbout.Click += new System.EventHandler(this.mnuAbout_Click);
             // 
@@ -491,6 +499,7 @@
         private System.Windows.Forms.ContextMenu cmuRun;
         private System.Windows.Forms.MenuItem cmnuCheckAndDownload;
         private System.Windows.Forms.MenuItem cmnuOnlyCheck;
+        private System.Windows.Forms.MenuItem mnuTutorial;
     }
 }
 

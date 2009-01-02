@@ -761,6 +761,18 @@ namespace Ketarin
 
             mnuLog.Checked = LogDialog.Instance.Visible;
         }
+
+        private void mnuTutorial_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                System.Diagnostics.Process.Start("http://cdburnerxp.se/help/kb/20");
+            }
+            catch (Exception)
+            {
+            }
+        }
+
         #endregion
 
     }
