@@ -249,7 +249,7 @@ namespace Ketarin
                                     {
                                         while (reader.Read())
                                         {
-                                            UrlVariable variable = new UrlVariable();
+                                            UrlVariable variable = new UrlVariable(this);
                                             variable.Hydrate(reader);
                                             m_Variables.Add(variable.Name, variable);
                                         }

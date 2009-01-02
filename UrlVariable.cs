@@ -21,8 +21,13 @@ namespace Ketarin
         private string m_TempContent = string.Empty;
         private string m_Regex = string.Empty;
         private string m_CachedContent = string.Empty;
+        private ApplicationJob m_Parent = null;
         private long m_JobId = 0;
         private static ApplicationJob.UrlVariableCollection m_GlobalVariables = null;
+        /// <summary>
+        /// Prevent recursion with the ExpandedUrl property.
+        /// </summary>
+        private bool m_Expanding = false;
 
         #region Properties
 
@@ -78,6 +83,29 @@ namespace Ketarin
             set { m_Url = value; }
         }
 
+        /// <summary>
+        /// If the URL contains variables, this property
+        /// will return the URL with all variables replaced.
+        /// </summary>
+        [XmlIgnore()]
+        public string ExpandedUrl
+        {
+            get
+            {
+                if (m_Parent == null || m_Expanding) return m_Url;
+
+                m_Expanding = true;
+                try
+                {
+                    return m_Parent.Variables.ReplaceAllInString(m_Url);
+                }
+                finally
+                {
+                    m_Expanding = false;
+                }
+            }
+        }
+
         [XmlElement("StartText")]
         public string StartText
         {
@@ -124,14 +152,32 @@ namespace Ketarin
 
         #endregion
 
-        public UrlVariable()
+        /// <summary>
+        /// Creates a new global variable.
+        /// </summary>
+        internal UrlVariable()
         {
         }
 
-        public UrlVariable(string name, long jobId)
+        /// <summary>
+        /// When loading variables for a given application job,
+        /// this constructor can be used to prepare a variable for Hydrate().
+        /// </summary>
+        internal UrlVariable(ApplicationJob job) : this(null, job)
+        {
+        }
+
+        /// <summary>
+        /// Creates a new variable for a given application.
+        /// </summary>
+        internal UrlVariable(string name, ApplicationJob job)
         {
             m_Name = name;
-            m_JobId = jobId;
+            m_Parent = job;
+            if (m_Parent != null)
+            {
+                m_JobId = m_Parent.Id;
+            }
         }
 
         public void Hydrate(IDataReader reader)
@@ -195,7 +241,7 @@ namespace Ketarin
             // Get the content we need to put in
             using (WebClient client = new WebClient())
             {
-                page = client.DownloadString(m_Url);
+                page = client.DownloadString(ExpandedUrl);
             }
 
             // Normalise line-breaks

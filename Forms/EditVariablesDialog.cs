@@ -119,7 +119,7 @@ namespace Ketarin.Forms
                         MessageBox.Show(this, msg, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
-                    m_Variables.Add(dialog.VariableName, new UrlVariable(dialog.VariableName, m_Job.Id));
+                    m_Variables.Add(dialog.VariableName, new UrlVariable(dialog.VariableName, m_Job));
                     RefreshListBox();
                     lbVariables.SelectedItem = dialog.VariableName;
                 }
@@ -128,9 +128,11 @@ namespace Ketarin.Forms
 
         private void bLoad_Click(object sender, EventArgs e)
         {
+            Uri url;
+
             try
             {
-                Uri url = new Uri(txtUrl.Text);
+                url = new Uri(CurrentVar.ExpandedUrl);
             }
             catch (UriFormatException)
             {
@@ -143,7 +145,7 @@ namespace Ketarin.Forms
             {
                 using (WebClient client = new WebClient())
                 {
-                    rtfContent.Text = client.DownloadString(txtUrl.Text);
+                    rtfContent.Text = client.DownloadString(url);
                     RefreshRtfFormatting();
                 }
             }
