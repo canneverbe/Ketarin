@@ -212,26 +212,169 @@ namespace Ketarin
             }
         }
 
+        /// <summary>
+        /// Detertmines whether or not a variable needs to be downloaded for a 
+        /// given string. This would be the case for custom column variables or
+        /// variables used conventionally.
+        /// </summary>
+        /// <param name="name">Name of the variable without { and }</param>
+        /// <param name="formatString">String to check</param>
         public static bool IsVariableDownloadNeeded(string name, string formatString)
         {
-            string find = "{" + name + "}";
-            string customColumnVariable = "{" + SettingsDialog.CustomColumnVariableName + "}";
             // If variable is unused, don't make any efforts
             // Unless, of course, the variable is used for the custom column
-            return (formatString.Contains(find) || customColumnVariable == find);
+            return (IsVariableUsedInString(name, formatString) || name == SettingsDialog.CustomColumnVariableName);
+        }
+
+        /// <summary>
+        /// Determines whether or not a variable is used within a string.
+        /// It also matches if functions like {variable:replace:a:b} are used.
+        /// </summary>
+        /// <param name="name">Name of the variable without { and }</param>
+        /// <param name="formatString">String to check</param>
+        private static bool IsVariableUsedInString(string name, string formatString)
+        {
+            Regex regex = new Regex(@"\{" + QuoteRegex(name) + @"(\:[^\}]+)?\}");
+            return regex.IsMatch(formatString);
+        }
+
+        private static string QuoteRegex(string value)
+        {
+            value = value.Replace("\\", "\\\\");
+            value = value.Replace("+", @"\+");
+            value = value.Replace("*", @"\*");
+            value = value.Replace("?", @"\?");
+            value = value.Replace("[", @"\[");
+            value = value.Replace("^", @"\^");
+            value = value.Replace("]", @"\]");
+            value = value.Replace("$", @"\$");
+            value = value.Replace("(", @"\(");
+            value = value.Replace(")", @"\)");
+            value = value.Replace("{", @"\{");
+            value = value.Replace("}", @"\}");
+            value = value.Replace("=", @"\=");
+            value = value.Replace("!", @"\!");
+            value = value.Replace("<", @"\<");
+            value = value.Replace(">", @"\>");
+            value = value.Replace("|", @"\|");
+            return value.Replace(":", @"\;");
+        }
+
+        /// <summary>
+        /// Replaces this variable within a string with the given content.
+        /// Applies functions if necessary.
+        /// </summary>
+        private string Replace(string formatString, string content)
+        {
+            Regex regex = new Regex(@"\{" + QuoteRegex(m_Name) + @"(\:[^\}]+)?\}", RegexOptions.Singleline);
+
+            Match match = regex.Match(formatString);
+            // We need to "rematch" multiple times if the string changes
+            while (match.Success)
+            {
+                string functionPart = match.Groups[1].Value;
+                formatString = formatString.Remove(match.Index, match.Length);
+                formatString = formatString.Insert(match.Index, ReplaceFunction(functionPart, content));
+                match = regex.Match(formatString);
+            } 
+
+            return formatString;
+        }
+
+        /// <summary>
+        /// Applies a function (if given) to content and returns the
+        /// modified content.
+        /// </summary>
+        /// <param name="function">A function specification, for example "replace:a:b"</param>
+        /// <param name="content">The usual variable content</param>
+        private string ReplaceFunction(string function, string content)
+        {
+            function = function.TrimStart(':');
+            if (string.IsNullOrEmpty(function)) return content;
+
+            string[] parts = SplitEscaped(function, ':');
+            if (parts.Length == 0) return content;
+
+            switch (parts[0])
+            {
+                case "toupper":
+                    return content.ToUpper();
+                case "tolower":
+                    return content.ToLower();
+                case "trim":
+                    return content.Trim();
+
+                case "replace":
+                    if (parts.Length >= 3)
+                    {
+                        return content.Replace(parts[1], parts[2]);
+                    }
+                    break;
+            }
+
+            return content;
+        }
+
+        /// <summary>
+        /// Splits a string at every occurence of 'splitter', but
+        /// only if this character has not been escaped with a \.
+        /// </summary>
+        private string[] SplitEscaped(string value, char splitter)
+        {
+            List<string> result = new List<string>();
+            StringBuilder temp = new StringBuilder();
+
+            for (int i = 0; i < value.Length; i++)
+            {
+                if (value[i] != splitter || IsEscaped(value, i))
+                {
+                    if (IsEscaped(value, i))
+                    {
+                        temp.Remove(temp.Length - 1, 1);
+                    }
+                    temp.Append(value[i]);
+                }
+                else
+                {
+                    result.Add(temp.ToString());
+                    temp = new StringBuilder();
+                }
+            }
+
+            if (temp.Length > 0)
+            {
+                result.Add(temp.ToString());
+            }
+
+            return result.ToArray();
+        }
+
+        /// <summary>
+        /// Determines whether or not the character at the 
+        /// given position is escaped.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="pos"></param>
+        /// <returns></returns>
+        private bool IsEscaped(string value, int pos)
+        {
+            return (pos > 0 && value[pos - 1] == '\\' && !IsEscaped(value, pos - 1));
         }
 
         public virtual string ReplaceInString(string url)
         {
+            return ReplaceInString(url, false);
+        }
+
+        public virtual string ReplaceInString(string url, bool onlyCached)
+        {
             if (!IsVariableDownloadNeeded(m_Name, url)) return url;
-            
-            string find = "{" + m_Name + "}";
 
             // Global variable only has static content
-            if (m_JobId == 0)
+            if (m_JobId == 0 || onlyCached)
             {
                 LogDialog.Log(this, url, m_CachedContent);
-                return url.Replace(find, m_CachedContent);
+                return string.IsNullOrEmpty(m_CachedContent) ? url : Replace(url, m_CachedContent);
             }
 
             // Ignore missing URLs
@@ -259,13 +402,13 @@ namespace Ketarin
                     {
                         m_CachedContent = match.Value;
                         LogDialog.Log(this, url, m_CachedContent);
-                        return url.Replace(find, match.Value);
+                        return Replace(url, match.Value);
                     }
                     else if (match.Groups.Count == 2)
                     {
                         m_CachedContent = match.Groups[1].Value;
                         LogDialog.Log(this, url, m_CachedContent);
-                        return url.Replace(find, match.Groups[1].Value);
+                        return Replace(url, match.Groups[1].Value);
                     }
                 }
             }
@@ -275,7 +418,7 @@ namespace Ketarin
             {
                 m_CachedContent = page;
                 LogDialog.Log(this, url, m_CachedContent);
-                return url.Replace(find, page);
+                return Replace(url, page);
             }
 
             int startPos = page.IndexOf(m_StartText);
@@ -290,7 +433,7 @@ namespace Ketarin
 
             m_CachedContent = result;
             LogDialog.Log(this, url, m_CachedContent);
-            url = url.Replace(find, result);
+            url = Replace(url, result);
 
             return url;
         }
