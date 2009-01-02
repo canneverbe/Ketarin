@@ -341,10 +341,7 @@ namespace Ketarin
                 }
             }
 
-            if (temp.Length > 0)
-            {
-                result.Add(temp.ToString());
-            }
+            result.Add(temp.ToString());
 
             return result.ToArray();
         }
