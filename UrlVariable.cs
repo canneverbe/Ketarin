@@ -395,7 +395,8 @@ namespace Ketarin
             // Global variable only has static content
             if (m_JobId == 0 || onlyCached)
             {
-                LogDialog.Log(this, url, m_CachedContent);
+                // We don't want to spam the log with chached only screen updates
+                if (!onlyCached) LogDialog.Log(this, url, m_CachedContent);
                 return string.IsNullOrEmpty(m_CachedContent) ? url : Replace(url, m_CachedContent);
             }
 
