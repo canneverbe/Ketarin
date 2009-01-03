@@ -55,5 +55,10 @@ namespace Ketarin.Forms
 
             bOK.Enabled = !string.IsNullOrEmpty(txtNewName.Text);
         }
+
+        protected override void OnSelectedApplicationChanged(object sender, EventArgs e)
+        {
+            // Do not enable OK
+        }
     }
 }
