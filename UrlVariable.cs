@@ -302,7 +302,32 @@ namespace Ketarin
                 case "tolower":
                     return content.ToLower();
                 case "trim":
-                    return content.Trim();
+                    if (parts.Length >= 2)
+                    {
+                        return content.Trim(parts[1].ToCharArray());
+                    }
+                    else
+                    {
+                        return content.Trim();
+                    }
+                case "trimend":
+                    if (parts.Length >= 2)
+                    {
+                        return content.TrimEnd(parts[1].ToCharArray());
+                    }
+                    else
+                    {
+                        return content.TrimEnd();
+                    }
+                case "trimstart":
+                    if (parts.Length >= 2)
+                    {
+                        return content.TrimStart(parts[1].ToCharArray());
+                    }
+                    else
+                    {
+                        return content.TrimStart();
+                    }
 
                 case "replace":
                     if (parts.Length >= 3)
