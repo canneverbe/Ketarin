@@ -5,16 +5,17 @@ using System.Net;
 
 namespace Ketarin
 {
+    /// <summary>
+    /// This exception should be thrown, if the file to download is
+    /// not a binary file type.
+    /// </summary>
     class NonBinaryFileException : Exception
     {
         private static string m_Message = "The downloaded file is not a binary file type ({0}). Possibly there is an error page. Status code: {1} ({2})";
 
-        public static string MessageText
-        {
-            get { return m_Message; }
-            set { m_Message = value; }
-        }
-
+        /// <summary>
+        /// Creates a new exception based on the content type and status code.
+        /// </summary>
         public static NonBinaryFileException Create(string contentType, HttpStatusCode code)
         {
             if (code == HttpStatusCode.NotFound)
@@ -34,7 +35,7 @@ namespace Ketarin
         }
 
         private NonBinaryFileException(string contentType, HttpStatusCode code)
-            : base(string.Format(MessageText, contentType, (int)code, code))
+            : base(string.Format(m_Message, contentType, (int)code, code))
         {
         }
     }
