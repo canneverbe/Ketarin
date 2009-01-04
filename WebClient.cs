@@ -12,6 +12,9 @@ namespace Ketarin
     /// </summary>
     class WebClient : System.Net.WebClient
     {
+        /// <summary>
+        /// Gets Ketarin's default user agent (includes application name and version)
+        /// </summary>
         public static string UserAgent
         {
             get

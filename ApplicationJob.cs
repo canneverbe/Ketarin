@@ -511,10 +511,19 @@ namespace Ketarin
         /// <summary>
         /// Imports one (incomplete) ApplicationJob from a PAD file (input stream).
         /// </summary>
+        /// <returns>null, if no application could be extracted</returns>
         private static ApplicationJob ImportFromPad(Stream inputStream)
         {
             XmlDocument doc = new XmlDocument();
-            doc.Load(inputStream);
+
+            try
+            {
+                doc.Load(inputStream);
+            }
+            catch (XmlException)
+            {
+                return null;
+            }
 
             XmlNodeList progNames = doc.GetElementsByTagName("Program_Name");
             XmlNodeList downloadUrls = doc.GetElementsByTagName("Primary_Download_URL");

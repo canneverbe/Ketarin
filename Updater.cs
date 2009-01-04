@@ -471,7 +471,7 @@ namespace Ketarin
                     }
                     if (response.ContentType.StartsWith("text/html") )
                     {
-                        throw NonBinaryFileException.Create(response.ContentType, HttpStatusCode.NotAcceptable);
+                        throw NonBinaryFileException.Create(response.ContentType, httpResponse.StatusCode);
                     }
                 }
 
