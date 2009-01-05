@@ -207,6 +207,8 @@ namespace Ketarin
                         value = value.Replace("{category}", m_Parent.Category);
                     }
 
+                    value = value.Replace("{appname}", m_Parent.Name);
+
                     // FileHippo version
                     if (m_Parent.DownloadSourceType == SourceType.FileHippo && !ContainsKey("version") && UrlVariable.IsVariableDownloadNeeded("version", value))
                     {
