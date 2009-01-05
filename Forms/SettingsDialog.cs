@@ -14,6 +14,9 @@ namespace Ketarin.Forms
     {
         #region Properties
 
+        /// <summary>
+        /// Returns the name of the custom column variable, without { and }.
+        /// </summary>
         public static string CustomColumnVariableName
         {
             get

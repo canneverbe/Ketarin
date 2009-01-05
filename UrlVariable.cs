@@ -11,18 +11,48 @@ using System.Data.SQLite;
 
 namespace Ketarin
 {
+    /// <summary>
+    /// A variable which can be used for download locations
+    /// or commands and determines its content dynamically
+    /// based on other webpages' content.
+    /// </summary>
     [XmlRoot("UrlVariable")]
     public class UrlVariable : ICloneable
     {
+        /// <summary>
+        /// Defines the possible types for a variable.
+        /// </summary>
+        public enum Type
+        {
+            /// <summary>
+            /// A variable which extracts content between
+            /// a start and end text from a URL.
+            /// </summary>
+            StartEnd,
+            /// <summary>
+            /// A variable which extracts content using
+            /// a regular expression from a URL.
+            /// </summary>
+            RegularExpression,
+            /// <summary>
+            /// A variable which is defined by plain text.
+            /// The text may contain further variables.
+            /// </summary>
+            Textual
+        }
+
+        private Type m_VariableType;
         private string m_Url;
         private string m_StartText;
         private string m_EndText;
+        private string m_TextualContent;
         private string m_Name;
         private string m_TempContent = string.Empty;
         private string m_Regex = string.Empty;
         private string m_CachedContent = string.Empty;
-        private ApplicationJob m_Parent = null;
+        private ApplicationJob.UrlVariableCollection m_Parent = null;
         private long m_JobId = 0;
+        private int m_DownloadCount = 0;
         private static ApplicationJob.UrlVariableCollection m_GlobalVariables = null;
         /// <summary>
         /// Prevent recursion with the ExpandedUrl property.
@@ -32,14 +62,36 @@ namespace Ketarin
         #region Properties
 
         /// <summary>
-        /// Ensures that the global variables are read from
-        /// the database when they are accessed for the next time.
+        /// Stores how often the variable has been downloaded.
+        /// This value is per session and is not stored in the database.
         /// </summary>
-        public static void ReloadGlobalVariables()
+        internal int DownloadCount
         {
-            m_GlobalVariables = null;
+            get { return m_DownloadCount; }
+            set { m_DownloadCount = value; }
         }
 
+        /// <summary>
+        /// Gets or sets the UrlVariableCollection this variable belongs to.
+        /// </summary>
+        public ApplicationJob.UrlVariableCollection Parent
+        {
+            get { return m_Parent; }
+            set { m_Parent = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the type of the variable.
+        /// </summary>
+        public Type VariableType
+        {
+            get { return m_VariableType; }
+            set { m_VariableType = value; }
+        }
+
+        /// <summary>
+        /// Collection of all global variables.
+        /// </summary>
         public static ApplicationJob.UrlVariableCollection GlobalVariables
         {
             get
@@ -97,7 +149,7 @@ namespace Ketarin
                 m_Expanding = true;
                 try
                 {
-                    return m_Parent.Variables.ReplaceAllInString(m_Url);
+                    return m_Parent.ReplaceAllInString(m_Url);
                 }
                 finally
                 {
@@ -118,6 +170,41 @@ namespace Ketarin
         {
             get { return m_EndText; }
             set { m_EndText = value; }
+        }
+
+        /// <summary>
+        /// For type 'Textual', this text represents the
+        /// value which is to be used as variable content.
+        /// Note: Variables are not replaced here.
+        /// </summary>
+        [XmlElement("TextualContent")]
+        public string TextualContent
+        {
+            get { return m_TextualContent; }
+            set { m_TextualContent = value; }
+        }
+
+        /// <summary>
+        /// For type 'Textual', this text is to be
+        /// used as replacement for the variable.
+        /// </summary>
+        [XmlIgnore()]
+        public string ExpandedTextualContent
+        {
+            get
+            {
+                if (m_Parent == null || m_Expanding) return m_TextualContent;
+
+                m_Expanding = true;
+                try
+                {
+                    return m_Parent.ReplaceAllInString(m_TextualContent);
+                }
+                finally
+                {
+                    m_Expanding = false;
+                }
+            }
         }
 
         [XmlElement("Name")]
@@ -150,6 +237,17 @@ namespace Ketarin
             set { m_CachedContent = value; }
         }
 
+        /// <summary>
+        /// Gets whether or not the variable is properly defined.
+        /// </summary>
+        public bool IsEmpty
+        {
+            get
+            {
+                return (string.IsNullOrEmpty(m_Url) && m_VariableType != Type.Textual);
+            }
+        }
+
         #endregion
 
         /// <summary>
@@ -163,20 +261,21 @@ namespace Ketarin
         /// When loading variables for a given application job,
         /// this constructor can be used to prepare a variable for Hydrate().
         /// </summary>
-        internal UrlVariable(ApplicationJob job) : this(null, job)
+        internal UrlVariable(ApplicationJob.UrlVariableCollection job)
+            : this(null, job)
         {
         }
 
         /// <summary>
         /// Creates a new variable for a given application.
         /// </summary>
-        internal UrlVariable(string name, ApplicationJob job)
+        internal UrlVariable(string name, ApplicationJob.UrlVariableCollection collection)
         {
             m_Name = name;
-            m_Parent = job;
-            if (m_Parent != null)
+            m_Parent = collection;
+            if (collection != null && collection.Parent != null)
             {
-                m_JobId = m_Parent.Id;
+                m_JobId = collection.Parent.Id;
             }
         }
 
@@ -188,7 +287,9 @@ namespace Ketarin
             m_Url = reader["Url"] as string;
             m_Regex = reader["RegularExpression"] as string;
             m_CachedContent = reader["CachedContent"] as string;
-            m_JobId = Convert.ToInt32(reader["JobId"]);
+            m_JobId = Convert.ToInt64(reader["JobId"]);
+            m_VariableType = (Type)Convert.ToInt32(reader["VariableType"]);
+            m_TextualContent = reader["TextualContent"] as string;
         }
 
         public void Save(IDbTransaction transaction, long parentJobId)
@@ -197,8 +298,8 @@ namespace Ketarin
             using (IDbCommand command = conn.CreateCommand())
             {
                 command.Transaction = transaction;
-                command.CommandText = @"INSERT INTO variables (JobId, VariableName, Url, StartText, EndText, RegularExpression, CachedContent)
-                                             VALUES (@JobId, @VariableName, @Url, @StartText, @EndText, @RegularExpression, @CachedContent)";
+                command.CommandText = @"INSERT INTO variables (JobId, VariableName, Url, StartText, EndText, RegularExpression, CachedContent, VariableType, TextualContent)
+                                             VALUES (@JobId, @VariableName, @Url, @StartText, @EndText, @RegularExpression, @CachedContent, @VariableType, @TextualContent)";
 
                 command.Parameters.Add(new SQLiteParameter("@JobId", parentJobId));
                 command.Parameters.Add(new SQLiteParameter("@VariableName", m_Name));
@@ -207,23 +308,20 @@ namespace Ketarin
                 command.Parameters.Add(new SQLiteParameter("@EndText", m_EndText));
                 command.Parameters.Add(new SQLiteParameter("@RegularExpression", m_Regex));
                 command.Parameters.Add(new SQLiteParameter("@CachedContent", m_CachedContent));
+                command.Parameters.Add(new SQLiteParameter("@VariableType", m_VariableType));
+                command.Parameters.Add(new SQLiteParameter("@TextualContent", m_TextualContent));
                 command.ExecuteNonQuery();
                 m_JobId = parentJobId;
             }
         }
 
         /// <summary>
-        /// Detertmines whether or not a variable needs to be downloaded for a 
-        /// given string. This would be the case for custom column variables or
-        /// variables used conventionally.
+        /// Ensures that the global variables are read from
+        /// the database when they are accessed for the next time.
         /// </summary>
-        /// <param name="name">Name of the variable without { and }</param>
-        /// <param name="formatString">String to check</param>
-        public static bool IsVariableDownloadNeeded(string name, string formatString)
+        public static void ReloadGlobalVariables()
         {
-            // If variable is unused, don't make any efforts
-            // Unless, of course, the variable is used for the custom column
-            return (IsVariableUsedInString(name, formatString) || name == SettingsDialog.CustomColumnVariableName);
+            m_GlobalVariables = null;
         }
 
         /// <summary>
@@ -238,6 +336,10 @@ namespace Ketarin
             return regex.IsMatch(formatString);
         }
 
+        /// <summary>
+        /// Quotes a string for insertion into a regular expression.
+        /// Based on preg_quote() (PHP)
+        /// </summary>
         private static string QuoteRegex(string value)
         {
             value = value.Replace("\\", "\\\\");
@@ -383,31 +485,47 @@ namespace Ketarin
             return (pos > 0 && value[pos - 1] == '\\' && !IsEscaped(value, pos - 1));
         }
 
-        public virtual string ReplaceInString(string url)
+        /// <summary>
+        /// Replaces this variable within a given string.
+        /// </summary>
+        public virtual string ReplaceInString(string value)
         {
-            return ReplaceInString(url, false);
+            return ReplaceInString(value, false);
         }
 
-        public virtual string ReplaceInString(string url, bool onlyCached)
+        /// <summary>
+        /// Replaces this variable within a given string.
+        /// </summary>
+        /// <param name="onlyCached">If true, no new content will be downloaded and only chached content will be used.</param>
+        public virtual string ReplaceInString(string value, bool onlyCached)
         {
-            if (!IsVariableDownloadNeeded(m_Name, url)) return url;
+            if (!IsVariableUsedInString(m_Name, value)) return value;
 
             // Global variable only has static content
-            if (m_JobId == 0 || onlyCached)
+            if (onlyCached)
             {
                 // We don't want to spam the log with chached only screen updates
-                if (!onlyCached) LogDialog.Log(this, url, m_CachedContent);
-                return string.IsNullOrEmpty(m_CachedContent) ? url : Replace(url, m_CachedContent);
+                if (!onlyCached) LogDialog.Log(this, value, m_CachedContent);
+                return string.IsNullOrEmpty(m_CachedContent) ? value : Replace(value, m_CachedContent);
             }
 
-            // Ignore missing URLs
-            if (string.IsNullOrEmpty(m_Url)) return url;
+            // Ignore missing URLs etc.
+            if (IsEmpty) return value;
+
+            // Using textual content?
+            if (m_VariableType == Type.Textual)
+            {
+                m_CachedContent = ExpandedTextualContent;
+                LogDialog.Log(this, value, m_CachedContent);
+                return Replace(value, ExpandedTextualContent);
+            }
 
             string page = string.Empty;
             // Get the content we need to put in
             using (WebClient client = new WebClient())
             {
                 page = client.DownloadString(ExpandedUrl);
+                m_DownloadCount++;
             }
 
             // Normalise line-breaks
@@ -415,8 +533,10 @@ namespace Ketarin
             page = page.Replace("\r", "\n");
 
             // Using a regular expression?
-            if (!string.IsNullOrEmpty(m_Regex))
+            if (m_VariableType == Type.RegularExpression)
             {
+                if (string.IsNullOrEmpty(m_Regex)) return value;
+
                 Regex regex = new Regex(m_Regex, RegexOptions.Singleline | RegexOptions.IgnoreCase);
                 Match match = regex.Match(page);
                 if (match.Success)
@@ -424,14 +544,14 @@ namespace Ketarin
                     if (match.Groups.Count == 1)
                     {
                         m_CachedContent = match.Value;
-                        LogDialog.Log(this, url, m_CachedContent);
-                        return Replace(url, match.Value);
+                        LogDialog.Log(this, value, m_CachedContent);
+                        return Replace(value, match.Value);
                     }
                     else if (match.Groups.Count == 2)
                     {
                         m_CachedContent = match.Groups[1].Value;
-                        LogDialog.Log(this, url, m_CachedContent);
-                        return Replace(url, match.Groups[1].Value);
+                        LogDialog.Log(this, value, m_CachedContent);
+                        return Replace(value, match.Groups[1].Value);
                     }
                 }
             }
@@ -440,25 +560,25 @@ namespace Ketarin
             if (string.IsNullOrEmpty(m_StartText) || string.IsNullOrEmpty(m_EndText))
             {
                 m_CachedContent = page;
-                LogDialog.Log(this, url, m_CachedContent);
-                return Replace(url, page);
+                LogDialog.Log(this, value, m_CachedContent);
+                return Replace(value, page);
             }
 
             int startPos = page.IndexOf(m_StartText);
-            if (startPos < 0) return url;
+            if (startPos < 0) return value;
 
             int endOfStart = startPos + m_StartText.Length;
 
             int endPos = page.IndexOf(m_EndText, endOfStart);
-            if (endPos < 0) return url;
+            if (endPos < 0) return value;
 
             string result = page.Substring(endOfStart, endPos - endOfStart);
 
             m_CachedContent = result;
-            LogDialog.Log(this, url, m_CachedContent);
-            url = Replace(url, result);
+            LogDialog.Log(this, value, m_CachedContent);
+            value = Replace(value, result);
 
-            return url;
+            return value;
         }
 
         #region ICloneable Member
