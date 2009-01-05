@@ -122,9 +122,13 @@ namespace Ketarin
         public class UrlVariableCollection : SerializableDictionary<string, UrlVariable>
         {
             private ApplicationJob m_Parent;
+            private bool m_VersionDownloaded = false;
 
             #region Properties
 
+            /// <summary>
+            /// Gets or sets the application to which the collection belongs.
+            /// </summary>
             public ApplicationJob Parent
             {
                 get { return m_Parent; }
@@ -182,6 +186,33 @@ namespace Ketarin
                 return value;
             }
 
+            /// <summary>
+            /// Resets the download count of all variables to 0.
+            /// </summary>
+            public void ResetDownloadCount()
+            {
+                foreach (UrlVariable var in this.Values)
+                {
+                    var.DownloadCount = 0;
+                }
+                m_VersionDownloaded = false;
+            }
+
+            /// <summary>
+            /// Determines whether or not a certain variable has
+            /// been downloaded.
+            /// </summary>
+            /// <param name="name">Name of the variable, { and }.</param>
+            public bool HasVariableBeenDownloaded(string name)
+            {
+                if (name == "version") return m_VersionDownloaded;
+
+                if (ContainsKey(name)) return false;
+
+                UrlVariable var = this[name];
+                return (var.DownloadCount > 0);
+            }
+
             public string ReplaceAllInString(string value)
             {
                 return ReplaceAllInString(value, false);
@@ -210,11 +241,12 @@ namespace Ketarin
                     value = value.Replace("{appname}", m_Parent.Name);
 
                     // FileHippo version
-                    if (m_Parent.DownloadSourceType == SourceType.FileHippo && !ContainsKey("version") && UrlVariable.IsVariableDownloadNeeded("version", value))
+                    if (m_Parent.DownloadSourceType == SourceType.FileHippo && !ContainsKey("version"))
                     {
                         if (!onlyCachedContent)
                         {
                             m_Parent.FileHippoVersion = ExternalServices.FileHippoVersion(m_Parent.FileHippoId, m_Parent.AvoidDownloadBeta);
+                            m_VersionDownloaded = true;
                         }
                         value = value.Replace("{version}", m_Parent.FileHippoVersion);
                     }
@@ -222,13 +254,14 @@ namespace Ketarin
 
                 foreach (UrlVariable var in Values)
                 {
+                    var.Parent = this; // make sure that value is set correctly
                     value = var.ReplaceInString(value, onlyCachedContent);
                 }
 
                 // Global variables
                 foreach (UrlVariable var in UrlVariable.GlobalVariables.Values)
                 {
-                    value = var.ReplaceInString(value);
+                    value = var.ReplaceInString(value, true);
                 }
 
                 return value;
@@ -259,7 +292,7 @@ namespace Ketarin
                                     {
                                         while (reader.Read())
                                         {
-                                            UrlVariable variable = new UrlVariable(this);
+                                            UrlVariable variable = new UrlVariable(m_Variables);
                                             variable.Hydrate(reader);
                                             m_Variables.Add(variable.Name, variable);
                                         }

@@ -11,14 +11,21 @@ using CDBurnerXP.Forms;
 
 namespace Ketarin.Forms
 {
+    /// <summary>
+    /// This dialog offers a GUI for editing an application
+    /// job's variables.
+    /// </summary>
     public partial class EditVariablesDialog : PersistentForm
     {
-        private ApplicationJob.UrlVariableCollection m_Variables = new ApplicationJob.UrlVariableCollection();
+        private ApplicationJob.UrlVariableCollection m_Variables = null;
         private ApplicationJob m_Job = null;
 
         #region Properties
 
-        private UrlVariable CurrentVar
+        /// <summary>
+        /// The variable which is currently being edited.
+        /// </summary>
+        protected UrlVariable CurrentVariable
         {
             get
             {
@@ -31,6 +38,10 @@ namespace Ketarin.Forms
             }
         }
 
+        /// <summary>
+        /// Gets or sets whether the dialog should be
+        /// opened in read-only mode.
+        /// </summary>
         public bool ReadOnly
         {
             get
@@ -56,6 +67,7 @@ namespace Ketarin.Forms
             CancelButton = bCancel;
 
             m_Job = job;
+            m_Variables = new ApplicationJob.UrlVariableCollection(job);
             // Get a copy of all variables
             foreach (KeyValuePair<string, UrlVariable> pair in job.Variables)
             {
@@ -65,6 +77,9 @@ namespace Ketarin.Forms
             RefreshListBox();
         }
 
+        /// <summary>
+        /// Re-populates the ListBox with the available variables.
+        /// </summary>
         private void RefreshListBox()
         {
             lbVariables.Items.Clear();
@@ -89,23 +104,115 @@ namespace Ketarin.Forms
             bUseAsEnd.Enabled = enable;
             lblRegex.Enabled = enable;
             txtRegularExpression.Enabled = enable;
+            rbContentUrlStartEnd.Enabled = enable;
+            rbContentText.Enabled = enable;
+            rbContentUrlRegex.Enabled = enable;
 
             if (enable)
             {
-                txtUrl.Focus();
-                txtUrl.Text = CurrentVar.Url;
-                txtRegularExpression.Text = CurrentVar.Regex;
-                if (string.IsNullOrEmpty(CurrentVar.TempContent) && !string.IsNullOrEmpty(txtUrl.Text))
+                switch (CurrentVariable.VariableType)
                 {
+                    case UrlVariable.Type.Textual: rbContentText.Checked = true; break;
+                    case UrlVariable.Type.StartEnd: rbContentUrlStartEnd.Checked = true; break;
+                    case UrlVariable.Type.RegularExpression: rbContentUrlRegex.Checked = true; break;
+                }
+
+                // Update interface when variable is accessed
+                txtUrl.Focus();
+                txtUrl.Text = CurrentVariable.Url;
+                txtRegularExpression.Text = CurrentVariable.Regex;
+                SetRtfContent();
+            }
+        }
+
+        /// <summary>
+        /// Adjusts the RTF content based on the currently
+        /// selected variable.
+        /// </summary>
+        private void SetRtfContent()
+        {
+            if (CurrentVariable.VariableType == UrlVariable.Type.Textual)
+            {
+                rtfContent.Text = CurrentVariable.TextualContent;
+            }
+            else
+            {
+                if (string.IsNullOrEmpty(CurrentVariable.TempContent) && !string.IsNullOrEmpty(txtUrl.Text))
+                {
+                    rtfContent.Text = string.Empty;
                     bLoad.PerformClick();
                 }
                 else
                 {
-                    rtfContent.Text = CurrentVar.TempContent;
+                    rtfContent.Text = CurrentVariable.TempContent;
                 }
                 RefreshRtfFormatting();
             }
         }
+
+        #region Layout options
+
+        /// <summary>
+        /// Helper function to hide certain parts of the layout
+        /// </summary>
+        /// <param name="startEnd">Hide or show the start/end buttons</param>
+        /// <param name="regex">Hide or show the regular expression field</param>
+        /// <param name="find">Hide or show the search box and URL field</param>
+        private void SetLayout(bool startEnd, bool regex, bool findAndUrl)
+        {
+            txtRegularExpression.Visible = regex;
+            lblRegex.Visible = regex;
+            bUseAsEnd.Visible = startEnd;
+            bUseAsStart.Visible = startEnd;
+            txtFind.Visible = findAndUrl;
+            lblFind.Visible = findAndUrl;
+            bFind.Visible = findAndUrl;
+            lblUrl.Visible = findAndUrl;
+            txtUrl.Visible = findAndUrl;
+            bLoad.Visible = findAndUrl;
+            rtfContent.ReadOnly = findAndUrl || ReadOnly;
+        }
+
+        private void rbContentUrlStartEnd_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!rbContentUrlStartEnd.Checked) return;
+
+            SetLayout(true, false, true);
+
+            rtfContent.Top = txtFind.Bottom + txtFind.Margin.Bottom + rtfContent.Margin.Top;
+            rtfContent.Height = lbVariables.Bottom - rtfContent.Top;
+
+            CurrentVariable.VariableType = UrlVariable.Type.StartEnd;
+            SetRtfContent();
+        }
+
+        private void rbContentUrlRegex_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!rbContentUrlRegex.Checked) return;
+
+            SetLayout(false, true, true);
+
+            rtfContent.Top = txtRegularExpression.Bottom + txtRegularExpression.Margin.Bottom + rtfContent.Margin.Top;
+            rtfContent.Height = lbVariables.Bottom - rtfContent.Top;
+
+            CurrentVariable.VariableType = UrlVariable.Type.RegularExpression;
+            SetRtfContent();
+        }
+
+        private void rbContentText_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!rbContentText.Checked) return;
+
+            SetLayout(false, false, false);
+
+            rtfContent.Top = rbContentText.Bottom + rbContentText.Margin.Bottom + rtfContent.Margin.Top;
+            rtfContent.Height = lbVariables.Bottom - rtfContent.Top;
+
+            CurrentVariable.VariableType = UrlVariable.Type.Textual;
+            SetRtfContent();
+        }
+
+        #endregion
 
         private void bAdd_Click(object sender, EventArgs e)
         {
@@ -119,7 +226,7 @@ namespace Ketarin.Forms
                         MessageBox.Show(this, msg, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
-                    m_Variables.Add(dialog.VariableName, new UrlVariable(dialog.VariableName, m_Job));
+                    m_Variables.Add(dialog.VariableName, new UrlVariable(dialog.VariableName, m_Variables));
                     RefreshListBox();
                     lbVariables.SelectedItem = dialog.VariableName;
                 }
@@ -130,9 +237,10 @@ namespace Ketarin.Forms
         {
             Uri url;
 
+            // Check whether or not the URL is valid and show an error message if necessary
             try
             {
-                url = new Uri(CurrentVar.ExpandedUrl);
+                url = new Uri(CurrentVariable.ExpandedUrl);
             }
             catch (UriFormatException)
             {
@@ -140,12 +248,14 @@ namespace Ketarin.Forms
                 return;
             }
 
+            // Load URL contents and show a wait cursor in the meantime
             Cursor = Cursors.WaitCursor;
             try
             {
                 using (WebClient client = new WebClient())
                 {
                     rtfContent.Text = client.DownloadString(url);
+                    CurrentVariable.TempContent = rtfContent.Text;
                     RefreshRtfFormatting();
                 }
             }
@@ -163,7 +273,9 @@ namespace Ketarin.Forms
         {
             if (string.IsNullOrEmpty(txtFind.Text)) return;
 
+            // Do not find the same string again...
             int searchPos = rtfContent.SelectionStart + 1;
+            // ... and start from the beginning if necessary
             if (searchPos >= rtfContent.Text.Length)
             {
                 searchPos = 0;
@@ -171,6 +283,7 @@ namespace Ketarin.Forms
             int pos = rtfContent.Find(txtFind.Text, searchPos , RichTextBoxFinds.None);
 
             if (pos < 0) return;
+            // If a match has been found, highlight it
             rtfContent.SelectionStart = pos;
             rtfContent.SelectionLength = txtFind.Text.Length;
         }
@@ -204,23 +317,18 @@ namespace Ketarin.Forms
 
         private void txtUrl_TextChanged(object sender, EventArgs e)
         {
-            CurrentVar.Url = txtUrl.Text;
-        }
-
-        private void rtfContent_TextChanged(object sender, EventArgs e)
-        {
-            CurrentVar.TempContent = rtfContent.Text;
+            CurrentVariable.Url = txtUrl.Text;
         }
 
         private void bUseAsStart_Click(object sender, EventArgs e)
         {
-            CurrentVar.StartText = rtfContent.SelectedText;
+            CurrentVariable.StartText = rtfContent.SelectedText;
             RefreshRtfFormatting();
         }
 
         private void bUseAsEnd_Click(object sender, EventArgs e)
         {
-            CurrentVar.EndText = rtfContent.SelectedText;
+            CurrentVariable.EndText = rtfContent.SelectedText;
             RefreshRtfFormatting();
         }
 
@@ -236,9 +344,9 @@ namespace Ketarin.Forms
                 rtfContent.SelectionFont = rtfContent.Font;
                 rtfContent.SelectionLength = 0;
 
-                if (!string.IsNullOrEmpty(CurrentVar.Regex))
+                if (!string.IsNullOrEmpty(CurrentVariable.Regex))
                 {
-                    Regex regex = new Regex(CurrentVar.Regex, RegexOptions.IgnoreCase | RegexOptions.Singleline);
+                    Regex regex = new Regex(CurrentVariable.Regex, RegexOptions.IgnoreCase | RegexOptions.Singleline);
                     Match match = regex.Match(rtfContent.Text);
 
                     rtfContent.SelectionStart = match.Index;
@@ -257,8 +365,8 @@ namespace Ketarin.Forms
                 else
                 {
                     // Highlight StartText if specified
-                    if (string.IsNullOrEmpty(CurrentVar.StartText)) return;
-                    int pos = rtfContent.Text.IndexOf(CurrentVar.StartText);
+                    if (string.IsNullOrEmpty(CurrentVariable.StartText)) return;
+                    int pos = rtfContent.Text.IndexOf(CurrentVariable.StartText);
                     if (pos == -1)
                     {
                         pos = 0;
@@ -266,18 +374,18 @@ namespace Ketarin.Forms
                     else
                     {
                         rtfContent.SelectionStart = pos;
-                        rtfContent.SelectionLength = CurrentVar.StartText.Length;
+                        rtfContent.SelectionLength = CurrentVariable.StartText.Length;
                         rtfContent.SelectionColor = Color.Blue;
                     }
 
-                    int boldStart = pos + CurrentVar.StartText.Length;
+                    int boldStart = pos + CurrentVariable.StartText.Length;
 
                     // Highlight EndText if specified
-                    if (string.IsNullOrEmpty(CurrentVar.EndText)) return;
-                    pos = rtfContent.Text.IndexOf(CurrentVar.EndText, boldStart);
+                    if (string.IsNullOrEmpty(CurrentVariable.EndText)) return;
+                    pos = rtfContent.Text.IndexOf(CurrentVariable.EndText, boldStart);
                     if (pos < 0) return;
                     rtfContent.SelectionStart = pos;
-                    rtfContent.SelectionLength = CurrentVar.EndText.Length;
+                    rtfContent.SelectionLength = CurrentVariable.EndText.Length;
 
                     rtfContent.SelectionColor = Color.Red;
 
@@ -291,13 +399,13 @@ namespace Ketarin.Forms
 
         private void rtfContent_SelectionChanged(object sender, EventArgs e)
         {
-            bool enable = (rtfContent.SelectionLength > 0 && string.IsNullOrEmpty(CurrentVar.Regex));
+            bool enable = (rtfContent.SelectionLength > 0 && string.IsNullOrEmpty(CurrentVariable.Regex));
             bUseAsEnd.Enabled = bUseAsStart.Enabled = enable;
         }
 
         private void bRemove_Click(object sender, EventArgs e)
         {
-            m_Variables.Remove(CurrentVar.Name);
+            m_Variables.Remove(CurrentVariable.Name);
             RefreshListBox();
 
             if (lbVariables.Items.Count > 0)
@@ -311,13 +419,21 @@ namespace Ketarin.Forms
             lbVariables_SelectedIndexChanged(this, null);
         }
 
+        private void rtfContent_TextChanged(object sender, EventArgs e)
+        {
+            if (CurrentVariable != null && CurrentVariable.VariableType == UrlVariable.Type.Textual)
+            {
+                CurrentVariable.TextualContent = rtfContent.Text;
+            }
+        }
+
         private void txtRegularExpression_TextChanged(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(txtRegularExpression.Text))
             {
                 bUseAsStart.Enabled = true;
                 bUseAsEnd.Enabled = true;
-                CurrentVar.Regex = string.Empty;
+                CurrentVariable.Regex = string.Empty;
                 RefreshRtfFormatting();
                 return;
             }
@@ -329,7 +445,7 @@ namespace Ketarin.Forms
             try
             {
                 Regex regex = new Regex(txtRegularExpression.Text, RegexOptions.IgnoreCase | RegexOptions.Singleline);
-                CurrentVar.Regex = regex.ToString();
+                CurrentVariable.Regex = regex.ToString();
             }
             catch (ArgumentException)
             {
@@ -348,16 +464,12 @@ namespace Ketarin.Forms
             List<string> toDelete = new List<string>();
             foreach (KeyValuePair<string, UrlVariable> pair in m_Variables) 
             {
-                if (string.IsNullOrEmpty(pair.Value.Url))
-                {
-                    toDelete.Add(pair.Key);
-                }
+                if (pair.Value.IsEmpty) toDelete.Add(pair.Key);
             }
             while (toDelete.Count > 0) { m_Variables.Remove(toDelete[0]); toDelete.RemoveAt(0); }
 
             // Save results
             m_Job.Variables = m_Variables;
         }
-
     }
 }

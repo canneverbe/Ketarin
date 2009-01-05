@@ -310,6 +310,15 @@ namespace Ketarin
                     {
                         numTries++;
                         m_Status[job] = DoDownload(job, out requestedUrl) ? Status.UpdateSuccessful : Status.NoUpdate;
+                        
+                        // If there is a custom column variable, and it has not been been downloaded yet,
+                        // make sure that we fetch it now "unnecessarily" so that the column contains a current value.
+                        string customColumn = SettingsDialog.CustomColumnVariableName;
+                        if (!string.IsNullOrEmpty(customColumn) && !job.Variables.HasVariableBeenDownloaded(customColumn))
+                        {
+                            job.Variables.ReplaceAllInString("{" + customColumn + "}");
+                        }
+
                         // If no exception happened, we immediately leave the loop
                         break;
                     }
@@ -423,6 +432,8 @@ namespace Ketarin
             // If we want to download multiple files simultaneously
             // from the same server, we need to "remove" the connection limit.
             ServicePointManager.DefaultConnectionLimit = 10;
+
+            job.Variables.ResetDownloadCount();
 
             WebRequest req = WebRequest.CreateDefault(urlToRequest);
             req.Timeout = Convert.ToInt32(Settings.GetValue("ConnectionTimeout", 10)) * 1000; // 10 seconds by default
@@ -549,7 +560,7 @@ namespace Ketarin
                 {
                     // Copying might fail if variables have been replaced with bad values.
                     // However, we cannot rely on functions to clean up the path, since they
-                    // might actually parse the path incorrectly and return a even worse path.
+                    // might actually parse the path incorrectly and return an even worse path.
                     File.Copy(tmpLocation, targetFileName, true);
                 }
                 catch (ArgumentException)

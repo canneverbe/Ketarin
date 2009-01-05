@@ -47,6 +47,9 @@
             this.lblDesc = new System.Windows.Forms.Label();
             this.txtRegularExpression = new System.Windows.Forms.TextBox();
             this.lblRegex = new System.Windows.Forms.Label();
+            this.rbContentUrlStartEnd = new System.Windows.Forms.RadioButton();
+            this.rbContentUrlRegex = new System.Windows.Forms.RadioButton();
+            this.rbContentText = new System.Windows.Forms.RadioButton();
             this.SuspendLayout();
             // 
             // lblVariables
@@ -73,7 +76,7 @@
             // 
             this.bCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.bCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.bCancel.Location = new System.Drawing.Point(525, 400);
+            this.bCancel.Location = new System.Drawing.Point(527, 400);
             this.bCancel.Name = "bCancel";
             this.bCancel.Size = new System.Drawing.Size(75, 23);
             this.bCancel.TabIndex = 21;
@@ -84,7 +87,7 @@
             // 
             this.bOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.bOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.bOK.Location = new System.Drawing.Point(444, 400);
+            this.bOK.Location = new System.Drawing.Point(446, 400);
             this.bOK.Name = "bOK";
             this.bOK.Size = new System.Drawing.Size(75, 23);
             this.bOK.TabIndex = 20;
@@ -96,7 +99,7 @@
             // 
             this.lblUrl.AutoSize = true;
             this.lblUrl.Enabled = false;
-            this.lblUrl.Location = new System.Drawing.Point(123, 75);
+            this.lblUrl.Location = new System.Drawing.Point(123, 107);
             this.lblUrl.Name = "lblUrl";
             this.lblUrl.Size = new System.Drawing.Size(100, 13);
             this.lblUrl.TabIndex = 2;
@@ -107,9 +110,9 @@
             this.txtUrl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.txtUrl.Enabled = false;
-            this.txtUrl.Location = new System.Drawing.Point(247, 72);
+            this.txtUrl.Location = new System.Drawing.Point(247, 104);
             this.txtUrl.Name = "txtUrl";
-            this.txtUrl.Size = new System.Drawing.Size(290, 20);
+            this.txtUrl.Size = new System.Drawing.Size(292, 20);
             this.txtUrl.TabIndex = 3;
             this.txtUrl.TextChanged += new System.EventHandler(this.txtUrl_TextChanged);
             // 
@@ -124,10 +127,10 @@
             this.rtfContent.Enabled = false;
             this.rtfContent.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.rtfContent.HideSelection = false;
-            this.rtfContent.Location = new System.Drawing.Point(126, 154);
+            this.rtfContent.Location = new System.Drawing.Point(126, 182);
             this.rtfContent.Name = "rtfContent";
             this.rtfContent.ReadOnly = true;
-            this.rtfContent.Size = new System.Drawing.Size(474, 221);
+            this.rtfContent.Size = new System.Drawing.Size(476, 193);
             this.rtfContent.TabIndex = 10;
             this.rtfContent.Text = "";
             this.rtfContent.WordWrap = false;
@@ -138,7 +141,7 @@
             // 
             this.bLoad.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.bLoad.Enabled = false;
-            this.bLoad.Location = new System.Drawing.Point(543, 70);
+            this.bLoad.Location = new System.Drawing.Point(545, 102);
             this.bLoad.Name = "bLoad";
             this.bLoad.Size = new System.Drawing.Size(57, 23);
             this.bLoad.TabIndex = 4;
@@ -197,7 +200,7 @@
             // 
             this.bFind.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.bFind.Enabled = false;
-            this.bFind.Location = new System.Drawing.Point(543, 95);
+            this.bFind.Location = new System.Drawing.Point(545, 127);
             this.bFind.Name = "bFind";
             this.bFind.Size = new System.Drawing.Size(57, 23);
             this.bFind.TabIndex = 7;
@@ -209,7 +212,7 @@
             // 
             this.lblFind.AutoSize = true;
             this.lblFind.Enabled = false;
-            this.lblFind.Location = new System.Drawing.Point(123, 101);
+            this.lblFind.Location = new System.Drawing.Point(123, 133);
             this.lblFind.Name = "lblFind";
             this.lblFind.Size = new System.Drawing.Size(118, 13);
             this.lblFind.TabIndex = 5;
@@ -220,9 +223,9 @@
             this.txtFind.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.txtFind.Enabled = false;
-            this.txtFind.Location = new System.Drawing.Point(247, 98);
+            this.txtFind.Location = new System.Drawing.Point(247, 130);
             this.txtFind.Name = "txtFind";
-            this.txtFind.Size = new System.Drawing.Size(290, 20);
+            this.txtFind.Size = new System.Drawing.Size(292, 20);
             this.txtFind.TabIndex = 6;
             // 
             // lblDesc
@@ -231,7 +234,7 @@
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.lblDesc.Location = new System.Drawing.Point(12, 9);
             this.lblDesc.Name = "lblDesc";
-            this.lblDesc.Size = new System.Drawing.Size(588, 42);
+            this.lblDesc.Size = new System.Drawing.Size(590, 42);
             this.lblDesc.TabIndex = 0;
             this.lblDesc.Text = resources.GetString("lblDesc.Text");
             // 
@@ -240,9 +243,9 @@
             this.txtRegularExpression.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.txtRegularExpression.Enabled = false;
-            this.txtRegularExpression.Location = new System.Drawing.Point(247, 124);
+            this.txtRegularExpression.Location = new System.Drawing.Point(247, 156);
             this.txtRegularExpression.Name = "txtRegularExpression";
-            this.txtRegularExpression.Size = new System.Drawing.Size(290, 20);
+            this.txtRegularExpression.Size = new System.Drawing.Size(292, 20);
             this.txtRegularExpression.TabIndex = 9;
             this.txtRegularExpression.TextChanged += new System.EventHandler(this.txtRegularExpression_TextChanged);
             // 
@@ -250,17 +253,56 @@
             // 
             this.lblRegex.AutoSize = true;
             this.lblRegex.Enabled = false;
-            this.lblRegex.Location = new System.Drawing.Point(123, 127);
+            this.lblRegex.Location = new System.Drawing.Point(123, 159);
             this.lblRegex.Name = "lblRegex";
             this.lblRegex.Size = new System.Drawing.Size(117, 13);
             this.lblRegex.TabIndex = 8;
             this.lblRegex.Text = "Use regular e&xpression:";
             // 
+            // rbContentUrlStartEnd
+            // 
+            this.rbContentUrlStartEnd.AutoSize = true;
+            this.rbContentUrlStartEnd.Enabled = false;
+            this.rbContentUrlStartEnd.Location = new System.Drawing.Point(126, 72);
+            this.rbContentUrlStartEnd.Name = "rbContentUrlStartEnd";
+            this.rbContentUrlStartEnd.Size = new System.Drawing.Size(162, 17);
+            this.rbContentUrlStartEnd.TabIndex = 22;
+            this.rbContentUrlStartEnd.Text = "Content from URL (start/end)";
+            this.rbContentUrlStartEnd.UseVisualStyleBackColor = true;
+            this.rbContentUrlStartEnd.CheckedChanged += new System.EventHandler(this.rbContentUrlStartEnd_CheckedChanged);
+            // 
+            // rbContentUrlRegex
+            // 
+            this.rbContentUrlRegex.AutoSize = true;
+            this.rbContentUrlRegex.Enabled = false;
+            this.rbContentUrlRegex.Location = new System.Drawing.Point(294, 72);
+            this.rbContentUrlRegex.Name = "rbContentUrlRegex";
+            this.rbContentUrlRegex.Size = new System.Drawing.Size(210, 17);
+            this.rbContentUrlRegex.TabIndex = 23;
+            this.rbContentUrlRegex.Text = "Content from URL (Regular Expression)";
+            this.rbContentUrlRegex.UseVisualStyleBackColor = true;
+            this.rbContentUrlRegex.CheckedChanged += new System.EventHandler(this.rbContentUrlRegex_CheckedChanged);
+            // 
+            // rbContentText
+            // 
+            this.rbContentText.AutoSize = true;
+            this.rbContentText.Enabled = false;
+            this.rbContentText.Location = new System.Drawing.Point(510, 72);
+            this.rbContentText.Name = "rbContentText";
+            this.rbContentText.Size = new System.Drawing.Size(99, 17);
+            this.rbContentText.TabIndex = 24;
+            this.rbContentText.Text = "Textual content";
+            this.rbContentText.UseVisualStyleBackColor = true;
+            this.rbContentText.CheckedChanged += new System.EventHandler(this.rbContentText_CheckedChanged);
+            // 
             // EditVariablesDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(612, 435);
+            this.ClientSize = new System.Drawing.Size(614, 435);
+            this.Controls.Add(this.rbContentText);
+            this.Controls.Add(this.rbContentUrlRegex);
+            this.Controls.Add(this.rbContentUrlStartEnd);
             this.Controls.Add(this.txtRegularExpression);
             this.Controls.Add(this.lblRegex);
             this.Controls.Add(this.lblDesc);
@@ -280,7 +322,7 @@
             this.Controls.Add(this.lbVariables);
             this.Controls.Add(this.lblVariables);
             this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(600, 300);
+            this.MinimumSize = new System.Drawing.Size(630, 300);
             this.Name = "EditVariablesDialog";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
@@ -310,5 +352,8 @@
         private System.Windows.Forms.Label lblDesc;
         private System.Windows.Forms.TextBox txtRegularExpression;
         private System.Windows.Forms.Label lblRegex;
+        private System.Windows.Forms.RadioButton rbContentUrlStartEnd;
+        private System.Windows.Forms.RadioButton rbContentUrlRegex;
+        private System.Windows.Forms.RadioButton rbContentText;
     }
 }

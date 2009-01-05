@@ -193,11 +193,13 @@ namespace Ketarin
                 command.CommandText = @"CREATE TABLE IF NOT EXISTS variables  
                                         (JobId              INTEGER,
                                          VariableName       TEXT,
+                                         VariableType       INTEGER DEFAULT 0,
                                          Url                TEXT,
                                          StartText          TEXT,
+                                         EndText            TEXT,
                                          RegularExpression  TEXT,
-                                         CachedContent      TEXT,
-                                         EndText            TEXT);";
+                                         TextualContent     TEXT,
+                                         CachedContent      TEXT);";
                 command.ExecuteNonQuery();
             }
 
@@ -222,7 +224,37 @@ namespace Ketarin
             addColumns.Add("HttpReferer", "ALTER TABLE jobs ADD HttpReferer TEXT");
             addColumns.Add("FileHippoVersion", "ALTER TABLE jobs ADD FileHippoVersion TEXT");
             addColumns.Add("DownloadBeta", "ALTER TABLE jobs ADD DownloadBeta INTEGER DEFAULT 0");
-            
+
+            ExecuteUpgradeQueries(columns, addColumns);
+
+            columns = GetColumns("variables");
+            addColumns = new Dictionary<string, string>();
+            addColumns.Add("RegularExpression", "ALTER TABLE variables ADD RegularExpression TEXT");
+            addColumns.Add("CachedContent", "ALTER TABLE variables ADD CachedContent TEXT");
+            addColumns.Add("VariableType", "ALTER TABLE variables ADD VariableType INTEGER DEFAULT 0");
+            addColumns.Add("TextualContent", "ALTER TABLE variables ADD TextualContent TEXT");
+
+            ExecuteUpgradeQueries(columns, addColumns);
+
+            // Compatibility: Set all regular expression variables to the new type
+            if (!columns.Contains("VariableType"))
+            {
+                using (IDbCommand command = Connection.CreateCommand())
+                {
+                    command.CommandText = @"UPDATE variables SET VariableType = 1 WHERE RegularExpression IS NOT NULL AND RegularExpression != ''";
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Adds all columns (keys of addColumns) using the query (values of addColumns)
+        /// which are not contained in the parameter 'columns'.
+        /// </summary>
+        /// <param name="columns">Existing columns</param>
+        /// <param name="addColumns">Columns to add (with queries)</param>
+        private static void ExecuteUpgradeQueries(List<string> columns, Dictionary<string, string> addColumns)
+        {
             foreach (KeyValuePair<string, string> column in addColumns)
             {
                 if (!columns.Contains(column.Key))
@@ -232,24 +264,6 @@ namespace Ketarin
                         command.CommandText = column.Value;
                         command.ExecuteNonQuery();
                     }
-                }
-            }
-
-            columns = GetColumns("variables");
-            if (!columns.Contains("RegularExpression"))
-            {
-                using (IDbCommand command = Connection.CreateCommand())
-                {
-                    command.CommandText = "ALTER TABLE variables ADD RegularExpression TEXT";
-                    command.ExecuteNonQuery();
-                }
-            }
-            if (!columns.Contains("CachedContent"))
-            {
-                using (IDbCommand command = Connection.CreateCommand())
-                {
-                    command.CommandText = "ALTER TABLE variables ADD CachedContent TEXT";
-                    command.ExecuteNonQuery();
                 }
             }
         }
