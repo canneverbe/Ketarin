@@ -41,6 +41,9 @@ namespace Ketarin.Forms
             }
         }
 
+        /// <summary>
+        /// Gets or sets whether or not the dialog is in read-only mode.
+        /// </summary>
         public bool ReadOnly 
         {
             get
@@ -78,6 +81,24 @@ namespace Ketarin.Forms
             CancelButton = bCancel;
 
             cboCategory.DataSource = DbManager.GetCategories();
+        }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+
+            if (m_ApplicationJob != null)
+            {
+                // Adjust context menus
+                List<string> appVarNames = new List<string>();
+                foreach (UrlVariable var in m_ApplicationJob.Variables.Values)
+                {
+                    appVarNames.Add(var.Name);
+                }
+                txtCommand.SetVariableNames(new string[] { "file", "root", "category", "appname" }, appVarNames.ToArray());
+                txtFixedUrl.SetVariableNames(new string[] { "category", "appname" }, appVarNames.ToArray());
+                txtTarget.SetVariableNames(new string[] { "category", "appname" }, appVarNames.ToArray());
+            }
         }
 
         /// <summary>
