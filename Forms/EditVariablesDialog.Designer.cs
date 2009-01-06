@@ -58,7 +58,7 @@
             this.lblVariables.Location = new System.Drawing.Point(12, 56);
             this.lblVariables.Name = "lblVariables";
             this.lblVariables.Size = new System.Drawing.Size(53, 13);
-            this.lblVariables.TabIndex = 0;
+            this.lblVariables.TabIndex = 1;
             this.lblVariables.Text = "&Variables:";
             // 
             // lbVariables
@@ -69,7 +69,7 @@
             this.lbVariables.Location = new System.Drawing.Point(12, 72);
             this.lbVariables.Name = "lbVariables";
             this.lbVariables.Size = new System.Drawing.Size(94, 303);
-            this.lbVariables.TabIndex = 1;
+            this.lbVariables.TabIndex = 2;
             this.lbVariables.SelectedIndexChanged += new System.EventHandler(this.lbVariables_SelectedIndexChanged);
             // 
             // bCancel
@@ -79,7 +79,7 @@
             this.bCancel.Location = new System.Drawing.Point(527, 400);
             this.bCancel.Name = "bCancel";
             this.bCancel.Size = new System.Drawing.Size(75, 23);
-            this.bCancel.TabIndex = 21;
+            this.bCancel.TabIndex = 20;
             this.bCancel.Text = "Cancel";
             this.bCancel.UseVisualStyleBackColor = true;
             // 
@@ -90,7 +90,7 @@
             this.bOK.Location = new System.Drawing.Point(446, 400);
             this.bOK.Name = "bOK";
             this.bOK.Size = new System.Drawing.Size(75, 23);
-            this.bOK.TabIndex = 20;
+            this.bOK.TabIndex = 19;
             this.bOK.Text = "OK";
             this.bOK.UseVisualStyleBackColor = true;
             this.bOK.Click += new System.EventHandler(this.bOK_Click);
@@ -102,7 +102,7 @@
             this.lblUrl.Location = new System.Drawing.Point(123, 107);
             this.lblUrl.Name = "lblUrl";
             this.lblUrl.Size = new System.Drawing.Size(100, 13);
-            this.lblUrl.TabIndex = 2;
+            this.lblUrl.TabIndex = 8;
             this.lblUrl.Text = "&Contents from URL:";
             // 
             // txtUrl
@@ -113,7 +113,7 @@
             this.txtUrl.Location = new System.Drawing.Point(247, 104);
             this.txtUrl.Name = "txtUrl";
             this.txtUrl.Size = new System.Drawing.Size(292, 20);
-            this.txtUrl.TabIndex = 3;
+            this.txtUrl.TabIndex = 9;
             this.txtUrl.TextChanged += new System.EventHandler(this.txtUrl_TextChanged);
             // 
             // rtfContent
@@ -131,7 +131,7 @@
             this.rtfContent.Name = "rtfContent";
             this.rtfContent.ReadOnly = true;
             this.rtfContent.Size = new System.Drawing.Size(476, 193);
-            this.rtfContent.TabIndex = 10;
+            this.rtfContent.TabIndex = 16;
             this.rtfContent.Text = "";
             this.rtfContent.WordWrap = false;
             this.rtfContent.SelectionChanged += new System.EventHandler(this.rtfContent_SelectionChanged);
@@ -144,7 +144,7 @@
             this.bLoad.Location = new System.Drawing.Point(545, 102);
             this.bLoad.Name = "bLoad";
             this.bLoad.Size = new System.Drawing.Size(57, 23);
-            this.bLoad.TabIndex = 4;
+            this.bLoad.TabIndex = 10;
             this.bLoad.Text = "&Load";
             this.bLoad.UseVisualStyleBackColor = true;
             this.bLoad.Click += new System.EventHandler(this.bLoad_Click);
@@ -156,7 +156,7 @@
             this.bUseAsStart.Location = new System.Drawing.Point(126, 381);
             this.bUseAsStart.Name = "bUseAsStart";
             this.bUseAsStart.Size = new System.Drawing.Size(134, 23);
-            this.bUseAsStart.TabIndex = 11;
+            this.bUseAsStart.TabIndex = 17;
             this.bUseAsStart.Text = "&Use selection as start";
             this.bUseAsStart.UseVisualStyleBackColor = true;
             this.bUseAsStart.Click += new System.EventHandler(this.bUseAsStart_Click);
@@ -168,7 +168,7 @@
             this.bUseAsEnd.Location = new System.Drawing.Point(266, 381);
             this.bUseAsEnd.Name = "bUseAsEnd";
             this.bUseAsEnd.Size = new System.Drawing.Size(134, 23);
-            this.bUseAsEnd.TabIndex = 12;
+            this.bUseAsEnd.TabIndex = 18;
             this.bUseAsEnd.Text = "Us&e selection as end";
             this.bUseAsEnd.UseVisualStyleBackColor = true;
             this.bUseAsEnd.Click += new System.EventHandler(this.bUseAsEnd_Click);
@@ -179,7 +179,7 @@
             this.bAdd.Location = new System.Drawing.Point(12, 381);
             this.bAdd.Name = "bAdd";
             this.bAdd.Size = new System.Drawing.Size(45, 23);
-            this.bAdd.TabIndex = 9;
+            this.bAdd.TabIndex = 3;
             this.bAdd.Text = "+";
             this.bAdd.UseVisualStyleBackColor = true;
             this.bAdd.Click += new System.EventHandler(this.bAdd_Click);
@@ -191,7 +191,7 @@
             this.bRemove.Location = new System.Drawing.Point(61, 381);
             this.bRemove.Name = "bRemove";
             this.bRemove.Size = new System.Drawing.Size(45, 23);
-            this.bRemove.TabIndex = 10;
+            this.bRemove.TabIndex = 4;
             this.bRemove.Text = "—";
             this.bRemove.UseVisualStyleBackColor = true;
             this.bRemove.Click += new System.EventHandler(this.bRemove_Click);
@@ -203,7 +203,7 @@
             this.bFind.Location = new System.Drawing.Point(545, 127);
             this.bFind.Name = "bFind";
             this.bFind.Size = new System.Drawing.Size(57, 23);
-            this.bFind.TabIndex = 7;
+            this.bFind.TabIndex = 13;
             this.bFind.Text = "&Find";
             this.bFind.UseVisualStyleBackColor = true;
             this.bFind.Click += new System.EventHandler(this.bFind_Click);
@@ -215,7 +215,7 @@
             this.lblFind.Location = new System.Drawing.Point(123, 133);
             this.lblFind.Name = "lblFind";
             this.lblFind.Size = new System.Drawing.Size(118, 13);
-            this.lblFind.TabIndex = 5;
+            this.lblFind.TabIndex = 11;
             this.lblFind.Text = "&Search within contents:";
             // 
             // txtFind
@@ -226,7 +226,7 @@
             this.txtFind.Location = new System.Drawing.Point(247, 130);
             this.txtFind.Name = "txtFind";
             this.txtFind.Size = new System.Drawing.Size(292, 20);
-            this.txtFind.TabIndex = 6;
+            this.txtFind.TabIndex = 12;
             // 
             // lblDesc
             // 
@@ -246,7 +246,7 @@
             this.txtRegularExpression.Location = new System.Drawing.Point(247, 156);
             this.txtRegularExpression.Name = "txtRegularExpression";
             this.txtRegularExpression.Size = new System.Drawing.Size(292, 20);
-            this.txtRegularExpression.TabIndex = 9;
+            this.txtRegularExpression.TabIndex = 15;
             this.txtRegularExpression.TextChanged += new System.EventHandler(this.txtRegularExpression_TextChanged);
             // 
             // lblRegex
@@ -256,7 +256,7 @@
             this.lblRegex.Location = new System.Drawing.Point(123, 159);
             this.lblRegex.Name = "lblRegex";
             this.lblRegex.Size = new System.Drawing.Size(117, 13);
-            this.lblRegex.TabIndex = 8;
+            this.lblRegex.TabIndex = 14;
             this.lblRegex.Text = "Use regular e&xpression:";
             // 
             // rbContentUrlStartEnd
@@ -266,8 +266,8 @@
             this.rbContentUrlStartEnd.Location = new System.Drawing.Point(126, 72);
             this.rbContentUrlStartEnd.Name = "rbContentUrlStartEnd";
             this.rbContentUrlStartEnd.Size = new System.Drawing.Size(162, 17);
-            this.rbContentUrlStartEnd.TabIndex = 22;
-            this.rbContentUrlStartEnd.Text = "Content from URL (start/end)";
+            this.rbContentUrlStartEnd.TabIndex = 5;
+            this.rbContentUrlStartEnd.Text = "Content from URL (st&art/end)";
             this.rbContentUrlStartEnd.UseVisualStyleBackColor = true;
             this.rbContentUrlStartEnd.CheckedChanged += new System.EventHandler(this.rbContentUrlStartEnd_CheckedChanged);
             // 
@@ -278,8 +278,8 @@
             this.rbContentUrlRegex.Location = new System.Drawing.Point(294, 72);
             this.rbContentUrlRegex.Name = "rbContentUrlRegex";
             this.rbContentUrlRegex.Size = new System.Drawing.Size(210, 17);
-            this.rbContentUrlRegex.TabIndex = 23;
-            this.rbContentUrlRegex.Text = "Content from URL (Regular Expression)";
+            this.rbContentUrlRegex.TabIndex = 6;
+            this.rbContentUrlRegex.Text = "Content from URL (&Regular Expression)";
             this.rbContentUrlRegex.UseVisualStyleBackColor = true;
             this.rbContentUrlRegex.CheckedChanged += new System.EventHandler(this.rbContentUrlRegex_CheckedChanged);
             // 
@@ -290,8 +290,8 @@
             this.rbContentText.Location = new System.Drawing.Point(510, 72);
             this.rbContentText.Name = "rbContentText";
             this.rbContentText.Size = new System.Drawing.Size(99, 17);
-            this.rbContentText.TabIndex = 24;
-            this.rbContentText.Text = "Textual content";
+            this.rbContentText.TabIndex = 7;
+            this.rbContentText.Text = "&Textual content";
             this.rbContentText.UseVisualStyleBackColor = true;
             this.rbContentText.CheckedChanged += new System.EventHandler(this.rbContentText_CheckedChanged);
             // 
