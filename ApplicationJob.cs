@@ -129,6 +129,7 @@ namespace Ketarin
             /// <summary>
             /// Gets or sets the application to which the collection belongs.
             /// </summary>
+            [XmlIgnore()]
             public ApplicationJob Parent
             {
                 get { return m_Parent; }
