@@ -242,6 +242,11 @@ namespace Ketarin.Forms
             {
                 url = new Uri(CurrentVariable.ExpandedUrl);
             }
+            catch (ArgumentNullException)
+            {
+                MessageBox.Show(this, "The URL you entered is empty and cannot be loaded.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);    
+                return;
+            }
             catch (UriFormatException)
             {
                 MessageBox.Show(this, "The specified URL is not valid.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
