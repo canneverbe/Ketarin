@@ -144,7 +144,10 @@ namespace Ketarin
         {
             get
             {
-                if (m_Parent == null || m_Expanding) return m_Url;
+                if (m_Parent == null || m_Expanding || string.IsNullOrEmpty(m_Url))
+                {
+                    return m_Url;
+                }
 
                 m_Expanding = true;
                 try
@@ -193,7 +196,10 @@ namespace Ketarin
         {
             get
             {
-                if (m_Parent == null || m_Expanding) return m_TextualContent;
+                if (m_Parent == null || m_Expanding || string.IsNullOrEmpty(m_TextualContent))
+                {
+                    return m_TextualContent;
+                }
 
                 m_Expanding = true;
                 try
