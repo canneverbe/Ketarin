@@ -87,6 +87,14 @@ namespace Ketarin.Forms
         {
             base.OnLoad(e);
 
+            RefreshVariables();
+        }
+
+        /// <summary>
+        /// Refreshes the variable menu items in the context menus.
+        /// </summary>
+        private void RefreshVariables()
+        {
             if (m_ApplicationJob != null)
             {
                 // Adjust context menus
@@ -333,7 +341,9 @@ namespace Ketarin.Forms
             using (EditVariablesDialog dialog = new EditVariablesDialog(m_ApplicationJob))
             {
                 dialog.ReadOnly = ReadOnly;
-                dialog.ShowDialog(this);
+                if (dialog.ShowDialog(this) == DialogResult.OK) {
+                    RefreshVariables();
+                }
             }
         }
 
