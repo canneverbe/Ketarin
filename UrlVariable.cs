@@ -409,6 +409,17 @@ namespace Ketarin
                     return content.ToUpper();
                 case "tolower":
                     return content.ToLower();
+                case "split":
+                    if (parts.Length >= 3)
+                    {
+                        string[] contentParts = content.Split(parts[1][0]);
+                        int partNum;
+                        if (Int32.TryParse(parts[2], out partNum) && partNum >= 0 && partNum < contentParts.Length)
+                        {
+                            return contentParts[partNum];
+                        }
+                    }
+                    break;
                 case "trim":
                     if (parts.Length >= 2)
                     {
