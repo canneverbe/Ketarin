@@ -74,6 +74,7 @@ namespace Ketarin
         /// <summary>
         /// Gets or sets the UrlVariableCollection this variable belongs to.
         /// </summary>
+        [XmlIgnore()]
         public ApplicationJob.UrlVariableCollection Parent
         {
             get { return m_Parent; }
