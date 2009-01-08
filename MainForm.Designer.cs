@@ -335,6 +335,7 @@
             this.olvJobs.OwnerDraw = true;
             this.olvJobs.Size = new System.Drawing.Size(658, 242);
             this.olvJobs.SmallImageList = this.imlStatus;
+            this.olvJobs.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.olvJobs.TabIndex = 0;
             this.olvJobs.UseCompatibleStateImageBehavior = false;
             this.olvJobs.View = System.Windows.Forms.View.Details;
