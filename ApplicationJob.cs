@@ -15,6 +15,11 @@ using Ketarin.Forms;
 
 namespace Ketarin
 {
+    /// <summary>
+    /// Represents an application which can be kept up
+    /// to date according to user defined rules.
+    /// It is the main object of Ketarin.
+    /// </summary>
     [XmlRoot("ApplicationJob")]
     public class ApplicationJob
     {
@@ -528,7 +533,10 @@ namespace Ketarin
         {
             using (Stream sourceFile = response.GetResponseStream())
             {
-                return ImportFromPad(sourceFile);
+                using (StreamReader reader = new StreamReader(sourceFile))
+                {
+                    return ImportFromPadXml(reader.ReadToEnd());
+                }
             }
         }
 
@@ -538,23 +546,20 @@ namespace Ketarin
         /// <returns>The incomplete ApplicationJob. Completiton by user required.</returns>
         public static ApplicationJob ImportFromPad(string fileName)
         {
-            using (FileStream stream = File.OpenRead(fileName))
-            {
-                return ImportFromPad(stream);
-            }
+            return ImportFromPadXml(File.ReadAllText(fileName));
         }
 
         /// <summary>
-        /// Imports one (incomplete) ApplicationJob from a PAD file (input stream).
+        /// Imports one (incomplete) ApplicationJob from a PAD file.
         /// </summary>
         /// <returns>null, if no application could be extracted</returns>
-        private static ApplicationJob ImportFromPad(Stream inputStream)
+        private static ApplicationJob ImportFromPadXml(string xml)
         {
             XmlDocument doc = new XmlDocument();
 
             try
             {
-                doc.Load(inputStream);
+                doc.LoadXml(xml);
             }
             catch (XmlException)
             {
