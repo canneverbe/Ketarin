@@ -609,6 +609,7 @@ namespace Ketarin
                 job.Save();
 
                 olvJobs.AddObject(job);
+                olvJobs.EnsureVisible(olvJobs.IndexOf(job));
                 olvJobs.SelectedObject = job;
             }
             catch (Exception) { }

@@ -34,7 +34,7 @@
             this.bCancel = new System.Windows.Forms.Button();
             this.bOK = new System.Windows.Forms.Button();
             this.lblUrl = new System.Windows.Forms.Label();
-            this.txtUrl = new System.Windows.Forms.TextBox();
+            this.txtUrl = new VariableTextBox();
             this.rtfContent = new System.Windows.Forms.RichTextBox();
             this.bLoad = new System.Windows.Forms.Button();
             this.bUseAsStart = new System.Windows.Forms.Button();
@@ -339,7 +339,7 @@
         private System.Windows.Forms.Button bCancel;
         private System.Windows.Forms.Button bOK;
         private System.Windows.Forms.Label lblUrl;
-        private System.Windows.Forms.TextBox txtUrl;
+        private VariableTextBox txtUrl;
         private System.Windows.Forms.RichTextBox rtfContent;
         private System.Windows.Forms.Button bLoad;
         private System.Windows.Forms.Button bUseAsStart;

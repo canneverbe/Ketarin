@@ -61,6 +61,8 @@ namespace Ketarin.Forms
         /// </summary>
         private void RebuildContextMenu()
         {
+            if (m_Customiser == null) return;
+
             m_Customiser.MenuItems.Clear();
 
             if (m_VariableNames.Length == 0) return;
