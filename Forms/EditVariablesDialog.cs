@@ -73,6 +73,14 @@ namespace Ketarin.Forms
             {
                 m_Variables.Add(pair.Key, pair.Value.Clone() as UrlVariable);
             }
+        }
+
+        /// <summary>
+        /// Prepare context menu as soon as handles have been created.
+        /// </summary>
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
 
             RefreshListBox();
         }
@@ -82,15 +90,21 @@ namespace Ketarin.Forms
         /// </summary>
         private void RefreshListBox()
         {
+            List<string> appVarNames = new List<string>();
             lbVariables.Items.Clear();
             foreach (KeyValuePair<string, UrlVariable> pair in m_Variables)
             {
                 lbVariables.Items.Add(pair.Key);
+                appVarNames.Add(pair.Value.Name);
             }
+
+            // Adjust context menus
+            txtUrl.SetVariableNames(new string[] { "category", "appname" }, appVarNames.ToArray());
         }
 
         private void lbVariables_SelectedIndexChanged(object sender, EventArgs e)
         {
+            // Enable or disable controls if variables exist
             bool enable = (lbVariables.SelectedIndex >= 0);
             bRemove.Enabled = enable;
             lblUrl.Enabled = enable;
@@ -108,8 +122,15 @@ namespace Ketarin.Forms
             rbContentText.Enabled = enable;
             rbContentUrlRegex.Enabled = enable;
 
-            if (enable)
+            if (!enable) return;
+
+            using (new ControlRedrawLock(this))
             {
+                // Update interface when variable is accessed
+                txtUrl.Focus();
+                txtUrl.Text = CurrentVariable.Url;
+                txtRegularExpression.Text = CurrentVariable.Regex;
+
                 switch (CurrentVariable.VariableType)
                 {
                     case UrlVariable.Type.Textual: rbContentText.Checked = true; break;
@@ -117,10 +138,6 @@ namespace Ketarin.Forms
                     case UrlVariable.Type.RegularExpression: rbContentUrlRegex.Checked = true; break;
                 }
 
-                // Update interface when variable is accessed
-                txtUrl.Focus();
-                txtUrl.Text = CurrentVariable.Url;
-                txtRegularExpression.Text = CurrentVariable.Regex;
                 SetRtfContent();
             }
         }
