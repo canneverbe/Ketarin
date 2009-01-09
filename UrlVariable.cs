@@ -51,7 +51,7 @@ namespace Ketarin
         private string m_Regex = string.Empty;
         private string m_CachedContent = string.Empty;
         private ApplicationJob.UrlVariableCollection m_Parent = null;
-        private long m_JobId = 0;
+        private Guid m_JobGuid = Guid.Empty;
         private int m_DownloadCount = 0;
         private static ApplicationJob.UrlVariableCollection m_GlobalVariables = null;
         /// <summary>
@@ -105,7 +105,8 @@ namespace Ketarin
                     {
                         using (IDbCommand command = conn.CreateCommand())
                         {
-                            command.CommandText = @"SELECT * FROM variables WHERE JobId = 0";
+                            command.CommandText = @"SELECT * FROM variables WHERE JobGuid IS NULL OR JobGuid = @JobGuid";
+                            command.Parameters.Add(new SQLiteParameter("@JobGuid", DbManager.FormatGuid(Guid.Empty)));
                             using (IDataReader reader = command.ExecuteReader())
                             {
                                 while (reader.Read())
@@ -282,7 +283,7 @@ namespace Ketarin
             m_Parent = collection;
             if (collection != null && collection.Parent != null)
             {
-                m_JobId = collection.Parent.Id;
+                m_JobGuid = collection.Parent.Guid;
             }
         }
 
@@ -294,21 +295,21 @@ namespace Ketarin
             m_Url = reader["Url"] as string;
             m_Regex = reader["RegularExpression"] as string;
             m_CachedContent = reader["CachedContent"] as string;
-            m_JobId = Convert.ToInt64(reader["JobId"]);
+            m_JobGuid = new Guid(reader["JobGuid"] as string);
             m_VariableType = (Type)Convert.ToInt32(reader["VariableType"]);
             m_TextualContent = reader["TextualContent"] as string;
         }
 
-        public void Save(IDbTransaction transaction, long parentJobId)
+        public void Save(IDbTransaction transaction, Guid parentJobGuid)
         {
             IDbConnection conn = (transaction != null) ? transaction.Connection : DbManager.NewConnection;
             using (IDbCommand command = conn.CreateCommand())
             {
                 command.Transaction = transaction;
-                command.CommandText = @"INSERT INTO variables (JobId, VariableName, Url, StartText, EndText, RegularExpression, CachedContent, VariableType, TextualContent)
-                                             VALUES (@JobId, @VariableName, @Url, @StartText, @EndText, @RegularExpression, @CachedContent, @VariableType, @TextualContent)";
+                command.CommandText = @"INSERT INTO variables (JobGuid, VariableName, Url, StartText, EndText, RegularExpression, CachedContent, VariableType, TextualContent)
+                                             VALUES (@JobGuid, @VariableName, @Url, @StartText, @EndText, @RegularExpression, @CachedContent, @VariableType, @TextualContent)";
 
-                command.Parameters.Add(new SQLiteParameter("@JobId", parentJobId));
+                command.Parameters.Add(new SQLiteParameter("@JobGuid", DbManager.FormatGuid(parentJobGuid)));
                 command.Parameters.Add(new SQLiteParameter("@VariableName", m_Name));
                 command.Parameters.Add(new SQLiteParameter("@Url", m_Url));
                 command.Parameters.Add(new SQLiteParameter("@StartText", m_StartText));
@@ -318,7 +319,7 @@ namespace Ketarin
                 command.Parameters.Add(new SQLiteParameter("@VariableType", m_VariableType));
                 command.Parameters.Add(new SQLiteParameter("@TextualContent", m_TextualContent));
                 command.ExecuteNonQuery();
-                m_JobId = parentJobId;
+                m_JobGuid = parentJobGuid;
             }
         }
 

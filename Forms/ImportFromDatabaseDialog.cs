@@ -85,7 +85,7 @@ namespace Ketarin.Forms
                     ApplicationJob resultJob = ApplicationJob.LoadFromXml(xml);
                     // For security reasons, we remove some of the properties
                     // if it's not the users own job
-                    if (!resultJob.SetIdByGuid(resultJob.Guid))
+                    if (!DbManager.ApplicationExists(resultJob.Guid))
                     {
                         resultJob.CanBeShared = false;
                     }

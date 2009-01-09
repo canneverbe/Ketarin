@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using System.Net;
+using System.Data.SQLite;
 using CDBurnerXP;
 
 namespace Ketarin.Forms
@@ -113,13 +114,14 @@ namespace Ketarin.Forms
                 using (IDbCommand comm = DbManager.Connection.CreateCommand())
                 {
                     comm.Transaction = transaction;
-                    comm.CommandText = "DELETE FROM variables WHERE JobId = 0";
+                    comm.CommandText = "DELETE FROM variables WHERE JobGuid = @JobGuid";
+                    comm.Parameters.Add(new SQLiteParameter("@JobGuid", DbManager.FormatGuid(Guid.Empty)));
                     comm.ExecuteNonQuery();
                 }
 
                 foreach (UrlVariable var in UrlVariable.GlobalVariables.Values)
                 {
-                    var.Save(transaction, 0);
+                    var.Save(transaction, Guid.Empty);
                 }
 
                 transaction.Commit();
