@@ -255,6 +255,101 @@ namespace Ketarin
                     command.ExecuteNonQuery();
                 }
             }
+
+            // Upgrade to GUIDs
+            if (!columns.Contains("JobGuid"))
+            {
+                // Add new columns, cleanup of existing GUIDs
+                using (IDbCommand command = Connection.CreateCommand())
+                {
+                    command.CommandText = @"ALTER TABLE variables ADD JobGuid TEXT; UPDATE jobs SET JobGuid = upper(JobGuid);";
+                    command.ExecuteNonQuery();
+                }
+                
+                // Make sure that all applications have a GUID
+                ApplicationJob[] jobs = GetJobs();
+                foreach (ApplicationJob job in jobs)
+                {
+                    job.Save();
+                }
+
+                // Upgrade variables
+                using (IDbCommand command = Connection.CreateCommand())
+                {
+                    command.CommandText = @"UPDATE variables SET JobGuid = (SELECT JobGuid FROM jobs WHERE jobs.JobId = variables.JobId);
+                                            UPDATE variables SET JobGuid = @JobGuid WHERE JobId = 0;
+                                            DELETE FROM variables WHERE JobGuid IS NULL";
+                    command.Parameters.Add(new SQLiteParameter("@JobGuid", FormatGuid(Guid.Empty)));
+                    command.ExecuteNonQuery();
+                }
+
+                // Delete variables.JobId
+                DeleteColumnFromTable("variables", "JobId");
+                DeleteColumnFromTable("jobs", "JobId");
+
+                // Create important indices
+                using (IDbCommand command = Connection.CreateCommand())
+                {
+                    command.CommandText = @"CREATE INDEX IF NOT EXISTS VarJobGuid ON variables (JobGuid);
+                                            CREATE UNIQUE INDEX IF NOT EXISTS JobGuid ON jobs (JobGuid);";
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Deletes the specified column from the given table.
+        /// </summary>
+        private static void DeleteColumnFromTable(string table, string colToDelete)
+        {
+            List<string> columns = new List<string>();
+            List<string> types = new List<string>();
+
+            // Read all columns and types from the table
+            using (IDbCommand command = Connection.CreateCommand())
+            {
+                command.CommandText = "PRAGMA table_info(" + table + ")";
+                using (IDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        columns.Add(reader.GetString(1));
+                        types.Add(reader.GetString(2));
+                    }
+                }
+            }
+
+            // Column does not exist, no action necessary
+            if (!columns.Contains(colToDelete)) return;
+
+            string cols = String.Join(",", columns.ToArray());
+            int index = columns.IndexOf(colToDelete);
+            columns.RemoveAt(index);
+            types.RemoveAt(index);
+            string colsWithoutDeleted = String.Join(",", columns.ToArray());
+            
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < columns.Count; i++)
+            {
+                if (columns[i] == colToDelete) continue;
+
+                sb.Append(columns[i] + " " + types[i] + ",");
+            }
+            string colsWithTypes = sb.ToString().TrimEnd(',');
+
+            // Actual deletion
+            using (IDbCommand command = Connection.CreateCommand())
+            {
+                command.CommandText = string.Format(@"BEGIN TRANSACTION;
+                    CREATE TEMPORARY TABLE {0}_backup({1});
+                    INSERT INTO {0}_backup SELECT {1} FROM {0};
+                    DROP TABLE {0};
+                    CREATE TABLE {0}({3});
+                    INSERT INTO {0} SELECT {2} FROM {0}_backup;
+                    DROP TABLE {0}_backup;
+                    COMMIT;", table, cols, colsWithoutDeleted, colsWithTypes);
+                command.ExecuteNonQuery();
+            }
         }
 
         /// <summary>
@@ -284,20 +379,23 @@ namespace Ketarin
             using (IDbCommand command = Connection.CreateCommand())
             {
                 command.CommandText = "PRAGMA table_info(" + table +")";
-                IDataReader reader = command.ExecuteReader();
-                try
+                using (IDataReader reader = command.ExecuteReader())
                 {
                     while (reader.Read())
                     {
                         columns.Add(reader.GetString(1));
                     }
                 }
-                finally
-                {
-                    reader.Close();
-                }
             }
             return columns;
+        }
+
+        /// <summary>
+        /// Formats a GUID as string the way it should be stored within the database.
+        /// </summary>
+        public static string FormatGuid(Guid guid)
+        {
+            return guid.ToString("D").ToUpper();
         }
 
         /// <summary>
@@ -321,6 +419,30 @@ namespace Ketarin
             }
 
             return result.ToArray();
+        }
+
+
+        /// <summary>
+        /// Determines whether or not an application with the given GUID exists.
+        /// </summary>
+        public static bool ApplicationExists(Guid appGuid)
+        {
+            return ApplicationExists(Connection, appGuid);
+        }
+
+        /// <summary>
+        /// Determines whether or not an application with the given GUID exists.
+        /// </summary>
+        public static bool ApplicationExists(IDbConnection conn, Guid appGuid)
+        {
+            if (appGuid == null || appGuid == Guid.Empty) return false;
+
+            using (IDbCommand command = conn.CreateCommand())
+            {
+                command.CommandText = "SELECT JobGuid FROM jobs WHERE JobGuid = @JobGuid";
+                command.Parameters.Add(new SQLiteParameter("@JobGuid", FormatGuid(appGuid)));
+                return (command.ExecuteScalar() != null);
+            }
         }
 
         /// <summary>

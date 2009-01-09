@@ -24,7 +24,6 @@ namespace Ketarin
     public class ApplicationJob
     {
         private string m_Name;
-        private long m_Id;
         private string m_FixedDownloadUrl = string.Empty;
         private string m_TargetPath = string.Empty;
         private DateTime? m_LastUpdated = null;
@@ -58,11 +57,6 @@ namespace Ketarin
         }
 
         #region Properties
-
-        internal long Id
-        {
-            get { return m_Id; }
-        }
 
         public DownloadBetaType DownloadBeta
         {
@@ -286,14 +280,14 @@ namespace Ketarin
                     if (m_Variables == null)
                     {
                         m_Variables = new UrlVariableCollection(this);
-                        if (m_Id != 0)
+                        if (m_Guid != Guid.Empty)
                         {
                             using (SQLiteConnection conn = DbManager.NewConnection)
                             {
                                 using (IDbCommand command = conn.CreateCommand())
                                 {
-                                    command.CommandText = @"SELECT * FROM variables WHERE JobId = @JobId";
-                                    command.Parameters.Add(new SQLiteParameter("@JobId", m_Id));
+                                    command.CommandText = @"SELECT * FROM variables WHERE JobGuid = @JobGuid";
+                                    command.Parameters.Add(new SQLiteParameter("@JobGuid", DbManager.FormatGuid(m_Guid)));
                                     using (IDataReader reader = command.ExecuteReader())
                                     {
                                         while (reader.Read())
@@ -462,8 +456,8 @@ namespace Ketarin
             using (IDbCommand command = DbManager.Connection.CreateCommand())
             {
                 command.Transaction = transaction;
-                command.CommandText = @"DELETE FROM jobs WHERE JobId = @JobId";
-                command.Parameters.Add(new SQLiteParameter("@JobId", m_Id));
+                command.CommandText = @"DELETE FROM jobs WHERE JobGuid = @JobGuid";
+                command.Parameters.Add(new SQLiteParameter("@JobGuid", DbManager.FormatGuid(m_Guid)));
                 command.ExecuteNonQuery();
             }
 
@@ -471,23 +465,12 @@ namespace Ketarin
             using (IDbCommand command = DbManager.Connection.CreateCommand())
             {
                 command.Transaction = transaction;
-                command.CommandText = "DELETE FROM variables WHERE JobId = @JobId";
-                command.Parameters.Add(new SQLiteParameter("@JobId", m_Id));
+                command.CommandText = "DELETE FROM variables WHERE JobGuid = @JobGuid";
+                command.Parameters.Add(new SQLiteParameter("@JobGuid", DbManager.FormatGuid(m_Guid)));
                 command.ExecuteNonQuery();
             }
 
             transaction.Commit();
-        }
-
-        public bool SetIdByGuid(Guid guid)
-        {
-            using (IDbCommand command = DbManager.Connection.CreateCommand())
-            {
-                command.CommandText = "SELECT JobId FROM jobs WHERE JobGuid = @JobGuid";
-                command.Parameters.Add(new SQLiteParameter("@JobGuid", guid.ToString()));
-                m_Id = Convert.ToInt32(command.ExecuteScalar());
-                return (m_Id > 0);
-            }
         }
 
         /// <summary>
@@ -686,7 +669,6 @@ namespace Ketarin
                 if (importedJob == null) break;
 
                 // If a job already exists, only update it!
-                importedJob.SetIdByGuid(importedJob.Guid);
                 if (save) importedJob.Save();
                 lastJob = importedJob;
             }
@@ -694,28 +676,27 @@ namespace Ketarin
             return lastJob;
         }
 
+        /// <summary>
+        /// Saves the application job including all variables
+        /// to the database.
+        /// </summary>
         public void Save()
         {
             lock (this)
             {
-                if (m_Guid == Guid.Empty)
-                {
-                    m_Guid = Guid.NewGuid();
-                }
-
                 using (SQLiteConnection conn = DbManager.NewConnection)
                 {
                     using (SQLiteTransaction transaction = conn.BeginTransaction())
                     {
-                        if (m_Id > 0)
+                        if (DbManager.ApplicationExists(conn, m_Guid))
                         {
                             // Important: Once CanBeShared is set to false,
                             // it can never be true again (ownership does not change)
                             using (IDbCommand command = conn.CreateCommand())
                             {
                                 command.Transaction = transaction;
-                                command.CommandText = "SELECT CanBeShared FROM jobs WHERE JobId = @JobId";
-                                command.Parameters.Add(new SQLiteParameter("@JobId", m_Id));
+                                command.CommandText = "SELECT CanBeShared FROM jobs WHERE JobGuid = @JobGuid";
+                                command.Parameters.Add(new SQLiteParameter("@JobGuid", DbManager.FormatGuid(m_Guid)));
                                 bool canBeShared = Convert.ToBoolean(command.ExecuteScalar());
                                 if (!canBeShared)
                                 {
@@ -739,14 +720,13 @@ namespace Ketarin
                                                    SourceType = @SourceType,
                                                    ExecuteCommand = @ExecuteCommand,
                                                    Category = @Category,
-                                                   JobGuid = @JobGuid,
                                                    CanBeShared = @CanBeShared,
                                                    ShareApplication = @ShareApplication,
                                                    HttpReferer = @HttpReferer,
                                                    FileHippoVersion = @FileHippoVersion,
                                                    DownloadBeta = @DownloadBeta,
                                                    DownloadDate = @DownloadDate
-                                             WHERE JobId = @JobId";
+                                             WHERE JobGuid = @JobGuid";
 
                                 command.Parameters.Add(new SQLiteParameter("@ApplicationName", Name));
                                 command.Parameters.Add(new SQLiteParameter("@FixedDownloadUrl", m_FixedDownloadUrl));
@@ -759,7 +739,6 @@ namespace Ketarin
                                 command.Parameters.Add(new SQLiteParameter("@SourceType", m_SourceType));
                                 command.Parameters.Add(new SQLiteParameter("@ExecuteCommand", m_ExecuteCommand));
                                 command.Parameters.Add(new SQLiteParameter("@Category", m_Category));
-                                command.Parameters.Add(new SQLiteParameter("@JobGuid", m_Guid.ToString()));
                                 command.Parameters.Add(new SQLiteParameter("@CanBeShared", m_CanBeShared));
                                 command.Parameters.Add(new SQLiteParameter("@ShareApplication", m_ShareApplication));
                                 command.Parameters.Add(new SQLiteParameter("@HttpReferer", m_HttpReferer));
@@ -774,13 +753,15 @@ namespace Ketarin
                                     command.Parameters.Add(new SQLiteParameter("@DownloadDate", DBNull.Value));
                                 }
 
-                                command.Parameters.Add(new SQLiteParameter("@JobId", m_Id));
+                                command.Parameters.Add(new SQLiteParameter("@JobGuid", DbManager.FormatGuid(m_Guid)));
 
                                 command.ExecuteNonQuery();
                             }
                         }
                         else
                         {
+                            if (m_Guid == Guid.Empty) m_Guid = Guid.NewGuid();
+
                             // Insert a new job
                             using (IDbCommand command = conn.CreateCommand())
                             {
@@ -799,7 +780,7 @@ namespace Ketarin
                                 command.Parameters.Add(new SQLiteParameter("@SourceType", m_SourceType));
                                 command.Parameters.Add(new SQLiteParameter("@ExecuteCommand", m_ExecuteCommand));
                                 command.Parameters.Add(new SQLiteParameter("@Category", m_Category));
-                                command.Parameters.Add(new SQLiteParameter("@JobGuid", m_Guid.ToString()));
+                                command.Parameters.Add(new SQLiteParameter("@JobGuid", DbManager.FormatGuid(m_Guid)));
                                 command.Parameters.Add(new SQLiteParameter("@CanBeShared", m_CanBeShared));
                                 command.Parameters.Add(new SQLiteParameter("@ShareApplication", m_ShareApplication));
                                 command.Parameters.Add(new SQLiteParameter("@HttpReferer", m_HttpReferer));
@@ -816,14 +797,6 @@ namespace Ketarin
 
                                 command.ExecuteNonQuery();
                             }
-
-                            // Get ID
-                            using (IDbCommand command = conn.CreateCommand())
-                            {
-                                command.Transaction = transaction;
-                                command.CommandText = "SELECT last_insert_rowid()";
-                                m_Id = Convert.ToInt32(command.ExecuteScalar());
-                            }
                         }
 
                         Dictionary<string, UrlVariable> variables = Variables;
@@ -832,14 +805,14 @@ namespace Ketarin
                         using (IDbCommand command = conn.CreateCommand())
                         {
                             command.Transaction = transaction;
-                            command.CommandText = "DELETE FROM variables WHERE JobId = @JobId";
-                            command.Parameters.Add(new SQLiteParameter("@JobId", m_Id));
+                            command.CommandText = "DELETE FROM variables WHERE JobGuid = @JobGuid";
+                            command.Parameters.Add(new SQLiteParameter("@JobGuid", DbManager.FormatGuid(m_Guid)));
                             command.ExecuteNonQuery();
                         }
 
                         foreach (KeyValuePair<string, UrlVariable> pair in variables)
                         {
-                            pair.Value.Save(transaction, m_Id);
+                            pair.Value.Save(transaction, m_Guid);
                         }
 
                         transaction.Commit();
@@ -850,7 +823,6 @@ namespace Ketarin
 
         public void Hydrate(IDataReader reader)
         {
-            m_Id = (long)reader["JobId"];
             m_Name = reader["ApplicationName"] as string;
             m_FixedDownloadUrl = reader["FixedDownloadUrl"] as string;
             m_TargetPath = reader["TargetPath"] as string;
@@ -873,10 +845,7 @@ namespace Ketarin
             m_DownloadDate = (reader["DownloadDate"] != DBNull.Value) ? reader["DownloadDate"] as DateTime? : null;
             
             string guid = reader["JobGuid"] as string;
-            if (!string.IsNullOrEmpty(guid))
-            {
-                m_Guid = new Guid(guid);
-            }
+            m_Guid = new Guid(guid);
         }
 
         public string GetTargetFile(WebResponse netResponse)

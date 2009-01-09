@@ -400,8 +400,15 @@ namespace Ketarin
             {
                 if (dialog.ShowDialog(this) == DialogResult.OK && dialog.ImportedApplication != null)
                 {
-                    olvJobs.AddObject(dialog.ImportedApplication);
-                    olvJobs.SelectedObject = dialog.ImportedApplication;
+                    ApplicationJob existing = Array.Find<ApplicationJob>(m_Jobs, delegate(ApplicationJob x) { return x.Guid == dialog.ImportedApplication.Guid; });
+                    if (existing == null) {
+                        existing = dialog.ImportedApplication;
+                        List<ApplicationJob> newJobs = new List<ApplicationJob>(m_Jobs);
+                        newJobs.Add(existing);
+                        m_Jobs = newJobs.ToArray();
+                        olvJobs.AddObject(existing);
+                    }
+                    olvJobs.SelectedObject = existing;
                     olvJobs.SelectedItem.EnsureVisible();
                 }
             }
@@ -605,7 +612,6 @@ namespace Ketarin
             {
                 ApplicationJob job = ApplicationJob.ImportFromXmlString(SafeClipboard.GetData(DataFormats.Text) as string);
                 job.Guid = Guid.NewGuid();
-                job.SetIdByGuid(job.Guid);
                 job.Save();
 
                 olvJobs.AddObject(job);
