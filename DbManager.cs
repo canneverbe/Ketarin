@@ -10,6 +10,10 @@ using System.Net;
 
 namespace Ketarin
 {
+    /// <summary>
+    /// This class contains a collection of functions
+    /// for reading from the database.
+    /// </summary>
     class DbManager
     {
         #region SettingsProvider
@@ -106,6 +110,9 @@ namespace Ketarin
             }
         }
 
+        /// <summary>
+        /// Returns an application wide database connection.
+        /// </summary>
         public static SQLiteConnection Connection
         {
             get
@@ -161,7 +168,10 @@ namespace Ketarin
             }
         }
 
-        public static void LoadOrCreateDatabase()
+        /// <summary>
+        /// Creates or upgrades the database if necessary.
+        /// </summary>
+        public static void CreateOrUpgradeDatabase()
         {
             using (IDbCommand command = Connection.CreateCommand())
             {
@@ -290,7 +300,9 @@ namespace Ketarin
             return columns;
         }
 
-
+        /// <summary>
+        /// Returns a sorted list of all existing application jobs.
+        /// </summary>
         public static ApplicationJob[] GetJobs()
         {
             IDbCommand command = Connection.CreateCommand();
@@ -311,6 +323,9 @@ namespace Ketarin
             return result.ToArray();
         }
 
+        /// <summary>
+        /// Returns a sorted list of all used category names.
+        /// </summary>
         public static string[] GetCategories()
         {
             IDbCommand command = Connection.CreateCommand();
@@ -331,6 +346,32 @@ namespace Ketarin
             }
 
             return categories.ToArray();
+        }
+
+        /// <summary>
+        /// Returns a list of the 10 most used variable names,
+        /// ordered by usage count.
+        /// </summary>
+        public static string[] GetMostUsedVariableNames()
+        {
+            IDbCommand command = Connection.CreateCommand();
+            command.CommandText = "SELECT VariableName, COUNT(*) AS cnt FROM variables GROUP BY VariableName ORDER BY cnt DESC LIMIT 10";
+
+            List<string> names = new List<string>();
+
+            using (IDataReader reader = command.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    string name = reader["VariableName"] as string;
+                    if (!string.IsNullOrEmpty(name))
+                    {
+                        names.Add(name);
+                    }
+                }
+            }
+
+            return names.ToArray();
         }
 
     }
