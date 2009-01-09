@@ -31,6 +31,13 @@ namespace Ketarin.Forms
             CancelButton = bCancel;
         }
 
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+
+            txtVariableName.SetVariableNames(DbManager.GetMostUsedVariableNames());
+        }
+
         private void bOK_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(txtVariableName.Text))

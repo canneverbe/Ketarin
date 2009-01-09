@@ -39,7 +39,7 @@ namespace Ketarin
             // Initialise database
             try
             {
-                DbManager.LoadOrCreateDatabase();
+                DbManager.CreateOrUpgradeDatabase();
 
                 WebRequest.DefaultWebProxy = DbManager.Proxy;
                 if (Settings.GetValue("AuthorGuid") == null)

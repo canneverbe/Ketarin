@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.lblVariableName = new System.Windows.Forms.Label();
-            this.txtVariableName = new System.Windows.Forms.TextBox();
+            this.txtVariableName = new VariableTextBox();
             this.bCancel = new System.Windows.Forms.Button();
             this.bOK = new System.Windows.Forms.Button();
             this.SuspendLayout();
@@ -101,7 +101,7 @@
         #endregion
 
         private System.Windows.Forms.Label lblVariableName;
-        private System.Windows.Forms.TextBox txtVariableName;
+        private VariableTextBox txtVariableName;
         private System.Windows.Forms.Button bCancel;
         private System.Windows.Forms.Button bOK;
     }
