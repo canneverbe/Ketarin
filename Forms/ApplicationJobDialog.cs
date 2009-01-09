@@ -88,6 +88,15 @@ namespace Ketarin.Forms
             base.OnLoad(e);
 
             RefreshVariables();
+            SetAutocompleteSource();
+        }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            base.OnClosed(e);
+
+            // Prevent an invalid operation exception because of automcomplete
+            txtTarget.Dispose();
         }
 
         /// <summary>
@@ -215,12 +224,27 @@ namespace Ketarin.Forms
 
         private void rbFileName_CheckedChanged(object sender, EventArgs e)
         {
-            txtTarget.AutoCompleteSource = AutoCompleteSource.FileSystem;
+            SetAutocompleteSource();
         }
 
         private void rbDirectory_CheckedChanged(object sender, EventArgs e)
         {
-            txtTarget.AutoCompleteSource = AutoCompleteSource.FileSystemDirectories;
+            SetAutocompleteSource();
+        }
+
+        /// <summary>
+        /// Sets the appropriate auto complete source.
+        /// </summary>
+        private void SetAutocompleteSource()
+        {
+            if (rbFileName.Checked)
+            {
+                txtTarget.AutoCompleteSource = AutoCompleteSource.FileSystem;
+            }
+            else
+            {
+                txtTarget.AutoCompleteSource = AutoCompleteSource.FileSystemDirectories;
+            }
         }
 
         private void bOK_Click(object sender, EventArgs e)
@@ -297,21 +321,19 @@ namespace Ketarin.Forms
 
         private static void ShareOnline(object argument)
         {
+            ApplicationJob job = argument as ApplicationJob;
+            if (job == null) return;
+
             try
             {
-                ApplicationJob job = argument as ApplicationJob;
-                if (job == null) return;
-
                 IKetarinRpc proxy = XmlRpcProxyGen.Create<IKetarinRpc>();
                 proxy.Timeout = 10000;
-                try
-                {
-                    proxy.SaveApplication(job.GetXml(), Settings.GetValue("AuthorGuid") as string);
-                }
-                catch (XmlRpcFaultException ex)
-                {
-                    LogDialog.Log("Could not submit '" + job.Name + "' to the online database: " + ex.FaultString);
-                }
+
+                proxy.SaveApplication(job.GetXml(), Settings.GetValue("AuthorGuid") as string);
+            }
+            catch (XmlRpcFaultException ex)
+            {
+                LogDialog.Log("Could not submit '" + job.Name + "' to the online database: " + ex.FaultString);
             }
             catch (Exception)
             {
