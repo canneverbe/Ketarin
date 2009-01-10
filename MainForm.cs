@@ -41,6 +41,7 @@ namespace Ketarin
         private Updater m_Updater = new Updater();
         // For caching purposes
         private string m_CustomColumn = string.Empty;
+        private FormWindowState m_PreviousState = FormWindowState.Normal;
 
         #region ProgressRenderer
 
@@ -262,6 +263,9 @@ namespace Ketarin
                     dialog.ShowDialog(this);
                 }
             });
+
+            ntiTrayIcon.Text = "Ketarin (Idle)";
+            ntiTrayIcon.ShowBalloonTip(5000, "Done", "Ketarin has finished the update check.", ToolTipIcon.Info);
         }
 
         private void m_Updater_StatusChanged(object sender, Updater.JobStatusChangedEventArgs e)
@@ -273,6 +277,7 @@ namespace Ketarin
                 {
                     olvJobs.EnsureVisible(index);
                 }
+                ntiTrayIcon.Text = "Currently working on: " + e.ApplicationJob.Name;
             });
         }
 
@@ -300,6 +305,36 @@ namespace Ketarin
         }
 
         #endregion
+
+        private void ntiTrayIcon_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if (Visible)
+            {
+                WindowState = FormWindowState.Minimized;
+            }
+            else
+            {
+                cmnuShow.PerformClick();
+            }
+        }
+
+        protected override void OnResize(EventArgs e)
+        {
+            base.OnResize(e);
+
+            if (this.WindowState == FormWindowState.Minimized)
+            {
+                if (Convert.ToBoolean(Settings.GetValue("MinimizeToTray", false)))
+                {
+                    ntiTrayIcon.Visible = true;
+                    this.Hide();
+                }
+            }
+            else
+            {
+                m_PreviousState = WindowState;
+            }
+        }
 
         protected override void OnLoad(EventArgs e)
         {
@@ -778,5 +813,20 @@ namespace Ketarin
 
         #endregion
 
+        #region Tray Icon Menu
+
+        private void cmnuShow_Click(object sender, EventArgs e)
+        {
+            this.Show();
+            this.BringToFront();
+            this.WindowState = m_PreviousState;
+        }
+
+        private void cmnuExit_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        #endregion
     }
 }
