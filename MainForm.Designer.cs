@@ -75,6 +75,10 @@
             this.cmuRun = new System.Windows.Forms.ContextMenu();
             this.cmnuCheckAndDownload = new System.Windows.Forms.MenuItem();
             this.cmnuOnlyCheck = new System.Windows.Forms.MenuItem();
+            this.ntiTrayIcon = new System.Windows.Forms.NotifyIcon(this.components);
+            this.cmnuTrayIconMenu = new System.Windows.Forms.ContextMenu();
+            this.cmnuShow = new System.Windows.Forms.MenuItem();
+            this.cmnuExit = new System.Windows.Forms.MenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.olvJobs)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.m_VistaMenu)).BeginInit();
             this.SuspendLayout();
@@ -433,6 +437,31 @@
             this.cmnuOnlyCheck.Text = "&Only check for updates";
             this.cmnuOnlyCheck.Click += new System.EventHandler(this.cmnuOnlyCheck_Click);
             // 
+            // ntiTrayIcon
+            // 
+            this.ntiTrayIcon.ContextMenu = this.cmnuTrayIconMenu;
+            this.ntiTrayIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("ntiTrayIcon.Icon")));
+            this.ntiTrayIcon.Text = "Ketarin {Idle}";
+            this.ntiTrayIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ntiTrayIcon_MouseDoubleClick);
+            // 
+            // cmnuTrayIconMenu
+            // 
+            this.cmnuTrayIconMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.cmnuShow,
+            this.cmnuExit});
+            // 
+            // cmnuShow
+            // 
+            this.cmnuShow.Index = 0;
+            this.cmnuShow.Text = "&Show";
+            this.cmnuShow.Click += new System.EventHandler(this.cmnuShow_Click);
+            // 
+            // cmnuExit
+            // 
+            this.cmnuExit.Index = 1;
+            this.cmnuExit.Text = "E&xit";
+            this.cmnuExit.Click += new System.EventHandler(this.cmnuExit_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -501,6 +530,10 @@
         private System.Windows.Forms.MenuItem cmnuCheckAndDownload;
         private System.Windows.Forms.MenuItem cmnuOnlyCheck;
         private System.Windows.Forms.MenuItem mnuTutorial;
+        private System.Windows.Forms.NotifyIcon ntiTrayIcon;
+        private System.Windows.Forms.ContextMenu cmnuTrayIconMenu;
+        private System.Windows.Forms.MenuItem cmnuShow;
+        private System.Windows.Forms.MenuItem cmnuExit;
     }
 }
 

@@ -60,7 +60,8 @@ namespace Ketarin.Forms
             nConnectionTimeout.Value = Convert.ToDecimal(Settings.GetValue("ConnectionTimeout", 10.0));
             nNumThreads.Value = Convert.ToDecimal(Settings.GetValue("ThreadCount", 2));
             nNumRetries.Value = Convert.ToDecimal(Settings.GetValue("RetryCount", 1));
-
+            chkMinToTray.Checked = (bool)Settings.GetValue("MinimizeToTray", false);
+            
             nProxyPort.Value = Convert.ToInt16(Settings.GetValue("ProxyPort", 0));
             txtProxyServer.Text = Settings.GetValue("ProxyServer", "") as string;
             txtProxyUser.Text = Settings.GetValue("ProxyUser", "") as string;
@@ -79,6 +80,7 @@ namespace Ketarin.Forms
             Settings.SetValue("ThreadCount", Convert.ToInt32(nNumThreads.Value));
             Settings.SetValue("RetryCount", Convert.ToInt32(nNumRetries.Value));
             Settings.SetValue("UpdateOnlineDatabase", chkUpdateOnlineDatabase.Checked);
+            Settings.SetValue("MinimizeToTray", chkMinToTray.Checked);
 
             Settings.SetValue("ProxyPort", nProxyPort.Value);
             Settings.SetValue("ProxyServer", txtProxyServer.Text);
