@@ -957,9 +957,13 @@ namespace Ketarin
             if (!string.IsNullOrEmpty(m_FileHippoId) && m_SourceType == SourceType.FileHippo && !string.IsNullOrEmpty(m_PreviousLocation) && File.Exists(m_PreviousLocation))
             {
                 string serverMd5 = ExternalServices.FileHippoMd5(m_FileHippoId, AvoidDownloadBeta);
-                bool md5Result = string.Compare(serverMd5, GetMd5OfFile(m_PreviousLocation), true) != 0;
-                LogDialog.Log(this, md5Result ? "Update required, MD5 does not match" : "Update not required");
-                return md5Result;
+                // It may happen, that the MD5 is not calculated
+                if (serverMd5 != null)
+                {
+                    bool md5Result = string.Compare(serverMd5, GetMd5OfFile(m_PreviousLocation), true) != 0;
+                    LogDialog.Log(this, md5Result ? "Update required, MD5 does not match" : "Update not required");
+                    return md5Result;
+                }
             }
 
             // Remote date must be greater than our local date
