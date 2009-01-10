@@ -30,6 +30,8 @@ namespace Ketarin.Forms
             get
             {
                 string name = lbVariables.SelectedItem as string;
+                if (name == null) return null;
+
                 if (m_Variables.ContainsKey(name))
                 {
                     return m_Variables[name];
@@ -427,6 +429,8 @@ namespace Ketarin.Forms
 
         private void bRemove_Click(object sender, EventArgs e)
         {
+            if (CurrentVariable == null) return;
+
             m_Variables.Remove(CurrentVariable.Name);
             RefreshListBox();
 
