@@ -6,8 +6,15 @@ using System.Text.RegularExpressions;
 
 namespace Ketarin
 {
+    /// <summary>
+    /// Provides a couple of functions for external services like FileHippo.
+    /// </summary>
     static class ExternalServices
     {
+        /// <summary>
+        /// Determines the download URL for a FileHippo application with the given ID.
+        /// </summary>
+        /// <param name="avoidBeta">Whether or not to avoid beta versions. If only beta versions are available, they will be downloaded anyways.</param>
         public static string FileHippoDownloadUrl(string fileId, bool avoidBeta)
         {
             fileId = fileId.ToLower();
@@ -49,6 +56,11 @@ namespace Ketarin
             return redirectUrl;
         }
 
+        /// <summary>
+        /// Determines the content of the most recent version of an application's
+        /// overview page on FileHippo, which is not a beta version.
+        /// </summary>
+        /// <param name="overviewPage">Starting point of an application (most recent version overview page)</param>
         private static string GetNonBetaPageContent(string overviewPage, string fileId)
         {
             // Find the most recent version which is not a beta
@@ -69,6 +81,9 @@ namespace Ketarin
             return overviewPage;
         }
 
+        /// <summary>
+        /// Determines the version of a given application on FileHippo.
+        /// </summary>
         public static string FileHippoVersion(string fileId, bool avoidBeta)
         {
             if (string.IsNullOrEmpty(fileId)) return null;
@@ -94,6 +109,10 @@ namespace Ketarin
             return match.Groups[1].Value;
         }
 
+        /// <summary>
+        /// Determines the MD5 hash of a given application.
+        /// </summary>
+        /// <returns>null if no hash has been calculated on the FileHippo website</returns>
         public static string FileHippoMd5(string fileId, bool avoidBeta)
         {
             fileId = fileId.ToLower();
@@ -114,16 +133,27 @@ namespace Ketarin
                 int pos = md5Page.IndexOf(find);
                 if (pos < 0) return string.Empty;
 
-                return md5Page.Substring(pos + find.Length, 32);
+                string result = md5Page.Substring(pos + find.Length, 32);
+                Regex validMd5 = new Regex("[0-9a-f]{32}", RegexOptions.IgnoreCase);
+                if (!validMd5.IsMatch(result)) return null;
+
+                return result;
             }
         }
 
-        public static bool FileHippoIsBeta(string pageContent)
+        /// <summary>
+        /// Determines whether or not a page refers to a beta version.
+        /// </summary>
+        private static bool FileHippoIsBeta(string pageContent)
         {
             return pageContent.Contains("http://i.filehippo.com/img/beta.gif");
         }
 
-        public static string[] FileHippoGetAllVersions(string pageContent, string fileId)
+        /// <summary>
+        /// Returns a list links to all versions of an application on FileHippo.
+        /// </summary>
+        /// <param name="pageContent">Starting point of an application (most recent version overview page)</param>
+        private static string[] FileHippoGetAllVersions(string pageContent, string fileId)
         {
             Regex regex = new Regex(string.Format(@"/download_{0}/(tech/)?(\d+)", fileId), RegexOptions.IgnoreCase);
             MatchCollection matches = regex.Matches(pageContent);
