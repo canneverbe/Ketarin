@@ -207,7 +207,7 @@ namespace Ketarin
             {
                 if (name == "version") return m_VersionDownloaded;
 
-                if (ContainsKey(name)) return false;
+                if (!ContainsKey(name)) return false;
 
                 UrlVariable var = this[name];
                 return (var.DownloadCount > 0);
