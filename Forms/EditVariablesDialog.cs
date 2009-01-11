@@ -278,8 +278,11 @@ namespace Ketarin.Forms
             {
                 using (WebClient client = new WebClient())
                 {
-                    rtfContent.Text = client.DownloadString(url);
-                    CurrentVariable.TempContent = rtfContent.Text;
+                    // Note: The Text property might modify the text value
+                    string result = client.DownloadString(url);
+                    result = result.Replace("\0", "");
+                    rtfContent.Text = result;
+                    CurrentVariable.TempContent = result;
                     RefreshRtfFormatting();
                 }
             }
