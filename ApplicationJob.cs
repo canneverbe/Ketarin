@@ -235,10 +235,10 @@ namespace Ketarin
                 {
                     if (!string.IsNullOrEmpty(m_Parent.Category))
                     {
-                        value = value.Replace("{category}", m_Parent.Category);
+                        value = UrlVariable.Replace(value, "category", m_Parent.Category);
                     }
 
-                    value = value.Replace("{appname}", m_Parent.Name);
+                    value = UrlVariable.Replace(value, "appname", m_Parent.Name);
 
                     // FileHippo version
                     if (m_Parent.DownloadSourceType == SourceType.FileHippo && !ContainsKey("version"))
@@ -248,7 +248,7 @@ namespace Ketarin
                             m_Parent.FileHippoVersion = ExternalServices.FileHippoVersion(m_Parent.FileHippoId, m_Parent.AvoidDownloadBeta);
                             m_VersionDownloaded = true;
                         }
-                        value = value.Replace("{version}", m_Parent.FileHippoVersion);
+                        value = UrlVariable.Replace(value, "version", m_Parent.FileHippoVersion);
                     }
                 }
 
