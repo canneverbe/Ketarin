@@ -441,7 +441,7 @@
             // 
             this.ntiTrayIcon.ContextMenu = this.cmnuTrayIconMenu;
             this.ntiTrayIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("ntiTrayIcon.Icon")));
-            this.ntiTrayIcon.Text = "Ketarin {Idle}";
+            this.ntiTrayIcon.Text = "Ketarin (Idle)";
             this.ntiTrayIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ntiTrayIcon_MouseDoubleClick);
             // 
             // cmnuTrayIconMenu
