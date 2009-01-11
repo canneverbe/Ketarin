@@ -942,6 +942,10 @@ namespace Ketarin
             {
                 current = new FileInfo(targetFile);
             }
+            catch (ArgumentException)
+            {
+                throw new TargetPathInvalidException(targetFile);
+            }
             catch (NotSupportedException)
             {
                 throw new TargetPathInvalidException(targetFile);
