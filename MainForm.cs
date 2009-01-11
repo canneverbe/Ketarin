@@ -277,7 +277,14 @@ namespace Ketarin
                 {
                     olvJobs.EnsureVisible(index);
                 }
-                ntiTrayIcon.Text = "Currently working on: " + e.ApplicationJob.Name;
+
+                // Icon text length limited to 64 chars
+                string text = "Currently working on: " + e.ApplicationJob.Name;
+                if (text.Length >= 64)
+                {
+                    text = text.Substring(0, 60) + "...";
+                }
+                ntiTrayIcon.Text = text;
             });
         }
 
