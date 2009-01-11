@@ -376,7 +376,17 @@ namespace Ketarin
         /// </summary>
         private string Replace(string formatString, string content)
         {
-            Regex regex = new Regex(@"\{" + QuoteRegex(m_Name) + @"(\:[^\}]+)?\}", RegexOptions.Singleline);
+            return Replace(formatString, m_Name, content);
+        }
+
+        /// <summary>
+        /// Replaces a variable with the given name within a string
+        /// with the given content.
+        /// Applies functions if necessary.
+        /// </summary>
+        public static string Replace(string formatString, string varname, string content)
+        {
+            Regex regex = new Regex(@"\{" + QuoteRegex(varname) + @"(\:[^\}]+)?\}", RegexOptions.Singleline);
 
             Match match = regex.Match(formatString);
             // We need to "rematch" multiple times if the string changes
@@ -397,7 +407,7 @@ namespace Ketarin
         /// </summary>
         /// <param name="function">A function specification, for example "replace:a:b"</param>
         /// <param name="content">The usual variable content</param>
-        private string ReplaceFunction(string function, string content)
+        private static string ReplaceFunction(string function, string content)
         {
             function = function.TrimStart(':');
             if (string.IsNullOrEmpty(function)) return content;
@@ -467,7 +477,7 @@ namespace Ketarin
         /// Splits a string at every occurence of 'splitter', but
         /// only if this character has not been escaped with a \.
         /// </summary>
-        private string[] SplitEscaped(string value, char splitter)
+        private static string[] SplitEscaped(string value, char splitter)
         {
             List<string> result = new List<string>();
             StringBuilder temp = new StringBuilder();
@@ -501,7 +511,7 @@ namespace Ketarin
         /// <param name="value"></param>
         /// <param name="pos"></param>
         /// <returns></returns>
-        private bool IsEscaped(string value, int pos)
+        private static bool IsEscaped(string value, int pos)
         {
             return (pos > 0 && value[pos - 1] == '\\' && !IsEscaped(value, pos - 1));
         }
