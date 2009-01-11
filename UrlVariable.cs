@@ -407,6 +407,8 @@ namespace Ketarin
 
             switch (parts[0])
             {
+                case "ext":
+                    return System.IO.Path.GetExtension(content).TrimStart('.');
                 case "toupper":
                     return content.ToUpper();
                 case "tolower":
