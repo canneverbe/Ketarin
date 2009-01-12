@@ -157,6 +157,9 @@
     <Compile Include="Forms\SimilarApplicationsDialog.Designer.cs">
       <DependentUpon>SimilarApplicationsDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\TextBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Forms\VariableTextBox.cs">
       <SubType>Component</SubType>
     </Compile>

@@ -32,7 +32,7 @@
             this.bOK = new System.Windows.Forms.Button();
             this.chkUpdateAtStartup = new System.Windows.Forms.CheckBox();
             this.lblDefaultCommand = new System.Windows.Forms.Label();
-            this.txtDefaultCommand = new System.Windows.Forms.TextBox();
+            this.txtDefaultCommand = new Ketarin.Forms.TextBox();
             this.txtCustomColumn = new System.Windows.Forms.TextBox();
             this.lblCustomColumn = new System.Windows.Forms.Label();
             this.chkAvoidBeta = new System.Windows.Forms.CheckBox();
@@ -535,7 +535,7 @@
         private System.Windows.Forms.Button bOK;
         private System.Windows.Forms.CheckBox chkUpdateAtStartup;
         private System.Windows.Forms.Label lblDefaultCommand;
-        private System.Windows.Forms.TextBox txtDefaultCommand;
+        private Ketarin.Forms.TextBox txtDefaultCommand;
         private System.Windows.Forms.TextBox txtCustomColumn;
         private System.Windows.Forms.Label lblCustomColumn;
         private System.Windows.Forms.CheckBox chkAvoidBeta;
