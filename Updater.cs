@@ -317,6 +317,7 @@ namespace Ketarin
                         if (!string.IsNullOrEmpty(customColumn) && !job.Variables.HasVariableBeenDownloaded(customColumn))
                         {
                             job.Variables.ReplaceAllInString("{" + customColumn + "}");
+                            job.Save(); // cached variable content
                         }
 
                         // If no exception happened, we immediately leave the loop
