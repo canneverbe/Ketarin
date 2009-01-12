@@ -269,17 +269,17 @@
             this.txtCommand.AcceptsReturn = true;
             this.txtCommand.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtCommand.Location = new System.Drawing.Point(9, 120);
+            this.txtCommand.Location = new System.Drawing.Point(6, 120);
             this.txtCommand.Multiline = true;
             this.txtCommand.Name = "txtCommand";
-            this.txtCommand.Size = new System.Drawing.Size(360, 49);
+            this.txtCommand.Size = new System.Drawing.Size(363, 49);
             this.txtCommand.TabIndex = 40;
             this.txtCommand.VariableNames = new string[0];
             // 
             // lblExecuteCommand
             // 
             this.lblExecuteCommand.AutoSize = true;
-            this.lblExecuteCommand.Location = new System.Drawing.Point(6, 104);
+            this.lblExecuteCommand.Location = new System.Drawing.Point(3, 104);
             this.lblExecuteCommand.Name = "lblExecuteCommand";
             this.lblExecuteCommand.Size = new System.Drawing.Size(247, 13);
             this.lblExecuteCommand.TabIndex = 39;
@@ -341,7 +341,7 @@
             // lblSpoofReferer
             // 
             this.lblSpoofReferer.AutoSize = true;
-            this.lblSpoofReferer.Location = new System.Drawing.Point(6, 178);
+            this.lblSpoofReferer.Location = new System.Drawing.Point(3, 178);
             this.lblSpoofReferer.Name = "lblSpoofReferer";
             this.lblSpoofReferer.Size = new System.Drawing.Size(103, 13);
             this.lblSpoofReferer.TabIndex = 41;
@@ -351,16 +351,16 @@
             // 
             this.txtSpoofReferer.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtSpoofReferer.Location = new System.Drawing.Point(115, 175);
+            this.txtSpoofReferer.Location = new System.Drawing.Point(112, 175);
             this.txtSpoofReferer.Name = "txtSpoofReferer";
-            this.txtSpoofReferer.Size = new System.Drawing.Size(254, 20);
+            this.txtSpoofReferer.Size = new System.Drawing.Size(257, 20);
             this.txtSpoofReferer.TabIndex = 42;
             // 
             // rbBetaDefault
             // 
             this.rbBetaDefault.AutoSize = true;
             this.rbBetaDefault.Checked = true;
-            this.rbBetaDefault.Location = new System.Drawing.Point(86, 79);
+            this.rbBetaDefault.Location = new System.Drawing.Point(83, 79);
             this.rbBetaDefault.Name = "rbBetaDefault";
             this.rbBetaDefault.Size = new System.Drawing.Size(79, 17);
             this.rbBetaDefault.TabIndex = 36;
@@ -371,7 +371,7 @@
             // lblBetaVersions
             // 
             this.lblBetaVersions.AutoSize = true;
-            this.lblBetaVersions.Location = new System.Drawing.Point(6, 81);
+            this.lblBetaVersions.Location = new System.Drawing.Point(3, 81);
             this.lblBetaVersions.Name = "lblBetaVersions";
             this.lblBetaVersions.Size = new System.Drawing.Size(74, 13);
             this.lblBetaVersions.TabIndex = 34;
@@ -380,7 +380,7 @@
             // rbAlwaysDownload
             // 
             this.rbAlwaysDownload.AutoSize = true;
-            this.rbAlwaysDownload.Location = new System.Drawing.Point(229, 79);
+            this.rbAlwaysDownload.Location = new System.Drawing.Point(226, 79);
             this.rbAlwaysDownload.Name = "rbAlwaysDownload";
             this.rbAlwaysDownload.Size = new System.Drawing.Size(108, 17);
             this.rbAlwaysDownload.TabIndex = 38;
@@ -390,7 +390,7 @@
             // rbBetaAvoid
             // 
             this.rbBetaAvoid.AutoSize = true;
-            this.rbBetaAvoid.Location = new System.Drawing.Point(171, 79);
+            this.rbBetaAvoid.Location = new System.Drawing.Point(168, 79);
             this.rbBetaAvoid.Name = "rbBetaAvoid";
             this.rbBetaAvoid.Size = new System.Drawing.Size(52, 17);
             this.rbBetaAvoid.TabIndex = 37;
@@ -455,16 +455,16 @@
             // 
             this.txtUseVariablesForChanges.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtUseVariablesForChanges.Location = new System.Drawing.Point(259, 206);
+            this.txtUseVariablesForChanges.Location = new System.Drawing.Point(256, 206);
             this.txtUseVariablesForChanges.Name = "txtUseVariablesForChanges";
-            this.txtUseVariablesForChanges.Size = new System.Drawing.Size(110, 20);
+            this.txtUseVariablesForChanges.Size = new System.Drawing.Size(113, 20);
             this.txtUseVariablesForChanges.TabIndex = 44;
             this.txtUseVariablesForChanges.VariableNames = new string[0];
             // 
             // lblUseVariableForChanges
             // 
             this.lblUseVariableForChanges.AutoSize = true;
-            this.lblUseVariableForChanges.Location = new System.Drawing.Point(6, 209);
+            this.lblUseVariableForChanges.Location = new System.Drawing.Point(3, 209);
             this.lblUseVariableForChanges.Name = "lblUseVariableForChanges";
             this.lblUseVariableForChanges.Size = new System.Drawing.Size(247, 13);
             this.lblUseVariableForChanges.TabIndex = 43;
