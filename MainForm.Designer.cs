@@ -48,7 +48,8 @@
             this.mnuFile = new System.Windows.Forms.MenuItem();
             this.mnuNew = new System.Windows.Forms.MenuItem();
             this.mnuImport = new System.Windows.Forms.MenuItem();
-            this.mnuExport = new System.Windows.Forms.MenuItem();
+            this.mnuExportSelected = new System.Windows.Forms.MenuItem();
+            this.mnuExportAll = new System.Windows.Forms.MenuItem();
             this.mnusep2 = new System.Windows.Forms.MenuItem();
             this.mnuSettings = new System.Windows.Forms.MenuItem();
             this.menuItem7 = new System.Windows.Forms.MenuItem();
@@ -201,7 +202,8 @@
             this.mnuFile.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.mnuNew,
             this.mnuImport,
-            this.mnuExport,
+            this.mnuExportSelected,
+            this.mnuExportAll,
             this.mnusep2,
             this.mnuSettings,
             this.menuItem7,
@@ -221,31 +223,37 @@
             this.mnuImport.Text = "&Import...";
             this.mnuImport.Click += new System.EventHandler(this.mnuImport_Click);
             // 
-            // mnuExport
+            // mnuExportSelected
             // 
-            this.mnuExport.Index = 2;
-            this.mnuExport.Text = "E&xport...";
-            this.mnuExport.Click += new System.EventHandler(this.mnuExport_Click);
+            this.mnuExportSelected.Index = 2;
+            this.mnuExportSelected.Text = "E&xport selected...";
+            this.mnuExportSelected.Click += new System.EventHandler(this.mnuExportSelected_Click);
+            // 
+            // mnuExportAll
+            // 
+            this.mnuExportAll.Index = 3;
+            this.mnuExportAll.Text = "Export &all...";
+            this.mnuExportAll.Click += new System.EventHandler(this.mnuExportAll_Click);
             // 
             // mnusep2
             // 
-            this.mnusep2.Index = 3;
+            this.mnusep2.Index = 4;
             this.mnusep2.Text = "-";
             // 
             // mnuSettings
             // 
-            this.mnuSettings.Index = 4;
+            this.mnuSettings.Index = 5;
             this.mnuSettings.Text = "&Settings";
             this.mnuSettings.Click += new System.EventHandler(this.mnuSettings_Click);
             // 
             // menuItem7
             // 
-            this.menuItem7.Index = 5;
+            this.menuItem7.Index = 6;
             this.menuItem7.Text = "-";
             // 
             // mnuExit
             // 
-            this.mnuExit.Index = 6;
+            this.mnuExit.Index = 7;
             this.mnuExit.Text = "&Exit";
             this.mnuExit.Click += new System.EventHandler(this.mnuExit_Click);
             // 
@@ -509,7 +517,7 @@
         private System.Windows.Forms.MenuItem mnuAbout;
         private System.Windows.Forms.MenuItem mnuNew;
         private System.Windows.Forms.MenuItem menuItem7;
-        private System.Windows.Forms.MenuItem mnuExport;
+        private System.Windows.Forms.MenuItem mnuExportSelected;
         private System.Windows.Forms.MenuItem mnuImport;
         private wyDay.Controls.SplitButton sbAddApplication;
         private System.Windows.Forms.ContextMenu cmuAdd;
@@ -534,6 +542,7 @@
         private System.Windows.Forms.ContextMenu cmnuTrayIconMenu;
         private System.Windows.Forms.MenuItem cmnuShow;
         private System.Windows.Forms.MenuItem cmnuExit;
+        private System.Windows.Forms.MenuItem mnuExportAll;
     }
 }
 

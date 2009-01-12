@@ -42,6 +42,8 @@ namespace Ketarin
         private bool m_ShareApplication = false;
         private string m_HttpReferer = string.Empty;
         private DownloadBetaType m_DownloadBeta = DownloadBetaType.Default;
+        private string m_VariableChangeIndicator = string.Empty;
+        private string m_VariableChangeIndicatorLastContent = null;
 
         public enum SourceType
         {
@@ -72,6 +74,16 @@ namespace Ketarin
         {
             get { return m_DownloadDate; }
             set { m_DownloadDate = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the variable, which is used as change indicator.
+        /// If this value is not set, the file modification date / size is used.
+        /// </summary>
+        public string VariableChangeIndicator
+        {
+            get { return m_VariableChangeIndicator; }
+            set { m_VariableChangeIndicator = value; }
         }
 
         /// <summary>
@@ -725,7 +737,9 @@ namespace Ketarin
                                                    HttpReferer = @HttpReferer,
                                                    FileHippoVersion = @FileHippoVersion,
                                                    DownloadBeta = @DownloadBeta,
-                                                   DownloadDate = @DownloadDate
+                                                   DownloadDate = @DownloadDate,
+                                                   VariableChangeIndicator = @VariableChangeIndicator,
+                                                   VariableChangeIndicatorLastContent = @VariableChangeIndicatorLastContent
                                              WHERE JobGuid = @JobGuid";
 
                                 command.Parameters.Add(new SQLiteParameter("@ApplicationName", Name));
@@ -744,6 +758,9 @@ namespace Ketarin
                                 command.Parameters.Add(new SQLiteParameter("@HttpReferer", m_HttpReferer));
                                 command.Parameters.Add(new SQLiteParameter("@FileHippoVersion", m_FileHippoVersion));
                                 command.Parameters.Add(new SQLiteParameter("@DownloadBeta", (int)m_DownloadBeta));
+                                command.Parameters.Add(new SQLiteParameter("@VariableChangeIndicator", m_VariableChangeIndicator));
+                                command.Parameters.Add(new SQLiteParameter("@VariableChangeIndicatorLastContent", m_VariableChangeIndicatorLastContent));
+                                
                                 if (m_DownloadDate.HasValue)
                                 {
                                     command.Parameters.Add(new SQLiteParameter("@DownloadDate", m_DownloadDate.Value));
@@ -766,8 +783,8 @@ namespace Ketarin
                             using (IDbCommand command = conn.CreateCommand())
                             {
                                 command.Transaction = transaction;
-                                command.CommandText = @"INSERT INTO jobs (ApplicationName, FixedDownloadUrl, DateAdded, TargetPath, LastUpdated, IsEnabled, FileHippoId, DeletePreviousFile, SourceType, ExecuteCommand, Category, JobGuid, CanBeShared, ShareApplication, HttpReferer, FileHippoVersion, DownloadBeta, DownloadDate)
-                                                 VALUES (@ApplicationName, @FixedDownloadUrl, @DateAdded, @TargetPath, @LastUpdated, @IsEnabled, @FileHippoId, @DeletePreviousFile, @SourceType, @ExecuteCommand, @Category, @JobGuid, @CanBeShared, @ShareApplication, @HttpReferer, @FileHippoVersion, @DownloadBeta, @DownloadDate)";
+                                command.CommandText = @"INSERT INTO jobs (ApplicationName, FixedDownloadUrl, DateAdded, TargetPath, LastUpdated, IsEnabled, FileHippoId, DeletePreviousFile, SourceType, ExecuteCommand, Category, JobGuid, CanBeShared, ShareApplication, HttpReferer, FileHippoVersion, DownloadBeta, DownloadDate, VariableChangeIndicator, VariableChangeIndicatorLastContent)
+                                                 VALUES (@ApplicationName, @FixedDownloadUrl, @DateAdded, @TargetPath, @LastUpdated, @IsEnabled, @FileHippoId, @DeletePreviousFile, @SourceType, @ExecuteCommand, @Category, @JobGuid, @CanBeShared, @ShareApplication, @HttpReferer, @FileHippoVersion, @DownloadBeta, @DownloadDate, @VariableChangeIndicator, NULL)";
 
                                 command.Parameters.Add(new SQLiteParameter("@ApplicationName", Name));
                                 command.Parameters.Add(new SQLiteParameter("@FixedDownloadUrl", m_FixedDownloadUrl));
@@ -786,6 +803,9 @@ namespace Ketarin
                                 command.Parameters.Add(new SQLiteParameter("@HttpReferer", m_HttpReferer));
                                 command.Parameters.Add(new SQLiteParameter("@FileHippoVersion", m_FileHippoVersion));
                                 command.Parameters.Add(new SQLiteParameter("@DownloadBeta", (int)m_DownloadBeta));
+                                command.Parameters.Add(new SQLiteParameter("@VariableChangeIndicator", m_VariableChangeIndicator));
+                                command.Parameters.Add(new SQLiteParameter("@VariableChangeLastContent", m_VariableChangeIndicatorLastContent));
+                                
                                 if (m_DownloadDate.HasValue)
                                 {
                                     command.Parameters.Add(new SQLiteParameter("@DownloadDate", m_DownloadDate.Value));
@@ -837,6 +857,9 @@ namespace Ketarin
             m_CanBeShared = Convert.ToBoolean(reader["CanBeShared"]);
             m_FileHippoVersion = reader["FileHippoVersion"] as string;
             m_HttpReferer = reader["HttpReferer"] as string;
+            m_VariableChangeIndicator = reader["VariableChangeIndicator"] as string;
+            m_VariableChangeIndicatorLastContent = reader["VariableChangeIndicatorLastContent"] as string;
+
             if (reader["DownloadBeta"] != DBNull.Value)
             {
                 m_DownloadBeta = (DownloadBetaType)Convert.ToInt32(reader["DownloadBeta"]);
@@ -955,6 +978,24 @@ namespace Ketarin
             {
                 LogDialog.Log(this, string.Format("Update required, '{0}' does not yet exist", targetFile));
                 return true;
+            }
+
+            // Check a variable's contents?
+            if (!string.IsNullOrEmpty(m_VariableChangeIndicator))
+            {
+                string varName = m_VariableChangeIndicator.Trim('{', '}');
+                string content = Variables.ReplaceAllInString("{" + varName + "}");
+                // Only return a result, if the variable has already been checked before,
+                // that is, if there is an actual difference.
+                if (m_VariableChangeIndicatorLastContent != null)
+                {
+                    m_VariableChangeIndicatorLastContent = content;
+                    return (content != m_VariableChangeIndicatorLastContent);
+                }
+                else
+                {
+                    m_VariableChangeIndicatorLastContent = content;
+                }
             }
 
             // If using FileHippo, and previous file is available, check MD5

@@ -188,6 +188,8 @@ namespace Ketarin
                                          PreviousLocation   TEXT,
                                          ExecuteCommand     TEXT,
                                          HttpReferer        TEXT,
+                                         VariableChangeIndicator TEXT,
+                                         VariableChangeIndicatorLastContent TEXT,
                                          JobGuid            TEXT UNIQUE,
                                          DeletePreviousFile INTEGER DEFAULT 0,
                                          DownloadBeta       INTEGER DEFAULT 0,
@@ -234,6 +236,8 @@ namespace Ketarin
             addColumns.Add("HttpReferer", "ALTER TABLE jobs ADD HttpReferer TEXT");
             addColumns.Add("FileHippoVersion", "ALTER TABLE jobs ADD FileHippoVersion TEXT");
             addColumns.Add("DownloadBeta", "ALTER TABLE jobs ADD DownloadBeta INTEGER DEFAULT 0");
+            addColumns.Add("VariableChangeIndicator", "ALTER TABLE jobs ADD VariableChangeIndicator TEXT");
+            addColumns.Add("VariableChangeIndicatorLastContent", "ALTER TABLE jobs ADD VariableChangeIndicatorLastContent TEXT");
 
             ExecuteUpgradeQueries(columns, addColumns);
 
