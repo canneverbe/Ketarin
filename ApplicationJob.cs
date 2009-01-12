@@ -855,6 +855,7 @@ namespace Ketarin
             m_ExecuteCommand = reader["ExecuteCommand"] as string;
             m_Category = reader["Category"] as string;
             m_CanBeShared = Convert.ToBoolean(reader["CanBeShared"]);
+            m_ShareApplication = Convert.ToBoolean(reader["ShareApplication"]);
             m_FileHippoVersion = reader["FileHippoVersion"] as string;
             m_HttpReferer = reader["HttpReferer"] as string;
             m_VariableChangeIndicator = reader["VariableChangeIndicator"] as string;
