@@ -272,9 +272,11 @@
             this.txtCommand.Location = new System.Drawing.Point(6, 120);
             this.txtCommand.Multiline = true;
             this.txtCommand.Name = "txtCommand";
+            this.txtCommand.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.txtCommand.Size = new System.Drawing.Size(363, 49);
             this.txtCommand.TabIndex = 40;
             this.txtCommand.VariableNames = new string[0];
+            this.txtCommand.WordWrap = false;
             // 
             // lblExecuteCommand
             // 

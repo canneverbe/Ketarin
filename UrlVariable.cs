@@ -49,7 +49,7 @@ namespace Ketarin
         private string m_Name;
         private string m_TempContent = string.Empty;
         private string m_Regex = string.Empty;
-        private string m_CachedContent = string.Empty;
+        private string m_CachedContent = null;
         private ApplicationJob.UrlVariableCollection m_Parent = null;
         private Guid m_JobGuid = Guid.Empty;
         private int m_DownloadCount = 0;
@@ -537,7 +537,7 @@ namespace Ketarin
             {
                 // We don't want to spam the log with chached only screen updates
                 if (!onlyCached) LogDialog.Log(this, value, m_CachedContent);
-                return string.IsNullOrEmpty(m_CachedContent) ? value : Replace(value, m_CachedContent);
+                return (m_CachedContent == null) ? value : Replace(value, m_CachedContent);
             }
 
             // Ignore missing URLs etc.
