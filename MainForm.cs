@@ -253,7 +253,8 @@ namespace Ketarin
                 bRun.SplitMenu = cmuRun;
                 bRun.Image = Properties.Resources.Restart;
                 sbAddApplication.Enabled = true;
-                mnuExport.Enabled = true;
+                mnuExportSelected.Enabled = true;
+                mnuExportAll.Enabled = true;
                 mnuImport.Enabled = true;
                 olvJobs.Refresh();
 
@@ -511,7 +512,8 @@ namespace Ketarin
             bRun.SplitMenu = null;
             bRun.Image = null;
             sbAddApplication.Enabled = false;
-            mnuExport.Enabled = false;
+            mnuExportSelected.Enabled = false;
+            mnuExportAll.Enabled = false;
             mnuImport.Enabled = false;
 
             m_Updater.BeginUpdate(jobs, onlyCheck);
@@ -725,7 +727,7 @@ namespace Ketarin
             cmnuAdd.PerformClick();
         }
 
-        private void mnuExport_Click(object sender, EventArgs e)
+        private void mnuExportSelected_Click(object sender, EventArgs e)
         {
             if (olvJobs.SelectedIndices.Count == 0)
             {
@@ -733,6 +735,11 @@ namespace Ketarin
                 return;
             }
 
+            ExportJobs(olvJobs.SelectedObjects);
+        }
+
+        private void ExportJobs(System.Collections.IEnumerable objects)
+        {
             using (SaveFileDialog dialog = new SaveFileDialog())
             {
                 dialog.Filter = "XML file|*.xml";
@@ -740,13 +747,18 @@ namespace Ketarin
 
                 try
                 {
-                    File.WriteAllText(dialog.FileName, ApplicationJob.GetXml(olvJobs.SelectedObjects));
+                    File.WriteAllText(dialog.FileName, ApplicationJob.GetXml(objects));
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show(this, "Failed to save the file: " + ex.Message, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
+        }
+
+        private void mnuExportAll_Click(object sender, EventArgs e)
+        {
+            ExportJobs(m_Jobs);
         }
 
         private void mnuImport_Click(object sender, EventArgs e)

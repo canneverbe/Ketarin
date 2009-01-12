@@ -54,6 +54,7 @@ namespace Ketarin.Forms
             base.OnHandleCreated(e);
 
             m_Customiser = new ContextMenuCustomiser(this);
+            RebuildContextMenu();
         }
 
         /// <summary>

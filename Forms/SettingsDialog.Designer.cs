@@ -436,9 +436,9 @@
             this.chkMinToTray.AutoSize = true;
             this.chkMinToTray.Location = new System.Drawing.Point(6, 80);
             this.chkMinToTray.Name = "chkMinToTray";
-            this.chkMinToTray.Size = new System.Drawing.Size(106, 17);
+            this.chkMinToTray.Size = new System.Drawing.Size(98, 17);
             this.chkMinToTray.TabIndex = 20;
-            this.chkMinToTray.Text = "&Minimize To Tray";
+            this.chkMinToTray.Text = "&Minimize to tray";
             this.chkMinToTray.UseVisualStyleBackColor = true;
             // 
             // chkUpdateOnlineDatabase

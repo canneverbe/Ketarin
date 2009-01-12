@@ -89,6 +89,12 @@ namespace Ketarin.Forms
 
             RefreshVariables();
             SetAutocompleteSource();
+
+            this.BeginInvoke((MethodInvoker)delegate()
+            {
+                // Do not set focus to TabControl 
+                txtApplicationName.Focus();
+            });
         }
 
         protected override void OnClosed(EventArgs e)
@@ -115,6 +121,7 @@ namespace Ketarin.Forms
                 txtCommand.SetVariableNames(new string[] { "file", "root", "category", "appname" }, appVarNames.ToArray());
                 txtFixedUrl.SetVariableNames(new string[] { "category", "appname" }, appVarNames.ToArray());
                 txtTarget.SetVariableNames(new string[] { "category", "appname" }, appVarNames.ToArray());
+                txtUseVariablesForChanges.SetVariableNames(appVarNames.ToArray());
             }
         }
 
@@ -141,6 +148,7 @@ namespace Ketarin.Forms
             rbBetaAvoid.Checked = (ApplicationJob.DownloadBeta == ApplicationJob.DownloadBetaType.Avoid);
             rbBetaDefault.Checked = (ApplicationJob.DownloadBeta == ApplicationJob.DownloadBetaType.Default);
             rbAlwaysDownload.Checked = (ApplicationJob.DownloadBeta == ApplicationJob.DownloadBetaType.AlwaysDownload);
+            txtUseVariablesForChanges.Text = m_ApplicationJob.VariableChangeIndicator;
         }
 
         /// <summary>
@@ -163,7 +171,8 @@ namespace Ketarin.Forms
             m_ApplicationJob.Category = cboCategory.Text;
             m_ApplicationJob.ShareApplication = chkShareOnline.Checked;
             m_ApplicationJob.HttpReferer = txtSpoofReferer.Text;
-            
+            m_ApplicationJob.VariableChangeIndicator = txtUseVariablesForChanges.Text;
+
             if (rbAlwaysDownload.Checked)
             {
                 m_ApplicationJob.DownloadBeta = ApplicationJob.DownloadBetaType.AlwaysDownload;
@@ -237,14 +246,11 @@ namespace Ketarin.Forms
         /// </summary>
         private void SetAutocompleteSource()
         {
-            if (rbFileName.Checked)
-            {
-                txtTarget.AutoCompleteSource = AutoCompleteSource.FileSystem;
-            }
-            else
-            {
-                txtTarget.AutoCompleteSource = AutoCompleteSource.FileSystemDirectories;
-            }
+            // Setting the auto complete value will reset the text.
+            // Thus, save and restore it.
+            string current = txtTarget.Text;
+            txtTarget.AutoCompleteSource = (rbFileName.Checked) ? AutoCompleteSource.FileSystem : AutoCompleteSource.FileSystemDirectories;
+            txtTarget.Text = current;
         }
 
         private void bOK_Click(object sender, EventArgs e)
@@ -252,7 +258,7 @@ namespace Ketarin.Forms
             // Check that a target location is given
             if (string.IsNullOrEmpty(txtTarget.Text))
             {
-                MessageBox.Show(this, "You did not specify a target location.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(this, "You did not specify a target location.", tpApplication.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 DialogResult = DialogResult.None;
                 return;
             }
@@ -260,7 +266,7 @@ namespace Ketarin.Forms
             // Check that name is not empty
             if (string.IsNullOrEmpty(txtApplicationName.Text))
             {
-                MessageBox.Show(this, "The application name must not be empty.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(this, "The application name must not be empty.", tpApplication.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 DialogResult = DialogResult.None;
                 return;
             }
@@ -268,13 +274,13 @@ namespace Ketarin.Forms
             // Check for valid URL
             if (rbFixedUrl.Checked && string.IsNullOrEmpty(txtFixedUrl.Text))
             {
-                MessageBox.Show(this, "The URL must not be empty.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(this, "The URL must not be empty.", tpApplication.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 DialogResult = DialogResult.None;
                 return;
             }
             else if (rbFileHippo.Checked && String.IsNullOrEmpty(txtFileHippoId.Text))
             {
-                MessageBox.Show(this, "You did not specify a FileHippo ID.\r\nYou can paste the desired URL from the FileHippo.com website, the ID will be extracted automatically.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(this, "You did not specify a FileHippo ID.\r\nYou can paste the desired URL from the FileHippo.com website, the ID will be extracted automatically.", tpApplication.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 DialogResult = DialogResult.None;
                 return;
             }
