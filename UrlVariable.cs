@@ -417,6 +417,9 @@ namespace Ketarin
 
             switch (parts[0])
             {
+                case "empty":
+                    // Useful, if you want to load, but not use a variable
+                    return string.Empty;
                 case "ext":
                     return System.IO.Path.GetExtension(content).TrimStart('.');
                 case "toupper":
