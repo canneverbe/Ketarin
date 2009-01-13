@@ -361,7 +361,7 @@ namespace Ketarin.Forms
 
         private void RefreshRtfFormatting()
         {
-            if (string.IsNullOrEmpty(rtfContent.Text)) return;
+            if (string.IsNullOrEmpty(rtfContent.Text) || CurrentVariable.VariableType == UrlVariable.Type.Textual) return;
 
             using (new ControlRedrawLock(this))
             {
