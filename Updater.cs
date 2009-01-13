@@ -16,6 +16,10 @@ using CookComputing.XmlRpc;
 
 namespace Ketarin
 {
+    /// <summary>
+    /// Handles the updating process of a list of
+    /// application jobs.
+    /// </summary>
     class Updater
     {
         private ApplicationJob[] m_Jobs = null;
@@ -34,6 +38,9 @@ namespace Ketarin
 
         #region Properties
 
+        /// <summary>
+        /// Gets the list of errors which happened after an update process.
+        /// </summary>
         public ApplicationJobError[] Errors
         {
             get
@@ -42,6 +49,9 @@ namespace Ketarin
             }
         }
 
+        /// <summary>
+        /// Gets whether or not the updating process is still ongoing.
+        /// </summary>
         public bool IsBusy
         {
             get
@@ -52,6 +62,9 @@ namespace Ketarin
 
         #endregion
 
+        /// <summary>
+        /// Represents a download status of an application.
+        /// </summary>
         public enum Status
         {
             Idle,
@@ -63,12 +76,19 @@ namespace Ketarin
 
         #region JobProgressChangedEventArgs
 
+        /// <summary>
+        /// Holds all necessary information for the event that
+        /// the download progress of an application changed.
+        /// </summary>
         public class JobProgressChangedEventArgs : ProgressChangedEventArgs
         {
             private ApplicationJob m_Job = null;
 
             #region Properties
 
+            /// <summary>
+            /// Gets the application for which the download progress changed.
+            /// </summary>
             public ApplicationJob ApplicationJob
             {
                 get
@@ -89,6 +109,10 @@ namespace Ketarin
 
         #region JobStatusChangedEventArgs
 
+        /// <summary>
+        /// Holds all necessary information for the event that
+        /// the update status of an application changed.
+        /// </summary>
         public class JobStatusChangedEventArgs : EventArgs
         {
             private ApplicationJob m_Job = null;
@@ -96,6 +120,9 @@ namespace Ketarin
 
             #region Properties
 
+            /// <summary>
+            /// Gets the application of which the status has changed.
+            /// </summary>
             public ApplicationJob ApplicationJob
             {
                 get
@@ -104,6 +131,9 @@ namespace Ketarin
                 }
             }
 
+            /// <summary>
+            /// Gets the new status of the application.
+            /// </summary>
             public Status NewStatus
             {
                 get
@@ -123,18 +153,41 @@ namespace Ketarin
 
         #endregion
 
+        /// <summary>
+        /// Occurs when the download progress of an application changed.
+        /// </summary>
         public event EventHandler<JobProgressChangedEventArgs> ProgressChanged;
+        
+        /// <summary>
+        /// Occurs when the upgrade status of an application changed.
+        /// </summary>
         public event EventHandler<JobStatusChangedEventArgs> StatusChanged;
+        
+        /// <summary>
+        /// Occurs when the updater has finished the whole upgrade process.
+        /// </summary>
         public event EventHandler UpdateCompleted;
+
+        /// <summary>
+        /// Occurs when updates for applications downloaded from the online database
+        /// have been found and provides a list of XML definitions for those applications.
+        /// </summary>
         public event EventHandler<GenericEventArgs<string[]>> UpdatesFound;
 
         #region Public control methods
 
+        /// <summary>
+        /// Cancels the updating progress.
+        /// </summary>
         public void Cancel()
         {
             m_CancelUpdates = true;
         }
 
+        /// <summary>
+        /// Returns the download size of a given application in bytes.
+        /// </summary>
+        /// <returns>-1 if the size cannot be determined</returns>
         public long GetDownloadSize(ApplicationJob job)
         {
             if (m_Size == null || !m_Size.ContainsKey(job)) return -1;
@@ -142,6 +195,10 @@ namespace Ketarin
             return m_Size[job];
         }
 
+        /// <summary>
+        /// Returns the progress of the given application.
+        /// </summary>
+        /// <returns>-1 for no progress yet, otherwise 0 to 100</returns>
         public short GetProgress(ApplicationJob job)
         {
             if (m_Progress == null || !m_Progress.ContainsKey(job)) return -1;
@@ -149,6 +206,10 @@ namespace Ketarin
             return m_Progress[job];
         }
 
+        /// <summary>
+        /// Returns the current status of a given application.
+        /// </summary>
+        /// <returns>Idle by default</returns>
         public Status GetStatus(ApplicationJob job)
         {
             if (m_Status == null || !m_Status.ContainsKey(job)) return Status.Idle;
@@ -156,6 +217,11 @@ namespace Ketarin
             return m_Status[job];
         }
 
+        /// <summary>
+        /// Starts one or more threads which update the given
+        /// applications asynchronously.
+        /// </summary>
+        /// <param name="onlyCheck">Specifies whether or not to download the updates</param>
         public void BeginUpdate(ApplicationJob[] jobs, bool onlyCheck)
         {
             m_IsBusy = true;
@@ -178,6 +244,10 @@ namespace Ketarin
             thread.Start();
         }
 
+        /// <summary>
+        /// Checks for which of the given applications updates
+        /// are available asynchronously.
+        /// </summary>
         public void BeginCheckForOnlineUpdates(ApplicationJob[] jobs)
         {
             DateTime lastUpdate = (DateTime)Settings.GetValue("LastUpdateCheck", DateTime.MinValue);
@@ -193,6 +263,10 @@ namespace Ketarin
             thread.Start(jobs);
         }
 
+        /// <summary>
+        /// Checks for which of the given applications updates
+        /// are available. Fires an event when finished.
+        /// </summary>
         private void CheckForOnlineUpdates(object argument)
         {
             ApplicationJob[] jobs = argument as ApplicationJob[];
@@ -229,6 +303,10 @@ namespace Ketarin
 
         #endregion
 
+        /// <summary>
+        /// Performs the actual update check for the current applications.
+        /// Starts multiple threads if necessary.
+        /// </summary>
         private void UpdateApplications()
         {
             m_CancelUpdates = false;
@@ -291,6 +369,10 @@ namespace Ketarin
             }
         }
 
+        /// <summary>
+        /// Performs the update process of a single application.
+        /// Catches most exceptions and stores them for later use.
+        /// </summary>
         private void StartNewThread(object paramJob)
         {
             ApplicationJob job = paramJob as ApplicationJob;
@@ -384,6 +466,10 @@ namespace Ketarin
             OnStatusChanged(job);
         }
 
+        /// <summary>
+        /// Determines the base host (TLD + server name) of an URI.
+        /// </summary>
+        /// <returns>Example: sourceforge.net</returns>
         private static string GetBaseHost(Uri uri)
         {
             string[] parts = uri.Host.Split('.');
@@ -396,10 +482,11 @@ namespace Ketarin
         }
 
         /// <summary>
-        /// Executes the actual download. Does not handle exceptions,
+        /// Executes the actual download (determines the URL to download from). Does not handle exceptions,
         /// but takes care of proper cleanup.
         /// </summary>
         /// <param name="job">The job to process</param>
+        /// <param name="requestedUrl">The URL from which has been downloaded</param>
         /// <returns>true, if a new update has been found and downloaded, false otherwise</returns>
         protected bool DoDownload(ApplicationJob job, out string requestedUrl)
         {
@@ -421,6 +508,15 @@ namespace Ketarin
             return DoDownload(job, url);
         }
 
+        /// <summary>
+        /// Executes the actual download from an URL. Does not handle exceptions,
+        /// but takes care of proper cleanup.
+        /// </summary>
+        /// <exception cref="NonBinaryFileException">This exception is thrown, if the resulting file is not of a binary type</exception>
+        /// <exception cref="TargetPathInvalidException">This exception is thrown, if the resulting target path of an application is not valid</exception>
+        /// <param name="job">The job to process</param>
+        /// <param name="urlToRequest">URL from which should be downloaded</param>
+        /// <returns>true, if a new update has been found and downloaded, false otherwise</returns>
         protected bool DoDownload(ApplicationJob job, Uri urlToRequest)
         {
             // Lower security policies
@@ -645,6 +741,9 @@ namespace Ketarin
             return -1;
         }
 
+        /// <summary>
+        /// Executes a given command for the given application (also resolves variables).
+        /// </summary>
         private static void ExecuteCommand(ApplicationJob job, string baseCommand)
         {
             baseCommand = baseCommand.Replace("\r\n", "\n");
@@ -701,6 +800,9 @@ namespace Ketarin
             }
         }
 
+        /// <summary>
+        /// Fires the UpdateCompleted event.
+        /// </summary>
         protected virtual void OnUpdateCompleted()
         {
             if (UpdateCompleted != null)
@@ -709,6 +811,9 @@ namespace Ketarin
             }
         }
 
+        /// <summary>
+        /// Fires the StatusChanged event.
+        /// </summary>
         protected virtual void OnStatusChanged(ApplicationJob job)
         {
             if (StatusChanged != null)
@@ -717,6 +822,9 @@ namespace Ketarin
             }
         }
 
+        /// <summary>
+        /// Fires the UpdatesFound.
+        /// </summary>
         protected virtual void OnUpdatesFound(string[] updatedApps)
         {
             if (UpdatesFound != null && updatedApps.Length > 0)
