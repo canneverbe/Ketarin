@@ -156,6 +156,7 @@
             this.rbFileHippo.TabIndex = 14;
             this.rbFileHippo.Text = "File&Hippo ID:";
             this.rbFileHippo.UseVisualStyleBackColor = true;
+            this.rbFileHippo.CheckedChanged += new System.EventHandler(this.rbFileHippo_CheckedChanged);
             // 
             // txtFixedUrl
             // 
@@ -179,6 +180,7 @@
             this.rbFixedUrl.TabStop = true;
             this.rbFixedUrl.Text = "&URL:";
             this.rbFixedUrl.UseVisualStyleBackColor = true;
+            this.rbFixedUrl.CheckedChanged += new System.EventHandler(this.rbFixedUrl_CheckedChanged);
             // 
             // pnlTarget
             // 

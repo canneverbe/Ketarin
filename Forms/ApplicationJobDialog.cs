@@ -110,19 +110,31 @@ namespace Ketarin.Forms
         /// </summary>
         private void RefreshVariables()
         {
-            if (m_ApplicationJob != null)
+            if (m_ApplicationJob == null) return;
+
+            // Adjust context menus
+            List<string> appVarNames = new List<string>();
+            foreach (UrlVariable var in m_ApplicationJob.Variables.Values)
             {
-                // Adjust context menus
-                List<string> appVarNames = new List<string>();
-                foreach (UrlVariable var in m_ApplicationJob.Variables.Values)
-                {
-                    appVarNames.Add(var.Name);
-                }
-                txtCommand.SetVariableNames(new string[] { "file", "root", "category", "appname" }, appVarNames.ToArray());
-                txtFixedUrl.SetVariableNames(new string[] { "category", "appname" }, appVarNames.ToArray());
-                txtTarget.SetVariableNames(new string[] { "category", "appname" }, appVarNames.ToArray());
-                txtUseVariablesForChanges.SetVariableNames(appVarNames.ToArray());
+                appVarNames.Add(var.Name);
             }
+
+            // Add global  variables
+            foreach (UrlVariable gVar in UrlVariable.GlobalVariables.Values)
+            {
+                appVarNames.Add(gVar.Name);
+            }
+
+            // Add "version" variable to context menu if filehippo ID is present
+            if (rbFileHippo.Checked && !string.IsNullOrEmpty(txtFileHippoId.Text) && !appVarNames.Contains("version"))
+            {
+                appVarNames.Add("version");
+            }
+
+            txtCommand.SetVariableNames(new string[] { "file", "root", "category", "appname" }, appVarNames.ToArray());
+            txtFixedUrl.SetVariableNames(new string[] { "category", "appname" }, appVarNames.ToArray());
+            txtTarget.SetVariableNames(new string[] { "category", "appname" }, appVarNames.ToArray());
+            txtUseVariablesForChanges.SetVariableNames(appVarNames.ToArray());
         }
 
         /// <summary>
@@ -357,6 +369,8 @@ namespace Ketarin.Forms
             {
                 txtFileHippoId.Text = id.Groups[1].Value;
             }
+
+            RefreshVariables();
         }
 
         private void txtFixedUrl_TextChanged(object sender, EventArgs e)
@@ -373,6 +387,16 @@ namespace Ketarin.Forms
                     RefreshVariables();
                 }
             }
+        }
+
+        private void rbFileHippo_CheckedChanged(object sender, EventArgs e)
+        {
+            RefreshVariables();
+        }
+
+        private void rbFixedUrl_CheckedChanged(object sender, EventArgs e)
+        {
+            RefreshVariables();
         }
 
     }
