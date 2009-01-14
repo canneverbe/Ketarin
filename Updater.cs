@@ -187,7 +187,7 @@ namespace Ketarin
         /// <summary>
         /// Returns the download size of a given application in bytes.
         /// </summary>
-        /// <returns>-1 if the size cannot be determined</returns>
+        /// <returns>-1 if the size cannot be determined, -2 if no file size has been determined yet</returns>
         public long GetDownloadSize(ApplicationJob job)
         {
             if (m_Size == null || !m_Size.ContainsKey(job)) return -1;
@@ -237,6 +237,7 @@ namespace Ketarin
                 m_Progress[job] = 0;
                 bool res = m_Progress.ContainsKey(job);
                 m_Status[job] = 0;
+                m_Size[job] = -2;
             }
             m_Threads.Clear();
 
