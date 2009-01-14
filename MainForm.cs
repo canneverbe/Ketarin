@@ -68,7 +68,8 @@ namespace Ketarin
                 base.Render(g, r);
 
                 long fileSize = m_Updater.GetDownloadSize(job);
-                if (fileSize < 0) return;
+                // No file size has been determined yet
+                if (fileSize == -2) return;
 
                 using (Brush fontBrush = new SolidBrush(SystemColors.WindowText))
                 {
@@ -77,6 +78,10 @@ namespace Ketarin
                     format.LineAlignment = StringAlignment.Center;
 
                     string text = FormatFileSize.Format(fileSize);
+                    if (fileSize < 0)
+                    {
+                        text = "(unknown)";
+                    }
                     g.DrawString(text, new Font(this.Font, FontStyle.Bold), fontBrush, r, format);
                 }
             }
