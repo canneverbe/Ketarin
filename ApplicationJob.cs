@@ -1018,7 +1018,7 @@ namespace Ketarin
             bool disregardDate = Math.Abs(toNowDiff.TotalSeconds) <= 0.1;
 
             TimeSpan diff = GetLastModified(netResponse) - current.LastWriteTime;
-            bool fileSizeMismatch = (current.Length != netResponse.ContentLength);
+            bool fileSizeMismatch = (current.Length != netResponse.ContentLength && netResponse.ContentLength >= 0);
             bool dateMismatch = (!disregardDate && diff > TimeSpan.Zero);
             bool result = (fileSizeMismatch || dateMismatch);
 
