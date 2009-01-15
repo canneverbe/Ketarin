@@ -110,6 +110,30 @@ namespace Ketarin
         }
 
         /// <summary>
+        /// Returns the application name for a given FileHippo ID.
+        /// </summary>
+        /// <returns>Returns string.empty if the name could not be determined</returns>
+        public static string FileHippoAppName(string fileId)
+        {
+            if (string.IsNullOrEmpty(fileId)) return string.Empty;
+
+            using (WebClient client = new WebClient())
+            {
+                string mainPage = client.DownloadString("http://www.filehippo.com/download_" + fileId);
+
+                // It will match almost anything from FileHippo (except drivers without version numbers...)
+                Regex regex = new Regex(@"<h1>(.+) [\.\dab]+(\s.+)?<\/h1>", RegexOptions.IgnoreCase);
+                Match match = regex.Match(mainPage);
+                if (match.Success)
+                {
+                    return match.Groups[1].Value;
+                }
+            }
+
+            return string.Empty;
+        }
+
+        /// <summary>
         /// Determines the MD5 hash of a given application.
         /// </summary>
         /// <returns>null if no hash has been calculated on the FileHippo website</returns>

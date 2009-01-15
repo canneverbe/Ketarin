@@ -373,6 +373,53 @@ namespace Ketarin.Forms
             RefreshVariables();
         }
 
+        private void txtFileHippoId_LostFocus(object sender, System.EventArgs e)
+        {
+            // Determine name in background to prevent annoying users
+            Cursor = Cursors.AppStarting;
+            Thread thread = new Thread(new ParameterizedThreadStart(AutoFillApplicationName));
+            thread.Start(txtFileHippoId.Text);
+        }
+
+        /// <summary>
+        /// Automatically fills the application name text box based on the 
+        /// FileHippo ID (to be used as background procress).
+        /// </summary>
+        private void AutoFillApplicationName(object fileHippoId)
+        {
+            string appName = string.Empty;
+
+            try
+            {
+                appName = ExternalServices.FileHippoAppName(fileHippoId as string);
+
+                if (string.IsNullOrEmpty(appName)) return;
+            }
+            catch (Exception ex)
+            {
+                // Ignore any errors, since optional process in background
+                LogDialog.Log("FileHippo application name could not be determined", ex);
+                return;
+            }
+            finally
+            {
+                // Make sure that form does still exist
+                if (Visible)
+                {
+                    this.BeginInvoke((MethodInvoker)delegate()
+                    {
+                        // Reset cursor
+                        Cursor = Cursors.Default;
+                        // Only fill the application name if it is still empty
+                        if (string.IsNullOrEmpty(txtApplicationName.Text))
+                        {
+                            txtApplicationName.Text = appName;
+                        }
+                    });
+                }
+            }
+        }
+
         private void txtFixedUrl_TextChanged(object sender, EventArgs e)
         {
             rbFixedUrl.Checked = true;

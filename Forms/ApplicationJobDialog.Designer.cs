@@ -146,6 +146,7 @@
             this.txtFileHippoId.Size = new System.Drawing.Size(270, 20);
             this.txtFileHippoId.TabIndex = 15;
             this.txtFileHippoId.TextChanged += new System.EventHandler(this.txtFileHippoId_TextChanged);
+            this.txtFileHippoId.LostFocus += new System.EventHandler(txtFileHippoId_LostFocus);
             // 
             // rbFileHippo
             // 
