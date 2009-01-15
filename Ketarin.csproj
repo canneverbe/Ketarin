@@ -169,6 +169,10 @@
       <Link>CDBurnerXP\ListView.cs</Link>
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="M:\CsLib\CDBurnerXP\Controls\MarqueeProgressBar.cs">
+      <Link>CDBurnerXP\MarqueeProgressBar.cs</Link>
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="M:\CsLib\CDBurnerXP\Controls\ObjectListView.cs">
       <Link>CDBurnerXP\ObjectListView.cs</Link>
       <SubType>Component</SubType>
@@ -191,6 +195,14 @@
     <Compile Include="M:\CsLib\CDBurnerXP\Forms\PersistentForm.cs">
       <Link>CDBurnerXP\PersistentForm.cs</Link>
       <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="M:\CsLib\CDBurnerXP\Forms\ProgressDialog.cs">
+      <Link>CDBurnerXP\ProgressDialog.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="M:\CsLib\CDBurnerXP\Forms\ProgressDialog.designer.cs">
+      <Link>CDBurnerXP\ProgressDialog.designer.cs</Link>
+      <DependentUpon>ProgressDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="M:\CsLib\CDBurnerXP\GenericEventArgs.cs">
       <Link>CDBurnerXP\GenericEventArgs.cs</Link>
@@ -267,6 +279,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\SimilarApplicationsDialog.resx">
       <DependentUpon>SimilarApplicationsDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="M:\CsLib\CDBurnerXP\Forms\ProgressDialog.resx">
+      <Link>CDBurnerXP\ProgressDialog.resx</Link>
+      <DependentUpon>ProgressDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>

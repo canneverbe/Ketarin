@@ -19,6 +19,9 @@ namespace Ketarin.Forms
     {
         private ApplicationJob.UrlVariableCollection m_Variables = null;
         private ApplicationJob m_Job = null;
+        private bool m_Updating = false;
+
+        private delegate UrlVariable VariableResultDelegate();
 
         #region Properties
 
@@ -29,6 +32,11 @@ namespace Ketarin.Forms
         {
             get
             {
+                if (InvokeRequired)
+                {
+                    return this.Invoke(new VariableResultDelegate(delegate() { return CurrentVariable; })) as UrlVariable;
+                }
+
                 string name = lbVariables.SelectedItem as string;
                 if (name == null) return null;
 
@@ -87,6 +95,14 @@ namespace Ketarin.Forms
             RefreshListBox();
         }
 
+        protected override void OnClosed(EventArgs e)
+        {
+            base.OnClosed(e);
+
+            // Prevent an invalid operation exception because of automcomplete
+            txtUrl.Dispose();
+        }
+
         /// <summary>
         /// Re-populates the ListBox with the available variables.
         /// </summary>
@@ -104,7 +120,10 @@ namespace Ketarin.Forms
             txtUrl.SetVariableNames(new string[] { "category", "appname" }, appVarNames.ToArray());
         }
 
-        private void lbVariables_SelectedIndexChanged(object sender, EventArgs e)
+        /// <summary>
+        /// Updates the interface according to the currently selected variable.
+        /// </summary>
+        private void UpdateInterface()
         {
             // Enable or disable controls if variables exist
             bool enable = (lbVariables.SelectedIndex >= 0);
@@ -126,22 +145,65 @@ namespace Ketarin.Forms
 
             if (!enable) return;
 
-            using (new ControlRedrawLock(this))
-            {
-                // Update interface when variable is accessed
-                txtUrl.Focus();
-                txtUrl.Text = CurrentVariable.Url;
-                txtRegularExpression.Text = CurrentVariable.Regex;
+            m_Updating = true;
 
-                switch (CurrentVariable.VariableType)
+            try
+            {
+                // Uodate controls which belong to the variable
+                using (new ControlRedrawLock(this))
                 {
-                    case UrlVariable.Type.Textual: rbContentText.Checked = true; break;
-                    case UrlVariable.Type.StartEnd: rbContentUrlStartEnd.Checked = true; break;
-                    case UrlVariable.Type.RegularExpression: rbContentUrlRegex.Checked = true; break;
+                    // Set the auto complete of the URL text box
+                    txtUrl.AutoCompleteMode = AutoCompleteMode.Suggest;
+                    txtUrl.AutoCompleteSource = AutoCompleteSource.CustomSource;
+                    AutoCompleteStringCollection urls = new AutoCompleteStringCollection();
+                    urls.AddRange(DbManager.GetVariableUrls());
+                    txtUrl.AutoCompleteCustomSource = urls;
+
+                    // Set remaining controls
+                    txtUrl.Text = CurrentVariable.Url;
+                    txtRegularExpression.Text = CurrentVariable.Regex;
+
+                    switch (CurrentVariable.VariableType)
+                    {
+                        case UrlVariable.Type.Textual:
+                            rbContentText.Checked = true;
+                            SetLayout(false, false, false);
+
+                            rtfContent.Top = rbContentText.Bottom + rbContentText.Margin.Bottom + rtfContent.Margin.Top;
+                            rtfContent.Height = lbVariables.Bottom - rtfContent.Top;
+                            break;
+
+                        case UrlVariable.Type.StartEnd:
+                            rbContentUrlStartEnd.Checked = true;
+                            SetLayout(true, false, true);
+
+                            rtfContent.Top = txtFind.Bottom + txtFind.Margin.Bottom + rtfContent.Margin.Top;
+                            rtfContent.Height = lbVariables.Bottom - rtfContent.Top;
+                            break;
+
+                        case UrlVariable.Type.RegularExpression:
+                            rbContentUrlRegex.Checked = true;
+                            SetLayout(false, true, true);
+
+                            rtfContent.Top = txtRegularExpression.Bottom + txtRegularExpression.Margin.Bottom + rtfContent.Margin.Top;
+                            rtfContent.Height = lbVariables.Bottom - rtfContent.Top;
+                            break;
+                    }
                 }
 
                 SetRtfContent();
             }
+            finally
+            {
+                m_Updating = false;
+            }
+        }
+
+        private void lbVariables_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UpdateInterface();
+
+            txtUrl.Focus();
         }
 
         /// <summary>
@@ -194,41 +256,26 @@ namespace Ketarin.Forms
 
         private void rbContentUrlStartEnd_CheckedChanged(object sender, EventArgs e)
         {
-            if (!rbContentUrlStartEnd.Checked) return;
-
-            SetLayout(true, false, true);
-
-            rtfContent.Top = txtFind.Bottom + txtFind.Margin.Bottom + rtfContent.Margin.Top;
-            rtfContent.Height = lbVariables.Bottom - rtfContent.Top;
+            if (m_Updating || !rbContentUrlStartEnd.Checked) return;
 
             CurrentVariable.VariableType = UrlVariable.Type.StartEnd;
-            SetRtfContent();
+            UpdateInterface();
         }
 
         private void rbContentUrlRegex_CheckedChanged(object sender, EventArgs e)
         {
-            if (!rbContentUrlRegex.Checked) return;
-
-            SetLayout(false, true, true);
-
-            rtfContent.Top = txtRegularExpression.Bottom + txtRegularExpression.Margin.Bottom + rtfContent.Margin.Top;
-            rtfContent.Height = lbVariables.Bottom - rtfContent.Top;
+            if (m_Updating || !rbContentUrlRegex.Checked) return;
 
             CurrentVariable.VariableType = UrlVariable.Type.RegularExpression;
-            SetRtfContent();
+            UpdateInterface();
         }
 
         private void rbContentText_CheckedChanged(object sender, EventArgs e)
         {
-            if (!rbContentText.Checked) return;
-
-            SetLayout(false, false, false);
-
-            rtfContent.Top = rbContentText.Bottom + rbContentText.Margin.Bottom + rtfContent.Margin.Top;
-            rtfContent.Height = lbVariables.Bottom - rtfContent.Top;
+            if (m_Updating || !rbContentText.Checked) return;
 
             CurrentVariable.VariableType = UrlVariable.Type.Textual;
-            SetRtfContent();
+            UpdateInterface();
         }
 
         #endregion
@@ -279,10 +326,28 @@ namespace Ketarin.Forms
                 using (WebClient client = new WebClient())
                 {
                     // Note: The Text property might modify the text value
-                    string result = client.DownloadString(url);
-                    result = result.Replace("\0", "");
-                    rtfContent.Text = result;
-                    CurrentVariable.TempContent = result;
+                    using (ProgressDialog dialog = new ProgressDialog("Loading URL", "Please wait while the content is being downloaded..."))
+                    {
+                        dialog.OnDoWork = delegate()
+                        {
+                            CurrentVariable.TempContent = client.DownloadString(url);
+                            return true;
+                        };
+                        dialog.OnCancel = delegate()
+                        {
+                            dialog.Cancel();
+                        };
+                        dialog.ShowDialog(this);
+                        
+                        // Did an error occur?
+                        if (!dialog.Cancelled && dialog.Error != null)
+                        {
+                            LogDialog.Log("Failed loading URL", dialog.Error);
+                            MessageBox.Show(this, "The contents of the URL could not be loaded.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                    }
+
+                    rtfContent.Text = CurrentVariable.TempContent;
                     RefreshRtfFormatting();
                 }
             }

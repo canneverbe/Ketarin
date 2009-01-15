@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
+using System.ComponentModel;
 
 namespace Ketarin.Forms
 {
@@ -19,6 +20,8 @@ namespace Ketarin.Forms
         /// Gets or sets the variable names to show
         /// within the context menu.
         /// </summary>
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [Browsable(false)]
         public string[] VariableNames
         {
             get { return m_VariableNames; }
