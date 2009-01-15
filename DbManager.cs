@@ -450,6 +450,31 @@ namespace Ketarin
         }
 
         /// <summary>
+        /// Returns a sorted list of all used URLs for variables.
+        /// </summary>
+        public static string[] GetVariableUrls()
+        {
+            IDbCommand command = Connection.CreateCommand();
+            command.CommandText = "SELECT DISTINCT Url FROM variables WHERE Url <> '' AND Url IS NOT NULL ORDER BY Url";
+
+            List<string> urls = new List<string>();
+
+            using (IDataReader reader = command.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    string url = reader["Url"] as string;
+                    if (!string.IsNullOrEmpty(url))
+                    {
+                        urls.Add(url);
+                    }
+                }
+            }
+
+            return urls.ToArray();
+        }
+
+        /// <summary>
         /// Returns a sorted list of all used category names.
         /// </summary>
         public static string[] GetCategories()

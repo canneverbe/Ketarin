@@ -34,7 +34,7 @@
             this.bCancel = new System.Windows.Forms.Button();
             this.bOK = new System.Windows.Forms.Button();
             this.lblUrl = new System.Windows.Forms.Label();
-            this.txtUrl = new VariableTextBox();
+            this.txtUrl = new Ketarin.Forms.VariableTextBox();
             this.rtfContent = new System.Windows.Forms.RichTextBox();
             this.bLoad = new System.Windows.Forms.Button();
             this.bUseAsStart = new System.Windows.Forms.Button();
@@ -114,6 +114,7 @@
             this.txtUrl.Name = "txtUrl";
             this.txtUrl.Size = new System.Drawing.Size(292, 20);
             this.txtUrl.TabIndex = 9;
+            this.txtUrl.VariableNames = new string[0];
             this.txtUrl.TextChanged += new System.EventHandler(this.txtUrl_TextChanged);
             // 
             // rtfContent
@@ -324,6 +325,7 @@
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(630, 300);
             this.Name = "EditVariablesDialog";
+            this.SavePosition = true;
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.Text = "Edit Variables";
