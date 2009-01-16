@@ -931,9 +931,6 @@ namespace Ketarin
 
             if (TargetIsFolder)
             {
-                // If directory does not yet exist, create it
-                Directory.CreateDirectory(targetLocation);
-
                 string fileName = GetFileNameFromWebResponse(netResponse);
                 targetLocation = Path.Combine(targetLocation, fileName);
             }
