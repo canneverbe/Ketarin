@@ -13,6 +13,7 @@ namespace Ketarin.Forms
     {
         private string[] m_VariableNames = new string[0];
         private ContextMenuCustomiser m_Customiser = null;
+        private bool m_EnableEditor = true;
 
         #region Properties
 
@@ -32,6 +33,17 @@ namespace Ketarin.Forms
                     RebuildContextMenu();
                 }
             }
+        }
+
+        /// <summary>
+        /// Gets or sets whether or not an editor for the 
+        /// text box can be opened from the context menu.
+        /// </summary>
+        [DefaultValue(true)]
+        public bool EnableEditor
+        {
+            get { return m_EnableEditor; }
+            set { m_EnableEditor = value; }
         }
 
         #endregion
@@ -69,20 +81,45 @@ namespace Ketarin.Forms
 
             m_Customiser.MenuItems.Clear();
 
-            if (m_VariableNames.Length == 0) return;
-
-            List<string> vars = new List<string>(m_VariableNames);
-            vars.Sort();
-            // We insert in reverse order
-            vars.Reverse();
-
-            // Add final separator
-            m_Customiser.MenuItems.Add(new ContextMenuItem(string.Empty, 0));
-
-            foreach (string var in vars)
+            if (m_VariableNames.Length > 0)
             {
-                ContextMenuItem newItem = new ContextMenuItem("{" + var + "}", 0);
-                newItem.EventHandler = OnVariableSelected;
+
+                List<string> vars = new List<string>(m_VariableNames);
+                vars.Sort();
+                // We insert in reverse order
+                vars.Reverse();
+
+                // Add final separator
+                m_Customiser.MenuItems.Add(new ContextMenuItem(string.Empty, 0));
+
+                foreach (string var in vars)
+                {
+                    ContextMenuItem newItem = new ContextMenuItem("{" + var + "}", 0);
+                    newItem.EventHandler = OnVariableSelected;
+                    m_Customiser.MenuItems.Add(newItem);
+                }
+            }
+
+            // Add context menu item for multiline editor
+            if (Multiline && m_EnableEditor)
+            {
+                // Add final separator
+                m_Customiser.MenuItems.Add(new ContextMenuItem(string.Empty, 0));
+
+                ContextMenuItem newItem = new ContextMenuItem("Editor...", 0);
+                newItem.EventHandler = delegate(ContextMenuItem item)
+                {
+                    using (MultilineEditorDialog dialog = new MultilineEditorDialog())
+                    {
+                        dialog.Value = this.Text;
+                        dialog.SetVariableNames(m_VariableNames);
+
+                        if (dialog.ShowDialog(this) == DialogResult.OK)
+                        {
+                            this.Text = dialog.Value;
+                        }
+                    }
+                };
                 m_Customiser.MenuItems.Add(newItem);
             }
         }
