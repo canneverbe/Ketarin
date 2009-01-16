@@ -201,7 +201,7 @@ namespace Ketarin
 
             colTarget.AspectGetter = delegate(object x) {
                 ApplicationJob job = x as ApplicationJob;
-                return job.Variables.ReplaceAllInString(job.TargetPath, true);
+                return job.Variables.ReplaceAllInString(job.TargetPath, DateTime.MinValue, null, true);
             };
             colTarget.GroupKeyGetter = delegate(object x) { return ((ApplicationJob)x).TargetPath.ToLower(); };
 
@@ -226,8 +226,9 @@ namespace Ketarin
                 if (string.IsNullOrEmpty(m_CustomColumn)) return null;
 
                 m_CustomColumn = SettingsDialog.CustomColumnVariableName;
-
-                return ((ApplicationJob)x).Variables.GetVariableContent(m_CustomColumn);
+                string varFind = "{" + m_CustomColumn + "}";
+                string value = ((ApplicationJob)x).Variables.ReplaceAllInString(varFind, DateTime.MinValue, null, true);
+                return (varFind == value) ? string.Empty : value;
             };
 
             m_Updater.ProgressChanged += new EventHandler<Updater.JobProgressChangedEventArgs>(m_Updater_ProgressChanged);
