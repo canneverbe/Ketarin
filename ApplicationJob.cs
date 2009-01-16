@@ -152,50 +152,10 @@ namespace Ketarin
             public UrlVariableCollection()
             {
             }
-
-            public string GetVariableContent(string variableName)
-            {
-                if (m_Parent.DownloadSourceType == SourceType.FileHippo && variableName == "version" && !ContainsKey("version"))
-                {
-                    return m_Parent.FileHippoVersion;
-                }
-
-                if (!ContainsKey(variableName)) return null;
-
-                return this[variableName].CachedContent;
-            }
             
             public UrlVariableCollection(ApplicationJob parent)
             {
                 m_Parent = parent;
-            }
-
-            public string ReplaceAllInString(string value, DateTime fileDate, string filename)
-            {
-                value = ReplaceAllInString(value, false);
-
-                // Some date/time variables, only if they were not user defined
-                string[] dateTimeVars = new string[] { "dd", "ddd", "dddd", "hh", "HH", "mm", "MM", "MMM", "MMMM", "ss", "tt", "yy", "yyyy", "zz", "zzz" };
-                foreach (string dateTimeVar in dateTimeVars)
-                {
-                    if (!ContainsKey(dateTimeVar))
-                    {
-                        value = value.Replace("{f:" + dateTimeVar + "}", fileDate.ToString(dateTimeVar));
-                    }
-                }
-
-                // Provide {url:ext} and {url:basefile}
-                try
-                {
-                    value = value.Replace("{url:ext}", Path.GetExtension(filename).TrimStart('.'));
-                    value = value.Replace("{url:basefile}", Path.GetFileNameWithoutExtension(filename));
-                }
-                catch (ArgumentException ex)
-                {
-                    LogDialog.Log("Could not determine {url:*} variables", ex);
-                }
-
-                return value;
             }
 
             /// <summary>
@@ -227,12 +187,61 @@ namespace Ketarin
 
             public string ReplaceAllInString(string value)
             {
-                return ReplaceAllInString(value, false);
+                return ReplaceAllInString(value, DateTime.MinValue, null, false);
             }
 
-            public string ReplaceAllInString(string value, bool onlyCachedContent)
+            public string ReplaceAllInString(string value, DateTime fileDate, string filename, bool onlyCachedContent)
             {
                 if (value == null) return value;
+
+                // Try to provide file date if missing
+                if (fileDate == DateTime.MinValue && m_Parent != null && !string.IsNullOrEmpty(m_Parent.PreviousLocation))
+                {
+                    try
+                    {
+                        FileInfo info = new FileInfo(m_Parent.PreviousLocation);
+                        fileDate = info.LastWriteTime;
+                    }
+                    catch (Exception)
+                    {
+                        // Ignore all errors. If no information can be retrieved, 
+                        // only expand the usual variables.
+                    }
+                }
+
+                // Try to add file path information if missing
+                if (string.IsNullOrEmpty(filename) && m_Parent != null)
+                {
+                    filename = m_Parent.PreviousLocation;
+                }
+
+                // Ignore invalid dates
+                if (fileDate > DateTime.MinValue)
+                {
+                    // Some date/time variables, only if they were not user defined
+                    string[] dateTimeVars = new string[] { "dd", "ddd", "dddd", "hh", "HH", "mm", "MM", "MMM", "MMMM", "ss", "tt", "yy", "yyyy", "zz", "zzz" };
+                    foreach (string dateTimeVar in dateTimeVars)
+                    {
+                        if (!ContainsKey(dateTimeVar))
+                        {
+                            value = value.Replace("{f:" + dateTimeVar + "}", fileDate.ToString(dateTimeVar));
+                        }
+                    }
+                }
+
+                // Provide {url:ext} and {url:basefile}
+                try
+                {
+                    if (filename != null)
+                    {
+                        value = value.Replace("{url:ext}", Path.GetExtension(filename).TrimStart('.'));
+                        value = value.Replace("{url:basefile}", Path.GetFileNameWithoutExtension(filename));
+                    }
+                }
+                catch (ArgumentException ex)
+                {
+                    LogDialog.Log("Could not determine {url:*} variables", ex);
+                }
 
                 // Job-specific data / non global variables
                 if (m_Parent != null)
@@ -911,7 +920,7 @@ namespace Ketarin
             string targetLocation = Environment.ExpandEnvironmentVariables(TargetPath);
 
             // Allow variables in target locations as well
-            targetLocation = Variables.ReplaceAllInString(targetLocation, GetLastModified(netResponse), GetFileNameFromWebResponse(netResponse));
+            targetLocation = Variables.ReplaceAllInString(targetLocation, GetLastModified(netResponse), GetFileNameFromWebResponse(netResponse), false);
 
             // If carried on a USB stick, allow using the drive name
             try
