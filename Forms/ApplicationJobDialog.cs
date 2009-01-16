@@ -337,6 +337,10 @@ namespace Ketarin.Forms
             }
         }
 
+        /// <summary>
+        /// Uploads an application to the online database (as background thread).
+        /// </summary>
+        /// <param name="argument">The ApplicationJob which is to be uploaded</param>
         private static void ShareOnline(object argument)
         {
             ApplicationJob job = argument as ApplicationJob;
@@ -347,7 +351,7 @@ namespace Ketarin.Forms
                 IKetarinRpc proxy = XmlRpcProxyGen.Create<IKetarinRpc>();
                 proxy.Timeout = 10000;
 
-                proxy.SaveApplication(job.GetXml(), Settings.GetValue("AuthorGuid") as string);
+                proxy.SaveApplication(job.GetXmlWithoutGlobalVariables(), Settings.GetValue("AuthorGuid") as string);
             }
             catch (XmlRpcFaultException ex)
             {

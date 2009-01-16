@@ -232,19 +232,21 @@ namespace Ketarin
 
             public string ReplaceAllInString(string value, bool onlyCachedContent)
             {
-                // Some date/time variables, only if they were not user defined
-                string[] dateTimeVars = new string[] { "dd", "ddd", "dddd", "hh", "HH", "mm", "MM", "MMM", "MMMM", "ss", "tt", "yy", "yyyy", "zz", "zzz" };
-                foreach (string dateTimeVar in dateTimeVars)
-                {
-                    if (!ContainsKey(dateTimeVar))
-                    {
-                        value = value.Replace("{" + dateTimeVar + "}", DateTime.Now.ToString(dateTimeVar));
-                    }
-                }
+                if (value == null) return value;
 
-                // Job-specific data
+                // Job-specific data / non global variables
                 if (m_Parent != null)
                 {
+                    // Some date/time variables, only if they were not user defined
+                    string[] dateTimeVars = new string[] { "dd", "ddd", "dddd", "hh", "HH", "mm", "MM", "MMM", "MMMM", "ss", "tt", "yy", "yyyy", "zz", "zzz" };
+                    foreach (string dateTimeVar in dateTimeVars)
+                    {
+                        if (!ContainsKey(dateTimeVar))
+                        {
+                            value = value.Replace("{" + dateTimeVar + "}", DateTime.Now.ToString(dateTimeVar));
+                        }
+                    }
+
                     if (!string.IsNullOrEmpty(m_Parent.Category))
                     {
                         value = UrlVariable.Replace(value, "category", m_Parent.Category);
@@ -610,6 +612,38 @@ namespace Ketarin
         public string GetXml()
         {
             return GetXml(new ApplicationJob[] { this });
+        }
+
+        /// <summary>
+        /// Returns an XML document containing this application job,
+        /// but replaces all global variables with the actual values.
+        /// </summary>
+        public string GetXmlWithoutGlobalVariables()
+        {
+            // Replace global variables
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(GetXml());
+            // Adjust download URL
+            XmlNodeList downloadUrlElements = doc.GetElementsByTagName("FixedDownloadUrl");
+            if (downloadUrlElements.Count > 0)
+            {
+                XmlElement downloadUrlElement = downloadUrlElements[0] as XmlElement;
+                downloadUrlElement.InnerText = UrlVariable.GlobalVariables.ReplaceAllInString(downloadUrlElement.InnerText);
+            }
+            // Adjust variables
+            XmlNodeList urlVariableElements = doc.GetElementsByTagName("UrlVariable");
+            foreach (XmlElement urlVariable in urlVariableElements)
+            {
+                foreach (XmlElement subElement in urlVariable.ChildNodes)
+                {
+                    if (subElement.Name == "Url" || subElement.Name == "TextualContent")
+                    {
+                        subElement.InnerText = UrlVariable.GlobalVariables.ReplaceAllInString(subElement.InnerText);
+                    }
+                }
+            }
+
+            return doc.InnerXml;
         }
 
         /// <summary>
