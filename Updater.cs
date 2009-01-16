@@ -656,6 +656,9 @@ namespace Ketarin
 
                 try
                 {
+                    // Before copying, we might have to create the directory
+                    Directory.CreateDirectory(Path.GetDirectoryName(targetFileName));
+
                     // Copying might fail if variables have been replaced with bad values.
                     // However, we cannot rely on functions to clean up the path, since they
                     // might actually parse the path incorrectly and return an even worse path.
