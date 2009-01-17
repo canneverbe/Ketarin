@@ -81,6 +81,9 @@ namespace Ketarin.Forms
 
             m_Customiser.MenuItems.Clear();
 
+            // No options for read only text boxes
+            if (ReadOnly) return;
+
             if (m_VariableNames.Length > 0)
             {
 

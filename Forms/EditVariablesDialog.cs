@@ -56,11 +56,14 @@ namespace Ketarin.Forms
         {
             get
             {
-                return !bAdd.Enabled;
+                return txtUrl.ReadOnly;
             }
             set
             {
                 bool enable = !value;
+                txtUrl.ReadOnly = value;
+                txtFind.ReadOnly = value;
+                txtRegularExpression.ReadOnly = value;
                 bAdd.Enabled = enable;
                 bRemove.Enabled = enable;
                 bOK.Enabled = enable;
