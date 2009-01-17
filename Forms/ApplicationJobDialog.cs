@@ -48,7 +48,7 @@ namespace Ketarin.Forms
         {
             get
             {
-                return !txtApplicationName.Enabled;
+                return txtApplicationName.ReadOnly;
             }
             set
             {
@@ -59,6 +59,7 @@ namespace Ketarin.Forms
                 txtTarget.ReadOnly = value;
                 txtSpoofReferer.ReadOnly = value;
                 txtFileHippoId.ReadOnly = value;
+                txtUseVariablesForChanges.ReadOnly = value;
                 cboCategory.Enabled = enable;
                 chkDeletePrevious.Enabled = enable;
                 chkEnabled.Enabled = enable;
