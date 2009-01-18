@@ -699,6 +699,58 @@ namespace Ketarin
         }
 
         /// <summary>
+        /// Imports an application job from an XML file. If the XML
+        /// contains any place holders, a dialog will be shown and ask
+        /// the user for additional information.
+        /// </summary>
+        /// <param name="owner">Handle of the parent window</param>
+        /// <param name="filename">File name of the XML file</param>
+        public static ApplicationJob ImportFromTemplateOrXml(IWin32Window owner, string filename)
+        {
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(File.ReadAllText(filename));
+
+            XmlNodeList placeholdersList = doc.GetElementsByTagName("placeholder");
+            
+            // Prevent changing collection!
+            XmlNode[] placeholders = new XmlNode[placeholdersList.Count];
+            for (int i = 0; i < placeholders.Length; i++)
+            {
+                placeholders[i] = placeholdersList[i];
+            }
+
+            // First, grather all values. A placeholder might occur twice.
+            Dictionary<string, string> values = new Dictionary<string, string>();
+
+            foreach (XmlElement element in placeholders)
+            {
+                string name = element.GetAttribute("name");
+
+                if (string.IsNullOrEmpty(name) || values.ContainsKey(name)) continue;
+
+                using (SetPlaceholderDialog dialog = new SetPlaceholderDialog(name))
+                {
+                    // Abort importing if cancelled
+                    if (dialog.ShowDialog(owner) == DialogResult.Cancel) return null;
+
+                    values.Add(name, dialog.Value);
+                }
+            }
+
+            foreach (XmlElement element in placeholders)
+            {
+                string name = element.GetAttribute("name");
+
+                if (!values.ContainsKey(name)) continue;
+
+                // Replace the placeholder with a text node
+                element.ParentNode.ReplaceChild(doc.CreateTextNode(values[name]), element);
+            }
+
+            return ImportFromXmlString(doc.OuterXml);
+        }
+
+        /// <summary>
         /// Imports one or more ApplicationJobs from a piece of XML, 
         /// provided by an XmlReader.
         /// </summary>
