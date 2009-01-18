@@ -151,6 +151,12 @@
     <Compile Include="Forms\RenameFileDialog.Designer.cs">
       <DependentUpon>RenameFileDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\SetPlaceholderDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SetPlaceholderDialog.Designer.cs">
+      <DependentUpon>SetPlaceholderDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\SettingsDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -282,6 +288,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\RenameFileDialog.resx">
       <DependentUpon>RenameFileDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SetPlaceholderDialog.resx">
+      <DependentUpon>SetPlaceholderDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\SettingsDialog.resx">
       <DependentUpon>SettingsDialog.cs</DependentUpon>

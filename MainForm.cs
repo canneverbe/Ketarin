@@ -788,7 +788,7 @@ namespace Ketarin
                         return;
                     }
 
-                    ApplicationJob.ImportFromXml(dialog.FileName);
+                    ApplicationJob.ImportFromTemplateOrXml(this, dialog.FileName);
 
                     UpdateList();
                 }
