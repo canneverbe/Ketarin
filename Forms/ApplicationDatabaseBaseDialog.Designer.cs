@@ -32,12 +32,11 @@
             this.lblResults = new System.Windows.Forms.Label();
             this.bCancel = new System.Windows.Forms.Button();
             this.bOK = new System.Windows.Forms.Button();
-            this.cmnuApplications = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.cmnuProperties = new System.Windows.Forms.ToolStripMenuItem();
+            this.cmnuApplications = new System.Windows.Forms.ContextMenu();
+            this.cmnuProperties = new System.Windows.Forms.MenuItem();
             this.olvApplications = new CDBurnerXP.Controls.FastObjectListView();
             this.colAppName = new CDBurnerXP.Controls.OLVColumn();
             this.colDate = new CDBurnerXP.Controls.OLVColumn();
-            this.cmnuApplications.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.olvApplications)).BeginInit();
             this.SuspendLayout();
             // 
@@ -75,15 +74,13 @@
             // 
             // cmnuApplications
             // 
-            this.cmnuApplications.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.cmnuApplications.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.cmnuProperties});
             this.cmnuApplications.Name = "cmnuApplications";
-            this.cmnuApplications.Size = new System.Drawing.Size(128, 26);
             // 
             // cmnuProperties
             // 
             this.cmnuProperties.Name = "cmnuProperties";
-            this.cmnuProperties.Size = new System.Drawing.Size(127, 22);
             this.cmnuProperties.Text = "&Properties";
             this.cmnuProperties.Click += new System.EventHandler(this.cmnuProperties_Click);
             // 
@@ -100,7 +97,7 @@
             this.olvApplications.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.colAppName,
             this.colDate});
-            this.olvApplications.ContextMenuStrip = this.cmnuApplications;
+            this.olvApplications.ContextMenu= this.cmnuApplications;
             this.olvApplications.FullRowSelect = true;
             this.olvApplications.HideSelection = false;
             this.olvApplications.HighlightBackgroundColor = System.Drawing.Color.Empty;
@@ -147,7 +144,6 @@
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Available Applications";
-            this.cmnuApplications.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.olvApplications)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -158,8 +154,8 @@
 
         private CDBurnerXP.Controls.OLVColumn colAppName;
         private CDBurnerXP.Controls.OLVColumn colDate;
-        private System.Windows.Forms.ContextMenuStrip cmnuApplications;
-        private System.Windows.Forms.ToolStripMenuItem cmnuProperties;
+        private System.Windows.Forms.ContextMenu cmnuApplications;
+        private System.Windows.Forms.MenuItem cmnuProperties;
         protected System.Windows.Forms.Button bOK;
         protected CDBurnerXP.Controls.FastObjectListView olvApplications;
         protected System.Windows.Forms.Label lblResults;
