@@ -36,6 +36,9 @@
             this.lblUrl = new System.Windows.Forms.Label();
             this.txtUrl = new Ketarin.Forms.VariableTextBox();
             this.rtfContent = new System.Windows.Forms.RichTextBox();
+            this.cmuRtf = new System.Windows.Forms.ContextMenu();
+            this.cmnuCopy = new System.Windows.Forms.MenuItem();
+            this.cmnuCopyMatch = new System.Windows.Forms.MenuItem();
             this.bLoad = new System.Windows.Forms.Button();
             this.bUseAsStart = new System.Windows.Forms.Button();
             this.bUseAsEnd = new System.Windows.Forms.Button();
@@ -114,7 +117,6 @@
             this.txtUrl.Name = "txtUrl";
             this.txtUrl.Size = new System.Drawing.Size(292, 20);
             this.txtUrl.TabIndex = 9;
-            this.txtUrl.VariableNames = new string[0];
             this.txtUrl.TextChanged += new System.EventHandler(this.txtUrl_TextChanged);
             // 
             // rtfContent
@@ -124,6 +126,7 @@
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.rtfContent.BackColor = System.Drawing.SystemColors.Window;
             this.rtfContent.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.rtfContent.ContextMenu = this.cmuRtf;
             this.rtfContent.DetectUrls = false;
             this.rtfContent.Enabled = false;
             this.rtfContent.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -137,6 +140,28 @@
             this.rtfContent.WordWrap = false;
             this.rtfContent.SelectionChanged += new System.EventHandler(this.rtfContent_SelectionChanged);
             this.rtfContent.TextChanged += new System.EventHandler(this.rtfContent_TextChanged);
+            // 
+            // cmuRtf
+            // 
+            this.cmuRtf.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.cmnuCopy,
+            this.cmnuCopyMatch});
+            // 
+            // cmnuCopy
+            // 
+            this.cmnuCopy.Enabled = false;
+            this.cmnuCopy.Index = 0;
+            this.cmnuCopy.Shortcut = System.Windows.Forms.Shortcut.CtrlP;
+            this.cmnuCopy.Text = "&Copy";
+            this.cmnuCopy.Click += new System.EventHandler(this.cmnuCopy_Click);
+            // 
+            // cmnuCopyMatch
+            // 
+            this.cmnuCopyMatch.Enabled = false;
+            this.cmnuCopyMatch.Index = 1;
+            this.cmnuCopyMatch.Shortcut = System.Windows.Forms.Shortcut.CtrlM;
+            this.cmnuCopyMatch.Text = "Copy &match";
+            this.cmnuCopyMatch.Click += new System.EventHandler(this.cmnuCopyMatch_Click);
             // 
             // bLoad
             // 
@@ -357,5 +382,8 @@
         private System.Windows.Forms.RadioButton rbContentUrlStartEnd;
         private System.Windows.Forms.RadioButton rbContentUrlRegex;
         private System.Windows.Forms.RadioButton rbContentText;
+        private System.Windows.Forms.ContextMenu cmuRtf;
+        private System.Windows.Forms.MenuItem cmnuCopy;
+        private System.Windows.Forms.MenuItem cmnuCopyMatch;
     }
 }

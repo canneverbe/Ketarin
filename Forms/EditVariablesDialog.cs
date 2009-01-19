@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using System.Net;
 using System.Text.RegularExpressions;
 using CDBurnerXP.Forms;
+using CDBurnerXP.IO;
 
 namespace Ketarin.Forms
 {
@@ -20,6 +21,20 @@ namespace Ketarin.Forms
         private ApplicationJob.UrlVariableCollection m_Variables = null;
         private ApplicationJob m_Job = null;
         private bool m_Updating = false;
+        private string m_MatchSelection = null;
+
+        /// <summary>
+        /// Gets or sets the currently used match for a given
+        /// start/end or regex.
+        /// </summary>
+        public string MatchSelection
+        {
+            get { return m_MatchSelection; }
+            set {
+                m_MatchSelection = value;
+                cmnuCopyMatch.Enabled = !string.IsNullOrEmpty(m_MatchSelection);
+            }
+        }
 
         private delegate UrlVariable VariableResultDelegate();
 
@@ -278,6 +293,7 @@ namespace Ketarin.Forms
             if (m_Updating || !rbContentText.Checked) return;
 
             CurrentVariable.VariableType = UrlVariable.Type.Textual;
+            MatchSelection = null;
             UpdateInterface();
         }
 
@@ -433,13 +449,15 @@ namespace Ketarin.Forms
 
             using (new ControlRedrawLock(this))
             {
+                // Reset text area
+                MatchSelection = string.Empty;
                 rtfContent.SelectionStart = 0;
                 rtfContent.SelectionLength = rtfContent.Text.Length;
                 rtfContent.SelectionColor = SystemColors.WindowText;
                 rtfContent.SelectionFont = rtfContent.Font;
                 rtfContent.SelectionLength = 0;
 
-                if (!string.IsNullOrEmpty(CurrentVariable.Regex))
+                if (CurrentVariable.VariableType == UrlVariable.Type.RegularExpression)
                 {
                     Regex regex = new Regex(CurrentVariable.Regex, RegexOptions.IgnoreCase | RegexOptions.Singleline);
                     Match match = regex.Match(rtfContent.Text);
@@ -455,11 +473,12 @@ namespace Ketarin.Forms
                         rtfContent.SelectionColor = Color.Blue;
                     }
 
+                    MatchSelection = rtfContent.SelectedText;
                     rtfContent.SelectionLength = 0;
                 }
-                else
+                else if (CurrentVariable.VariableType == UrlVariable.Type.StartEnd)
                 {
-                    // Highlight StartText if specified
+                    // Highlight StartText if specified (blue color)
                     if (string.IsNullOrEmpty(CurrentVariable.StartText)) return;
                     int pos = rtfContent.Text.IndexOf(CurrentVariable.StartText);
                     if (pos == -1)
@@ -475,7 +494,7 @@ namespace Ketarin.Forms
 
                     int boldStart = pos + CurrentVariable.StartText.Length;
 
-                    // Highlight EndText if specified
+                    // Highlight EndText if specified (red color)
                     if (string.IsNullOrEmpty(CurrentVariable.EndText)) return;
                     pos = rtfContent.Text.IndexOf(CurrentVariable.EndText, boldStart);
                     if (pos < 0) return;
@@ -486,6 +505,7 @@ namespace Ketarin.Forms
 
                     rtfContent.SelectionStart = boldStart;
                     rtfContent.SelectionLength = pos - boldStart;
+                    MatchSelection = rtfContent.SelectedText;
                     rtfContent.SelectionFont = new Font(rtfContent.SelectionFont, FontStyle.Bold);
                     rtfContent.SelectionLength = 0;
                 }
@@ -494,7 +514,8 @@ namespace Ketarin.Forms
 
         private void rtfContent_SelectionChanged(object sender, EventArgs e)
         {
-            bool enable = (rtfContent.SelectionLength > 0 && string.IsNullOrEmpty(CurrentVariable.Regex));
+            bool enable = (rtfContent.SelectionLength > 0);
+            cmnuCopy.Enabled = enable;
             bUseAsEnd.Enabled = bUseAsStart.Enabled = enable;
         }
 
@@ -526,18 +547,13 @@ namespace Ketarin.Forms
 
         private void txtRegularExpression_TextChanged(object sender, EventArgs e)
         {
+            // "Disable" regex if empty
             if (string.IsNullOrEmpty(txtRegularExpression.Text))
             {
-                bUseAsStart.Enabled = true;
-                bUseAsEnd.Enabled = true;
                 CurrentVariable.Regex = string.Empty;
                 RefreshRtfFormatting();
                 return;
             }
-
-            // We cannot (or rather don't want to) combine those to for now
-            bUseAsEnd.Enabled = false;
-            bUseAsStart.Enabled = false;
 
             try
             {
@@ -546,6 +562,8 @@ namespace Ketarin.Forms
             }
             catch (ArgumentException)
             {
+                // Make sure that user notices an error. Just showing error 
+                // messages will be annoying.
                 txtRegularExpression.BackColor = Color.Tomato;
                 return;
             }
@@ -568,5 +586,19 @@ namespace Ketarin.Forms
             // Save results
             m_Job.Variables = m_Variables;
         }
+
+        #region Context menu
+
+        private void cmnuCopy_Click(object sender, EventArgs e)
+        {
+            SafeClipboard.SetData(rtfContent.SelectedText, true);
+        }
+
+        private void cmnuCopyMatch_Click(object sender, EventArgs e)
+        {
+            SafeClipboard.SetData(MatchSelection, true);
+        }
+
+        #endregion
     }
 }
