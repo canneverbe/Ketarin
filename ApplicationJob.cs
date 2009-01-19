@@ -1067,6 +1067,13 @@ namespace Ketarin
                 throw new TargetPathInvalidException(targetFile);
             }
 
+            if (!current.Exists && !string.IsNullOrEmpty(m_PreviousLocation))
+            {
+                // The file does not exist at the target location.
+                // Check if the previously downloaded file still matches.
+                current = new FileInfo(m_PreviousLocation);
+            }
+
             if (!current.Exists)
             {
                 LogDialog.Log(this, string.Format("Update required, '{0}' does not yet exist", targetFile));

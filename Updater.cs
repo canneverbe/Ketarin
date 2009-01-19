@@ -594,7 +594,12 @@ namespace Ketarin
                     // If file already exists (created by user),
                     // the download is not necessary. We still need to
                     // set the file name.
-                    job.PreviousLocation = targetFileName;
+                    // If the file exists, but not at the target location
+                    // (after renaming), do not reset the previous location.
+                    if (File.Exists(targetFileName))
+                    {
+                        job.PreviousLocation = targetFileName;
+                    }
                     job.Save();
                     return false;
                 }
