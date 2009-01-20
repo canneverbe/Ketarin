@@ -455,6 +455,7 @@ namespace Ketarin.Forms
                 rtfContent.SelectionLength = rtfContent.Text.Length;
                 rtfContent.SelectionColor = SystemColors.WindowText;
                 rtfContent.SelectionFont = rtfContent.Font;
+                rtfContent.SelectionBackColor = SystemColors.Window;
                 rtfContent.SelectionLength = 0;
 
                 if (CurrentVariable.VariableType == UrlVariable.Type.RegularExpression)
@@ -464,22 +465,23 @@ namespace Ketarin.Forms
 
                     rtfContent.SelectionStart = match.Index;
                     rtfContent.SelectionLength = match.Length;
-                    rtfContent.SelectionColor = Color.Red;
+                    rtfContent.SelectionColor = Color.White;
+                    rtfContent.SelectionBackColor = Color.Blue;
 
                     if (match.Groups.Count > 1)
                     {
                         rtfContent.SelectionStart = match.Groups[1].Index;
                         rtfContent.SelectionLength = match.Groups[1].Length;
-                        rtfContent.SelectionColor = Color.Blue;
+                        rtfContent.SelectionColor = Color.White;
+                        rtfContent.SelectionBackColor = Color.Red;
                     }
 
                     MatchSelection = rtfContent.SelectedText;
                     rtfContent.SelectionLength = 0;
                 }
-                else if (CurrentVariable.VariableType == UrlVariable.Type.StartEnd)
+                else if (CurrentVariable.VariableType == UrlVariable.Type.StartEnd && !string.IsNullOrEmpty(CurrentVariable.StartText))
                 {
-                    // Highlight StartText if specified (blue color)
-                    if (string.IsNullOrEmpty(CurrentVariable.StartText)) return;
+                    // Highlight StartText with blue background
                     int pos = rtfContent.Text.IndexOf(CurrentVariable.StartText);
                     if (pos == -1)
                     {
@@ -489,24 +491,29 @@ namespace Ketarin.Forms
                     {
                         rtfContent.SelectionStart = pos;
                         rtfContent.SelectionLength = CurrentVariable.StartText.Length;
-                        rtfContent.SelectionColor = Color.Blue;
+                        rtfContent.SelectionColor = Color.White;
+                        rtfContent.SelectionBackColor = Color.Blue;
                     }
 
-                    int boldStart = pos + CurrentVariable.StartText.Length;
+                    int matchStart = pos + CurrentVariable.StartText.Length;
 
-                    // Highlight EndText if specified (red color)
                     if (string.IsNullOrEmpty(CurrentVariable.EndText)) return;
-                    pos = rtfContent.Text.IndexOf(CurrentVariable.EndText, boldStart);
+
+                    pos = rtfContent.Text.IndexOf(CurrentVariable.EndText, matchStart);
                     if (pos < 0) return;
+
+                    // Highlight EndText with blue background if specified
                     rtfContent.SelectionStart = pos;
                     rtfContent.SelectionLength = CurrentVariable.EndText.Length;
+                    rtfContent.SelectionColor = Color.White;
+                    rtfContent.SelectionBackColor = Color.Blue;
 
-                    rtfContent.SelectionColor = Color.Red;
-
-                    rtfContent.SelectionStart = boldStart;
-                    rtfContent.SelectionLength = pos - boldStart;
+                    // Highlight match with red background
+                    rtfContent.SelectionStart = matchStart;
+                    rtfContent.SelectionLength = pos - matchStart;
                     MatchSelection = rtfContent.SelectedText;
-                    rtfContent.SelectionFont = new Font(rtfContent.SelectionFont, FontStyle.Bold);
+                    rtfContent.SelectionColor = Color.White;
+                    rtfContent.SelectionBackColor = Color.Red;
                     rtfContent.SelectionLength = 0;
                 }
             }
