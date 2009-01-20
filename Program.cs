@@ -53,11 +53,12 @@ namespace Ketarin
                 return;
             }
 
+            CommandlineArguments arguments = new CommandlineArguments(args);
+            
             // Either run silently on command line or launch GUI
-            if (args.Length > 0)
+            if (args.Length > 0) 
             {
-                List<string> arguments = new List<string>(args);
-                if (arguments.Contains("/SILENT"))
+                if (arguments["silent"] != null)
                 {
                     Kernel32.AttachConsole(Kernel32.ATTACH_PARENT_PROCESS);
 
@@ -67,7 +68,7 @@ namespace Ketarin
                     updater.ProgressChanged += new EventHandler<Updater.JobProgressChangedEventArgs>(updater_ProgressChanged);
                     updater.BeginUpdate(jobs, false);
 
-                    if (arguments.Contains("/NOTIFY"))
+                    if (arguments["notify"] != null)
                     {
                         m_Icon = new NotifyIcon();
                         m_Icon.Icon = System.Drawing.Icon.FromHandle(Properties.Resources.Restart.GetHicon());
@@ -86,6 +87,19 @@ namespace Ketarin
                     }
 
                     Kernel32.FreeConsole();
+                }
+                else if (arguments["update"] != null && arguments["appguid"] != null)
+                {
+                    // Update properties of an application in the database
+                    ApplicationJob job = DbManager.GetJob(new Guid(arguments["appguid"]));
+                    if (job == null) return;
+
+                    if (arguments["PreviousLocation"] != null)
+                    {
+                        job.PreviousLocation = arguments["PreviousLocation"];
+                    }
+
+                    job.Save();
                 }
             }
             else

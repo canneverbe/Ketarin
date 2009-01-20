@@ -425,6 +425,28 @@ namespace Ketarin
             return result.ToArray();
         }
 
+        /// <summary>
+        /// Returns an application from the database which has the specified GUID.
+        /// </summary>
+        public static ApplicationJob GetJob(Guid appGuid)
+        {
+            IDbCommand command = Connection.CreateCommand();
+            command.CommandText = "SELECT * FROM jobs WHERE JobGuid = @JobGuid";
+            command.Parameters.Add(new SQLiteParameter("@JobGuid", FormatGuid(appGuid)));
+
+            using (IDataReader reader = command.ExecuteReader())
+            {
+                if (reader.Read())
+                {
+                    ApplicationJob job = new ApplicationJob();
+                    job.Hydrate(reader);
+                    return job;
+                }
+            }
+
+            return null;
+        }
+
 
         /// <summary>
         /// Determines whether or not an application with the given GUID exists.
