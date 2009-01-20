@@ -81,6 +81,7 @@
   <ItemGroup>
     <Compile Include="ApplicationJob.cs" />
     <Compile Include="ApplicationJobError.cs" />
+    <Compile Include="CommandLineParser.cs" />
     <Compile Include="ContextMenuCustomiser.cs" />
     <Compile Include="ContextMenuItem.cs" />
     <Compile Include="DbManager.cs" />
