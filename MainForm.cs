@@ -258,7 +258,7 @@ namespace Ketarin
                 bRun.Text = "&Update now";
                 bRun.SplitMenu = cmuRun;
                 bRun.Image = Properties.Resources.Restart;
-                sbAddApplication.Enabled = true;
+                cmnuImportFile.Enabled = true;
                 mnuExportSelected.Enabled = true;
                 mnuExportAll.Enabled = true;
                 mnuImport.Enabled = true;
@@ -517,7 +517,7 @@ namespace Ketarin
             bRun.Text = "Cancel";
             bRun.SplitMenu = null;
             bRun.Image = null;
-            sbAddApplication.Enabled = false;
+            cmnuImportFile.Enabled = false;
             mnuExportSelected.Enabled = false;
             mnuExportAll.Enabled = false;
             mnuImport.Enabled = false;
