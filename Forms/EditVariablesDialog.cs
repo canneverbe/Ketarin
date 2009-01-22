@@ -9,6 +9,7 @@ using System.Net;
 using System.Text.RegularExpressions;
 using CDBurnerXP.Forms;
 using CDBurnerXP.IO;
+using Microsoft.Win32;
 
 namespace Ketarin.Forms
 {
@@ -449,6 +450,10 @@ namespace Ketarin.Forms
 
             using (new ControlRedrawLock(this))
             {
+                // Determine scroll position
+                User32.POINT scrollPos = new User32.POINT();
+                User32.SendMessage(rtfContent.Handle, User32.EM_GETSCROLLPOS, IntPtr.Zero, ref scrollPos);
+
                 // Reset text area
                 MatchSelection = string.Empty;
                 rtfContent.SelectionStart = 0;
@@ -497,25 +502,30 @@ namespace Ketarin.Forms
 
                     int matchStart = pos + CurrentVariable.StartText.Length;
 
-                    if (string.IsNullOrEmpty(CurrentVariable.EndText)) return;
+                    if (!string.IsNullOrEmpty(CurrentVariable.EndText))
+                    {
+                        pos = rtfContent.Text.IndexOf(CurrentVariable.EndText, matchStart);
+                        if (pos >= 0)
+                        {
+                            // Highlight EndText with blue background if specified
+                            rtfContent.SelectionStart = pos;
+                            rtfContent.SelectionLength = CurrentVariable.EndText.Length;
+                            rtfContent.SelectionColor = Color.White;
+                            rtfContent.SelectionBackColor = Color.Blue;
 
-                    pos = rtfContent.Text.IndexOf(CurrentVariable.EndText, matchStart);
-                    if (pos < 0) return;
-
-                    // Highlight EndText with blue background if specified
-                    rtfContent.SelectionStart = pos;
-                    rtfContent.SelectionLength = CurrentVariable.EndText.Length;
-                    rtfContent.SelectionColor = Color.White;
-                    rtfContent.SelectionBackColor = Color.Blue;
-
-                    // Highlight match with red background
-                    rtfContent.SelectionStart = matchStart;
-                    rtfContent.SelectionLength = pos - matchStart;
-                    MatchSelection = rtfContent.SelectedText;
-                    rtfContent.SelectionColor = Color.White;
-                    rtfContent.SelectionBackColor = Color.Red;
-                    rtfContent.SelectionLength = 0;
+                            // Highlight match with red background
+                            rtfContent.SelectionStart = matchStart;
+                            rtfContent.SelectionLength = pos - matchStart;
+                            MatchSelection = rtfContent.SelectedText;
+                            rtfContent.SelectionColor = Color.White;
+                            rtfContent.SelectionBackColor = Color.Red;
+                            rtfContent.SelectionLength = 0;
+                        }
+                    }
                 }
+
+                // Restore scroll position
+                User32.SendMessage(rtfContent.Handle, User32.EM_SETSCROLLPOS, IntPtr.Zero, ref scrollPos);
             }
         }
 
