@@ -54,7 +54,10 @@ namespace Ketarin.Forms
             int selStart = txtVariableName.SelectionStart;
             
             m_Updating = true;
-            txtVariableName.Text = txtVariableName.Text.Trim('{', '}');
+            // Do not allow colons and braces within variable names
+            txtVariableName.Text = txtVariableName.Text.Replace("{", "");
+            txtVariableName.Text = txtVariableName.Text.Replace("}", "");
+            txtVariableName.Text = txtVariableName.Text.Replace(":", "");
             m_Updating = false;
 
             txtVariableName.SelectionStart = selStart;
