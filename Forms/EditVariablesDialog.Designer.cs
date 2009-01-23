@@ -53,6 +53,7 @@
             this.rbContentUrlStartEnd = new System.Windows.Forms.RadioButton();
             this.rbContentUrlRegex = new System.Windows.Forms.RadioButton();
             this.rbContentText = new System.Windows.Forms.RadioButton();
+            this.cmnuGoToMatch = new System.Windows.Forms.MenuItem();
             this.SuspendLayout();
             // 
             // lblVariables
@@ -145,7 +146,8 @@
             // 
             this.cmuRtf.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.cmnuCopy,
-            this.cmnuCopyMatch});
+            this.cmnuCopyMatch,
+            this.cmnuGoToMatch});
             // 
             // cmnuCopy
             // 
@@ -321,6 +323,13 @@
             this.rbContentText.UseVisualStyleBackColor = true;
             this.rbContentText.CheckedChanged += new System.EventHandler(this.rbContentText_CheckedChanged);
             // 
+            // cmnuGoToMatch
+            // 
+            this.cmnuGoToMatch.Index = 2;
+            this.cmnuGoToMatch.Shortcut = System.Windows.Forms.Shortcut.CtrlG;
+            this.cmnuGoToMatch.Text = "&Go to match";
+            this.cmnuGoToMatch.Click += new System.EventHandler(this.cmnuGoToMatch_Click);
+            // 
             // EditVariablesDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -385,5 +394,6 @@
         private System.Windows.Forms.ContextMenu cmuRtf;
         private System.Windows.Forms.MenuItem cmnuCopy;
         private System.Windows.Forms.MenuItem cmnuCopyMatch;
+        private System.Windows.Forms.MenuItem cmnuGoToMatch;
     }
 }

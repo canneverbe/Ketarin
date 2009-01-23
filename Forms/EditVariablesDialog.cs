@@ -34,6 +34,7 @@ namespace Ketarin.Forms
             set {
                 m_MatchSelection = value;
                 cmnuCopyMatch.Enabled = !string.IsNullOrEmpty(m_MatchSelection);
+                cmnuGoToMatch.Enabled = cmnuCopyMatch.Enabled;
             }
         }
 
@@ -221,8 +222,26 @@ namespace Ketarin.Forms
         private void lbVariables_SelectedIndexChanged(object sender, EventArgs e)
         {
             UpdateInterface();
-
+            GoToMatch();
             txtUrl.Focus();
+        }
+
+        /// <summary>
+        /// Makes sure, that the matched content is visible
+        /// in the richtextbox.
+        /// </summary>
+        private void GoToMatch()
+        {
+            if (!string.IsNullOrEmpty(m_MatchSelection))
+            {
+                int pos = rtfContent.Find(m_MatchSelection);
+                if (pos >= 0)
+                {
+                    rtfContent.SelectionStart = pos;
+                    rtfContent.SelectionLength = m_MatchSelection.Length;
+                    rtfContent.SelectionLength = 0;
+                }
+            }
         }
 
         /// <summary>
@@ -444,6 +463,10 @@ namespace Ketarin.Forms
             RefreshRtfFormatting();
         }
 
+        /// <summary>
+        /// Highlights the currently matched content (based 
+        /// on regex or start/end) within the richtextbox.
+        /// </summary>
         private void RefreshRtfFormatting()
         {
             if (string.IsNullOrEmpty(rtfContent.Text) || CurrentVariable.VariableType == UrlVariable.Type.Textual) return;
@@ -614,6 +637,11 @@ namespace Ketarin.Forms
         private void cmnuCopyMatch_Click(object sender, EventArgs e)
         {
             SafeClipboard.SetData(MatchSelection, true);
+        }
+
+        private void cmnuGoToMatch_Click(object sender, EventArgs e)
+        {
+            GoToMatch();
         }
 
         #endregion
