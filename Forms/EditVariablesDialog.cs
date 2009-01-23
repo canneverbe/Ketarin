@@ -441,6 +441,10 @@ namespace Ketarin.Forms
                         return true;
                     }
                     break;
+
+                case Keys.Control | Keys.G:
+                    GoToMatch();
+                    return true;
             }
 
             return base.ProcessCmdKey(ref msg, keyData);
