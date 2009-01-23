@@ -525,7 +525,7 @@ namespace Ketarin.Forms
 
                     int matchStart = pos + CurrentVariable.StartText.Length;
 
-                    if (!string.IsNullOrEmpty(CurrentVariable.EndText))
+                    if (!string.IsNullOrEmpty(CurrentVariable.EndText) && matchStart <= rtfContent.Text.Length)
                     {
                         pos = rtfContent.Text.IndexOf(CurrentVariable.EndText, matchStart);
                         if (pos >= 0)
