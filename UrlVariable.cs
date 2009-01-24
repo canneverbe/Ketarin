@@ -551,14 +551,22 @@ namespace Ketarin
             {
                 m_CachedContent = ExpandedTextualContent;
                 LogDialog.Log(this, value, m_CachedContent);
-                return Replace(value, ExpandedTextualContent);
+                return Replace(value, m_CachedContent);
             }
 
             string page = string.Empty;
             // Get the content we need to put in
             using (WebClient client = new WebClient())
             {
-                page = client.DownloadString(ExpandedUrl);
+                try
+                {
+                    string url = ExpandedUrl;
+                    page = client.DownloadString(url);
+                }
+                catch (ArgumentException)
+                {
+                    throw new UriFormatException("The URL '" + Url + "' of variable '" + m_Name + "' is not valid.");
+                }
                 m_DownloadCount++;
             }
 
