@@ -36,6 +36,8 @@ namespace Ketarin
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
+            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
+
             // Initialise database
             try
             {
@@ -106,6 +108,12 @@ namespace Ketarin
             {
                 Application.Run(new MainForm());
             }
+        }
+
+        static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            Exception ex = e.ExceptionObject as Exception;
+            MessageBox.Show("An unhandled exception occured and Ketarin needs to be closed.\n\n" + (ex == null ? "" : ex.ToString()), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         #region Command line updater
