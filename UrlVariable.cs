@@ -589,7 +589,7 @@ namespace Ketarin
                         LogDialog.Log(this, value, m_CachedContent);
                         return Replace(value, match.Value);
                     }
-                    else if (match.Groups.Count == 2)
+                    else if (match.Groups.Count >= 2)
                     {
                         m_CachedContent = match.Groups[1].Value;
                         LogDialog.Log(this, value, m_CachedContent);
