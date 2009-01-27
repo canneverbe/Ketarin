@@ -521,7 +521,15 @@ namespace Ketarin
         protected bool DoDownload(ApplicationJob job, Uri urlToRequest)
         {
             // Lower security policies
-            ServicePointManager.CheckCertificateRevocationList = false;
+            try
+            {
+                ServicePointManager.CheckCertificateRevocationList = false;
+            }
+            catch (PlatformNotSupportedException)
+            {
+                // .NET bug under special circumstances
+            }
+
             ServicePointManager.ServerCertificateValidationCallback = delegate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
             {
                 return true;
