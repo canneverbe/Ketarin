@@ -127,7 +127,9 @@ namespace Ketarin
         public string Regex
         {
             get { return m_Regex; }
-            set { m_Regex = value; }
+            set {
+                m_Regex = value ?? string.Empty;
+            }
         }
 
         [XmlElement("Url")]
@@ -293,7 +295,7 @@ namespace Ketarin
             m_StartText = reader["StartText"] as string;
             m_EndText = reader["EndText"] as string;
             m_Url = reader["Url"] as string;
-            m_Regex = reader["RegularExpression"] as string;
+            Regex = reader["RegularExpression"] as string;
             m_CachedContent = reader["CachedContent"] as string;
             m_JobGuid = new Guid(reader["JobGuid"] as string);
             m_VariableType = (Type)Convert.ToInt32(reader["VariableType"]);
