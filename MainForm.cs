@@ -523,7 +523,7 @@ namespace Ketarin
             mnuImport.Enabled = false;
 
             m_Updater.BeginUpdate(jobs, onlyCheck);
-            olvJobs.RefreshObjects(m_Jobs);
+            olvJobs.RefreshObjects(jobs);
         }
 
         #region Context menu
@@ -601,7 +601,8 @@ namespace Ketarin
         {
             if (DeleteApplicationDialog.Show(this, olvJobs.SelectedObjects))
             {
-                UpdateList();
+                olvJobs.RemoveObject(olvJobs.SelectedObject);
+                m_Jobs = new List<ApplicationJob>(DbManager.GetJobs()).ToArray();
             }
         }
 
@@ -611,6 +612,7 @@ namespace Ketarin
             cmnuEdit.Enabled = (job != null);
             cmnuDelete.Enabled = (olvJobs.SelectedIndices.Count > 0 && !m_Updater.IsBusy);
             cmnuUpdate.Enabled = (!m_Updater.IsBusy);
+            cmnuCheckForUpdate.Enabled = (!m_Updater.IsBusy);
             cmnuOpenFile.Enabled = (job != null && !m_Updater.IsBusy && !string.IsNullOrEmpty(job.PreviousLocation) && File.Exists(job.PreviousLocation));
             cmnuOpenFolder.Enabled = (job != null && !string.IsNullOrEmpty(job.PreviousLocation) && File.Exists(job.PreviousLocation));
             cmnuRename.Enabled = cmnuOpenFile.Enabled;
@@ -640,6 +642,24 @@ namespace Ketarin
                         MessageBox.Show(this, "The file to be renamed does not exist anymore.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
+            }
+        }
+
+        private void cmnuCheckForUpdate_Click(object sender, EventArgs e)
+        {
+            List<ApplicationJob> jobs = new List<ApplicationJob>();
+            foreach (ApplicationJob job in olvJobs.SelectedObjects)
+            {
+                jobs.Add(job);
+            }
+
+            if (jobs.Count == 0)
+            {
+                RunJobs(true);
+            }
+            else
+            {
+                RunJobs(jobs.ToArray(), true);
             }
         }
 
@@ -853,5 +873,6 @@ namespace Ketarin
         }
 
         #endregion
+
     }
 }
