@@ -332,6 +332,7 @@
             this.olvJobs.AllColumns.Add(this.colTarget);
             this.olvJobs.AllColumns.Add(this.colCategory);
             this.olvJobs.AllColumns.Add(this.colCustomValue);
+            this.olvJobs.AllowColumnReorder = true;
             this.olvJobs.AlternateRowBackColor = System.Drawing.Color.Empty;
             this.olvJobs.AlwaysGroupByColumn = null;
             this.olvJobs.AlwaysGroupBySortOrder = System.Windows.Forms.SortOrder.None;
