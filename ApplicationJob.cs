@@ -621,7 +621,7 @@ namespace Ketarin
         /// </summary>
         public string GetXml()
         {
-            return GetXml(new ApplicationJob[] { this });
+            return GetXml(new ApplicationJob[] { this }, false);
         }
 
         /// <summary>
@@ -659,8 +659,9 @@ namespace Ketarin
         /// <summary>
         /// Returns an XML document from the given jobs.
         /// </summary>
-        /// <param name="jobs"></param>
-        public static string GetXml(System.Collections.IEnumerable jobs)
+        /// <param name="jobs">The jobs which should be included in the XML</param>
+        /// <param name="isTemplate">Determines whether or not a template should be generated. Templates lack a few properties.</param>
+        public static string GetXml(System.Collections.IEnumerable jobs, bool isTemplate)
         {
             XmlSerializer serializer = new XmlSerializer(typeof(ApplicationJob));
             XmlWriterSettings settings = new XmlWriterSettings();
@@ -680,7 +681,33 @@ namespace Ketarin
                 xmlWriter.WriteEndElement();
             }
 
-            return output.ToString();
+            string xmlResult = output.ToString();
+
+            // Remove a couple of properties:
+            // Guid, DownloadDate, LastUpdated, PreviousLocation
+            if (isTemplate)
+            {
+                XmlDocument doc = new XmlDocument();
+                doc.PreserveWhitespace = true;
+                doc.LoadXml(xmlResult);
+
+                XmlNodeList nodes = doc.GetElementsByTagName("ApplicationJob");
+                foreach (XmlElement element in nodes)
+                {
+                    // Remove attribute Guid
+                    element.RemoveAttribute("Guid");
+                    // Remove element DownloadDate
+                    element.RemoveChild(element["DownloadDate"]);
+                    // Remove element LastUpdated
+                    element.RemoveChild(element["LastUpdated"]);
+                    // Remove element PreviousLocation
+                    element.RemoveChild(element["PreviousLocation"]);
+                }
+                
+                xmlResult = doc.InnerXml;
+            }
+
+            return xmlResult;
         }
 
         /// <summary>
