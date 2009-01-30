@@ -768,12 +768,12 @@ namespace Ketarin
         {
             using (SaveFileDialog dialog = new SaveFileDialog())
             {
-                dialog.Filter = "XML file|*.xml";
+                dialog.Filter = "Application Definition|*.xml|Application Template|*.xml";
                 if (dialog.ShowDialog() != DialogResult.OK) return;
 
                 try
                 {
-                    File.WriteAllText(dialog.FileName, ApplicationJob.GetXml(objects));
+                    File.WriteAllText(dialog.FileName, ApplicationJob.GetXml(objects, dialog.FilterIndex == 2));
                 }
                 catch (Exception ex)
                 {

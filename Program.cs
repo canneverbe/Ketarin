@@ -120,7 +120,7 @@ namespace Ketarin
 
         static void updater_ProgressChanged(object sender, Updater.JobProgressChangedEventArgs e)
         {
-            Console.Write(" " + e.ProgressPercentage + "%");
+            Console.WriteLine(e.ApplicationJob.Name + ": " + e.ProgressPercentage + "%");
         }
 
         static void updater_StatusChanged(object sender, Updater.JobStatusChangedEventArgs e)
@@ -147,6 +147,8 @@ namespace Ketarin
                     status += "Update successful.";
                     break;
             }
+
+            Console.WriteLine(status);
 
             if (m_Icon != null)
             {
