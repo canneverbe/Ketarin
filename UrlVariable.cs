@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Text;
 using System.Data;
@@ -423,7 +424,23 @@ namespace Ketarin
                     // Useful, if you want to load, but not use a variable
                     return string.Empty;
                 case "ext":
-                    return System.IO.Path.GetExtension(content).TrimStart('.');
+                    return Path.GetExtension(content).TrimStart('.');
+                case "directory":
+                    try
+                    {
+                        if (content.StartsWith("\"") && content.EndsWith("\""))
+                        {
+                            return "\"" + Path.GetDirectoryName(content.Trim('"')) + "\"";
+                        }
+                        else
+                        {
+                            return Path.GetDirectoryName(content.Trim('"'));
+                        }
+                    }
+                    catch
+                    {
+                        return content;
+                    }
                 case "toupper":
                     return content.ToUpper();
                 case "tolower":
