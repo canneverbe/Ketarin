@@ -393,7 +393,7 @@ namespace Ketarin
                     {
                         numTries++;
                         m_Status[job] = DoDownload(job, out requestedUrl) ? Status.UpdateSuccessful : Status.NoUpdate;
-                        
+
                         // If there is a custom column variable, and it has not been been downloaded yet,
                         // make sure that we fetch it now "unnecessarily" so that the column contains a current value.
                         string customColumn = SettingsDialog.CustomColumnVariableName;
@@ -439,6 +439,12 @@ namespace Ketarin
                 m_Errors.Add(new ApplicationJobError(job, ex));
             }
             catch (IOException ex)
+            {
+                LogDialog.Log(job, ex);
+                m_Errors.Add(new ApplicationJobError(job, ex));
+                m_Status[job] = Status.Failure;
+            }
+            catch (UnauthorizedAccessException ex)
             {
                 LogDialog.Log(job, ex);
                 m_Errors.Add(new ApplicationJobError(job, ex));
