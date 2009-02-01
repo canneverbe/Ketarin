@@ -773,11 +773,11 @@ namespace Ketarin
             baseCommand = job.Variables.ReplaceAllInString(baseCommand);
 
             // Replace variable: file
-            baseCommand = baseCommand.Replace("{file}", "\"" + job.PreviousLocation + "\"");
+            baseCommand = UrlVariable.Replace(baseCommand, "file", "\"" + job.PreviousLocation + "\"");
             // Replace variable: root
             try
             {
-                baseCommand = baseCommand.Replace("{root}", Path.GetPathRoot(Application.StartupPath));
+                baseCommand = UrlVariable.Replace(baseCommand, "root", Path.GetPathRoot(Application.StartupPath));
             }
             catch (ArgumentException) { }
 
