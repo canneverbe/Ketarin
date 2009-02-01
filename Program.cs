@@ -36,7 +36,17 @@ namespace Ketarin
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
+            // Set an error handler (just a message box) for unexpected exceptions in threads
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
+
+            // Parse command line arguments
+            CommandlineArguments arguments = new CommandlineArguments(args);
+
+            // Is a database path set per command line?
+            if (!string.IsNullOrEmpty(arguments["database"]))
+            {
+                DbManager.DatabasePath = arguments["database"];
+            }
 
             // Initialise database
             try
@@ -55,55 +65,52 @@ namespace Ketarin
                 return;
             }
 
-            CommandlineArguments arguments = new CommandlineArguments(args);
-            
-            // Either run silently on command line or launch GUI
-            if (args.Length > 0) 
+            // Either run silently on command line...
+            if (arguments["silent"] != null)
             {
-                if (arguments["silent"] != null)
+                Kernel32.AttachConsole(Kernel32.ATTACH_PARENT_PROCESS);
+
+                ApplicationJob[] jobs = DbManager.GetJobs();
+                Updater updater = new Updater();
+                updater.StatusChanged += new EventHandler<Updater.JobStatusChangedEventArgs>(updater_StatusChanged);
+                updater.ProgressChanged += new EventHandler<Updater.JobProgressChangedEventArgs>(updater_ProgressChanged);
+                updater.BeginUpdate(jobs, false);
+
+                if (arguments["notify"] != null)
                 {
-                    Kernel32.AttachConsole(Kernel32.ATTACH_PARENT_PROCESS);
-
-                    ApplicationJob[] jobs = DbManager.GetJobs();
-                    Updater updater = new Updater();
-                    updater.StatusChanged += new EventHandler<Updater.JobStatusChangedEventArgs>(updater_StatusChanged);
-                    updater.ProgressChanged += new EventHandler<Updater.JobProgressChangedEventArgs>(updater_ProgressChanged);
-                    updater.BeginUpdate(jobs, false);
-
-                    if (arguments["notify"] != null)
-                    {
-                        m_Icon = new NotifyIcon();
-                        m_Icon.Icon = System.Drawing.Icon.FromHandle(Properties.Resources.Restart.GetHicon());
-                        m_Icon.Text = "Ketarin is working...";
-                        m_Icon.Visible = true;
-                    }
-
-                    while (updater.IsBusy)
-                    {
-                        Thread.Sleep(1000);
-                    }
-
-                    if (m_Icon != null)
-                    {
-                        m_Icon.Dispose();
-                    }
-
-                    Kernel32.FreeConsole();
+                    m_Icon = new NotifyIcon();
+                    m_Icon.Icon = System.Drawing.Icon.FromHandle(Properties.Resources.Restart.GetHicon());
+                    m_Icon.Text = "Ketarin is working...";
+                    m_Icon.Visible = true;
                 }
-                else if (arguments["update"] != null && arguments["appguid"] != null)
+
+                while (updater.IsBusy)
                 {
-                    // Update properties of an application in the database
-                    ApplicationJob job = DbManager.GetJob(new Guid(arguments["appguid"]));
-                    if (job == null) return;
-
-                    if (arguments["PreviousLocation"] != null)
-                    {
-                        job.PreviousLocation = arguments["PreviousLocation"];
-                    }
-
-                    job.Save();
+                    Thread.Sleep(1000);
                 }
+
+                if (m_Icon != null)
+                {
+                    m_Icon.Dispose();
+                }
+
+                Kernel32.FreeConsole();
             }
+            // ...perform database operations...
+            else if (arguments["update"] != null && arguments["appguid"] != null)
+            {
+                // Update properties of an application in the database
+                ApplicationJob job = DbManager.GetJob(new Guid(arguments["appguid"]));
+                if (job == null) return;
+
+                if (arguments["PreviousLocation"] != null)
+                {
+                    job.PreviousLocation = arguments["PreviousLocation"];
+                }
+
+                job.Save();
+            }
+            // ...ir lanch the GUI.
             else
             {
                 Application.Run(new MainForm());
