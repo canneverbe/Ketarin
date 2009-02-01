@@ -73,6 +73,14 @@ namespace Ketarin
         private static string m_DatabasePath;
 
         /// <summary>
+        /// Sets a predefined database path if necessary.
+        /// </summary>
+        public static string DatabasePath
+        {
+            set { DbManager.m_DatabasePath = value; }
+        }
+
+        /// <summary>
         /// Builds a new proxy object from the settings.
         /// Returns null if no valid proxy exists.
         /// </summary>
