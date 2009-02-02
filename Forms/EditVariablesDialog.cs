@@ -23,6 +23,7 @@ namespace Ketarin.Forms
         private ApplicationJob m_Job = null;
         private bool m_Updating = false;
         private string m_MatchSelection = null;
+        private int m_MatchPosition = -1;
 
         /// <summary>
         /// Gets or sets the currently used match for a given
@@ -234,10 +235,9 @@ namespace Ketarin.Forms
         {
             if (!string.IsNullOrEmpty(m_MatchSelection))
             {
-                int pos = rtfContent.Find(m_MatchSelection);
-                if (pos >= 0)
+                if (m_MatchPosition >= 0)
                 {
-                    rtfContent.SelectionStart = pos;
+                    rtfContent.SelectionStart = m_MatchPosition;
                     rtfContent.SelectionLength = m_MatchSelection.Length;
                     rtfContent.SelectionLength = 0;
                 }
@@ -314,6 +314,7 @@ namespace Ketarin.Forms
 
             CurrentVariable.VariableType = UrlVariable.Type.Textual;
             MatchSelection = null;
+            m_MatchPosition = -1;
             UpdateInterface();
         }
 
@@ -483,6 +484,7 @@ namespace Ketarin.Forms
 
                 // Reset text area
                 MatchSelection = string.Empty;
+                m_MatchPosition = -1;
                 rtfContent.SelectionStart = 0;
                 rtfContent.SelectionLength = rtfContent.Text.Length;
                 rtfContent.SelectionColor = SystemColors.WindowText;
@@ -495,6 +497,7 @@ namespace Ketarin.Forms
                     Regex regex = new Regex(CurrentVariable.Regex, RegexOptions.IgnoreCase | RegexOptions.Singleline);
                     Match match = regex.Match(rtfContent.Text);
 
+                    m_MatchPosition = match.Index;
                     rtfContent.SelectionStart = match.Index;
                     rtfContent.SelectionLength = match.Length;
                     rtfContent.SelectionColor = Color.White;
@@ -502,6 +505,7 @@ namespace Ketarin.Forms
 
                     if (match.Groups.Count > 1)
                     {
+                        m_MatchPosition = match.Groups[1].Index;
                         rtfContent.SelectionStart = match.Groups[1].Index;
                         rtfContent.SelectionLength = match.Groups[1].Length;
                         rtfContent.SelectionColor = Color.White;
@@ -535,6 +539,7 @@ namespace Ketarin.Forms
                         if (pos >= 0)
                         {
                             // Highlight EndText with blue background if specified
+                            m_MatchPosition = pos;
                             rtfContent.SelectionStart = pos;
                             rtfContent.SelectionLength = CurrentVariable.EndText.Length;
                             rtfContent.SelectionColor = Color.White;
