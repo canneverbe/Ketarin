@@ -1095,7 +1095,7 @@ namespace Ketarin
                 throw new TargetPathInvalidException(targetFile);
             }
 
-            if (!current.Exists && !string.IsNullOrEmpty(m_PreviousLocation))
+            if (!current.Exists && !string.IsNullOrEmpty(m_PreviousLocation) && m_DeletePreviousFile)
             {
                 // The file does not exist at the target location.
                 // Check if the previously downloaded file still matches.
