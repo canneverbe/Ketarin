@@ -379,11 +379,20 @@ namespace Ketarin
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
+            // Make shortcuts global
             switch (keyData)
             {
                 case (Keys.Control | Keys.Enter):
                     cmnuOpenFolder.PerformClick();
                     return true;
+            }
+
+            foreach (MenuItem item in cmnuJobs.MenuItems)
+            {
+                if ((int)item.Shortcut == (int)keyData)
+                {
+                    item.PerformClick();
+                }
             }
 
             return base.ProcessCmdKey(ref msg, keyData);
