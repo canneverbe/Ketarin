@@ -78,7 +78,8 @@ namespace Ketarin.Forms
 
         public static void Log(UrlVariable var, string url, string replacement)
         {
-            Log("Replacing {" + var.Name + "} in '" + url + "' with '" + replacement + "'");
+            string prepend = (var.Parent == null || var.Parent.Parent == null) ? "" : var.Parent.Parent.Name + ": ";
+            Log(prepend + "Replacing {" + var.Name + "} in '" + url + "' with '" + replacement + "'");
         }
 
         public static void Log(ApplicationJob job, bool fileSizeMismatch, bool dateMismatch)
