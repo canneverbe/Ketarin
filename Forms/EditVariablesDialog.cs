@@ -19,6 +19,17 @@ namespace Ketarin.Forms
     /// </summary>
     public partial class EditVariablesDialog : PersistentForm
     {
+        /// <summary>
+        /// Allows to refresh the contents of the ListBox.
+        /// </summary>
+        private class VariableListBox : ListBox
+        {
+            public new void RefreshItems()
+            {
+                base.RefreshItems();
+            }
+        }
+
         private ApplicationJob.UrlVariableCollection m_Variables = null;
         private ApplicationJob m_Job = null;
         private bool m_Updating = false;
@@ -55,14 +66,7 @@ namespace Ketarin.Forms
                     return this.Invoke(new VariableResultDelegate(delegate() { return CurrentVariable; })) as UrlVariable;
                 }
 
-                string name = lbVariables.SelectedItem as string;
-                if (name == null) return null;
-
-                if (m_Variables.ContainsKey(name))
-                {
-                    return m_Variables[name];
-                }
-                return null;
+                return lbVariables.SelectedItem as UrlVariable;
             }
         }
 
@@ -133,7 +137,7 @@ namespace Ketarin.Forms
             lbVariables.Items.Clear();
             foreach (KeyValuePair<string, UrlVariable> pair in m_Variables)
             {
-                lbVariables.Items.Add(pair.Key);
+                lbVariables.Items.Add(pair.Value);
                 appVarNames.Add(pair.Value.Name);
             }
 
@@ -424,6 +428,20 @@ namespace Ketarin.Forms
         {
             switch (keyData)
             {
+                case Keys.F2:
+                    if (CurrentVariable != null)
+                    {
+                        NewVariableDialog dialog = new NewVariableDialog();
+                        dialog.VariableName = CurrentVariable.Name;
+                        dialog.Text = "Rename variable";
+                        if (dialog.ShowDialog(this) == DialogResult.OK)
+                        {
+                            CurrentVariable.Name = dialog.VariableName;
+                            lbVariables.RefreshItems();
+                        }
+                    }
+                    break;
+
                 case Keys.Enter:
                     // Do not push the OK button in certain occasions
                     if (lbVariables.Items.Count == 0)

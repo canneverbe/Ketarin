@@ -30,7 +30,7 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EditVariablesDialog));
             this.lblVariables = new System.Windows.Forms.Label();
-            this.lbVariables = new System.Windows.Forms.ListBox();
+            this.lbVariables = new VariableListBox();
             this.bCancel = new System.Windows.Forms.Button();
             this.bOK = new System.Windows.Forms.Button();
             this.lblUrl = new System.Windows.Forms.Label();
@@ -371,7 +371,7 @@
         #endregion
 
         private System.Windows.Forms.Label lblVariables;
-        private System.Windows.Forms.ListBox lbVariables;
+        private VariableListBox lbVariables;
         private System.Windows.Forms.Button bCancel;
         private System.Windows.Forms.Button bOK;
         private System.Windows.Forms.Label lblUrl;

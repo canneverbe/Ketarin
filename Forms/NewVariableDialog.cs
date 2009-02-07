@@ -8,15 +8,25 @@ using System.Windows.Forms;
 
 namespace Ketarin.Forms
 {
+    /// <summary>
+    /// Represents a dialog for creating or rename a variable.
+    /// </summary>
     public partial class NewVariableDialog : Form
     {
         #region Properties
 
+        /// <summary>
+        /// Gets or sets the variable name.
+        /// </summary>
         public string VariableName
         {
             get
             {
                 return txtVariableName.Text;
+            }
+            set
+            {
+                txtVariableName.Text = value;
             }
         }
 
@@ -35,11 +45,13 @@ namespace Ketarin.Forms
         {
             base.OnLoad(e);
 
+            // Provide a list of most used variable names
             txtVariableName.SetVariableNames(DbManager.GetMostUsedVariableNames());
         }
 
         private void bOK_Click(object sender, EventArgs e)
         {
+            // Make sure, that the user entered a value (if OK has been chosen)
             if (string.IsNullOrEmpty(txtVariableName.Text))
             {
                 MessageBox.Show(this, "The variable name must not be empty.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
