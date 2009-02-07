@@ -338,7 +338,7 @@ namespace Ketarin.Forms
                     }
                     m_Variables.Add(dialog.VariableName, new UrlVariable(dialog.VariableName, m_Variables));
                     RefreshListBox();
-                    lbVariables.SelectedItem = dialog.VariableName;
+                    lbVariables.SelectedItem = m_Variables[dialog.VariableName];
                 }
             }
         }
