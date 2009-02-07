@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.txtLog = new System.Windows.Forms.TextBox();
+            this.txtLog = new TextBox();
             this.SuspendLayout();
             // 
             // txtLog
@@ -65,6 +65,6 @@
 
         #endregion
 
-        private System.Windows.Forms.TextBox txtLog;
+        private TextBox txtLog;
     }
 }
