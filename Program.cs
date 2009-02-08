@@ -68,7 +68,7 @@ namespace Ketarin
             // Either run silently on command line...
             if (arguments["silent"] != null)
             {
-                Kernel32.AttachConsole(Kernel32.ATTACH_PARENT_PROCESS);
+                Kernel32.ManagedAttachConsole(Kernel32.ATTACH_PARENT_PROCESS);
 
                 ApplicationJob[] jobs = DbManager.GetJobs();
                 Updater updater = new Updater();
