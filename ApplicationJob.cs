@@ -1117,8 +1117,18 @@ namespace Ketarin
                 // that is, if there is an actual difference.
                 if (m_VariableChangeIndicatorLastContent != null)
                 {
+                    bool update = (content != m_VariableChangeIndicatorLastContent);
+                    if (update)
+                    {
+                        LogDialog.Log(this, string.Format("Update required, {0} has changed from '{1}' to '{2}'", "{" + varName + "}", m_VariableChangeIndicatorLastContent, content));
+                    }
+                    else
+                    {
+                        LogDialog.Log(this, string.Format("Update not required, {0} has not changed", "{" + varName + "}"));
+                    }
+
                     m_VariableChangeIndicatorLastContent = content;
-                    return (content != m_VariableChangeIndicatorLastContent);
+                    return update;
                 }
                 else
                 {
