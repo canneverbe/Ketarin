@@ -83,7 +83,14 @@ namespace Ketarin
         public string VariableChangeIndicator
         {
             get { return m_VariableChangeIndicator; }
-            set { m_VariableChangeIndicator = value; }
+            set
+            {
+                if (m_VariableChangeIndicator != value)
+                {
+                    m_VariableChangeIndicator = value;
+                    m_VariableChangeIndicatorLastContent = null;
+                }
+            }
         }
 
         /// <summary>
