@@ -621,6 +621,8 @@ namespace Ketarin
                 // Skip downloading!
                 if (m_OnlyCheck) return true;
 
+                ExecuteCommand(job, job.ExecutePreCommand);
+
                 // Read all file contents to a temporary location
                 string tmpLocation = Path.GetTempFileName();
 
@@ -703,10 +705,7 @@ namespace Ketarin
 
             // Execute a default command?
             string defaultCommand = Settings.GetValue("DefaultCommand") as string;
-            if (!string.IsNullOrEmpty(defaultCommand))
-            {
-                ExecuteCommand(job, defaultCommand);
-            }
+            ExecuteCommand(job, defaultCommand);
 
             // Do we need to execute a command after downloading?
             if (!string.IsNullOrEmpty(job.ExecuteCommand))
@@ -769,6 +768,9 @@ namespace Ketarin
         /// </summary>
         private static void ExecuteCommand(ApplicationJob job, string baseCommand)
         {
+            // Ignore empty commands
+            if (string.IsNullOrEmpty(baseCommand)) return;
+
             baseCommand = baseCommand.Replace("\r\n", "\n");
             baseCommand = job.Variables.ReplaceAllInString(baseCommand);
 
