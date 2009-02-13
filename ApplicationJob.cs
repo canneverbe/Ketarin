@@ -34,7 +34,8 @@ namespace Ketarin
         private string m_PreviousLocation = string.Empty;
         private SourceType m_SourceType = SourceType.FixedUrl;
         private UrlVariableCollection m_Variables = null;
-        private string m_ExecuteCommand = string.Empty;
+        private string m_ExecutePostCommand = string.Empty;
+        private string m_ExecutePreCommand = string.Empty;
         private string m_Category = string.Empty;
         private Guid m_Guid = Guid.Empty;
         private bool m_CanBeShared = true;
@@ -352,8 +353,19 @@ namespace Ketarin
         [XmlElement("ExecuteCommand")]
         public string ExecuteCommand
         {
-            get { return m_ExecuteCommand; }
-            set { m_ExecuteCommand = value; }
+            get { return m_ExecutePostCommand; }
+            set { m_ExecutePostCommand = value; }
+        }
+
+        /// <summary>
+        /// A command to be executed before downloading.
+        /// {file} is a placeholder for PreviousLocation.
+        /// </summary>
+        [XmlElement("ExecutePreCommand")]
+        public string ExecutePreCommand
+        {
+            get { return m_ExecutePreCommand; }
+            set { m_ExecutePreCommand = value; }
         }
 
         [XmlElement("Category")]
@@ -861,6 +873,7 @@ namespace Ketarin
                                                    PreviousLocation = @PreviousLocation,
                                                    SourceType = @SourceType,
                                                    ExecuteCommand = @ExecuteCommand,
+                                                   ExecutePreCommand = @ExecutePreCommand, 
                                                    Category = @Category,
                                                    CanBeShared = @CanBeShared,
                                                    ShareApplication = @ShareApplication,
@@ -881,7 +894,8 @@ namespace Ketarin
                                 command.Parameters.Add(new SQLiteParameter("@DeletePreviousFile", m_DeletePreviousFile));
                                 command.Parameters.Add(new SQLiteParameter("@PreviousLocation", m_PreviousLocation));
                                 command.Parameters.Add(new SQLiteParameter("@SourceType", m_SourceType));
-                                command.Parameters.Add(new SQLiteParameter("@ExecuteCommand", m_ExecuteCommand));
+                                command.Parameters.Add(new SQLiteParameter("@ExecuteCommand", m_ExecutePostCommand));
+                                command.Parameters.Add(new SQLiteParameter("@ExecutePreCommand", ExecutePreCommand));
                                 command.Parameters.Add(new SQLiteParameter("@Category", m_Category));
                                 command.Parameters.Add(new SQLiteParameter("@CanBeShared", m_CanBeShared));
                                 command.Parameters.Add(new SQLiteParameter("@ShareApplication", m_ShareApplication));
@@ -913,8 +927,8 @@ namespace Ketarin
                             using (IDbCommand command = conn.CreateCommand())
                             {
                                 command.Transaction = transaction;
-                                command.CommandText = @"INSERT INTO jobs (ApplicationName, FixedDownloadUrl, DateAdded, TargetPath, LastUpdated, IsEnabled, FileHippoId, DeletePreviousFile, SourceType, ExecuteCommand, Category, JobGuid, CanBeShared, ShareApplication, HttpReferer, FileHippoVersion, DownloadBeta, DownloadDate, VariableChangeIndicator, VariableChangeIndicatorLastContent)
-                                                 VALUES (@ApplicationName, @FixedDownloadUrl, @DateAdded, @TargetPath, @LastUpdated, @IsEnabled, @FileHippoId, @DeletePreviousFile, @SourceType, @ExecuteCommand, @Category, @JobGuid, @CanBeShared, @ShareApplication, @HttpReferer, @FileHippoVersion, @DownloadBeta, @DownloadDate, @VariableChangeIndicator, NULL)";
+                                command.CommandText = @"INSERT INTO jobs (ApplicationName, FixedDownloadUrl, DateAdded, TargetPath, LastUpdated, IsEnabled, FileHippoId, DeletePreviousFile, SourceType, ExecuteCommand, ExecutePreCommand, Category, JobGuid, CanBeShared, ShareApplication, HttpReferer, FileHippoVersion, DownloadBeta, DownloadDate, VariableChangeIndicator, VariableChangeIndicatorLastContent)
+                                                 VALUES (@ApplicationName, @FixedDownloadUrl, @DateAdded, @TargetPath, @LastUpdated, @IsEnabled, @FileHippoId, @DeletePreviousFile, @SourceType, @ExecuteCommand, @ExecutePreCommand, @Category, @JobGuid, @CanBeShared, @ShareApplication, @HttpReferer, @FileHippoVersion, @DownloadBeta, @DownloadDate, @VariableChangeIndicator, NULL)";
 
                                 command.Parameters.Add(new SQLiteParameter("@ApplicationName", Name));
                                 command.Parameters.Add(new SQLiteParameter("@FixedDownloadUrl", m_FixedDownloadUrl));
@@ -925,7 +939,8 @@ namespace Ketarin
                                 command.Parameters.Add(new SQLiteParameter("@DeletePreviousFile", m_DeletePreviousFile));
                                 command.Parameters.Add(new SQLiteParameter("@FileHippoId", m_FileHippoId));
                                 command.Parameters.Add(new SQLiteParameter("@SourceType", m_SourceType));
-                                command.Parameters.Add(new SQLiteParameter("@ExecuteCommand", m_ExecuteCommand));
+                                command.Parameters.Add(new SQLiteParameter("@ExecuteCommand", m_ExecutePostCommand));
+                                command.Parameters.Add(new SQLiteParameter("@ExecutePreCommand", ExecutePreCommand));
                                 command.Parameters.Add(new SQLiteParameter("@Category", m_Category));
                                 command.Parameters.Add(new SQLiteParameter("@JobGuid", DbManager.FormatGuid(m_Guid)));
                                 command.Parameters.Add(new SQLiteParameter("@CanBeShared", m_CanBeShared));
@@ -982,7 +997,8 @@ namespace Ketarin
             m_DeletePreviousFile = Convert.ToBoolean(reader["DeletePreviousFile"]);
             m_PreviousLocation = reader["PreviousLocation"] as string;
             m_SourceType = (SourceType)Convert.ToByte(reader["SourceType"]);
-            m_ExecuteCommand = reader["ExecuteCommand"] as string;
+            m_ExecutePostCommand = reader["ExecuteCommand"] as string;
+            m_ExecutePreCommand = reader["ExecutePreCommand"] as string;
             m_Category = reader["Category"] as string;
             m_CanBeShared = Convert.ToBoolean(reader["CanBeShared"]);
             m_ShareApplication = Convert.ToBoolean(reader["ShareApplication"]);

@@ -54,7 +54,7 @@ namespace Ketarin.Forms
             {
                 bool enable = !value;
                 txtApplicationName.ReadOnly = value;
-                txtCommand.ReadOnly = value;
+                txtExecuteAfter.ReadOnly = value;
                 txtFixedUrl.ReadOnly = value;
                 txtTarget.ReadOnly = value;
                 txtSpoofReferer.ReadOnly = value;
@@ -132,7 +132,8 @@ namespace Ketarin.Forms
                 appVarNames.Add("version");
             }
 
-            txtCommand.SetVariableNames(new string[] { "file", "root", "category", "appname" }, appVarNames.ToArray());
+            txtExecuteAfter.SetVariableNames(new string[] { "file", "root", "category", "appname" }, appVarNames.ToArray());
+            txtExecuteBefore.SetVariableNames(new string[] { "file", "root", "category", "appname" }, appVarNames.ToArray());
             txtFixedUrl.SetVariableNames(new string[] { "category", "appname" }, appVarNames.ToArray());
             txtTarget.SetVariableNames(new string[] { "category", "appname" }, appVarNames.ToArray());
             txtUseVariablesForChanges.SetVariableNames(appVarNames.ToArray());
@@ -152,7 +153,8 @@ namespace Ketarin.Forms
             chkEnabled.Checked = m_ApplicationJob.Enabled;
             rbFolder.Checked = m_ApplicationJob.TargetIsFolder;
             chkDeletePrevious.Checked = m_ApplicationJob.DeletePreviousFile;
-            txtCommand.Text = m_ApplicationJob.ExecuteCommand;
+            txtExecuteAfter.Text = m_ApplicationJob.ExecuteCommand;
+            txtExecuteBefore.Text = m_ApplicationJob.ExecutePreCommand;
             cboCategory.SelectedIndex = -1;
             cboCategory.Text = string.IsNullOrEmpty(m_ApplicationJob.Category) ? null : m_ApplicationJob.Category;
             chkShareOnline.Checked = m_ApplicationJob.ShareApplication;
@@ -179,7 +181,8 @@ namespace Ketarin.Forms
             m_ApplicationJob.Enabled = chkEnabled.Checked;
             m_ApplicationJob.FileHippoId = txtFileHippoId.Text;
             m_ApplicationJob.DeletePreviousFile = chkDeletePrevious.Checked;
-            m_ApplicationJob.ExecuteCommand = txtCommand.Text;
+            m_ApplicationJob.ExecuteCommand = txtExecuteAfter.Text;
+            m_ApplicationJob.ExecutePreCommand = txtExecuteBefore.Text;
             m_ApplicationJob.DownloadSourceType = (rbFixedUrl.Checked) ? ApplicationJob.SourceType.FixedUrl : ApplicationJob.SourceType.FileHippo;
             m_ApplicationJob.Category = cboCategory.Text;
             m_ApplicationJob.ShareApplication = chkShareOnline.Checked;
