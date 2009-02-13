@@ -59,6 +59,7 @@
             this.tcApplication = new System.Windows.Forms.TabControl();
             this.tpApplication = new System.Windows.Forms.TabPage();
             this.tpSettings = new System.Windows.Forms.TabPage();
+            this.chkDownloadExclusively = new System.Windows.Forms.CheckBox();
             this.txtUseVariablesForChanges = new Ketarin.Forms.VariableTextBox();
             this.lblUseVariableForChanges = new System.Windows.Forms.Label();
             this.tpCommands = new System.Windows.Forms.TabPage();
@@ -250,10 +251,10 @@
             this.chkEnabled.AutoSize = true;
             this.chkEnabled.Checked = true;
             this.chkEnabled.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkEnabled.Location = new System.Drawing.Point(6, 54);
+            this.chkEnabled.Location = new System.Drawing.Point(6, 77);
             this.chkEnabled.Name = "chkEnabled";
             this.chkEnabled.Size = new System.Drawing.Size(65, 17);
-            this.chkEnabled.TabIndex = 33;
+            this.chkEnabled.TabIndex = 3;
             this.chkEnabled.Text = "&Enabled";
             this.chkEnabled.UseVisualStyleBackColor = true;
             // 
@@ -265,7 +266,7 @@
             this.chkDeletePrevious.Location = new System.Drawing.Point(6, 8);
             this.chkDeletePrevious.Name = "chkDeletePrevious";
             this.chkDeletePrevious.Size = new System.Drawing.Size(218, 17);
-            this.chkDeletePrevious.TabIndex = 30;
+            this.chkDeletePrevious.TabIndex = 0;
             this.chkDeletePrevious.Text = "Always &delete previously downloaded file";
             this.chkDeletePrevious.UseVisualStyleBackColor = true;
             // 
@@ -318,36 +319,36 @@
             this.chkShareOnline.Location = new System.Drawing.Point(6, 31);
             this.chkShareOnline.Name = "chkShareOnline";
             this.chkShareOnline.Size = new System.Drawing.Size(212, 17);
-            this.chkShareOnline.TabIndex = 31;
+            this.chkShareOnline.TabIndex = 1;
             this.chkShareOnline.Text = "S&hare this application online with others";
             this.chkShareOnline.UseVisualStyleBackColor = true;
             // 
             // lblSpoofReferer
             // 
             this.lblSpoofReferer.AutoSize = true;
-            this.lblSpoofReferer.Location = new System.Drawing.Point(3, 122);
+            this.lblSpoofReferer.Location = new System.Drawing.Point(3, 145);
             this.lblSpoofReferer.Name = "lblSpoofReferer";
             this.lblSpoofReferer.Size = new System.Drawing.Size(103, 13);
-            this.lblSpoofReferer.TabIndex = 41;
+            this.lblSpoofReferer.TabIndex = 8;
             this.lblSpoofReferer.Text = "Sp&oof HTTP referer:";
             // 
             // txtSpoofReferer
             // 
             this.txtSpoofReferer.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtSpoofReferer.Location = new System.Drawing.Point(112, 119);
+            this.txtSpoofReferer.Location = new System.Drawing.Point(112, 142);
             this.txtSpoofReferer.Name = "txtSpoofReferer";
             this.txtSpoofReferer.Size = new System.Drawing.Size(257, 20);
-            this.txtSpoofReferer.TabIndex = 42;
+            this.txtSpoofReferer.TabIndex = 9;
             // 
             // rbBetaDefault
             // 
             this.rbBetaDefault.AutoSize = true;
             this.rbBetaDefault.Checked = true;
-            this.rbBetaDefault.Location = new System.Drawing.Point(83, 82);
+            this.rbBetaDefault.Location = new System.Drawing.Point(83, 107);
             this.rbBetaDefault.Name = "rbBetaDefault";
             this.rbBetaDefault.Size = new System.Drawing.Size(79, 17);
-            this.rbBetaDefault.TabIndex = 36;
+            this.rbBetaDefault.TabIndex = 5;
             this.rbBetaDefault.TabStop = true;
             this.rbBetaDefault.Text = "Use &default";
             this.rbBetaDefault.UseVisualStyleBackColor = true;
@@ -355,29 +356,29 @@
             // lblBetaVersions
             // 
             this.lblBetaVersions.AutoSize = true;
-            this.lblBetaVersions.Location = new System.Drawing.Point(3, 84);
+            this.lblBetaVersions.Location = new System.Drawing.Point(3, 109);
             this.lblBetaVersions.Name = "lblBetaVersions";
             this.lblBetaVersions.Size = new System.Drawing.Size(74, 13);
-            this.lblBetaVersions.TabIndex = 34;
+            this.lblBetaVersions.TabIndex = 4;
             this.lblBetaVersions.Text = "&Beta versions:";
             // 
             // rbAlwaysDownload
             // 
             this.rbAlwaysDownload.AutoSize = true;
-            this.rbAlwaysDownload.Location = new System.Drawing.Point(226, 82);
+            this.rbAlwaysDownload.Location = new System.Drawing.Point(226, 107);
             this.rbAlwaysDownload.Name = "rbAlwaysDownload";
             this.rbAlwaysDownload.Size = new System.Drawing.Size(108, 17);
-            this.rbAlwaysDownload.TabIndex = 38;
+            this.rbAlwaysDownload.TabIndex = 7;
             this.rbAlwaysDownload.Text = "Download al&ways";
             this.rbAlwaysDownload.UseVisualStyleBackColor = true;
             // 
             // rbBetaAvoid
             // 
             this.rbBetaAvoid.AutoSize = true;
-            this.rbBetaAvoid.Location = new System.Drawing.Point(168, 82);
+            this.rbBetaAvoid.Location = new System.Drawing.Point(168, 107);
             this.rbBetaAvoid.Name = "rbBetaAvoid";
             this.rbBetaAvoid.Size = new System.Drawing.Size(52, 17);
-            this.rbBetaAvoid.TabIndex = 37;
+            this.rbBetaAvoid.TabIndex = 6;
             this.rbBetaAvoid.Text = "A&void";
             this.rbBetaAvoid.UseVisualStyleBackColor = true;
             // 
@@ -415,6 +416,7 @@
             // 
             // tpSettings
             // 
+            this.tpSettings.Controls.Add(this.chkDownloadExclusively);
             this.tpSettings.Controls.Add(this.txtUseVariablesForChanges);
             this.tpSettings.Controls.Add(this.lblUseVariableForChanges);
             this.tpSettings.Controls.Add(this.rbBetaAvoid);
@@ -434,22 +436,32 @@
             this.tpSettings.Text = "Advanced settings";
             this.tpSettings.UseVisualStyleBackColor = true;
             // 
+            // chkDownloadExclusively
+            // 
+            this.chkDownloadExclusively.AutoSize = true;
+            this.chkDownloadExclusively.Location = new System.Drawing.Point(6, 54);
+            this.chkDownloadExclusively.Name = "chkDownloadExclusively";
+            this.chkDownloadExclusively.Size = new System.Drawing.Size(359, 17);
+            this.chkDownloadExclusively.TabIndex = 2;
+            this.chkDownloadExclusively.Text = "Do not download this application &simultaneously with other applications";
+            this.chkDownloadExclusively.UseVisualStyleBackColor = true;
+            // 
             // txtUseVariablesForChanges
             // 
             this.txtUseVariablesForChanges.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtUseVariablesForChanges.Location = new System.Drawing.Point(256, 150);
+            this.txtUseVariablesForChanges.Location = new System.Drawing.Point(256, 173);
             this.txtUseVariablesForChanges.Name = "txtUseVariablesForChanges";
             this.txtUseVariablesForChanges.Size = new System.Drawing.Size(113, 20);
-            this.txtUseVariablesForChanges.TabIndex = 44;
+            this.txtUseVariablesForChanges.TabIndex = 11;
             // 
             // lblUseVariableForChanges
             // 
             this.lblUseVariableForChanges.AutoSize = true;
-            this.lblUseVariableForChanges.Location = new System.Drawing.Point(3, 153);
+            this.lblUseVariableForChanges.Location = new System.Drawing.Point(3, 176);
             this.lblUseVariableForChanges.Name = "lblUseVariableForChanges";
             this.lblUseVariableForChanges.Size = new System.Drawing.Size(247, 13);
-            this.lblUseVariableForChanges.TabIndex = 43;
+            this.lblUseVariableForChanges.TabIndex = 10;
             this.lblUseVariableForChanges.Text = "&Use the following variable as indicator for changes:";
             // 
             // tpCommands
@@ -474,7 +486,7 @@
             this.txtExecuteBefore.Multiline = true;
             this.txtExecuteBefore.Name = "txtExecuteBefore";
             this.txtExecuteBefore.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtExecuteBefore.Size = new System.Drawing.Size(363, 92);
+            this.txtExecuteBefore.Size = new System.Drawing.Size(363, 90);
             this.txtExecuteBefore.TabIndex = 1;
             this.txtExecuteBefore.WordWrap = false;
             // 
@@ -492,18 +504,18 @@
             this.txtExecuteAfter.AcceptsReturn = true;
             this.txtExecuteAfter.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtExecuteAfter.Location = new System.Drawing.Point(6, 147);
+            this.txtExecuteAfter.Location = new System.Drawing.Point(6, 145);
             this.txtExecuteAfter.Multiline = true;
             this.txtExecuteAfter.Name = "txtExecuteAfter";
             this.txtExecuteAfter.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtExecuteAfter.Size = new System.Drawing.Size(363, 89);
+            this.txtExecuteAfter.Size = new System.Drawing.Size(363, 90);
             this.txtExecuteAfter.TabIndex = 3;
             this.txtExecuteAfter.WordWrap = false;
             // 
             // lblExecuteCommand
             // 
             this.lblExecuteCommand.AutoSize = true;
-            this.lblExecuteCommand.Location = new System.Drawing.Point(3, 131);
+            this.lblExecuteCommand.Location = new System.Drawing.Point(3, 129);
             this.lblExecuteCommand.Name = "lblExecuteCommand";
             this.lblExecuteCommand.Size = new System.Drawing.Size(247, 13);
             this.lblExecuteCommand.TabIndex = 2;
@@ -579,5 +591,6 @@
         private System.Windows.Forms.Label lblCommandBefore;
         private VariableTextBox txtExecuteAfter;
         private System.Windows.Forms.Label lblExecuteCommand;
+        private System.Windows.Forms.CheckBox chkDownloadExclusively;
     }
 }

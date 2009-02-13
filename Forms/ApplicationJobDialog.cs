@@ -159,6 +159,7 @@ namespace Ketarin.Forms
             cboCategory.Text = string.IsNullOrEmpty(m_ApplicationJob.Category) ? null : m_ApplicationJob.Category;
             chkShareOnline.Checked = m_ApplicationJob.ShareApplication;
             chkShareOnline.Enabled = m_ApplicationJob.CanBeShared;
+            chkDownloadExclusively.Checked = m_ApplicationJob.ExclusiveDownload;
             txtSpoofReferer.Text = m_ApplicationJob.HttpReferer;
             rbBetaAvoid.Checked = (ApplicationJob.DownloadBeta == ApplicationJob.DownloadBetaType.Avoid);
             rbBetaDefault.Checked = (ApplicationJob.DownloadBeta == ApplicationJob.DownloadBetaType.Default);
@@ -185,6 +186,7 @@ namespace Ketarin.Forms
             m_ApplicationJob.ExecutePreCommand = txtExecuteBefore.Text;
             m_ApplicationJob.DownloadSourceType = (rbFixedUrl.Checked) ? ApplicationJob.SourceType.FixedUrl : ApplicationJob.SourceType.FileHippo;
             m_ApplicationJob.Category = cboCategory.Text;
+            m_ApplicationJob.ExclusiveDownload = chkDownloadExclusively.Checked;
             m_ApplicationJob.ShareApplication = chkShareOnline.Checked;
             m_ApplicationJob.HttpReferer = txtSpoofReferer.Text;
             m_ApplicationJob.VariableChangeIndicator = txtUseVariablesForChanges.Text;

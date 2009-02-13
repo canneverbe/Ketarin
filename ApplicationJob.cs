@@ -31,6 +31,7 @@ namespace Ketarin
         private string m_FileHippoId = string.Empty;
         private string m_FileHippoVersion = string.Empty;
         private bool m_DeletePreviousFile = false;
+        private bool m_ExclusiveDownload = false;
         private string m_PreviousLocation = string.Empty;
         private SourceType m_SourceType = SourceType.FixedUrl;
         private UrlVariableCollection m_Variables = null;
@@ -117,12 +118,32 @@ namespace Ketarin
             }
         }
 
+        /// <summary>
+        /// Gets or sets whether or not the application
+        /// may be downloaded simultaneously with other
+        /// applications.
+        /// </summary>
+        public bool ExclusiveDownload
+        {
+            get { return m_ExclusiveDownload; }
+            set { m_ExclusiveDownload = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets a referer which is used 
+        /// for HTTP requests when downloading
+        /// the application.
+        /// </summary>
         public string HttpReferer
         {
             get { return m_HttpReferer; }
             set { m_HttpReferer = value; }
         }
 
+        /// <summary>
+        /// Gets or sets the globally unique identifier
+        /// of this application.
+        /// </summary>
         [XmlAttribute("Guid")]
         public Guid Guid
         {
@@ -882,7 +903,8 @@ namespace Ketarin
                                                    DownloadBeta = @DownloadBeta,
                                                    DownloadDate = @DownloadDate,
                                                    VariableChangeIndicator = @VariableChangeIndicator,
-                                                   VariableChangeIndicatorLastContent = @VariableChangeIndicatorLastContent
+                                                   VariableChangeIndicatorLastContent = @VariableChangeIndicatorLastContent,
+                                                   ExclusiveDownload = @ExclusiveDownload
                                              WHERE JobGuid = @JobGuid";
 
                                 command.Parameters.Add(new SQLiteParameter("@ApplicationName", Name));
@@ -904,6 +926,7 @@ namespace Ketarin
                                 command.Parameters.Add(new SQLiteParameter("@DownloadBeta", (int)m_DownloadBeta));
                                 command.Parameters.Add(new SQLiteParameter("@VariableChangeIndicator", m_VariableChangeIndicator));
                                 command.Parameters.Add(new SQLiteParameter("@VariableChangeIndicatorLastContent", m_VariableChangeIndicatorLastContent));
+                                command.Parameters.Add(new SQLiteParameter("@ExclusiveDownload", ExclusiveDownload));
                                 
                                 if (m_DownloadDate.HasValue)
                                 {
@@ -927,8 +950,8 @@ namespace Ketarin
                             using (IDbCommand command = conn.CreateCommand())
                             {
                                 command.Transaction = transaction;
-                                command.CommandText = @"INSERT INTO jobs (ApplicationName, FixedDownloadUrl, DateAdded, TargetPath, LastUpdated, IsEnabled, FileHippoId, DeletePreviousFile, SourceType, ExecuteCommand, ExecutePreCommand, Category, JobGuid, CanBeShared, ShareApplication, HttpReferer, FileHippoVersion, DownloadBeta, DownloadDate, VariableChangeIndicator, VariableChangeIndicatorLastContent)
-                                                 VALUES (@ApplicationName, @FixedDownloadUrl, @DateAdded, @TargetPath, @LastUpdated, @IsEnabled, @FileHippoId, @DeletePreviousFile, @SourceType, @ExecuteCommand, @ExecutePreCommand, @Category, @JobGuid, @CanBeShared, @ShareApplication, @HttpReferer, @FileHippoVersion, @DownloadBeta, @DownloadDate, @VariableChangeIndicator, NULL)";
+                                command.CommandText = @"INSERT INTO jobs (ApplicationName, FixedDownloadUrl, DateAdded, TargetPath, LastUpdated, IsEnabled, FileHippoId, DeletePreviousFile, SourceType, ExecuteCommand, ExecutePreCommand, Category, JobGuid, CanBeShared, ShareApplication, HttpReferer, FileHippoVersion, DownloadBeta, DownloadDate, VariableChangeIndicator, VariableChangeIndicatorLastContent, ExclusiveDownload)
+                                                 VALUES (@ApplicationName, @FixedDownloadUrl, @DateAdded, @TargetPath, @LastUpdated, @IsEnabled, @FileHippoId, @DeletePreviousFile, @SourceType, @ExecuteCommand, @ExecutePreCommand, @Category, @JobGuid, @CanBeShared, @ShareApplication, @HttpReferer, @FileHippoVersion, @DownloadBeta, @DownloadDate, @VariableChangeIndicator, NULL, @ExclusiveDownload)";
 
                                 command.Parameters.Add(new SQLiteParameter("@ApplicationName", Name));
                                 command.Parameters.Add(new SQLiteParameter("@FixedDownloadUrl", m_FixedDownloadUrl));
@@ -950,6 +973,7 @@ namespace Ketarin
                                 command.Parameters.Add(new SQLiteParameter("@DownloadBeta", (int)m_DownloadBeta));
                                 command.Parameters.Add(new SQLiteParameter("@VariableChangeIndicator", m_VariableChangeIndicator));
                                 command.Parameters.Add(new SQLiteParameter("@VariableChangeLastContent", m_VariableChangeIndicatorLastContent));
+                                command.Parameters.Add(new SQLiteParameter("@ExclusiveDownload", ExclusiveDownload));
                                 
                                 if (m_DownloadDate.HasValue)
                                 {
@@ -1006,6 +1030,7 @@ namespace Ketarin
             m_HttpReferer = reader["HttpReferer"] as string;
             m_VariableChangeIndicator = reader["VariableChangeIndicator"] as string;
             m_VariableChangeIndicatorLastContent = reader["VariableChangeIndicatorLastContent"] as string;
+            m_ExclusiveDownload = Convert.ToBoolean(reader["ExclusiveDownload"]);
 
             if (reader["DownloadBeta"] != DBNull.Value)
             {
