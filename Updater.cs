@@ -316,13 +316,18 @@ namespace Ketarin
 
             try
             {
+                ApplicationJob previousJob = null;
+
                 foreach (ApplicationJob job in m_Jobs)
                 {
                     // Skip if disabled
                     if (!job.Enabled) continue;
 
-                    // Wait until we can start a new thread
-                    while (m_Threads.Count >= m_ThreadLimit)
+                    // Wait until we can start a new thread:
+                    // - Thread limit is not reached
+                    // - The next application is not to be downloaded exclusively
+                    // - The application previously started is not to be downloaded exclusively
+                    while (m_Threads.Count >= m_ThreadLimit || (m_Threads.Count > 0 && (job.ExclusiveDownload || (previousJob != null && previousJob.ExclusiveDownload))))
                     {
                         Thread.Sleep(200);
 
@@ -340,6 +345,7 @@ namespace Ketarin
                     if (m_CancelUpdates) break;
 
                     Thread newThread = new Thread(new ParameterizedThreadStart(StartNewThread));
+                    previousJob = job;
                     newThread.Start(job);
                     m_Threads.Add(newThread);
                 }
