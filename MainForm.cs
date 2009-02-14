@@ -304,7 +304,7 @@ namespace Ketarin
         {
             this.BeginInvoke((MethodInvoker)delegate()
             {
-                string msg = string.Format("Updates for {0} applications which you added from the online database have been found. Do you want to update these applications now?", e.Value.Length);
+                string msg = string.Format("Updates for {0} application definitions which you added from the online database have been found. Do you want to update these applications now?", e.Value.Length);
                 if (MessageBox.Show(this, msg, "Updates found", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
                     foreach (ApplicationJob job in m_Jobs)
