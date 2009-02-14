@@ -6,6 +6,7 @@ using System.Data;
 using System.Data.SQLite;
 using System.Windows.Forms;
 using CDBurnerXP;
+using CDBurnerXP.IO;
 using System.Net;
 
 namespace Ketarin
@@ -71,6 +72,7 @@ namespace Ketarin
 
         private static SQLiteConnection m_DbConn;
         private static string m_DatabasePath;
+        private static bool m_BackupDone = false;
 
         /// <summary>
         /// Sets a predefined database path if necessary.
@@ -170,9 +172,70 @@ namespace Ketarin
                 {
                     connString += "New=True;";
                 }
+                else
+                {
+                    try
+                    {
+                        MakeBackups();
+                    }
+                    catch (Exception)
+                    {
+                        // We can ignore these kind of errors
+                        Ketarin.Forms.LogDialog.Log("Creating database backup failed.");
+                    }
+                }
                 connection = new SQLiteConnection(connString);
                 connection.Open();
                 return connection;
+            }
+        }
+
+        /// <summary>
+        /// Makes sure that a couple of database backups 
+        /// are kept automatically. SQLite is reliable, 
+        /// but better safe than sorry.
+        /// </summary>
+        private static void MakeBackups()
+        {
+            // Only try to create a backup once per instance
+            if (m_BackupDone) return;
+            m_BackupDone = true;
+
+            DateTime oldestBackup = DateTime.MaxValue;
+            string oldestBackupFile = null;
+            int backupCount = 0;
+
+            // Determine the number of backups and the oldest backup
+            foreach (string file in Directory.GetFiles(Path.GetDirectoryName(m_DatabasePath)))
+            {
+                if (file.StartsWith(m_DatabasePath) && Path.GetExtension(file) == ".bak")
+                {
+                    // Extract date
+                    string date = Path.GetFileNameWithoutExtension(file);
+                    if (date.Length < 10) continue;
+
+                    backupCount++;
+                    DateTime backupDate = File.GetLastWriteTime(file);
+                    if (backupDate < oldestBackup)
+                    {
+                        oldestBackup = backupDate;
+                        oldestBackupFile = file;
+                    }
+                }
+            }
+
+            // If there are more then 6 backups, delete the oldest one
+            if (backupCount > 6)
+            {
+                PathEx.TryDeleteFiles(oldestBackupFile);
+            }
+
+            // Create a backup, 7 backups, daily
+            string dateAppend = "_" + DateTime.Now.ToString("yyyy-MM-dd");
+            string backupName = m_DatabasePath + dateAppend + ".bak";
+            if (!File.Exists(backupName))
+            {
+                File.Copy(m_DatabasePath, backupName, true);
             }
         }
 
