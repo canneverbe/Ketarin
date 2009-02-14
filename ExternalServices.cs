@@ -170,7 +170,7 @@ namespace Ketarin
         /// </summary>
         private static bool FileHippoIsBeta(string pageContent)
         {
-            return pageContent.Contains("http://i.filehippo.com/img/beta.gif");
+            return pageContent.Contains("filehippo.com/img/beta.gif");
         }
 
         /// <summary>
