@@ -43,8 +43,6 @@
             this.cmnuCopy = new System.Windows.Forms.MenuItem();
             this.cmnuPaste = new System.Windows.Forms.MenuItem();
             this.mnuSelectAll = new System.Windows.Forms.MenuItem();
-            this.sepView = new System.Windows.Forms.MenuItem();
-            this.cmnuShowGroups = new System.Windows.Forms.MenuItem();
             this.mnuMain = new System.Windows.Forms.MainMenu(this.components);
             this.mnuFile = new System.Windows.Forms.MenuItem();
             this.mnuNew = new System.Windows.Forms.MenuItem();
@@ -57,6 +55,7 @@
             this.mnuExit = new System.Windows.Forms.MenuItem();
             this.mnuView = new System.Windows.Forms.MenuItem();
             this.mnuLog = new System.Windows.Forms.MenuItem();
+            this.mnuShowGroups = new System.Windows.Forms.MenuItem();
             this.mnuHelp = new System.Windows.Forms.MenuItem();
             this.mnuTutorial = new System.Windows.Forms.MenuItem();
             this.mnuAbout = new System.Windows.Forms.MenuItem();
@@ -104,9 +103,7 @@
             this.cmnuDelete,
             this.cmnuCopy,
             this.cmnuPaste,
-            this.mnuSelectAll,
-            this.sepView,
-            this.cmnuShowGroups});
+            this.mnuSelectAll});
             this.cmnuJobs.Popup += new System.EventHandler(this.cmnuJobs_Popup);
             // 
             // cmnuUpdate
@@ -186,18 +183,6 @@
             this.mnuSelectAll.Text = "Select &all";
             this.mnuSelectAll.Click += new System.EventHandler(this.mnuSelectAll_Click);
             // 
-            // sepView
-            // 
-            this.sepView.Index = 11;
-            this.sepView.Text = "-";
-            // 
-            // cmnuShowGroups
-            // 
-            this.cmnuShowGroups.Checked = true;
-            this.cmnuShowGroups.Index = 12;
-            this.cmnuShowGroups.Text = "&Show groups";
-            this.cmnuShowGroups.Click += new System.EventHandler(this.cmnuShowGroups_Click);
-            // 
             // mnuMain
             // 
             this.mnuMain.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
@@ -270,7 +255,8 @@
             // 
             this.mnuView.Index = 1;
             this.mnuView.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-            this.mnuLog});
+            this.mnuLog,
+            this.mnuShowGroups});
             this.mnuView.Text = "&View";
             // 
             // mnuLog
@@ -278,6 +264,13 @@
             this.mnuLog.Index = 0;
             this.mnuLog.Text = "&Show log";
             this.mnuLog.Click += new System.EventHandler(this.mnuLog_Click);
+            // 
+            // mnuShowGroups
+            // 
+            this.mnuShowGroups.Checked = true;
+            this.mnuShowGroups.Index = 1;
+            this.mnuShowGroups.Text = "Show &groups";
+            this.mnuShowGroups.Click += new System.EventHandler(this.mnuShowGroups_Click);
             // 
             // mnuHelp
             // 
@@ -511,8 +504,6 @@
         private System.Windows.Forms.MenuItem menuItem4;
         private System.Windows.Forms.MenuItem cmnuEdit;
         private System.Windows.Forms.MenuItem cmnuDelete;
-        private System.Windows.Forms.MenuItem sepView;
-        private System.Windows.Forms.MenuItem cmnuShowGroups;
         private CDBurnerXP.Controls.OLVColumn colName;
         private CDBurnerXP.Controls.OLVColumn colLastUpdate;
         private CDBurnerXP.Controls.OLVColumn colProgress;
@@ -542,7 +533,6 @@
         private System.Windows.Forms.MenuItem mnuSelectAll;
         private System.Windows.Forms.MenuItem cmnuOpenFolder;
         private System.Windows.Forms.MenuItem mnuView;
-        private System.Windows.Forms.MenuItem mnuLog;
         private wyDay.Controls.SplitButton bRun;
         private System.Windows.Forms.ContextMenu cmuRun;
         private System.Windows.Forms.MenuItem cmnuCheckAndDownload;
@@ -554,6 +544,8 @@
         private System.Windows.Forms.MenuItem cmnuExit;
         private System.Windows.Forms.MenuItem mnuExportAll;
         private System.Windows.Forms.MenuItem cmnuCheckForUpdate;
+        private System.Windows.Forms.MenuItem mnuLog;
+        private System.Windows.Forms.MenuItem mnuShowGroups;
     }
 }
 

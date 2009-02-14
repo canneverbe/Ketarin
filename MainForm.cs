@@ -354,8 +354,8 @@ namespace Ketarin
         {
             base.OnLoad(e);
 
-            cmnuShowGroups.Checked = Convert.ToBoolean(Settings.GetValue("Ketarin", "ShowGroups", true));
-            olvJobs.ShowGroups = cmnuShowGroups.Checked;
+            mnuShowGroups.Checked = Convert.ToBoolean(Settings.GetValue("Ketarin", "ShowGroups", true));
+            olvJobs.ShowGroups = mnuShowGroups.Checked;
             m_CustomColumn = Settings.GetValue("CustomColumn", "") as string;
 
             UpdateList();
@@ -536,21 +536,6 @@ namespace Ketarin
         }
 
         #region Context menu
-
-        private void cmnuShowGroups_Click(object sender, EventArgs e)
-        {
-            if (cmnuShowGroups.Checked)
-            {
-                olvJobs.ShowGroups = false;
-                cmnuShowGroups.Checked = false;
-            }
-            else
-            {
-                olvJobs.ShowGroups = true;
-                olvJobs.BuildGroups();
-                cmnuShowGroups.Checked = true;
-            }
-        }
 
         private void cmnuOpenFile_Click(object sender, EventArgs e)
         {
@@ -757,6 +742,21 @@ namespace Ketarin
             Close();
         }
 
+        private void mnuShowGroups_Click(object sender, EventArgs e)
+        {
+            if (mnuShowGroups.Checked)
+            {
+                olvJobs.ShowGroups = false;
+                mnuShowGroups.Checked = false;
+            }
+            else
+            {
+                olvJobs.ShowGroups = true;
+                olvJobs.BuildGroups();
+                mnuShowGroups.Checked = true;
+            }
+        }
+
         private void mnuAddNew_Click(object sender, EventArgs e)
         {
             cmnuAdd.PerformClick();
@@ -882,6 +882,7 @@ namespace Ketarin
         }
 
         #endregion
+
 
     }
 }
