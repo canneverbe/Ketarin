@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Net;
 using System.Windows.Forms;
+using CDBurnerXP;
 
 namespace Ketarin
 {
@@ -27,6 +28,14 @@ namespace Ketarin
             : base()
         {
             Headers.Add("User-Agent", UserAgent);
+        }
+
+        protected override WebRequest GetWebRequest(Uri address)
+        {
+            WebRequest request = base.GetWebRequest(address);
+            // Make sure that the user defined timeout is used for all web requests!
+            request.Timeout = Convert.ToInt32(Settings.GetValue("ConnectionTimeout", 10)) * 1000; // 10 seconds by default
+            return request;
         }
     }
 }
