@@ -1057,7 +1057,7 @@ namespace Ketarin
             }
             catch (ArgumentException) { }
 
-            if (TargetIsFolder)
+            if (TargetIsFolder || Directory.Exists(targetLocation))
             {
                 string fileName = GetFileNameFromWebResponse(netResponse);
                 targetLocation = Path.Combine(targetLocation, fileName);

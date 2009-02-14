@@ -549,7 +549,7 @@ namespace Ketarin
 
             // If we want to download multiple files simultaneously
             // from the same server, we need to "remove" the connection limit.
-            ServicePointManager.DefaultConnectionLimit = 10;
+            ServicePointManager.DefaultConnectionLimit = 50;
 
             job.Variables.ResetDownloadCount();
 
