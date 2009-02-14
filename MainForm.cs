@@ -595,7 +595,7 @@ namespace Ketarin
         {
             if (DeleteApplicationDialog.Show(this, olvJobs.SelectedObjects))
             {
-                olvJobs.RemoveObject(olvJobs.SelectedObject);
+                olvJobs.RemoveObjects(olvJobs.SelectedObjects);
                 m_Jobs = new List<ApplicationJob>(DbManager.GetJobs()).ToArray();
             }
         }
