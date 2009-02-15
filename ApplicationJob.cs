@@ -238,12 +238,6 @@ namespace Ketarin
                     }
                 }
 
-                // Try to add file path information if missing
-                if (string.IsNullOrEmpty(filename) && m_Parent != null)
-                {
-                    filename = m_Parent.PreviousLocation;
-                }
-
                 // Ignore invalid dates
                 if (fileDate > DateTime.MinValue)
                 {
