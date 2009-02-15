@@ -55,12 +55,14 @@ namespace Ketarin.Forms
                 bool enable = !value;
                 txtApplicationName.ReadOnly = value;
                 txtExecuteAfter.ReadOnly = value;
+                txtExecuteBefore.ReadOnly = value;
                 txtFixedUrl.ReadOnly = value;
                 txtTarget.ReadOnly = value;
                 txtSpoofReferer.ReadOnly = value;
                 txtFileHippoId.ReadOnly = value;
                 txtUseVariablesForChanges.ReadOnly = value;
                 cboCategory.Enabled = enable;
+                chkDownloadExclusively.Enabled = enable;
                 chkDeletePrevious.Enabled = enable;
                 chkEnabled.Enabled = enable;
                 chkShareOnline.Enabled = enable;
