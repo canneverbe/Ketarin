@@ -81,7 +81,6 @@
   <ItemGroup>
     <Compile Include="ApplicationJob.cs" />
     <Compile Include="ApplicationJobError.cs" />
-    <Compile Include="CDBurnerXP\Utility.cs" />
     <Compile Include="CommandLineParser.cs" />
     <Compile Include="ContextMenuCustomiser.cs" />
     <Compile Include="ContextMenuItem.cs" />
@@ -232,6 +231,9 @@
     </Compile>
     <Compile Include="M:\CsLib\CDBurnerXP\Settings.cs">
       <Link>CDBurnerXP\Settings.cs</Link>
+    </Compile>
+    <Compile Include="M:\CsLib\CDBurnerXP\Utility.cs">
+      <Link>CDBurnerXP\Utility.cs</Link>
     </Compile>
     <Compile Include="M:\CsLib\Win32\IconReader.cs">
       <Link>CDBurnerXP\IconReader.cs</Link>
