@@ -423,6 +423,26 @@ namespace Ketarin
                 case "empty":
                     // Useful, if you want to load, but not use a variable
                     return string.Empty;
+                case "regex":
+                    try
+                    {
+                        Regex regex = new Regex(parts[1], RegexOptions.Singleline);
+                        Match match = regex.Match(content);
+                        if (parts.Length > 2)
+                        {
+                            int matchNum = Convert.ToInt32(parts[2]);
+                            if (matchNum >= 0 && matchNum < match.Groups.Count)
+                            {
+                                return match.Groups[matchNum].Value;
+                            }
+                        }
+                        return (match.Success) ? match.Value : string.Empty;
+                    }
+                    catch (ArgumentException ex)
+                    {
+                        LogDialog.Log("Could not process the function 'regex'.", ex);
+                        return string.Empty;
+                    }
                 case "ext":
                     return Path.GetExtension(content).TrimStart('.');
                 case "directory":
