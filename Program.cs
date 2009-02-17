@@ -23,6 +23,7 @@ using System.Threading;
 using System.Runtime.InteropServices;
 using Microsoft.Win32;
 using System.Net;
+using System.IO;
 
 namespace Ketarin
 {
@@ -110,7 +111,20 @@ namespace Ketarin
 
                 job.Save();
             }
-            // ...ir lanch the GUI.
+            else if (arguments["export"] != null)
+            {
+                ApplicationJob[] jobs = DbManager.GetJobs();
+                string exportedXml = ApplicationJob.GetXml(jobs, false);
+                try
+                {
+                    File.WriteAllText(arguments["export"] as string, exportedXml); 
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Could export to the specified location: " + ex.Message);
+                }
+            }
+            // ...or lanch the GUI.
             else
             {
                 Application.Run(new MainForm());
