@@ -80,6 +80,7 @@ namespace Ketarin
         public static string DatabasePath
         {
             set { DbManager.m_DatabasePath = value; }
+            get { return DbManager.m_DatabasePath; }
         }
 
         /// <summary>
