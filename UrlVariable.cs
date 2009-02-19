@@ -8,6 +8,7 @@ using System.Xml;
 using System.Xml.Serialization;
 using System.Text.RegularExpressions;
 using Ketarin.Forms;
+using CDBurnerXP;
 using System.Data.SQLite;
 
 namespace Ketarin
@@ -430,7 +431,7 @@ namespace Ketarin
                         Match match = regex.Match(content);
                         if (parts.Length > 2)
                         {
-                            int matchNum = Convert.ToInt32(parts[2]);
+                            int matchNum = Conversion.ToInt(parts[2]);
                             if (matchNum >= 0 && matchNum < match.Groups.Count)
                             {
                                 return match.Groups[matchNum].Value;
@@ -555,6 +556,8 @@ namespace Ketarin
         /// <returns></returns>
         private static bool IsEscaped(string value, int pos)
         {
+            // It has to be a special character...
+            if (value[pos] != '\\' && value[pos] != ':') return false;
             return (pos > 0 && value[pos - 1] == '\\' && !IsEscaped(value, pos - 1));
         }
 
