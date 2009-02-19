@@ -1174,6 +1174,7 @@ namespace Ketarin
                 }
                 else
                 {
+                    LogDialog.Log(this, string.Format("No previous value for {0} available, ignoring this variable as indicator for changes", "{" + varName + "}"));
                     m_VariableChangeIndicatorLastContent = content;
                 }
             }
