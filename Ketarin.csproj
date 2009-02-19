@@ -202,6 +202,9 @@
       <Link>CDBurnerXP\WebLink.cs</Link>
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="M:\CsLib\CDBurnerXP\Conversion.cs">
+      <Link>CDBurnerXP\Conversion.cs</Link>
+    </Compile>
     <Compile Include="M:\CsLib\CDBurnerXP\Forms\ControlRedrawLock.cs">
       <Link>CDBurnerXP\ControlRedrawLock.cs</Link>
     </Compile>
