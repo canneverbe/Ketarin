@@ -31,8 +31,6 @@
             this.bCancel = new System.Windows.Forms.Button();
             this.bOK = new System.Windows.Forms.Button();
             this.chkUpdateAtStartup = new System.Windows.Forms.CheckBox();
-            this.lblDefaultCommand = new System.Windows.Forms.Label();
-            this.txtDefaultCommand = new Ketarin.Forms.TextBox();
             this.txtCustomColumn = new System.Windows.Forms.TextBox();
             this.lblCustomColumn = new System.Windows.Forms.Label();
             this.chkAvoidBeta = new System.Windows.Forms.CheckBox();
@@ -63,6 +61,11 @@
             this.sepGlobalVariables = new CDBurnerXP.Controls.Separator();
             this.tpConnection = new System.Windows.Forms.TabPage();
             this.sepProxy = new CDBurnerXP.Controls.Separator();
+            this.tpCommands = new System.Windows.Forms.TabPage();
+            this.txtPostUpdateCommand = new Ketarin.Forms.TextBox();
+            this.lblPostUpdateCommand = new System.Windows.Forms.Label();
+            this.txtDefaultCommand = new Ketarin.Forms.TextBox();
+            this.lblDefaultCommand = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.nConnectionTimeout)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nProxyPort)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nNumThreads)).BeginInit();
@@ -70,16 +73,17 @@
             this.tcSettings.SuspendLayout();
             this.tpGeneral.SuspendLayout();
             this.tpConnection.SuspendLayout();
+            this.tpCommands.SuspendLayout();
             this.SuspendLayout();
             // 
             // bCancel
             // 
             this.bCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.bCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.bCancel.Location = new System.Drawing.Point(339, 351);
+            this.bCancel.Location = new System.Drawing.Point(339, 295);
             this.bCancel.Name = "bCancel";
             this.bCancel.Size = new System.Drawing.Size(75, 23);
-            this.bCancel.TabIndex = 27;
+            this.bCancel.TabIndex = 2;
             this.bCancel.Text = "Cancel";
             this.bCancel.UseVisualStyleBackColor = true;
             // 
@@ -87,10 +91,10 @@
             // 
             this.bOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.bOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.bOK.Location = new System.Drawing.Point(258, 351);
+            this.bOK.Location = new System.Drawing.Point(258, 295);
             this.bOK.Name = "bOK";
             this.bOK.Size = new System.Drawing.Size(75, 23);
-            this.bOK.TabIndex = 26;
+            this.bOK.TabIndex = 1;
             this.bOK.Text = "OK";
             this.bOK.UseVisualStyleBackColor = true;
             this.bOK.Click += new System.EventHandler(this.bOK_Click);
@@ -105,33 +109,11 @@
             this.chkUpdateAtStartup.Text = "&Update automatically at startup";
             this.chkUpdateAtStartup.UseVisualStyleBackColor = true;
             // 
-            // lblDefaultCommand
-            // 
-            this.lblDefaultCommand.AutoSize = true;
-            this.lblDefaultCommand.Location = new System.Drawing.Point(3, 100);
-            this.lblDefaultCommand.Name = "lblDefaultCommand";
-            this.lblDefaultCommand.Size = new System.Drawing.Size(283, 13);
-            this.lblDefaultCommand.TabIndex = 2;
-            this.lblDefaultCommand.Text = "Default &command to execute after updating an application:";
-            // 
-            // txtDefaultCommand
-            // 
-            this.txtDefaultCommand.AcceptsReturn = true;
-            this.txtDefaultCommand.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtDefaultCommand.Location = new System.Drawing.Point(6, 116);
-            this.txtDefaultCommand.Multiline = true;
-            this.txtDefaultCommand.Name = "txtDefaultCommand";
-            this.txtDefaultCommand.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtDefaultCommand.Size = new System.Drawing.Size(382, 71);
-            this.txtDefaultCommand.TabIndex = 3;
-            this.txtDefaultCommand.WordWrap = false;
-            // 
             // txtCustomColumn
             // 
             this.txtCustomColumn.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtCustomColumn.Location = new System.Drawing.Point(149, 193);
+            this.txtCustomColumn.Location = new System.Drawing.Point(149, 111);
             this.txtCustomColumn.Name = "txtCustomColumn";
             this.txtCustomColumn.Size = new System.Drawing.Size(239, 20);
             this.txtCustomColumn.TabIndex = 5;
@@ -139,7 +121,7 @@
             // lblCustomColumn
             // 
             this.lblCustomColumn.AutoSize = true;
-            this.lblCustomColumn.Location = new System.Drawing.Point(6, 196);
+            this.lblCustomColumn.Location = new System.Drawing.Point(6, 114);
             this.lblCustomColumn.Name = "lblCustomColumn";
             this.lblCustomColumn.Size = new System.Drawing.Size(137, 13);
             this.lblCustomColumn.TabIndex = 4;
@@ -161,7 +143,7 @@
             this.lblConnectionTimeout.Location = new System.Drawing.Point(7, 11);
             this.lblConnectionTimeout.Name = "lblConnectionTimeout";
             this.lblConnectionTimeout.Size = new System.Drawing.Size(101, 13);
-            this.lblConnectionTimeout.TabIndex = 6;
+            this.lblConnectionTimeout.TabIndex = 0;
             this.lblConnectionTimeout.Text = "&Connection timeout:";
             // 
             // nConnectionTimeout
@@ -181,7 +163,7 @@
             0});
             this.nConnectionTimeout.Name = "nConnectionTimeout";
             this.nConnectionTimeout.Size = new System.Drawing.Size(210, 20);
-            this.nConnectionTimeout.TabIndex = 7;
+            this.nConnectionTimeout.TabIndex = 1;
             this.nConnectionTimeout.Value = new decimal(new int[] {
             1,
             0,
@@ -195,7 +177,7 @@
             this.lblSeconds.Location = new System.Drawing.Point(331, 11);
             this.lblSeconds.Name = "lblSeconds";
             this.lblSeconds.Size = new System.Drawing.Size(47, 13);
-            this.lblSeconds.TabIndex = 8;
+            this.lblSeconds.TabIndex = 2;
             this.lblSeconds.Text = "seconds";
             // 
             // lblServer
@@ -204,7 +186,7 @@
             this.lblServer.Location = new System.Drawing.Point(15, 124);
             this.lblServer.Name = "lblServer";
             this.lblServer.Size = new System.Drawing.Size(41, 13);
-            this.lblServer.TabIndex = 19;
+            this.lblServer.TabIndex = 8;
             this.lblServer.Text = "&Server:";
             // 
             // txtProxyServer
@@ -214,7 +196,7 @@
             this.txtProxyServer.Location = new System.Drawing.Point(82, 121);
             this.txtProxyServer.Name = "txtProxyServer";
             this.txtProxyServer.Size = new System.Drawing.Size(242, 20);
-            this.txtProxyServer.TabIndex = 20;
+            this.txtProxyServer.TabIndex = 9;
             // 
             // nProxyPort
             // 
@@ -227,7 +209,7 @@
             0});
             this.nProxyPort.Name = "nProxyPort";
             this.nProxyPort.Size = new System.Drawing.Size(48, 20);
-            this.nProxyPort.TabIndex = 21;
+            this.nProxyPort.TabIndex = 10;
             // 
             // lblProxyUser
             // 
@@ -235,7 +217,7 @@
             this.lblProxyUser.Location = new System.Drawing.Point(15, 150);
             this.lblProxyUser.Name = "lblProxyUser";
             this.lblProxyUser.Size = new System.Drawing.Size(61, 13);
-            this.lblProxyUser.TabIndex = 22;
+            this.lblProxyUser.TabIndex = 11;
             this.lblProxyUser.Text = "Us&er name:";
             // 
             // txtProxyUser
@@ -245,7 +227,7 @@
             this.txtProxyUser.Location = new System.Drawing.Point(82, 147);
             this.txtProxyUser.Name = "txtProxyUser";
             this.txtProxyUser.Size = new System.Drawing.Size(296, 20);
-            this.txtProxyUser.TabIndex = 23;
+            this.txtProxyUser.TabIndex = 12;
             // 
             // lblProxyPassword
             // 
@@ -253,7 +235,7 @@
             this.lblProxyPassword.Location = new System.Drawing.Point(15, 176);
             this.lblProxyPassword.Name = "lblProxyPassword";
             this.lblProxyPassword.Size = new System.Drawing.Size(56, 13);
-            this.lblProxyPassword.TabIndex = 24;
+            this.lblProxyPassword.TabIndex = 13;
             this.lblProxyPassword.Text = "&Password:";
             // 
             // txtProxyPassword
@@ -263,7 +245,7 @@
             this.txtProxyPassword.Location = new System.Drawing.Point(82, 173);
             this.txtProxyPassword.Name = "txtProxyPassword";
             this.txtProxyPassword.Size = new System.Drawing.Size(296, 20);
-            this.txtProxyPassword.TabIndex = 25;
+            this.txtProxyPassword.TabIndex = 14;
             this.txtProxyPassword.UseSystemPasswordChar = true;
             // 
             // lblNumThreads
@@ -272,7 +254,7 @@
             this.lblNumThreads.Location = new System.Drawing.Point(7, 37);
             this.lblNumThreads.Name = "lblNumThreads";
             this.lblNumThreads.Size = new System.Drawing.Size(97, 13);
-            this.lblNumThreads.TabIndex = 9;
+            this.lblNumThreads.TabIndex = 3;
             this.lblNumThreads.Text = "&Number of threads:";
             // 
             // nNumThreads
@@ -292,7 +274,7 @@
             0});
             this.nNumThreads.Name = "nNumThreads";
             this.nNumThreads.Size = new System.Drawing.Size(264, 20);
-            this.nNumThreads.TabIndex = 10;
+            this.nNumThreads.TabIndex = 4;
             this.nNumThreads.Value = new decimal(new int[] {
             2,
             0,
@@ -303,48 +285,48 @@
             // 
             this.cboGlobalVariables.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboGlobalVariables.FormattingEnabled = true;
-            this.cboGlobalVariables.Location = new System.Drawing.Point(54, 254);
+            this.cboGlobalVariables.Location = new System.Drawing.Point(54, 172);
             this.cboGlobalVariables.Name = "cboGlobalVariables";
             this.cboGlobalVariables.Size = new System.Drawing.Size(106, 21);
             this.cboGlobalVariables.Sorted = true;
-            this.cboGlobalVariables.TabIndex = 13;
+            this.cboGlobalVariables.TabIndex = 8;
             this.cboGlobalVariables.SelectedIndexChanged += new System.EventHandler(this.cboGlobalVariables_SelectedIndexChanged);
             // 
             // txtGlobalVariableValue
             // 
             this.txtGlobalVariableValue.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtGlobalVariableValue.Location = new System.Drawing.Point(215, 254);
+            this.txtGlobalVariableValue.Location = new System.Drawing.Point(215, 172);
             this.txtGlobalVariableValue.Name = "txtGlobalVariableValue";
             this.txtGlobalVariableValue.Size = new System.Drawing.Size(173, 20);
-            this.txtGlobalVariableValue.TabIndex = 15;
+            this.txtGlobalVariableValue.TabIndex = 10;
             this.txtGlobalVariableValue.TextChanged += new System.EventHandler(this.txtGlobalVariableValue_TextChanged);
             // 
             // lblVarName
             // 
             this.lblVarName.AutoSize = true;
-            this.lblVarName.Location = new System.Drawing.Point(10, 257);
+            this.lblVarName.Location = new System.Drawing.Point(10, 175);
             this.lblVarName.Name = "lblVarName";
             this.lblVarName.Size = new System.Drawing.Size(38, 13);
-            this.lblVarName.TabIndex = 12;
+            this.lblVarName.TabIndex = 7;
             this.lblVarName.Text = "&Name:";
             // 
             // lblvalue
             // 
             this.lblvalue.AutoSize = true;
-            this.lblvalue.Location = new System.Drawing.Point(172, 257);
+            this.lblvalue.Location = new System.Drawing.Point(172, 175);
             this.lblvalue.Name = "lblvalue";
             this.lblvalue.Size = new System.Drawing.Size(37, 13);
-            this.lblvalue.TabIndex = 14;
+            this.lblvalue.TabIndex = 9;
             this.lblvalue.Text = "&Value:";
             // 
             // bAdd
             // 
             this.bAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.bAdd.Location = new System.Drawing.Point(232, 280);
+            this.bAdd.Location = new System.Drawing.Point(232, 198);
             this.bAdd.Name = "bAdd";
             this.bAdd.Size = new System.Drawing.Size(75, 23);
-            this.bAdd.TabIndex = 16;
+            this.bAdd.TabIndex = 11;
             this.bAdd.Text = "&Add";
             this.bAdd.UseVisualStyleBackColor = true;
             this.bAdd.Click += new System.EventHandler(this.bAdd_Click);
@@ -353,10 +335,10 @@
             // 
             this.bRemove.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.bRemove.Enabled = false;
-            this.bRemove.Location = new System.Drawing.Point(313, 280);
+            this.bRemove.Location = new System.Drawing.Point(313, 198);
             this.bRemove.Name = "bRemove";
             this.bRemove.Size = new System.Drawing.Size(75, 23);
-            this.bRemove.TabIndex = 17;
+            this.bRemove.TabIndex = 12;
             this.bRemove.Text = "&Remove";
             this.bRemove.UseVisualStyleBackColor = true;
             this.bRemove.Click += new System.EventHandler(this.bRemove_Click);
@@ -378,7 +360,7 @@
             0});
             this.nNumRetries.Name = "nNumRetries";
             this.nNumRetries.Size = new System.Drawing.Size(264, 20);
-            this.nNumRetries.TabIndex = 28;
+            this.nNumRetries.TabIndex = 6;
             this.nNumRetries.Value = new decimal(new int[] {
             1,
             0,
@@ -391,30 +373,30 @@
             this.label1.Location = new System.Drawing.Point(7, 63);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(90, 13);
-            this.label1.TabIndex = 29;
+            this.label1.TabIndex = 5;
             this.label1.Text = "Number of retrie&s:";
             // 
             // tcSettings
             // 
-            this.tcSettings.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.tcSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.tcSettings.Controls.Add(this.tpGeneral);
             this.tcSettings.Controls.Add(this.tpConnection);
+            this.tcSettings.Controls.Add(this.tpCommands);
             this.tcSettings.Location = new System.Drawing.Point(12, 12);
             this.tcSettings.Name = "tcSettings";
             this.tcSettings.SelectedIndex = 0;
-            this.tcSettings.Size = new System.Drawing.Size(402, 333);
-            this.tcSettings.TabIndex = 30;
+            this.tcSettings.Size = new System.Drawing.Size(402, 268);
+            this.tcSettings.TabIndex = 0;
             // 
             // tpGeneral
             // 
             this.tpGeneral.Controls.Add(this.chkMinToTray);
             this.tpGeneral.Controls.Add(this.chkUpdateOnlineDatabase);
-            this.tpGeneral.Controls.Add(this.txtDefaultCommand);
             this.tpGeneral.Controls.Add(this.bRemove);
             this.tpGeneral.Controls.Add(this.chkUpdateAtStartup);
             this.tpGeneral.Controls.Add(this.bAdd);
-            this.tpGeneral.Controls.Add(this.lblDefaultCommand);
             this.tpGeneral.Controls.Add(this.lblvalue);
             this.tpGeneral.Controls.Add(this.txtCustomColumn);
             this.tpGeneral.Controls.Add(this.lblVarName);
@@ -426,7 +408,7 @@
             this.tpGeneral.Location = new System.Drawing.Point(4, 22);
             this.tpGeneral.Name = "tpGeneral";
             this.tpGeneral.Padding = new System.Windows.Forms.Padding(3);
-            this.tpGeneral.Size = new System.Drawing.Size(394, 307);
+            this.tpGeneral.Size = new System.Drawing.Size(394, 242);
             this.tpGeneral.TabIndex = 0;
             this.tpGeneral.Text = "General";
             this.tpGeneral.UseVisualStyleBackColor = true;
@@ -437,7 +419,7 @@
             this.chkMinToTray.Location = new System.Drawing.Point(6, 80);
             this.chkMinToTray.Name = "chkMinToTray";
             this.chkMinToTray.Size = new System.Drawing.Size(98, 17);
-            this.chkMinToTray.TabIndex = 20;
+            this.chkMinToTray.TabIndex = 3;
             this.chkMinToTray.Text = "&Minimize to tray";
             this.chkMinToTray.UseVisualStyleBackColor = true;
             // 
@@ -447,7 +429,7 @@
             this.chkUpdateOnlineDatabase.Location = new System.Drawing.Point(6, 57);
             this.chkUpdateOnlineDatabase.Name = "chkUpdateOnlineDatabase";
             this.chkUpdateOnlineDatabase.Size = new System.Drawing.Size(220, 17);
-            this.chkUpdateOnlineDatabase.TabIndex = 18;
+            this.chkUpdateOnlineDatabase.TabIndex = 2;
             this.chkUpdateOnlineDatabase.Text = "&Check for updates in the online database";
             this.chkUpdateOnlineDatabase.UseVisualStyleBackColor = true;
             // 
@@ -456,10 +438,10 @@
             this.sepGlobalVariables.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.sepGlobalVariables.ForeColor = System.Drawing.SystemColors.ActiveCaption;
-            this.sepGlobalVariables.Location = new System.Drawing.Point(3, 226);
+            this.sepGlobalVariables.Location = new System.Drawing.Point(3, 144);
             this.sepGlobalVariables.Name = "sepGlobalVariables";
             this.sepGlobalVariables.Size = new System.Drawing.Size(385, 23);
-            this.sepGlobalVariables.TabIndex = 11;
+            this.sepGlobalVariables.TabIndex = 6;
             this.sepGlobalVariables.Text = "Global variables";
             this.sepGlobalVariables.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -483,7 +465,7 @@
             this.tpConnection.Location = new System.Drawing.Point(4, 22);
             this.tpConnection.Name = "tpConnection";
             this.tpConnection.Padding = new System.Windows.Forms.Padding(3);
-            this.tpConnection.Size = new System.Drawing.Size(394, 307);
+            this.tpConnection.Size = new System.Drawing.Size(394, 242);
             this.tpConnection.TabIndex = 1;
             this.tpConnection.Text = "Connection";
             this.tpConnection.UseVisualStyleBackColor = true;
@@ -496,15 +478,73 @@
             this.sepProxy.Location = new System.Drawing.Point(3, 93);
             this.sepProxy.Name = "sepProxy";
             this.sepProxy.Size = new System.Drawing.Size(375, 23);
-            this.sepProxy.TabIndex = 18;
+            this.sepProxy.TabIndex = 7;
             this.sepProxy.Text = "HTTP proxy settings";
             this.sepProxy.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // tpCommands
+            // 
+            this.tpCommands.Controls.Add(this.txtPostUpdateCommand);
+            this.tpCommands.Controls.Add(this.lblPostUpdateCommand);
+            this.tpCommands.Controls.Add(this.txtDefaultCommand);
+            this.tpCommands.Controls.Add(this.lblDefaultCommand);
+            this.tpCommands.Location = new System.Drawing.Point(4, 22);
+            this.tpCommands.Name = "tpCommands";
+            this.tpCommands.Padding = new System.Windows.Forms.Padding(3);
+            this.tpCommands.Size = new System.Drawing.Size(394, 242);
+            this.tpCommands.TabIndex = 2;
+            this.tpCommands.Text = "Commands";
+            this.tpCommands.UseVisualStyleBackColor = true;
+            // 
+            // txtPostUpdateCommand
+            // 
+            this.txtPostUpdateCommand.AcceptsReturn = true;
+            this.txtPostUpdateCommand.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtPostUpdateCommand.Location = new System.Drawing.Point(6, 126);
+            this.txtPostUpdateCommand.Multiline = true;
+            this.txtPostUpdateCommand.Name = "txtPostUpdateCommand";
+            this.txtPostUpdateCommand.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.txtPostUpdateCommand.Size = new System.Drawing.Size(382, 71);
+            this.txtPostUpdateCommand.TabIndex = 3;
+            this.txtPostUpdateCommand.WordWrap = false;
+            // 
+            // lblPostUpdateCommand
+            // 
+            this.lblPostUpdateCommand.AutoSize = true;
+            this.lblPostUpdateCommand.Location = new System.Drawing.Point(6, 110);
+            this.lblPostUpdateCommand.Name = "lblPostUpdateCommand";
+            this.lblPostUpdateCommand.Size = new System.Drawing.Size(250, 13);
+            this.lblPostUpdateCommand.TabIndex = 2;
+            this.lblPostUpdateCommand.Text = "&Command to execute after updating all applications:";
+            // 
+            // txtDefaultCommand
+            // 
+            this.txtDefaultCommand.AcceptsReturn = true;
+            this.txtDefaultCommand.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtDefaultCommand.Location = new System.Drawing.Point(6, 27);
+            this.txtDefaultCommand.Multiline = true;
+            this.txtDefaultCommand.Name = "txtDefaultCommand";
+            this.txtDefaultCommand.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.txtDefaultCommand.Size = new System.Drawing.Size(382, 71);
+            this.txtDefaultCommand.TabIndex = 1;
+            this.txtDefaultCommand.WordWrap = false;
+            // 
+            // lblDefaultCommand
+            // 
+            this.lblDefaultCommand.AutoSize = true;
+            this.lblDefaultCommand.Location = new System.Drawing.Point(6, 11);
+            this.lblDefaultCommand.Name = "lblDefaultCommand";
+            this.lblDefaultCommand.Size = new System.Drawing.Size(283, 13);
+            this.lblDefaultCommand.TabIndex = 0;
+            this.lblDefaultCommand.Text = "&Default command to execute after updating an application:";
             // 
             // SettingsDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(426, 386);
+            this.ClientSize = new System.Drawing.Size(426, 330);
             this.Controls.Add(this.tcSettings);
             this.Controls.Add(this.bOK);
             this.Controls.Add(this.bCancel);
@@ -525,6 +565,8 @@
             this.tpGeneral.PerformLayout();
             this.tpConnection.ResumeLayout(false);
             this.tpConnection.PerformLayout();
+            this.tpCommands.ResumeLayout(false);
+            this.tpCommands.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -534,8 +576,6 @@
         private System.Windows.Forms.Button bCancel;
         private System.Windows.Forms.Button bOK;
         private System.Windows.Forms.CheckBox chkUpdateAtStartup;
-        private System.Windows.Forms.Label lblDefaultCommand;
-        private Ketarin.Forms.TextBox txtDefaultCommand;
         private System.Windows.Forms.TextBox txtCustomColumn;
         private System.Windows.Forms.Label lblCustomColumn;
         private System.Windows.Forms.CheckBox chkAvoidBeta;
@@ -566,5 +606,10 @@
         private System.Windows.Forms.TabPage tpConnection;
         private System.Windows.Forms.CheckBox chkUpdateOnlineDatabase;
         private System.Windows.Forms.CheckBox chkMinToTray;
+        private System.Windows.Forms.TabPage tpCommands;
+        private TextBox txtPostUpdateCommand;
+        private System.Windows.Forms.Label lblPostUpdateCommand;
+        private TextBox txtDefaultCommand;
+        private System.Windows.Forms.Label lblDefaultCommand;
     }
 }

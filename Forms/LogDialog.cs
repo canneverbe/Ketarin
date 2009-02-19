@@ -63,7 +63,14 @@ namespace Ketarin.Forms
 
         public static void Log(ApplicationJob job, string text)
         {
-            Log(job.Name + ": " + text);
+            if (job == null)
+            {
+                Log(text);
+            }
+            else
+            {
+                Log(job.Name + ": " + text);
+            }
         }
 
         public static void Log(ApplicationJob job, Exception ex)
