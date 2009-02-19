@@ -365,6 +365,9 @@ namespace Ketarin
                     }
                 }
 
+                string postUpdateCommand = Settings.GetValue("PostUpdateCommand", "") as string;
+                ExecuteCommand(null, postUpdateCommand);
+
                 LogDialog.Log("Update finished");
             }
             finally
@@ -778,10 +781,16 @@ namespace Ketarin
             if (string.IsNullOrEmpty(baseCommand)) return;
 
             baseCommand = baseCommand.Replace("\r\n", "\n");
-            baseCommand = job.Variables.ReplaceAllInString(baseCommand);
 
-            // Replace variable: file
-            baseCommand = UrlVariable.Replace(baseCommand, "file", "\"" + job.PreviousLocation + "\"");
+            // Job specific data
+            if (job != null)
+            {
+                baseCommand = job.Variables.ReplaceAllInString(baseCommand);
+
+                // Replace variable: file
+                baseCommand = UrlVariable.Replace(baseCommand, "file", "\"" + job.PreviousLocation + "\"");
+            }
+
             // Replace variable: root
             try
             {
