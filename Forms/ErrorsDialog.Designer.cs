@@ -33,6 +33,7 @@
             this.olvErrors = new CDBurnerXP.Controls.FastObjectListView();
             this.colAppName = new CDBurnerXP.Controls.OLVColumn();
             this.colError = new CDBurnerXP.Controls.OLVColumn();
+            this.bCopyToClipboard = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.olvErrors)).BeginInit();
             this.SuspendLayout();
             // 
@@ -40,7 +41,7 @@
             // 
             this.lblDesc.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblDesc.Location = new System.Drawing.Point(12, 9);
+            this.lblDesc.Location = new System.Drawing.Point(9, 9);
             this.lblDesc.Name = "lblDesc";
             this.lblDesc.Size = new System.Drawing.Size(518, 20);
             this.lblDesc.TabIndex = 0;
@@ -52,7 +53,7 @@
             this.bClose.Location = new System.Drawing.Point(455, 210);
             this.bClose.Name = "bClose";
             this.bClose.Size = new System.Drawing.Size(75, 23);
-            this.bClose.TabIndex = 1;
+            this.bClose.TabIndex = 3;
             this.bClose.Text = "Close";
             this.bClose.UseVisualStyleBackColor = true;
             // 
@@ -75,13 +76,13 @@
             this.olvErrors.HighlightForegroundColor = System.Drawing.Color.Empty;
             this.olvErrors.LastSortColumn = null;
             this.olvErrors.LastSortOrder = System.Windows.Forms.SortOrder.None;
-            this.olvErrors.Location = new System.Drawing.Point(15, 26);
+            this.olvErrors.Location = new System.Drawing.Point(12, 26);
             this.olvErrors.Name = "olvErrors";
             this.olvErrors.ShowGroups = false;
             this.olvErrors.ShowItemToolTips = true;
-            this.olvErrors.Size = new System.Drawing.Size(515, 178);
+            this.olvErrors.Size = new System.Drawing.Size(518, 178);
             this.olvErrors.Sorting = System.Windows.Forms.SortOrder.Ascending;
-            this.olvErrors.TabIndex = 2;
+            this.olvErrors.TabIndex = 1;
             this.olvErrors.UseCompatibleStateImageBehavior = false;
             this.olvErrors.View = System.Windows.Forms.View.Details;
             this.olvErrors.VirtualMode = true;
@@ -99,11 +100,23 @@
             this.colError.Text = "Error";
             this.colError.Width = 120;
             // 
+            // bCopyToClipboard
+            // 
+            this.bCopyToClipboard.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.bCopyToClipboard.Location = new System.Drawing.Point(12, 210);
+            this.bCopyToClipboard.Name = "bCopyToClipboard";
+            this.bCopyToClipboard.Size = new System.Drawing.Size(115, 23);
+            this.bCopyToClipboard.TabIndex = 2;
+            this.bCopyToClipboard.Text = "&Copy to clipboard";
+            this.bCopyToClipboard.UseVisualStyleBackColor = true;
+            this.bCopyToClipboard.Click += new System.EventHandler(this.bCopyToClipboard_Click);
+            // 
             // ErrorsDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(542, 245);
+            this.Controls.Add(this.bCopyToClipboard);
             this.Controls.Add(this.olvErrors);
             this.Controls.Add(this.bClose);
             this.Controls.Add(this.lblDesc);
@@ -126,5 +139,6 @@
         private CDBurnerXP.Controls.FastObjectListView olvErrors;
         private CDBurnerXP.Controls.OLVColumn colAppName;
         private CDBurnerXP.Controls.OLVColumn colError;
+        private System.Windows.Forms.Button bCopyToClipboard;
     }
 }
