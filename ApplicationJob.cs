@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Data;
 using System.Data.SQLite;
 using System.IO;
 using System.Net;
-using System.Xml;
-using System.Windows.Forms;
-using System.Xml.Serialization;
+using System.Text.RegularExpressions;
 using System.Security.Cryptography;
-using CDBurnerXP.IO;
+using System.Text;
+using System.Windows.Forms;
+using System.Xml;
+using System.Xml.Serialization;
 using CDBurnerXP;
+using CDBurnerXP.IO;
 using Ketarin.Forms;
 
 namespace Ketarin
@@ -792,6 +793,7 @@ namespace Ketarin
 
                 using (SetPlaceholderDialog dialog = new SetPlaceholderDialog(name))
                 {
+                    dialog.Value = element.GetAttribute("value");
                     // Abort importing if cancelled
                     if (dialog.ShowDialog(owner) == DialogResult.Cancel) return null;
 
@@ -804,6 +806,26 @@ namespace Ketarin
                 string name = element.GetAttribute("name");
 
                 if (!values.ContainsKey(name)) continue;
+
+                // Apply regex on the value entered by the user?
+                string regex = element.GetAttribute("regex");
+                if (!string.IsNullOrEmpty(regex))
+                {
+                    try
+                    {
+                        Regex valueRegex = new Regex(regex);
+                        Match match = valueRegex.Match(values[name]);
+                        if (match.Success)
+                        {
+                            values[name] = match.Value;
+                        }
+                    }
+                    catch (ArgumentException)
+                    {
+                        // invalid regex, do not use it
+                        LogDialog.Log("Invalid regular expression for template placeholder '" + name + "'");
+                    }
+                }
 
                 // Replace the placeholder with a text node
                 element.ParentNode.ReplaceChild(doc.CreateTextNode(values[name]), element);

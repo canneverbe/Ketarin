@@ -25,6 +25,10 @@ namespace Ketarin.Forms
             {
                 return txtValue.Text;
             }
+            set
+            {
+                txtValue.Text = value;
+            }
         }
 
         #endregion
