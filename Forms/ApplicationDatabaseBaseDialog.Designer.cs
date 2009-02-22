@@ -36,7 +36,7 @@
             this.olvApplications = new CDBurnerXP.Controls.FastObjectListView();
             this.colAppName = new CDBurnerXP.Controls.OLVColumn();
             this.colDate = new CDBurnerXP.Controls.OLVColumn();
-            this.olvColumn1 = new CDBurnerXP.Controls.OLVColumn();
+            this.colUseCount = new CDBurnerXP.Controls.OLVColumn();
             ((System.ComponentModel.ISupportInitialize)(this.olvApplications)).BeginInit();
             this.SuspendLayout();
             // 
@@ -87,7 +87,7 @@
             // 
             this.olvApplications.AllColumns.Add(this.colAppName);
             this.olvApplications.AllColumns.Add(this.colDate);
-            this.olvApplications.AllColumns.Add(this.olvColumn1);
+            this.olvApplications.AllColumns.Add(this.colUseCount);
             this.olvApplications.AlternateRowBackColor = System.Drawing.Color.Empty;
             this.olvApplications.AlwaysGroupByColumn = null;
             this.olvApplications.AlwaysGroupBySortOrder = System.Windows.Forms.SortOrder.None;
@@ -97,7 +97,7 @@
             this.olvApplications.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.colAppName,
             this.colDate,
-            this.olvColumn1});
+            this.colUseCount});
             this.olvApplications.ContextMenu = this.cmnuApplications;
             this.olvApplications.FullRowSelect = true;
             this.olvApplications.HideSelection = false;
@@ -129,11 +129,11 @@
             this.colDate.Text = "Last updated";
             this.colDate.Width = 130;
             // 
-            // olvColumn1
+            // colUseCount
             // 
-            this.olvColumn1.AspectName = "UseCount";
-            this.olvColumn1.Text = "Uses";
-            this.olvColumn1.Width = 40;
+            this.colUseCount.AspectName = "UseCount";
+            this.colUseCount.Text = "Uses";
+            this.colUseCount.Width = 40;
             // 
             // ApplicationDatabaseBaseDialog
             // 
@@ -167,6 +167,6 @@
         protected CDBurnerXP.Controls.FastObjectListView olvApplications;
         protected System.Windows.Forms.Label lblResults;
         protected System.Windows.Forms.Button bCancel;
-        private CDBurnerXP.Controls.OLVColumn olvColumn1;
+        protected CDBurnerXP.Controls.OLVColumn colUseCount;
     }
 }
