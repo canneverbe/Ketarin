@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             this.lblResults = new System.Windows.Forms.Label();
             this.bCancel = new System.Windows.Forms.Button();
             this.bOK = new System.Windows.Forms.Button();
@@ -37,6 +36,7 @@
             this.olvApplications = new CDBurnerXP.Controls.FastObjectListView();
             this.colAppName = new CDBurnerXP.Controls.OLVColumn();
             this.colDate = new CDBurnerXP.Controls.OLVColumn();
+            this.olvColumn1 = new CDBurnerXP.Controls.OLVColumn();
             ((System.ComponentModel.ISupportInitialize)(this.olvApplications)).BeginInit();
             this.SuspendLayout();
             // 
@@ -76,11 +76,10 @@
             // 
             this.cmnuApplications.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.cmnuProperties});
-            this.cmnuApplications.Name = "cmnuApplications";
             // 
             // cmnuProperties
             // 
-            this.cmnuProperties.Name = "cmnuProperties";
+            this.cmnuProperties.Index = 0;
             this.cmnuProperties.Text = "&Properties";
             this.cmnuProperties.Click += new System.EventHandler(this.cmnuProperties_Click);
             // 
@@ -88,6 +87,7 @@
             // 
             this.olvApplications.AllColumns.Add(this.colAppName);
             this.olvApplications.AllColumns.Add(this.colDate);
+            this.olvApplications.AllColumns.Add(this.olvColumn1);
             this.olvApplications.AlternateRowBackColor = System.Drawing.Color.Empty;
             this.olvApplications.AlwaysGroupByColumn = null;
             this.olvApplications.AlwaysGroupBySortOrder = System.Windows.Forms.SortOrder.None;
@@ -96,8 +96,9 @@
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.olvApplications.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.colAppName,
-            this.colDate});
-            this.olvApplications.ContextMenu= this.cmnuApplications;
+            this.colDate,
+            this.olvColumn1});
+            this.olvApplications.ContextMenu = this.cmnuApplications;
             this.olvApplications.FullRowSelect = true;
             this.olvApplications.HideSelection = false;
             this.olvApplications.HighlightBackgroundColor = System.Drawing.Color.Empty;
@@ -127,6 +128,12 @@
             this.colDate.AspectName = "UpdatedAtDate";
             this.colDate.Text = "Last updated";
             this.colDate.Width = 130;
+            // 
+            // olvColumn1
+            // 
+            this.olvColumn1.AspectName = "UseCount";
+            this.olvColumn1.Text = "Uses";
+            this.olvColumn1.Width = 40;
             // 
             // ApplicationDatabaseBaseDialog
             // 
@@ -160,5 +167,6 @@
         protected CDBurnerXP.Controls.FastObjectListView olvApplications;
         protected System.Windows.Forms.Label lblResults;
         protected System.Windows.Forms.Button bCancel;
+        private CDBurnerXP.Controls.OLVColumn olvColumn1;
     }
 }

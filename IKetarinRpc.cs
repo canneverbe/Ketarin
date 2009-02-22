@@ -56,6 +56,8 @@ namespace Ketarin
         public int UpdatedAt;
         [XmlRpcMember("shareid")]
         public int ShareId;
+        [XmlRpcMember("downloadcount")]
+        public int UseCount;
 
         [XmlRpcMissingMapping(MappingAction.Ignore)]
         public DateTime UpdatedAtDate
