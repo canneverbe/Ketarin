@@ -101,7 +101,7 @@ namespace Ketarin.Forms
             }
             else
             {
-                Log(job, "Update not required");
+                Log(job, "Update not required, since date and file size remain unchanged");
             }
         }
 

@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Text;
+using System.Net;
 using System.Windows.Forms;
 using CookComputing.XmlRpc;
 
@@ -59,6 +60,10 @@ namespace Ketarin.Forms
             {
                 MessageBox.Show(this, "An error occured while accessing the online database: " + ex.Message, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            catch (WebException ex)
+            {
+                MessageBox.Show(this, "Could not connect to the online database: " + ex.Message, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
             finally
             {
                 Cursor = Cursors.Default;
@@ -107,6 +112,11 @@ namespace Ketarin.Forms
             catch (XmlRpcException ex)
             {
                 MessageBox.Show(this, "An error occured while importing applications: " + ex.Message, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                DialogResult = DialogResult.None;
+            }
+            catch (WebException ex)
+            {
+                MessageBox.Show(this, "Could not connect to the online database: " + ex.Message, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 DialogResult = DialogResult.None;
             }
             finally
