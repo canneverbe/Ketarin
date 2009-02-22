@@ -8,11 +8,14 @@ namespace Ketarin
     [XmlRpcUrl("http://ketarin.canneverbe.com/rpc")]
     public interface IKetarinRpc : IXmlRpcProxy
     {
+        [XmlRpcMethod("ketarin.GetMostDownloadedApplications")]
+        RpcApplication[] GetMostDownloadedApplications();
+
         [XmlRpcMethod("ketarin.GetApplications")]
         RpcApplication[] GetApplications(string searchSubject);
 
         [XmlRpcMethod("ketarin.GetSimilarApplications")]
-        RpcApplication[] GetSimilarApplications(string searchSubject, string appGuid);     
+        RpcApplication[] GetSimilarApplications(string searchSubject, string appGuid);
 
         [XmlRpcMethod("ketarin.GetUpdatedApplications")]
         string[] GetUpdatedApplications(RpcAppGuidAndDate[] existingApps); 

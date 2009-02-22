@@ -130,5 +130,31 @@ namespace Ketarin.Forms
             AcceptButton = bSearch;
         }
 
+        private void bTop50_Click(object sender, EventArgs e)
+        {
+            Cursor = Cursors.WaitCursor;
+
+            try
+            {
+                IKetarinRpc proxy = XmlRpcProxyGen.Create<IKetarinRpc>();
+                m_LastLoadedApplications = proxy.GetMostDownloadedApplications();
+                m_LastSearchText = string.Empty;
+                olvApplications.Sort(colUseCount);
+                Applications = m_LastLoadedApplications;
+            }
+            catch (XmlRpcException ex)
+            {
+                MessageBox.Show(this, "An error occured while accessing the online database: " + ex.Message, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            catch (WebException ex)
+            {
+                MessageBox.Show(this, "Could not connect to the online database: " + ex.Message, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                Cursor = Cursors.Default;
+            }
+        }
+
     }
 }
