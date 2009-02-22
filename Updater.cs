@@ -582,11 +582,14 @@ namespace Ketarin
                     httpRequest.Referer = job.HttpReferer;
                 }
 
+                LogDialog.Log(job, "Using referer: " + httpRequest.Referer);
                 httpRequest.UserAgent = WebClient.UserAgent;
             }
 
             using (WebResponse response = req.GetResponse())
             {
+                LogDialog.Log(job, "Server source file: " + req.RequestUri.AbsolutePath);
+
                 // Occasionally, websites are not available and an error page is encountered
                 // For the case that the content type is just plain wrong, ignore it if the size is higher than 500KB
                 HttpWebResponse httpResponse = response as HttpWebResponse;
@@ -608,6 +611,8 @@ namespace Ketarin
                 }
 
                 string targetFileName = job.GetTargetFile(response);
+
+                LogDialog.Log(job, "Determined target file name: " + targetFileName);
 
                 // Only download, if the file size or date has changed
                 if (!job.RequiresDownload(response, targetFileName))
@@ -824,7 +829,10 @@ namespace Ketarin
                     string[] commands = baseCommand.Split('\n');
                     foreach (string command in commands)
                     {
-                        LogDialog.Log(job, "Executing command: " + command);
+                        if (!string.IsNullOrEmpty(command))
+                        {
+                            LogDialog.Log(job, "Executing command: " + command);
+                        }
                         proc.StandardInput.WriteLine(command);
                     }
                 }
