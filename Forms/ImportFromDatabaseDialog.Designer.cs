@@ -75,7 +75,7 @@
             this.bTop50.Location = new System.Drawing.Point(12, 269);
             this.bTop50.Name = "bTop50";
             this.bTop50.Size = new System.Drawing.Size(75, 23);
-            this.bTop50.TabIndex = 7;
+            this.bTop50.TabIndex = 4;
             this.bTop50.Text = "&Top 50";
             this.bTop50.UseVisualStyleBackColor = true;
             this.bTop50.Click += new System.EventHandler(this.bTop50_Click);
