@@ -710,7 +710,7 @@ namespace Ketarin
                 foreach (ApplicationJob job in jobs)
                 {
                     // Before exporting, make sure that it got a Guid
-                    if (job.Guid == Guid.Empty) job.Save();
+                    if (job.Guid == Guid.Empty && !isTemplate) job.Save();
                     serializer.Serialize(xmlWriter, job);
                 }
                 xmlWriter.WriteEndElement();

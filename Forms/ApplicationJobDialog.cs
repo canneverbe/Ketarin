@@ -36,6 +36,7 @@ namespace Ketarin.Forms
                 }
 
                 m_ApplicationJob = value;
+                bSaveAsDefault.Visible = false;
                 ReadApplication();
                 this.Text = "Edit " + m_ApplicationJob.Name;
             }
@@ -84,6 +85,13 @@ namespace Ketarin.Forms
             CancelButton = bCancel;
 
             cboCategory.DataSource = DbManager.GetCategories();
+
+            string defaultXml = Settings.GetValue("DefaultApplication", "") as string;
+            if (!string.IsNullOrEmpty(defaultXml))
+            {
+                m_ApplicationJob = ApplicationJob.LoadFromXml(defaultXml);
+                ReadApplication();
+            }
         }
 
         protected override void OnLoad(EventArgs e)
@@ -456,6 +464,14 @@ namespace Ketarin.Forms
         private void rbFixedUrl_CheckedChanged(object sender, EventArgs e)
         {
             RefreshVariables();
+        }
+
+        private void bSaveAsDefault_Click(object sender, EventArgs e)
+        {
+            // Save entered values as default for next time
+            WriteApplication();
+            string xml = ApplicationJob.GetXml(new ApplicationJob[] { ApplicationJob }, true);
+            Settings.SetValue("DefaultApplication", xml);
         }
 
     }

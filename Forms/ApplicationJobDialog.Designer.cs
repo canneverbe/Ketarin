@@ -67,6 +67,7 @@
             this.lblCommandBefore = new System.Windows.Forms.Label();
             this.txtExecuteAfter = new Ketarin.Forms.VariableTextBox();
             this.lblExecuteCommand = new System.Windows.Forms.Label();
+            this.bSaveAsDefault = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.pnlTarget.SuspendLayout();
             this.tcApplication.SuspendLayout();
@@ -521,11 +522,23 @@
             this.lblExecuteCommand.TabIndex = 2;
             this.lblExecuteCommand.Text = "Execute the following command &after downloading:";
             // 
+            // bSaveAsDefault
+            // 
+            this.bSaveAsDefault.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.bSaveAsDefault.Location = new System.Drawing.Point(12, 292);
+            this.bSaveAsDefault.Name = "bSaveAsDefault";
+            this.bSaveAsDefault.Size = new System.Drawing.Size(99, 23);
+            this.bSaveAsDefault.TabIndex = 98;
+            this.bSaveAsDefault.Text = "Save as &default";
+            this.bSaveAsDefault.UseVisualStyleBackColor = true;
+            this.bSaveAsDefault.Click += new System.EventHandler(this.bSaveAsDefault_Click);
+            // 
             // ApplicationJobDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(407, 327);
+            this.Controls.Add(this.bSaveAsDefault);
             this.Controls.Add(this.tcApplication);
             this.Controls.Add(this.bCancel);
             this.Controls.Add(this.bOK);
@@ -592,5 +605,6 @@
         private VariableTextBox txtExecuteAfter;
         private System.Windows.Forms.Label lblExecuteCommand;
         private System.Windows.Forms.CheckBox chkDownloadExclusively;
+        private System.Windows.Forms.Button bSaveAsDefault;
     }
 }
