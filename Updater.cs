@@ -582,7 +582,7 @@ namespace Ketarin
                     httpRequest.Referer = job.HttpReferer;
                 }
 
-                LogDialog.Log(job, "Using referer: " + httpRequest.Referer);
+                LogDialog.Log(job, "Using referer: " + (string.IsNullOrEmpty(httpRequest.Referer) ? "(none)" : httpRequest.Referer));
                 httpRequest.UserAgent = WebClient.UserAgent;
             }
 
