@@ -14,13 +14,26 @@ namespace Ketarin
     class WebClient : System.Net.WebClient
     {
         /// <summary>
-        /// Gets Ketarin's default user agent (includes application name and version)
+        /// Gets a user agent. To prevent websites from
+        /// blocking Ketarin, we'll just use some random
+        /// Internet Explorer / Firefox user agents.
         /// </summary>
         public static string UserAgent
         {
             get
             {
-                return "Ketarin/" + Application.ProductVersion + "(Windows; N) MSIE (.NET CLR 2.0)";
+                List<string> userAgents = new List<string>();
+                userAgents.Add("Mozilla/5.0 (Windows; U; MSIE 7.0; Windows NT 6.0; en-US)");
+                userAgents.Add("Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0;)");
+                userAgents.Add("Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1)");
+                userAgents.Add("Mozilla/4.0 (Windows; MSIE 6.0; Windows NT 6.0)");
+                userAgents.Add("Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.6pre) Gecko/2009011606 Firefox/3.1");
+                userAgents.Add("Mozilla/5.0 (Windows; U; Windows NT 7.0; en-US; rv:1.9.0.6) Gecko/2009011913 Firefox/3.0.6");
+                userAgents.Add("Mozilla/5.0 (Windows; U; Windows NT 6.0; de; rv:1.9.0.6) Gecko/2009011913 Firefox/3.0.6 (.NET CLR 3.5.30729)");
+                
+                Random rand = new Random();
+                int index = rand.Next() % userAgents.Count;
+                return userAgents[index];
             }
         }
 
