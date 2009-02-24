@@ -134,7 +134,7 @@ namespace Ketarin.Forms
             }
             else
             {
-                if (Visible) {
+                if (Visible && text != null) {
                     txtLog.AppendText(text);
                     txtLog.AppendText(Environment.NewLine);
 
