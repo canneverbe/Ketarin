@@ -161,7 +161,11 @@ namespace Ketarin.Forms
             rbFileHippo.Checked = (m_ApplicationJob.DownloadSourceType == ApplicationJob.SourceType.FileHippo);
             rbFixedUrl.Checked = (m_ApplicationJob.DownloadSourceType == ApplicationJob.SourceType.FixedUrl);
             chkEnabled.Checked = m_ApplicationJob.Enabled;
+            
             rbFolder.Checked = m_ApplicationJob.TargetIsFolder;
+            // One of the two must be checked (always)
+            if (!rbFolder.Checked) rbFileName.Checked = true;
+
             chkDeletePrevious.Checked = m_ApplicationJob.DeletePreviousFile;
             txtExecuteAfter.Text = m_ApplicationJob.ExecuteCommand;
             txtExecuteBefore.Text = m_ApplicationJob.ExecutePreCommand;
