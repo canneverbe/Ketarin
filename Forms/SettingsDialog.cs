@@ -52,8 +52,9 @@ namespace Ketarin.Forms
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-            txtDefaultCommand.Text = Settings.GetValue("DefaultCommand", "") as string;
-            txtPostUpdateCommand.Text = Settings.GetValue("PostUpdateCommand", "") as string;
+            txtPostUpdateCommand.Text = Settings.GetValue("DefaultCommand", "") as string;
+            txtPostUpdateAllCommand.Text = Settings.GetValue("PostUpdateCommand", "") as string;
+            txtPreUpdateCommand.Text = Settings.GetValue("PreUpdateCommand", "") as string;
 
             chkUpdateAtStartup.Checked = (bool)Settings.GetValue("UpdateAtStartup", false);
             txtCustomColumn.Text = Settings.GetValue("CustomColumn", "") as string;
@@ -74,8 +75,9 @@ namespace Ketarin.Forms
 
         private void bOK_Click(object sender, EventArgs e)
         {
-            Settings.SetValue("DefaultCommand", txtDefaultCommand.Text);
-            Settings.SetValue("PostUpdateCommand", txtPostUpdateCommand.Text);
+            Settings.SetValue("DefaultCommand", txtPostUpdateCommand.Text);
+            Settings.SetValue("PostUpdateCommand", txtPostUpdateAllCommand.Text);
+            Settings.SetValue("PreUpdateCommand", txtPreUpdateCommand.Text);
 
             Settings.SetValue("UpdateAtStartup", chkUpdateAtStartup.Checked);
             Settings.SetValue("CustomColumn", txtCustomColumn.Text);

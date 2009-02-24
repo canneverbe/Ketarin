@@ -62,10 +62,12 @@
             this.tpConnection = new System.Windows.Forms.TabPage();
             this.sepProxy = new CDBurnerXP.Controls.Separator();
             this.tpCommands = new System.Windows.Forms.TabPage();
+            this.txtPreUpdateCommand = new Ketarin.Forms.TextBox();
+            this.lblPreUpdateCommand = new System.Windows.Forms.Label();
+            this.txtPostUpdateAllCommand = new Ketarin.Forms.TextBox();
+            this.lblPostUpdateAllCommand = new System.Windows.Forms.Label();
             this.txtPostUpdateCommand = new Ketarin.Forms.TextBox();
             this.lblPostUpdateCommand = new System.Windows.Forms.Label();
-            this.txtDefaultCommand = new Ketarin.Forms.TextBox();
-            this.lblDefaultCommand = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.nConnectionTimeout)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nProxyPort)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nNumThreads)).BeginInit();
@@ -484,10 +486,12 @@
             // 
             // tpCommands
             // 
+            this.tpCommands.Controls.Add(this.txtPreUpdateCommand);
+            this.tpCommands.Controls.Add(this.lblPreUpdateCommand);
+            this.tpCommands.Controls.Add(this.txtPostUpdateAllCommand);
+            this.tpCommands.Controls.Add(this.lblPostUpdateAllCommand);
             this.tpCommands.Controls.Add(this.txtPostUpdateCommand);
             this.tpCommands.Controls.Add(this.lblPostUpdateCommand);
-            this.tpCommands.Controls.Add(this.txtDefaultCommand);
-            this.tpCommands.Controls.Add(this.lblDefaultCommand);
             this.tpCommands.Location = new System.Drawing.Point(4, 22);
             this.tpCommands.Name = "tpCommands";
             this.tpCommands.Padding = new System.Windows.Forms.Padding(3);
@@ -496,49 +500,71 @@
             this.tpCommands.Text = "Commands";
             this.tpCommands.UseVisualStyleBackColor = true;
             // 
+            // txtPreUpdateCommand
+            // 
+            this.txtPreUpdateCommand.AcceptsReturn = true;
+            this.txtPreUpdateCommand.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtPreUpdateCommand.Location = new System.Drawing.Point(6, 25);
+            this.txtPreUpdateCommand.Multiline = true;
+            this.txtPreUpdateCommand.Name = "txtPreUpdateCommand";
+            this.txtPreUpdateCommand.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.txtPreUpdateCommand.Size = new System.Drawing.Size(382, 50);
+            this.txtPreUpdateCommand.TabIndex = 1;
+            this.txtPreUpdateCommand.WordWrap = false;
+            // 
+            // lblPreUpdateCommand
+            // 
+            this.lblPreUpdateCommand.AutoSize = true;
+            this.lblPreUpdateCommand.Location = new System.Drawing.Point(6, 9);
+            this.lblPreUpdateCommand.Name = "lblPreUpdateCommand";
+            this.lblPreUpdateCommand.Size = new System.Drawing.Size(292, 13);
+            this.lblPreUpdateCommand.TabIndex = 0;
+            this.lblPreUpdateCommand.Text = "Default command to execute &before updating an application:";
+            // 
+            // txtPostUpdateAllCommand
+            // 
+            this.txtPostUpdateAllCommand.AcceptsReturn = true;
+            this.txtPostUpdateAllCommand.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtPostUpdateAllCommand.Location = new System.Drawing.Point(6, 186);
+            this.txtPostUpdateAllCommand.Multiline = true;
+            this.txtPostUpdateAllCommand.Name = "txtPostUpdateAllCommand";
+            this.txtPostUpdateAllCommand.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.txtPostUpdateAllCommand.Size = new System.Drawing.Size(382, 50);
+            this.txtPostUpdateAllCommand.TabIndex = 5;
+            this.txtPostUpdateAllCommand.WordWrap = false;
+            // 
+            // lblPostUpdateAllCommand
+            // 
+            this.lblPostUpdateAllCommand.AutoSize = true;
+            this.lblPostUpdateAllCommand.Location = new System.Drawing.Point(6, 170);
+            this.lblPostUpdateAllCommand.Name = "lblPostUpdateAllCommand";
+            this.lblPostUpdateAllCommand.Size = new System.Drawing.Size(250, 13);
+            this.lblPostUpdateAllCommand.TabIndex = 4;
+            this.lblPostUpdateAllCommand.Text = "&Command to execute after updating all applications:";
+            // 
             // txtPostUpdateCommand
             // 
             this.txtPostUpdateCommand.AcceptsReturn = true;
             this.txtPostUpdateCommand.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtPostUpdateCommand.Location = new System.Drawing.Point(6, 126);
+            this.txtPostUpdateCommand.Location = new System.Drawing.Point(6, 106);
             this.txtPostUpdateCommand.Multiline = true;
             this.txtPostUpdateCommand.Name = "txtPostUpdateCommand";
             this.txtPostUpdateCommand.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtPostUpdateCommand.Size = new System.Drawing.Size(382, 71);
+            this.txtPostUpdateCommand.Size = new System.Drawing.Size(382, 50);
             this.txtPostUpdateCommand.TabIndex = 3;
             this.txtPostUpdateCommand.WordWrap = false;
             // 
             // lblPostUpdateCommand
             // 
             this.lblPostUpdateCommand.AutoSize = true;
-            this.lblPostUpdateCommand.Location = new System.Drawing.Point(6, 110);
+            this.lblPostUpdateCommand.Location = new System.Drawing.Point(6, 90);
             this.lblPostUpdateCommand.Name = "lblPostUpdateCommand";
-            this.lblPostUpdateCommand.Size = new System.Drawing.Size(250, 13);
+            this.lblPostUpdateCommand.Size = new System.Drawing.Size(283, 13);
             this.lblPostUpdateCommand.TabIndex = 2;
-            this.lblPostUpdateCommand.Text = "&Command to execute after updating all applications:";
-            // 
-            // txtDefaultCommand
-            // 
-            this.txtDefaultCommand.AcceptsReturn = true;
-            this.txtDefaultCommand.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtDefaultCommand.Location = new System.Drawing.Point(6, 27);
-            this.txtDefaultCommand.Multiline = true;
-            this.txtDefaultCommand.Name = "txtDefaultCommand";
-            this.txtDefaultCommand.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtDefaultCommand.Size = new System.Drawing.Size(382, 71);
-            this.txtDefaultCommand.TabIndex = 1;
-            this.txtDefaultCommand.WordWrap = false;
-            // 
-            // lblDefaultCommand
-            // 
-            this.lblDefaultCommand.AutoSize = true;
-            this.lblDefaultCommand.Location = new System.Drawing.Point(6, 11);
-            this.lblDefaultCommand.Name = "lblDefaultCommand";
-            this.lblDefaultCommand.Size = new System.Drawing.Size(283, 13);
-            this.lblDefaultCommand.TabIndex = 0;
-            this.lblDefaultCommand.Text = "&Default command to execute after updating an application:";
+            this.lblPostUpdateCommand.Text = "&Default command to execute after updating an application:";
             // 
             // SettingsDialog
             // 
@@ -607,9 +633,11 @@
         private System.Windows.Forms.CheckBox chkUpdateOnlineDatabase;
         private System.Windows.Forms.CheckBox chkMinToTray;
         private System.Windows.Forms.TabPage tpCommands;
+        private TextBox txtPostUpdateAllCommand;
+        private System.Windows.Forms.Label lblPostUpdateAllCommand;
         private TextBox txtPostUpdateCommand;
         private System.Windows.Forms.Label lblPostUpdateCommand;
-        private TextBox txtDefaultCommand;
-        private System.Windows.Forms.Label lblDefaultCommand;
+        private TextBox txtPreUpdateCommand;
+        private System.Windows.Forms.Label lblPreUpdateCommand;
     }
 }
