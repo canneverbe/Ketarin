@@ -635,6 +635,8 @@ namespace Ketarin
                 // Skip downloading!
                 if (m_OnlyCheck) return true;
 
+                string defaultPreCommand = Settings.GetValue("PreUpdateCommand", "") as string;
+                ExecuteCommand(job, defaultPreCommand);
                 ExecuteCommand(job, job.ExecutePreCommand);
 
                 // Read all file contents to a temporary location
