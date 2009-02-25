@@ -345,24 +345,6 @@ namespace Ketarin.Forms
 
         private void bLoad_Click(object sender, EventArgs e)
         {
-            Uri url;
-
-            // Check whether or not the URL is valid and show an error message if necessary
-            try
-            {
-                url = new Uri(CurrentVariable.ExpandedUrl);
-            }
-            catch (ArgumentNullException)
-            {
-                MessageBox.Show(this, "The URL you entered is empty and cannot be loaded.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);    
-                return;
-            }
-            catch (UriFormatException)
-            {
-                MessageBox.Show(this, "The specified URL is not valid.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
             // Load URL contents and show a wait cursor in the meantime
             Cursor = Cursors.WaitCursor;
             try
@@ -374,6 +356,7 @@ namespace Ketarin.Forms
                     {
                         dialog.OnDoWork = delegate()
                         {
+                            Uri url = new Uri(CurrentVariable.ExpandedUrl);
                             CurrentVariable.TempContent = client.DownloadString(url);
                             return true;
                         };
@@ -387,7 +370,20 @@ namespace Ketarin.Forms
                         if (!dialog.Cancelled && dialog.Error != null)
                         {
                             LogDialog.Log("Failed loading URL", dialog.Error);
-                            MessageBox.Show(this, "The contents of the URL could not be loaded.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                            // Check whether or not the URL is valid and show an error message if necessary
+                            if (dialog.Error is ArgumentNullException)
+                            {
+                                MessageBox.Show(this, "The URL you entered is empty and cannot be loaded.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            }
+                            else if (dialog.Error is UriFormatException)
+                            {
+                                MessageBox.Show(this, "The specified URL is not valid.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            }
+                            else
+                            {
+                                MessageBox.Show(this, "The contents of the URL could not be loaded.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            }
                         }
                     }
 
