@@ -337,6 +337,60 @@ namespace Ketarin
         }
 
         /// <summary>
+        /// Find the position and length of a variable usage
+        /// within a string.
+        /// </summary>
+        /// <param name="input">String to search for the variable</param>
+        /// <param name="varname">Name of the variable to search</param>
+        /// <param name="position">Position of the found variable</param>
+        /// <param name="length">Length of the variable string</param>
+        /// <returns>true, if the variable has been found, false otherwise</returns>
+        private static bool GetVariablePosition(string input, string varname, out int position, out int length, out string functionPart)
+        {
+            functionPart = "";
+            position = -1;
+            length = 0;
+
+            for (int i = 0; i < input.Length; i++)
+            {
+                bool fitsRemainingString = (input.Length - i >= varname.Length + 2);
+                if (input[i] == '{' && !IsEscaped(input, i) && fitsRemainingString)
+                {
+                    // Start of variable detected. Is it the right variable?
+                    string upcomingString = input.Substring(i + 1, varname.Length + 1);
+                    if (upcomingString == varname + ":" || upcomingString == varname + "}")
+                    {
+                        position = i;
+                        // Find end (consider functions)
+                        int startPos = (input[i + varname.Length + 1] == ':') ? i + varname.Length + 2 : i + varname.Length + 1;
+
+                        functionPart = "";
+                        for (int j = startPos; j < input.Length; j++)
+                        {
+                            if (IsEscaped(input, j))
+                            {
+                                functionPart = functionPart.Substring(0, functionPart.Length - 1) + input[j];
+                            }
+                            else if (input[j] == '}')
+                            {
+                                length = j - i + 1;
+                                return true;
+                            }
+                            else
+                            {
+                                functionPart += input[j];
+                            }
+                        }
+
+                        return false;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
         /// Determines whether or not a variable is used within a string.
         /// It also matches if functions like {variable:replace:a:b} are used.
         /// </summary>
@@ -344,34 +398,9 @@ namespace Ketarin
         /// <param name="formatString">String to check</param>
         private static bool IsVariableUsedInString(string name, string formatString)
         {
-            Regex regex = new Regex(@"\{" + QuoteRegex(name) + @"(\:[^\}]+)?\}");
-            return regex.IsMatch(formatString);
-        }
-
-        /// <summary>
-        /// Quotes a string for insertion into a regular expression.
-        /// Based on preg_quote() (PHP)
-        /// </summary>
-        private static string QuoteRegex(string value)
-        {
-            value = value.Replace("\\", "\\\\");
-            value = value.Replace("+", @"\+");
-            value = value.Replace("*", @"\*");
-            value = value.Replace("?", @"\?");
-            value = value.Replace("[", @"\[");
-            value = value.Replace("^", @"\^");
-            value = value.Replace("]", @"\]");
-            value = value.Replace("$", @"\$");
-            value = value.Replace("(", @"\(");
-            value = value.Replace(")", @"\)");
-            value = value.Replace("{", @"\{");
-            value = value.Replace("}", @"\}");
-            value = value.Replace("=", @"\=");
-            value = value.Replace("!", @"\!");
-            value = value.Replace("<", @"\<");
-            value = value.Replace(">", @"\>");
-            value = value.Replace("|", @"\|");
-            return value.Replace(":", @"\;");
+            int pos, length;
+            string functionPart;
+            return GetVariablePosition(formatString, name, out pos, out length, out functionPart);
         }
 
         /// <summary>
@@ -390,16 +419,14 @@ namespace Ketarin
         /// </summary>
         public static string Replace(string formatString, string varname, string content)
         {
-            Regex regex = new Regex(@"\{" + QuoteRegex(varname) + @"(\:[^\}]+)?\}", RegexOptions.Singleline);
+            int pos, length;
+            string functionPart;
 
-            Match match = regex.Match(formatString);
             // We need to "rematch" multiple times if the string changes
-            while (match.Success)
+            while (GetVariablePosition(formatString, varname, out pos, out length, out functionPart))
             {
-                string functionPart = match.Groups[1].Value;
-                formatString = formatString.Remove(match.Index, match.Length);
-                formatString = formatString.Insert(match.Index, ReplaceFunction(functionPart, content));
-                match = regex.Match(formatString);
+                formatString = formatString.Remove(pos, length);
+                formatString = formatString.Insert(pos, ReplaceFunction(functionPart, content));
             } 
 
             return formatString;
@@ -557,7 +584,7 @@ namespace Ketarin
         private static bool IsEscaped(string value, int pos)
         {
             // It has to be a special character...
-            if (value[pos] != '\\' && value[pos] != ':') return false;
+            if (value[pos] != '\\' && value[pos] != ':' && value[pos] != '}') return false;
             return (pos > 0 && value[pos - 1] == '\\' && !IsEscaped(value, pos - 1));
         }
 
