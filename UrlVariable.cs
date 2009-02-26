@@ -345,13 +345,13 @@ namespace Ketarin
         /// <param name="position">Position of the found variable</param>
         /// <param name="length">Length of the variable string</param>
         /// <returns>true, if the variable has been found, false otherwise</returns>
-        private static bool GetVariablePosition(string input, string varname, out int position, out int length, out string functionPart)
+        private static bool GetVariablePosition(string input, string varname, int startAt, out int position, out int length, out string functionPart)
         {
             functionPart = "";
             position = -1;
             length = 0;
 
-            for (int i = 0; i < input.Length; i++)
+            for (int i = startAt; i < input.Length; i++)
             {
                 bool fitsRemainingString = (input.Length - i >= varname.Length + 2);
                 if (input[i] == '{' && !IsEscaped(input, i) && fitsRemainingString)
@@ -400,7 +400,7 @@ namespace Ketarin
         {
             int pos, length;
             string functionPart;
-            return GetVariablePosition(formatString, name, out pos, out length, out functionPart);
+            return GetVariablePosition(formatString, name, 0, out pos, out length, out functionPart);
         }
 
         /// <summary>
@@ -421,12 +421,15 @@ namespace Ketarin
         {
             int pos, length;
             string functionPart;
+            int startAt = 0;
 
             // We need to "rematch" multiple times if the string changes
-            while (GetVariablePosition(formatString, varname, out pos, out length, out functionPart))
+            while (GetVariablePosition(formatString, varname, startAt, out pos, out length, out functionPart))
             {
                 formatString = formatString.Remove(pos, length);
-                formatString = formatString.Insert(pos, ReplaceFunction(functionPart, content));
+                string replaceValue = ReplaceFunction(functionPart, content);
+                startAt = pos + replaceValue.Length;
+                formatString = formatString.Insert(pos, replaceValue);
             } 
 
             return formatString;
@@ -451,6 +454,26 @@ namespace Ketarin
                 case "empty":
                     // Useful, if you want to load, but not use a variable
                     return string.Empty;
+                case "regexreplace":
+                    try
+                    {
+                        if (parts.Length > 2)
+                        {
+                            Regex regex = new Regex(parts[1], RegexOptions.Singleline);
+                            Match match = regex.Match(content);
+                            if (match.Success)
+                            {
+                                content = content.Remove(match.Index, match.Length);
+                                return content.Insert(match.Index, parts[2]);
+                            }
+                        }
+                    }
+                    catch (ArgumentException ex)
+                    {
+                        LogDialog.Log("Could not process the function 'regexreplace'.", ex);
+                    }
+                    return string.Empty;
+
                 case "regex":
                     try
                     {
