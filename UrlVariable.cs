@@ -464,6 +464,11 @@ namespace Ketarin
                             if (match.Success)
                             {
                                 content = content.Remove(match.Index, match.Length);
+                                // Use $x as group references
+                                for (int i = 0; i < match.Groups.Count; i++)
+                                {
+                                    parts[2] = parts[2].Replace("$" + i, match.Groups[i].Value);
+                                }
                                 return content.Insert(match.Index, parts[2]);
                             }
                         }
