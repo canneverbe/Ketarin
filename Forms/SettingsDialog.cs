@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -6,6 +7,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using System.Net;
+using System.Xml.Serialization;
 using System.Data.SQLite;
 using CDBurnerXP;
 
@@ -52,6 +54,15 @@ namespace Ketarin.Forms
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
+
+            LoadSettings();
+        }
+
+        /// <summary>
+        /// Updates the user controls based on the settings stored in the database.
+        /// </summary>
+        private void LoadSettings()
+        {
             txtPostUpdateCommand.Text = Settings.GetValue("DefaultCommand", "") as string;
             txtPostUpdateAllCommand.Text = Settings.GetValue("PostUpdateCommand", "") as string;
             txtPreUpdateCommand.Text = Settings.GetValue("PreUpdateCommand", "") as string;
@@ -64,7 +75,7 @@ namespace Ketarin.Forms
             nNumThreads.Value = Convert.ToDecimal(Settings.GetValue("ThreadCount", 2));
             nNumRetries.Value = Convert.ToDecimal(Settings.GetValue("RetryCount", 1));
             chkMinToTray.Checked = (bool)Settings.GetValue("MinimizeToTray", false);
-            
+
             nProxyPort.Value = Convert.ToInt16(Settings.GetValue("ProxyPort", 0));
             txtProxyServer.Text = Settings.GetValue("ProxyServer", "") as string;
             txtProxyUser.Text = Settings.GetValue("ProxyUser", "") as string;
@@ -96,6 +107,55 @@ namespace Ketarin.Forms
             WebRequest.DefaultWebProxy = DbManager.Proxy;
 
             SaveGlobalVariables();
+        }
+
+        private void bExport_Click(object sender, EventArgs e)
+        {
+            using (SaveFileDialog dialog = new SaveFileDialog())
+            {
+                dialog.Filter = "XML file|*.xml";
+                if (dialog.ShowDialog(this) == DialogResult.OK)
+                {
+                    try
+                    {
+                        using (FileStream stream = File.Open(dialog.FileName, FileMode.Create, FileAccess.Write))
+                        {
+                            // Export settings to XML file
+                            XmlSerializer serializer = new XmlSerializer(typeof(SerializableDictionary<string, string>));
+                            serializer.Serialize(stream, DbManager.GetSettings());
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(this, "Failed to export the settings: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }            
+        }
+
+        private void bImport_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog dialog = new OpenFileDialog())
+            {
+                dialog.Filter = "XML file|*.xml";
+                if (dialog.ShowDialog(this) == DialogResult.OK)
+                {
+                    try
+                    {
+                        using (FileStream stream = File.OpenRead(dialog.FileName))
+                        {
+                            // Import settings from file as dictionary
+                            XmlSerializer serializer = new XmlSerializer(typeof(SerializableDictionary<string, string>));
+                            DbManager.SetSettings(serializer.Deserialize(stream) as Dictionary<string, string>);
+                            LoadSettings();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(this, "Failed to import the settings: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }    
         }
 
         #region Global variables

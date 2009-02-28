@@ -9,6 +9,10 @@ using System.IO;
 
 namespace Ketarin.Forms
 {
+    /// <summary>
+    /// Represents a dialog which shows the about information
+    /// for Ketarin. The path to the database file is also included.
+    /// </summary>
     public partial class AboutDialog : Form
     {
         public AboutDialog()
