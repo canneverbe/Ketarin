@@ -10,12 +10,19 @@ using CDBurnerXP.IO;
 
 namespace Ketarin.Forms
 {
+    /// <summary>
+    /// Represents a dialog which allows the user
+    /// to rename a file.
+    /// </summary>
     public partial class RenameFileDialog : Form
     {
         private string m_Directory = string.Empty;
 
         #region Properties
 
+        /// <summary>
+        /// Gets or sets the file which is to be renamed.
+        /// </summary>
         public string FileName
         {
             get

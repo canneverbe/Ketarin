@@ -357,6 +357,7 @@ namespace Ketarin.Forms
                         dialog.OnDoWork = delegate()
                         {
                             Uri url = new Uri(CurrentVariable.ExpandedUrl);
+                            if (dialog.Cancelled) return false;
                             CurrentVariable.TempContent = client.DownloadString(url);
                             return true;
                         };

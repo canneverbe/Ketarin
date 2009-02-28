@@ -58,16 +58,18 @@
             this.tpGeneral = new System.Windows.Forms.TabPage();
             this.chkMinToTray = new System.Windows.Forms.CheckBox();
             this.chkUpdateOnlineDatabase = new System.Windows.Forms.CheckBox();
-            this.sepGlobalVariables = new CDBurnerXP.Controls.Separator();
             this.tpConnection = new System.Windows.Forms.TabPage();
-            this.sepProxy = new CDBurnerXP.Controls.Separator();
             this.tpCommands = new System.Windows.Forms.TabPage();
-            this.txtPreUpdateCommand = new Ketarin.Forms.TextBox();
             this.lblPreUpdateCommand = new System.Windows.Forms.Label();
-            this.txtPostUpdateAllCommand = new Ketarin.Forms.TextBox();
             this.lblPostUpdateAllCommand = new System.Windows.Forms.Label();
-            this.txtPostUpdateCommand = new Ketarin.Forms.TextBox();
             this.lblPostUpdateCommand = new System.Windows.Forms.Label();
+            this.bExport = new System.Windows.Forms.Button();
+            this.sepGlobalVariables = new CDBurnerXP.Controls.Separator();
+            this.sepProxy = new CDBurnerXP.Controls.Separator();
+            this.txtPreUpdateCommand = new Ketarin.Forms.TextBox();
+            this.txtPostUpdateAllCommand = new Ketarin.Forms.TextBox();
+            this.txtPostUpdateCommand = new Ketarin.Forms.TextBox();
+            this.bImport = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.nConnectionTimeout)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nProxyPort)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nNumThreads)).BeginInit();
@@ -85,7 +87,7 @@
             this.bCancel.Location = new System.Drawing.Point(339, 295);
             this.bCancel.Name = "bCancel";
             this.bCancel.Size = new System.Drawing.Size(75, 23);
-            this.bCancel.TabIndex = 2;
+            this.bCancel.TabIndex = 4;
             this.bCancel.Text = "Cancel";
             this.bCancel.UseVisualStyleBackColor = true;
             // 
@@ -96,7 +98,7 @@
             this.bOK.Location = new System.Drawing.Point(258, 295);
             this.bOK.Name = "bOK";
             this.bOK.Size = new System.Drawing.Size(75, 23);
-            this.bOK.TabIndex = 1;
+            this.bOK.TabIndex = 3;
             this.bOK.Text = "OK";
             this.bOK.UseVisualStyleBackColor = true;
             this.bOK.Click += new System.EventHandler(this.bOK_Click);
@@ -435,18 +437,6 @@
             this.chkUpdateOnlineDatabase.Text = "&Check for updates in the online database";
             this.chkUpdateOnlineDatabase.UseVisualStyleBackColor = true;
             // 
-            // sepGlobalVariables
-            // 
-            this.sepGlobalVariables.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.sepGlobalVariables.ForeColor = System.Drawing.SystemColors.ActiveCaption;
-            this.sepGlobalVariables.Location = new System.Drawing.Point(3, 144);
-            this.sepGlobalVariables.Name = "sepGlobalVariables";
-            this.sepGlobalVariables.Size = new System.Drawing.Size(385, 23);
-            this.sepGlobalVariables.TabIndex = 6;
-            this.sepGlobalVariables.Text = "Global variables";
-            this.sepGlobalVariables.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
             // tpConnection
             // 
             this.tpConnection.Controls.Add(this.nConnectionTimeout);
@@ -472,6 +462,71 @@
             this.tpConnection.Text = "Connection";
             this.tpConnection.UseVisualStyleBackColor = true;
             // 
+            // tpCommands
+            // 
+            this.tpCommands.Controls.Add(this.txtPreUpdateCommand);
+            this.tpCommands.Controls.Add(this.lblPreUpdateCommand);
+            this.tpCommands.Controls.Add(this.lblPostUpdateAllCommand);
+            this.tpCommands.Controls.Add(this.lblPostUpdateCommand);
+            this.tpCommands.Controls.Add(this.txtPostUpdateAllCommand);
+            this.tpCommands.Controls.Add(this.txtPostUpdateCommand);
+            this.tpCommands.Location = new System.Drawing.Point(4, 22);
+            this.tpCommands.Name = "tpCommands";
+            this.tpCommands.Padding = new System.Windows.Forms.Padding(3);
+            this.tpCommands.Size = new System.Drawing.Size(394, 242);
+            this.tpCommands.TabIndex = 2;
+            this.tpCommands.Text = "Commands";
+            this.tpCommands.UseVisualStyleBackColor = true;
+            // 
+            // lblPreUpdateCommand
+            // 
+            this.lblPreUpdateCommand.AutoSize = true;
+            this.lblPreUpdateCommand.Location = new System.Drawing.Point(6, 9);
+            this.lblPreUpdateCommand.Name = "lblPreUpdateCommand";
+            this.lblPreUpdateCommand.Size = new System.Drawing.Size(292, 13);
+            this.lblPreUpdateCommand.TabIndex = 0;
+            this.lblPreUpdateCommand.Text = "Default command to execute &before updating an application:";
+            // 
+            // lblPostUpdateAllCommand
+            // 
+            this.lblPostUpdateAllCommand.AutoSize = true;
+            this.lblPostUpdateAllCommand.Location = new System.Drawing.Point(6, 170);
+            this.lblPostUpdateAllCommand.Name = "lblPostUpdateAllCommand";
+            this.lblPostUpdateAllCommand.Size = new System.Drawing.Size(250, 13);
+            this.lblPostUpdateAllCommand.TabIndex = 4;
+            this.lblPostUpdateAllCommand.Text = "&Command to execute after updating all applications:";
+            // 
+            // lblPostUpdateCommand
+            // 
+            this.lblPostUpdateCommand.AutoSize = true;
+            this.lblPostUpdateCommand.Location = new System.Drawing.Point(6, 90);
+            this.lblPostUpdateCommand.Name = "lblPostUpdateCommand";
+            this.lblPostUpdateCommand.Size = new System.Drawing.Size(283, 13);
+            this.lblPostUpdateCommand.TabIndex = 2;
+            this.lblPostUpdateCommand.Text = "&Default command to execute after updating an application:";
+            // 
+            // bExport
+            // 
+            this.bExport.Location = new System.Drawing.Point(12, 295);
+            this.bExport.Name = "bExport";
+            this.bExport.Size = new System.Drawing.Size(75, 23);
+            this.bExport.TabIndex = 1;
+            this.bExport.Text = "Export...";
+            this.bExport.UseVisualStyleBackColor = true;
+            this.bExport.Click += new System.EventHandler(this.bExport_Click);
+            // 
+            // sepGlobalVariables
+            // 
+            this.sepGlobalVariables.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.sepGlobalVariables.ForeColor = System.Drawing.SystemColors.ActiveCaption;
+            this.sepGlobalVariables.Location = new System.Drawing.Point(3, 144);
+            this.sepGlobalVariables.Name = "sepGlobalVariables";
+            this.sepGlobalVariables.Size = new System.Drawing.Size(385, 23);
+            this.sepGlobalVariables.TabIndex = 6;
+            this.sepGlobalVariables.Text = "Global variables";
+            this.sepGlobalVariables.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
             // sepProxy
             // 
             this.sepProxy.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
@@ -483,22 +538,6 @@
             this.sepProxy.TabIndex = 7;
             this.sepProxy.Text = "HTTP proxy settings";
             this.sepProxy.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // tpCommands
-            // 
-            this.tpCommands.Controls.Add(this.txtPreUpdateCommand);
-            this.tpCommands.Controls.Add(this.lblPreUpdateCommand);
-            this.tpCommands.Controls.Add(this.txtPostUpdateAllCommand);
-            this.tpCommands.Controls.Add(this.lblPostUpdateAllCommand);
-            this.tpCommands.Controls.Add(this.txtPostUpdateCommand);
-            this.tpCommands.Controls.Add(this.lblPostUpdateCommand);
-            this.tpCommands.Location = new System.Drawing.Point(4, 22);
-            this.tpCommands.Name = "tpCommands";
-            this.tpCommands.Padding = new System.Windows.Forms.Padding(3);
-            this.tpCommands.Size = new System.Drawing.Size(394, 242);
-            this.tpCommands.TabIndex = 2;
-            this.tpCommands.Text = "Commands";
-            this.tpCommands.UseVisualStyleBackColor = true;
             // 
             // txtPreUpdateCommand
             // 
@@ -513,15 +552,6 @@
             this.txtPreUpdateCommand.TabIndex = 1;
             this.txtPreUpdateCommand.WordWrap = false;
             // 
-            // lblPreUpdateCommand
-            // 
-            this.lblPreUpdateCommand.AutoSize = true;
-            this.lblPreUpdateCommand.Location = new System.Drawing.Point(6, 9);
-            this.lblPreUpdateCommand.Name = "lblPreUpdateCommand";
-            this.lblPreUpdateCommand.Size = new System.Drawing.Size(292, 13);
-            this.lblPreUpdateCommand.TabIndex = 0;
-            this.lblPreUpdateCommand.Text = "Default command to execute &before updating an application:";
-            // 
             // txtPostUpdateAllCommand
             // 
             this.txtPostUpdateAllCommand.AcceptsReturn = true;
@@ -534,15 +564,6 @@
             this.txtPostUpdateAllCommand.Size = new System.Drawing.Size(382, 50);
             this.txtPostUpdateAllCommand.TabIndex = 5;
             this.txtPostUpdateAllCommand.WordWrap = false;
-            // 
-            // lblPostUpdateAllCommand
-            // 
-            this.lblPostUpdateAllCommand.AutoSize = true;
-            this.lblPostUpdateAllCommand.Location = new System.Drawing.Point(6, 170);
-            this.lblPostUpdateAllCommand.Name = "lblPostUpdateAllCommand";
-            this.lblPostUpdateAllCommand.Size = new System.Drawing.Size(250, 13);
-            this.lblPostUpdateAllCommand.TabIndex = 4;
-            this.lblPostUpdateAllCommand.Text = "&Command to execute after updating all applications:";
             // 
             // txtPostUpdateCommand
             // 
@@ -557,20 +578,23 @@
             this.txtPostUpdateCommand.TabIndex = 3;
             this.txtPostUpdateCommand.WordWrap = false;
             // 
-            // lblPostUpdateCommand
+            // bImport
             // 
-            this.lblPostUpdateCommand.AutoSize = true;
-            this.lblPostUpdateCommand.Location = new System.Drawing.Point(6, 90);
-            this.lblPostUpdateCommand.Name = "lblPostUpdateCommand";
-            this.lblPostUpdateCommand.Size = new System.Drawing.Size(283, 13);
-            this.lblPostUpdateCommand.TabIndex = 2;
-            this.lblPostUpdateCommand.Text = "&Default command to execute after updating an application:";
+            this.bImport.Location = new System.Drawing.Point(93, 295);
+            this.bImport.Name = "bImport";
+            this.bImport.Size = new System.Drawing.Size(75, 23);
+            this.bImport.TabIndex = 2;
+            this.bImport.Text = "Import...";
+            this.bImport.UseVisualStyleBackColor = true;
+            this.bImport.Click += new System.EventHandler(this.bImport_Click);
             // 
             // SettingsDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(426, 330);
+            this.Controls.Add(this.bImport);
+            this.Controls.Add(this.bExport);
             this.Controls.Add(this.tcSettings);
             this.Controls.Add(this.bOK);
             this.Controls.Add(this.bCancel);
@@ -639,5 +663,7 @@
         private System.Windows.Forms.Label lblPostUpdateCommand;
         private TextBox txtPreUpdateCommand;
         private System.Windows.Forms.Label lblPreUpdateCommand;
+        private System.Windows.Forms.Button bExport;
+        private System.Windows.Forms.Button bImport;
     }
 }

@@ -44,25 +44,32 @@ namespace Ketarin
                 }
             }
 
-            public void SetValue(string value, params string[] path)
+            public void SetValueRaw(string value, string path, IDbTransaction transaction)
             {
                 lock (Connection)
                 {
                     using (IDbCommand command = Connection.CreateCommand())
                     {
+                        command.Transaction = transaction;
+
                         command.CommandText = "UPDATE settings SET SettingValue = @SettingValue WHERE SettingPath = @SettingPath";
                         command.Parameters.Add(new SQLiteParameter("@SettingValue", value));
-                        command.Parameters.Add(new SQLiteParameter("@SettingPath", GetPath(path)));
+                        command.Parameters.Add(new SQLiteParameter("@SettingPath", path));
                         if (command.ExecuteNonQuery() == 0)
                         {
                             command.CommandText = @"INSERT INTO settings (SettingPath, SettingValue)
                                                  VALUES (@SettingPath, @SettingValue)";
                             command.Parameters.Add(new SQLiteParameter("@SettingValue", value));
-                            command.Parameters.Add(new SQLiteParameter("@SettingPath", GetPath(path)));
+                            command.Parameters.Add(new SQLiteParameter("@SettingPath", path));
                             command.ExecuteNonQuery();
                         }
                     }
                 }
+            }
+
+            public void SetValue(string value, params string[] path)
+            {
+                SetValueRaw(value, GetPath(path), null);
             }
 
             #endregion
@@ -619,6 +626,49 @@ namespace Ketarin
             }
 
             return names.ToArray();
+        }
+
+        /// <summary>
+        /// Returns a list of all settings in the database
+        /// (key-value pairs).
+        /// </summary>
+        public static SerializableDictionary<string, string> GetSettings()
+        {
+            IDbCommand command = Connection.CreateCommand();
+            command.CommandText = "SELECT * FROM settings";
+
+            SerializableDictionary<string, string> settings = new SerializableDictionary<string, string>();
+
+            using (IDataReader reader = command.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    settings.Add(reader["SettingPath"] as string, reader["SettingValue"] as string);
+                }
+            }
+
+            return settings;
+        }
+
+        /// <summary>
+        /// Saves all settings specified to the database.
+        /// </summary>
+        /// <param name="settings">Dictionary, which holds the settings as key-value pairs</param>
+        public static void SetSettings(Dictionary<string, string> settings)
+        {
+            if (settings == null) return;
+
+            SettingsProvider provider = new SettingsProvider();
+
+            using (IDbTransaction transaction = Connection.BeginTransaction())
+            {
+                foreach (KeyValuePair<string, string> setting in settings)
+                {
+                    provider.SetValueRaw(setting.Value, setting.Key, transaction);
+                }
+
+                transaction.Commit();
+            }
         }
 
     }
