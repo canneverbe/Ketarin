@@ -721,9 +721,9 @@ namespace Ketarin
                 if (dialog.ShowDialog(this) == DialogResult.OK)
                 {
                     dialog.ApplicationJob.Save();
+                    olvJobs.RefreshObject(job);
                 }
             }
-            olvJobs.RefreshObject(job);
         }
 
         #endregion
