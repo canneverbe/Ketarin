@@ -13,6 +13,8 @@ namespace Ketarin.Forms
     /// </summary>
     public partial class NewVariableDialog : Form
     {
+        private ApplicationJob.UrlVariableCollection m_ExistingVariables = null;
+
         #region Properties
 
         /// <summary>
@@ -34,9 +36,11 @@ namespace Ketarin.Forms
 
         private bool m_Updating = false;
 
-        public NewVariableDialog()
+        public NewVariableDialog(ApplicationJob.UrlVariableCollection variables)
         {
             InitializeComponent();
+            m_ExistingVariables = variables;
+
             AcceptButton = bOK;
             CancelButton = bCancel;
         }
@@ -55,6 +59,12 @@ namespace Ketarin.Forms
             if (string.IsNullOrEmpty(txtVariableName.Text))
             {
                 MessageBox.Show(this, "The variable name must not be empty.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                DialogResult = DialogResult.None;
+            }
+            else if (m_ExistingVariables != null && m_ExistingVariables.ContainsKey(txtVariableName.Text))
+            {
+                string msg = string.Format("A variable with the name '{0}' already exists.", txtVariableName.Text);
+                MessageBox.Show(this, msg, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 DialogResult = DialogResult.None;
             }
         }
