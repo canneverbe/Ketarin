@@ -198,18 +198,10 @@ namespace Ketarin.Forms
 
         private void bAdd_Click(object sender, EventArgs e)
         {
-            using (NewVariableDialog dialog = new NewVariableDialog())
+            using (NewVariableDialog dialog = new NewVariableDialog(UrlVariable.GlobalVariables))
             {
                 if (dialog.ShowDialog(this) == DialogResult.OK)
                 {
-                    // Check for duplicate variables
-                    if (UrlVariable.GlobalVariables.ContainsKey(dialog.VariableName))
-                    {
-                        string msg = string.Format("The variable name '{0}' already exists.", dialog.VariableName);
-                        MessageBox.Show(this, msg, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return;
-                    }
-
                     UrlVariable newVariable = new UrlVariable(dialog.VariableName, null);
                     UrlVariable.GlobalVariables.Add(dialog.VariableName, newVariable);
 

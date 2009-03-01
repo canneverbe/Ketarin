@@ -326,16 +326,10 @@ namespace Ketarin.Forms
 
         private void bAdd_Click(object sender, EventArgs e)
         {
-            using (NewVariableDialog dialog = new NewVariableDialog())
+            using (NewVariableDialog dialog = new NewVariableDialog(m_Variables))
             {
                 if (dialog.ShowDialog(this) == DialogResult.OK)
                 {
-                    if (m_Variables.ContainsKey(dialog.VariableName))
-                    {
-                        string msg = string.Format("The variable name '{0}' already exists.", dialog.VariableName);
-                        MessageBox.Show(this, msg, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return;
-                    }
                     m_Variables.Add(dialog.VariableName, new UrlVariable(dialog.VariableName, m_Variables));
                     RefreshListBox();
                     lbVariables.SelectedItem = m_Variables[dialog.VariableName];
@@ -428,12 +422,14 @@ namespace Ketarin.Forms
                 case Keys.F2:
                     if (CurrentVariable != null)
                     {
-                        NewVariableDialog dialog = new NewVariableDialog();
+                        NewVariableDialog dialog = new NewVariableDialog(m_Variables);
                         dialog.VariableName = CurrentVariable.Name;
                         dialog.Text = "Rename variable";
                         if (dialog.ShowDialog(this) == DialogResult.OK)
                         {
+                            m_Variables.Remove(CurrentVariable.Name);
                             CurrentVariable.Name = dialog.VariableName;
+                            m_Variables.Add(CurrentVariable.Name, CurrentVariable);
                             lbVariables.RefreshItems();
                         }
                     }
