@@ -505,7 +505,7 @@ namespace Ketarin.Forms
 
                 if (CurrentVariable.VariableType == UrlVariable.Type.RegularExpression)
                 {
-                    Regex regex = new Regex(CurrentVariable.Regex, RegexOptions.IgnoreCase | RegexOptions.Singleline);
+                    Regex regex = CurrentVariable.CreateRegex();
                     Match match = regex.Match(rtfContent.Text);
 
                     m_MatchPosition = match.Index;
@@ -618,7 +618,7 @@ namespace Ketarin.Forms
             try
             {
                 Regex regex = new Regex(txtRegularExpression.Text, RegexOptions.IgnoreCase | RegexOptions.Singleline);
-                CurrentVariable.Regex = regex.ToString();
+                CurrentVariable.Regex = txtRegularExpression.Text;
             }
             catch (ArgumentException)
             {

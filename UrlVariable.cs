@@ -134,6 +134,32 @@ namespace Ketarin
             }
         }
 
+        /// <summary>
+        /// Returns the regular expression for this
+        /// variable, with all variables replaced.
+        /// </summary>
+        [XmlIgnore()]
+        public string ExpandedRegex
+        {
+            get
+            {
+                if (m_Parent == null || m_Expanding || string.IsNullOrEmpty(m_Regex))
+                {
+                    return m_Regex;
+                }
+
+                m_Expanding = true;
+                try
+                {
+                    return m_Parent.ReplaceAllInString(m_Regex);
+                }
+                finally
+                {
+                    m_Expanding = false;
+                }
+            }
+        }
+
         [XmlElement("Url")]
         public string Url
         {
@@ -625,6 +651,27 @@ namespace Ketarin
         }
 
         /// <summary>
+        /// Creates the Regex used in this variable.
+        /// </summary>
+        /// <returns></returns>
+        public Regex CreateRegex()
+        {
+            if (m_VariableType != Type.RegularExpression || string.IsNullOrEmpty(m_Regex))
+            {
+                return null;
+            }
+
+            try
+            {
+                return new Regex(ExpandedRegex, RegexOptions.Singleline | RegexOptions.IgnoreCase);
+            }
+            catch (ArgumentException)
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
         /// Replaces this variable within a given string.
         /// </summary>
         /// <param name="onlyCached">If true, no new content will be downloaded and only chached content will be used.</param>
@@ -674,9 +721,9 @@ namespace Ketarin
             // Using a regular expression?
             if (m_VariableType == Type.RegularExpression)
             {
-                if (string.IsNullOrEmpty(m_Regex)) return value;
+                Regex regex = CreateRegex();
+                if (regex == null) return value;
 
-                Regex regex = new Regex(m_Regex, RegexOptions.Singleline | RegexOptions.IgnoreCase);
                 Match match = regex.Match(page);
                 if (match.Success)
                 {
