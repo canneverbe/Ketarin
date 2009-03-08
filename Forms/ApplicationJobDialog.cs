@@ -174,6 +174,7 @@ namespace Ketarin.Forms
             chkShareOnline.Checked = m_ApplicationJob.ShareApplication;
             chkShareOnline.Enabled = m_ApplicationJob.CanBeShared;
             chkDownloadExclusively.Checked = m_ApplicationJob.ExclusiveDownload;
+            chkCheckForUpdatesOnly.Checked = m_ApplicationJob.CheckForUpdatesOnly;
             txtSpoofReferer.Text = m_ApplicationJob.HttpReferer;
             rbBetaAvoid.Checked = (ApplicationJob.DownloadBeta == ApplicationJob.DownloadBetaType.Avoid);
             rbBetaDefault.Checked = (ApplicationJob.DownloadBeta == ApplicationJob.DownloadBetaType.Default);
@@ -204,6 +205,7 @@ namespace Ketarin.Forms
             m_ApplicationJob.ShareApplication = chkShareOnline.Checked;
             m_ApplicationJob.HttpReferer = txtSpoofReferer.Text;
             m_ApplicationJob.VariableChangeIndicator = txtUseVariablesForChanges.Text;
+            m_ApplicationJob.CheckForUpdatesOnly = chkCheckForUpdatesOnly.Checked;
 
             if (rbAlwaysDownload.Checked)
             {
