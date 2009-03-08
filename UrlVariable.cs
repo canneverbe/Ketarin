@@ -445,6 +445,11 @@ namespace Ketarin
         /// </summary>
         public static string Replace(string formatString, string varname, string content)
         {
+            if (content == null)
+            {
+                content = string.Empty;
+            }
+
             int pos, length;
             string functionPart;
             int startAt = 0;
