@@ -313,6 +313,7 @@ namespace Ketarin
             addColumns.Add("DownloadDate", "ALTER TABLE jobs ADD DownloadDate Date");
             addColumns.Add("CanBeShared", "ALTER TABLE jobs ADD CanBeShared INTEGER DEFAULT 1");
             addColumns.Add("ExclusiveDownload", "ALTER TABLE jobs ADD ExclusiveDownload INTEGER DEFAULT 0");
+            addColumns.Add("CheckForUpdateOnly", "ALTER TABLE jobs ADD CheckForUpdateOnly INTEGER DEFAULT 0");
             addColumns.Add("ShareApplication", "ALTER TABLE jobs ADD ShareApplication INTEGER DEFAULT 0");
             addColumns.Add("HttpReferer", "ALTER TABLE jobs ADD HttpReferer TEXT");
             addColumns.Add("FileHippoVersion", "ALTER TABLE jobs ADD FileHippoVersion TEXT");

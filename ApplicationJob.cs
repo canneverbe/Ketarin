@@ -47,6 +47,7 @@ namespace Ketarin
         private DownloadBetaType m_DownloadBeta = DownloadBetaType.Default;
         private string m_VariableChangeIndicator = string.Empty;
         private string m_VariableChangeIndicatorLastContent = null;
+        private bool m_CheckForUpdateOnly = false;
 
         public enum SourceType
         {
@@ -77,6 +78,18 @@ namespace Ketarin
         {
             get { return m_DownloadDate; }
             set { m_DownloadDate = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets whether or not the application should
+        /// not be downloaded.
+        /// For example, you might not want to include downloading
+        /// huge applications.
+        /// </summary>
+        public bool CheckForUpdatesOnly
+        {
+            get { return m_CheckForUpdateOnly; }
+            set { m_CheckForUpdateOnly = value; }
         }
 
         /// <summary>
@@ -920,7 +933,8 @@ namespace Ketarin
                                                    DownloadDate = @DownloadDate,
                                                    VariableChangeIndicator = @VariableChangeIndicator,
                                                    VariableChangeIndicatorLastContent = @VariableChangeIndicatorLastContent,
-                                                   ExclusiveDownload = @ExclusiveDownload
+                                                   ExclusiveDownload = @ExclusiveDownload,
+                                                   CheckForUpdateOnly = @CheckForUpdateOnly
                                              WHERE JobGuid = @JobGuid";
 
                                 command.Parameters.Add(new SQLiteParameter("@ApplicationName", Name));
@@ -942,7 +956,8 @@ namespace Ketarin
                                 command.Parameters.Add(new SQLiteParameter("@DownloadBeta", (int)m_DownloadBeta));
                                 command.Parameters.Add(new SQLiteParameter("@VariableChangeIndicator", m_VariableChangeIndicator));
                                 command.Parameters.Add(new SQLiteParameter("@VariableChangeIndicatorLastContent", m_VariableChangeIndicatorLastContent));
-                                command.Parameters.Add(new SQLiteParameter("@ExclusiveDownload", ExclusiveDownload));
+                                command.Parameters.Add(new SQLiteParameter("@ExclusiveDownload", m_ExclusiveDownload));
+                                command.Parameters.Add(new SQLiteParameter("@CheckForUpdateOnly", m_CheckForUpdateOnly));
                                 
                                 if (m_DownloadDate.HasValue)
                                 {
@@ -966,8 +981,8 @@ namespace Ketarin
                             using (IDbCommand command = conn.CreateCommand())
                             {
                                 command.Transaction = transaction;
-                                command.CommandText = @"INSERT INTO jobs (ApplicationName, FixedDownloadUrl, DateAdded, TargetPath, LastUpdated, IsEnabled, FileHippoId, DeletePreviousFile, SourceType, ExecuteCommand, ExecutePreCommand, Category, JobGuid, CanBeShared, ShareApplication, HttpReferer, FileHippoVersion, DownloadBeta, DownloadDate, VariableChangeIndicator, VariableChangeIndicatorLastContent, ExclusiveDownload)
-                                                 VALUES (@ApplicationName, @FixedDownloadUrl, @DateAdded, @TargetPath, @LastUpdated, @IsEnabled, @FileHippoId, @DeletePreviousFile, @SourceType, @ExecuteCommand, @ExecutePreCommand, @Category, @JobGuid, @CanBeShared, @ShareApplication, @HttpReferer, @FileHippoVersion, @DownloadBeta, @DownloadDate, @VariableChangeIndicator, NULL, @ExclusiveDownload)";
+                                command.CommandText = @"INSERT INTO jobs (ApplicationName, FixedDownloadUrl, DateAdded, TargetPath, LastUpdated, IsEnabled, FileHippoId, DeletePreviousFile, SourceType, ExecuteCommand, ExecutePreCommand, Category, JobGuid, CanBeShared, ShareApplication, HttpReferer, FileHippoVersion, DownloadBeta, DownloadDate, VariableChangeIndicator, VariableChangeIndicatorLastContent, ExclusiveDownload, CheckForUpdateOnly)
+                                                 VALUES (@ApplicationName, @FixedDownloadUrl, @DateAdded, @TargetPath, @LastUpdated, @IsEnabled, @FileHippoId, @DeletePreviousFile, @SourceType, @ExecuteCommand, @ExecutePreCommand, @Category, @JobGuid, @CanBeShared, @ShareApplication, @HttpReferer, @FileHippoVersion, @DownloadBeta, @DownloadDate, @VariableChangeIndicator, NULL, @ExclusiveDownload, @CheckForUpdateOnly)";
 
                                 command.Parameters.Add(new SQLiteParameter("@ApplicationName", Name));
                                 command.Parameters.Add(new SQLiteParameter("@FixedDownloadUrl", m_FixedDownloadUrl));
@@ -989,7 +1004,8 @@ namespace Ketarin
                                 command.Parameters.Add(new SQLiteParameter("@DownloadBeta", (int)m_DownloadBeta));
                                 command.Parameters.Add(new SQLiteParameter("@VariableChangeIndicator", m_VariableChangeIndicator));
                                 command.Parameters.Add(new SQLiteParameter("@VariableChangeLastContent", m_VariableChangeIndicatorLastContent));
-                                command.Parameters.Add(new SQLiteParameter("@ExclusiveDownload", ExclusiveDownload));
+                                command.Parameters.Add(new SQLiteParameter("@ExclusiveDownload", m_ExclusiveDownload));
+                                command.Parameters.Add(new SQLiteParameter("@CheckForUpdateOnly", m_CheckForUpdateOnly));
                                 
                                 if (m_DownloadDate.HasValue)
                                 {
@@ -1047,7 +1063,8 @@ namespace Ketarin
             m_VariableChangeIndicator = reader["VariableChangeIndicator"] as string;
             m_VariableChangeIndicatorLastContent = reader["VariableChangeIndicatorLastContent"] as string;
             m_ExclusiveDownload = Convert.ToBoolean(reader["ExclusiveDownload"]);
-
+            m_CheckForUpdateOnly = Convert.ToBoolean(reader["CheckForUpdateOnly"]);
+            
             if (reader["DownloadBeta"] != DBNull.Value)
             {
                 m_DownloadBeta = (DownloadBetaType)Convert.ToInt32(reader["DownloadBeta"]);

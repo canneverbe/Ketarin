@@ -633,7 +633,7 @@ namespace Ketarin
                 }
 
                 // Skip downloading!
-                if (m_OnlyCheck) return true;
+                if (m_OnlyCheck || job.CheckForUpdatesOnly) return true;
 
                 string defaultPreCommand = Settings.GetValue("PreUpdateCommand", "") as string;
                 ExecuteCommand(job, defaultPreCommand);

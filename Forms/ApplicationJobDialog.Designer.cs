@@ -68,6 +68,7 @@
             this.txtExecuteAfter = new Ketarin.Forms.VariableTextBox();
             this.lblExecuteCommand = new System.Windows.Forms.Label();
             this.bSaveAsDefault = new System.Windows.Forms.Button();
+            this.chkCheckForUpdatesOnly = new System.Windows.Forms.CheckBox();
             this.panel1.SuspendLayout();
             this.pnlTarget.SuspendLayout();
             this.tcApplication.SuspendLayout();
@@ -252,10 +253,10 @@
             this.chkEnabled.AutoSize = true;
             this.chkEnabled.Checked = true;
             this.chkEnabled.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkEnabled.Location = new System.Drawing.Point(6, 77);
+            this.chkEnabled.Location = new System.Drawing.Point(6, 100);
             this.chkEnabled.Name = "chkEnabled";
             this.chkEnabled.Size = new System.Drawing.Size(65, 17);
-            this.chkEnabled.TabIndex = 3;
+            this.chkEnabled.TabIndex = 4;
             this.chkEnabled.Text = "&Enabled";
             this.chkEnabled.UseVisualStyleBackColor = true;
             // 
@@ -327,29 +328,29 @@
             // lblSpoofReferer
             // 
             this.lblSpoofReferer.AutoSize = true;
-            this.lblSpoofReferer.Location = new System.Drawing.Point(3, 145);
+            this.lblSpoofReferer.Location = new System.Drawing.Point(3, 168);
             this.lblSpoofReferer.Name = "lblSpoofReferer";
             this.lblSpoofReferer.Size = new System.Drawing.Size(103, 13);
-            this.lblSpoofReferer.TabIndex = 8;
+            this.lblSpoofReferer.TabIndex = 9;
             this.lblSpoofReferer.Text = "Sp&oof HTTP referer:";
             // 
             // txtSpoofReferer
             // 
             this.txtSpoofReferer.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtSpoofReferer.Location = new System.Drawing.Point(112, 142);
+            this.txtSpoofReferer.Location = new System.Drawing.Point(112, 165);
             this.txtSpoofReferer.Name = "txtSpoofReferer";
             this.txtSpoofReferer.Size = new System.Drawing.Size(257, 20);
-            this.txtSpoofReferer.TabIndex = 9;
+            this.txtSpoofReferer.TabIndex = 10;
             // 
             // rbBetaDefault
             // 
             this.rbBetaDefault.AutoSize = true;
             this.rbBetaDefault.Checked = true;
-            this.rbBetaDefault.Location = new System.Drawing.Point(83, 107);
+            this.rbBetaDefault.Location = new System.Drawing.Point(83, 130);
             this.rbBetaDefault.Name = "rbBetaDefault";
             this.rbBetaDefault.Size = new System.Drawing.Size(79, 17);
-            this.rbBetaDefault.TabIndex = 5;
+            this.rbBetaDefault.TabIndex = 6;
             this.rbBetaDefault.TabStop = true;
             this.rbBetaDefault.Text = "Use &default";
             this.rbBetaDefault.UseVisualStyleBackColor = true;
@@ -357,29 +358,29 @@
             // lblBetaVersions
             // 
             this.lblBetaVersions.AutoSize = true;
-            this.lblBetaVersions.Location = new System.Drawing.Point(3, 109);
+            this.lblBetaVersions.Location = new System.Drawing.Point(3, 132);
             this.lblBetaVersions.Name = "lblBetaVersions";
             this.lblBetaVersions.Size = new System.Drawing.Size(74, 13);
-            this.lblBetaVersions.TabIndex = 4;
+            this.lblBetaVersions.TabIndex = 5;
             this.lblBetaVersions.Text = "&Beta versions:";
             // 
             // rbAlwaysDownload
             // 
             this.rbAlwaysDownload.AutoSize = true;
-            this.rbAlwaysDownload.Location = new System.Drawing.Point(226, 107);
+            this.rbAlwaysDownload.Location = new System.Drawing.Point(226, 130);
             this.rbAlwaysDownload.Name = "rbAlwaysDownload";
             this.rbAlwaysDownload.Size = new System.Drawing.Size(108, 17);
-            this.rbAlwaysDownload.TabIndex = 7;
+            this.rbAlwaysDownload.TabIndex = 8;
             this.rbAlwaysDownload.Text = "Download al&ways";
             this.rbAlwaysDownload.UseVisualStyleBackColor = true;
             // 
             // rbBetaAvoid
             // 
             this.rbBetaAvoid.AutoSize = true;
-            this.rbBetaAvoid.Location = new System.Drawing.Point(168, 107);
+            this.rbBetaAvoid.Location = new System.Drawing.Point(168, 130);
             this.rbBetaAvoid.Name = "rbBetaAvoid";
             this.rbBetaAvoid.Size = new System.Drawing.Size(52, 17);
-            this.rbBetaAvoid.TabIndex = 6;
+            this.rbBetaAvoid.TabIndex = 7;
             this.rbBetaAvoid.Text = "A&void";
             this.rbBetaAvoid.UseVisualStyleBackColor = true;
             // 
@@ -417,6 +418,7 @@
             // 
             // tpSettings
             // 
+            this.tpSettings.Controls.Add(this.chkCheckForUpdatesOnly);
             this.tpSettings.Controls.Add(this.chkDownloadExclusively);
             this.tpSettings.Controls.Add(this.txtUseVariablesForChanges);
             this.tpSettings.Controls.Add(this.lblUseVariableForChanges);
@@ -451,18 +453,18 @@
             // 
             this.txtUseVariablesForChanges.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtUseVariablesForChanges.Location = new System.Drawing.Point(256, 173);
+            this.txtUseVariablesForChanges.Location = new System.Drawing.Point(256, 196);
             this.txtUseVariablesForChanges.Name = "txtUseVariablesForChanges";
             this.txtUseVariablesForChanges.Size = new System.Drawing.Size(113, 20);
-            this.txtUseVariablesForChanges.TabIndex = 11;
+            this.txtUseVariablesForChanges.TabIndex = 12;
             // 
             // lblUseVariableForChanges
             // 
             this.lblUseVariableForChanges.AutoSize = true;
-            this.lblUseVariableForChanges.Location = new System.Drawing.Point(3, 176);
+            this.lblUseVariableForChanges.Location = new System.Drawing.Point(3, 199);
             this.lblUseVariableForChanges.Name = "lblUseVariableForChanges";
             this.lblUseVariableForChanges.Size = new System.Drawing.Size(247, 13);
-            this.lblUseVariableForChanges.TabIndex = 10;
+            this.lblUseVariableForChanges.TabIndex = 11;
             this.lblUseVariableForChanges.Text = "&Use the following variable as indicator for changes:";
             // 
             // tpCommands
@@ -532,6 +534,16 @@
             this.bSaveAsDefault.Text = "Save as &default";
             this.bSaveAsDefault.UseVisualStyleBackColor = true;
             this.bSaveAsDefault.Click += new System.EventHandler(this.bSaveAsDefault_Click);
+            // 
+            // chkCheckForUpdatesOnly
+            // 
+            this.chkCheckForUpdatesOnly.AutoSize = true;
+            this.chkCheckForUpdatesOnly.Location = new System.Drawing.Point(6, 77);
+            this.chkCheckForUpdatesOnly.Name = "chkCheckForUpdatesOnly";
+            this.chkCheckForUpdatesOnly.Size = new System.Drawing.Size(221, 17);
+            this.chkCheckForUpdatesOnly.TabIndex = 3;
+            this.chkCheckForUpdatesOnly.Text = "Do not download, &check for updates only";
+            this.chkCheckForUpdatesOnly.UseVisualStyleBackColor = true;
             // 
             // ApplicationJobDialog
             // 
@@ -606,5 +618,6 @@
         private System.Windows.Forms.Label lblExecuteCommand;
         private System.Windows.Forms.CheckBox chkDownloadExclusively;
         private System.Windows.Forms.Button bSaveAsDefault;
+        private System.Windows.Forms.CheckBox chkCheckForUpdatesOnly;
     }
 }
