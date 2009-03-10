@@ -506,6 +506,8 @@ namespace Ketarin.Forms
                 if (CurrentVariable.VariableType == UrlVariable.Type.RegularExpression)
                 {
                     Regex regex = CurrentVariable.CreateRegex();
+                    if (regex == null) return;
+
                     Match match = regex.Match(rtfContent.Text);
 
                     m_MatchPosition = match.Index;
