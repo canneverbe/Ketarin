@@ -213,10 +213,11 @@ namespace Ketarin
             string oldestBackupFile = null;
             int backupCount = 0;
 
+            string fullPath = Path.GetFullPath(m_DatabasePath);
             // Determine the number of backups and the oldest backup
-            foreach (string file in Directory.GetFiles(Path.GetDirectoryName(m_DatabasePath)))
+            foreach (string file in Directory.GetFiles(Path.GetDirectoryName(fullPath)))
             {
-                if (file.StartsWith(m_DatabasePath) && Path.GetExtension(file) == ".bak")
+                if (file.StartsWith(fullPath) && Path.GetExtension(file) == ".bak")
                 {
                     // Extract date
                     string date = Path.GetFileNameWithoutExtension(file);
