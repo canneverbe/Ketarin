@@ -432,7 +432,7 @@ namespace Ketarin
             catch (WebException ex)
             {
                 LogDialog.Log(job, ex);
-                m_Errors.Add(new ApplicationJobError(job, ex, requestedUrl));
+                m_Errors.Add(new ApplicationJobError(job, ex, (ex.Response != null) ? ex.Response.ResponseUri.ToString() : requestedUrl));
                 m_Status[job] = Status.Failure;
             }
             catch (FileNotFoundException ex)
@@ -586,7 +586,7 @@ namespace Ketarin
                 httpRequest.UserAgent = WebClient.UserAgent;
             }
 
-            using (WebResponse response = req.GetResponse())
+            using (WebResponse response = WebClient.GetResponse(req))
             {
                 LogDialog.Log(job, "Server source file: " + req.RequestUri.AbsolutePath);
 
