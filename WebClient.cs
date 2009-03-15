@@ -50,5 +50,40 @@ namespace Ketarin
             request.Timeout = Convert.ToInt32(Settings.GetValue("ConnectionTimeout", 10)) * 1000; // 10 seconds by default
             return request;
         }
+
+        /// <summary>
+        /// Works around the HTTP to FTP redirection limitation.
+        /// </summary>
+        public static WebResponse GetResponse(WebRequest request)
+        {
+            try
+            {
+                return request.GetResponse();
+            }
+            catch (WebException ex)
+            {
+                if (ex.Response == null || ex.Status != WebExceptionStatus.ProtocolError)
+                {
+                    throw;
+                }
+
+                // Create a new WebRequest, starting with the FTP URL
+                string nextUrl = ex.Response.Headers["location"];
+                if (string.IsNullOrEmpty(nextUrl))
+                {
+                    throw;
+                }
+
+                WebRequest nextRequest = WebRequest.CreateDefault(new Uri(nextUrl));
+                nextRequest.Timeout = request.Timeout;
+                if (request.Credentials != null)
+                {
+                    nextRequest.Credentials = request.Credentials;
+                }
+                nextRequest.Proxy = request.Proxy;
+
+                return nextRequest.GetResponse();
+            }
+        }
     }
 }
