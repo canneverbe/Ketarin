@@ -327,6 +327,7 @@ namespace Ketarin
             columns = GetColumns("variables");
             addColumns = new Dictionary<string, string>();
             addColumns.Add("RegularExpression", "ALTER TABLE variables ADD RegularExpression TEXT");
+            addColumns.Add("RegexRightToLeft", "ALTER TABLE variables ADD RegexRightToLeft INTEGER DEFAULT 0");
             addColumns.Add("CachedContent", "ALTER TABLE variables ADD CachedContent TEXT");
             addColumns.Add("VariableType", "ALTER TABLE variables ADD VariableType INTEGER DEFAULT 0");
             addColumns.Add("TextualContent", "ALTER TABLE variables ADD TextualContent TEXT");
