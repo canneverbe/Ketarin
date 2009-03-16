@@ -30,7 +30,7 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EditVariablesDialog));
             this.lblVariables = new System.Windows.Forms.Label();
-            this.lbVariables = new VariableListBox();
+            this.lbVariables = new Ketarin.Forms.EditVariablesDialog.VariableListBox();
             this.bCancel = new System.Windows.Forms.Button();
             this.bOK = new System.Windows.Forms.Button();
             this.lblUrl = new System.Windows.Forms.Label();
@@ -39,6 +39,7 @@
             this.cmuRtf = new System.Windows.Forms.ContextMenu();
             this.cmnuCopy = new System.Windows.Forms.MenuItem();
             this.cmnuCopyMatch = new System.Windows.Forms.MenuItem();
+            this.cmnuGoToMatch = new System.Windows.Forms.MenuItem();
             this.bLoad = new System.Windows.Forms.Button();
             this.bUseAsStart = new System.Windows.Forms.Button();
             this.bUseAsEnd = new System.Windows.Forms.Button();
@@ -53,7 +54,7 @@
             this.rbContentUrlStartEnd = new System.Windows.Forms.RadioButton();
             this.rbContentUrlRegex = new System.Windows.Forms.RadioButton();
             this.rbContentText = new System.Windows.Forms.RadioButton();
-            this.cmnuGoToMatch = new System.Windows.Forms.MenuItem();
+            this.chkRightToLeft = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // lblVariables
@@ -136,7 +137,7 @@
             this.rtfContent.Name = "rtfContent";
             this.rtfContent.ReadOnly = true;
             this.rtfContent.Size = new System.Drawing.Size(476, 193);
-            this.rtfContent.TabIndex = 16;
+            this.rtfContent.TabIndex = 17;
             this.rtfContent.Text = "";
             this.rtfContent.WordWrap = false;
             this.rtfContent.SelectionChanged += new System.EventHandler(this.rtfContent_SelectionChanged);
@@ -165,6 +166,13 @@
             this.cmnuCopyMatch.Text = "Copy &match";
             this.cmnuCopyMatch.Click += new System.EventHandler(this.cmnuCopyMatch_Click);
             // 
+            // cmnuGoToMatch
+            // 
+            this.cmnuGoToMatch.Index = 2;
+            this.cmnuGoToMatch.Shortcut = System.Windows.Forms.Shortcut.CtrlG;
+            this.cmnuGoToMatch.Text = "&Go to match";
+            this.cmnuGoToMatch.Click += new System.EventHandler(this.cmnuGoToMatch_Click);
+            // 
             // bLoad
             // 
             this.bLoad.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -184,7 +192,7 @@
             this.bUseAsStart.Location = new System.Drawing.Point(126, 381);
             this.bUseAsStart.Name = "bUseAsStart";
             this.bUseAsStart.Size = new System.Drawing.Size(134, 23);
-            this.bUseAsStart.TabIndex = 17;
+            this.bUseAsStart.TabIndex = 18;
             this.bUseAsStart.Text = "&Use selection as start";
             this.bUseAsStart.UseVisualStyleBackColor = true;
             this.bUseAsStart.Click += new System.EventHandler(this.bUseAsStart_Click);
@@ -196,7 +204,7 @@
             this.bUseAsEnd.Location = new System.Drawing.Point(266, 381);
             this.bUseAsEnd.Name = "bUseAsEnd";
             this.bUseAsEnd.Size = new System.Drawing.Size(134, 23);
-            this.bUseAsEnd.TabIndex = 18;
+            this.bUseAsEnd.TabIndex = 19;
             this.bUseAsEnd.Text = "Us&e selection as end";
             this.bUseAsEnd.UseVisualStyleBackColor = true;
             this.bUseAsEnd.Click += new System.EventHandler(this.bUseAsEnd_Click);
@@ -323,18 +331,24 @@
             this.rbContentText.UseVisualStyleBackColor = true;
             this.rbContentText.CheckedChanged += new System.EventHandler(this.rbContentText_CheckedChanged);
             // 
-            // cmnuGoToMatch
+            // chkRightToLeft
             // 
-            this.cmnuGoToMatch.Index = 2;
-            this.cmnuGoToMatch.Shortcut = System.Windows.Forms.Shortcut.CtrlG;
-            this.cmnuGoToMatch.Text = "&Go to match";
-            this.cmnuGoToMatch.Click += new System.EventHandler(this.cmnuGoToMatch_Click);
+            this.chkRightToLeft.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.chkRightToLeft.AutoSize = true;
+            this.chkRightToLeft.Location = new System.Drawing.Point(545, 158);
+            this.chkRightToLeft.Name = "chkRightToLeft";
+            this.chkRightToLeft.Size = new System.Drawing.Size(47, 17);
+            this.chkRightToLeft.TabIndex = 16;
+            this.chkRightToLeft.Text = "&RTL";
+            this.chkRightToLeft.UseVisualStyleBackColor = true;
+            this.chkRightToLeft.CheckedChanged += new System.EventHandler(this.chkRightToLeft_CheckedChanged);
             // 
             // EditVariablesDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(614, 435);
+            this.Controls.Add(this.chkRightToLeft);
             this.Controls.Add(this.rbContentText);
             this.Controls.Add(this.rbContentUrlRegex);
             this.Controls.Add(this.rbContentUrlStartEnd);
@@ -395,5 +409,6 @@
         private System.Windows.Forms.MenuItem cmnuCopy;
         private System.Windows.Forms.MenuItem cmnuCopyMatch;
         private System.Windows.Forms.MenuItem cmnuGoToMatch;
+        private System.Windows.Forms.CheckBox chkRightToLeft;
     }
 }

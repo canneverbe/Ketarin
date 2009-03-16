@@ -86,6 +86,7 @@ namespace Ketarin.Forms
                 txtUrl.ReadOnly = value;
                 txtFind.ReadOnly = value;
                 txtRegularExpression.ReadOnly = value;
+                chkRightToLeft.Enabled = enable;
                 bAdd.Enabled = enable;
                 bRemove.Enabled = enable;
                 bOK.Enabled = enable;
@@ -164,6 +165,7 @@ namespace Ketarin.Forms
             bUseAsEnd.Enabled = enable;
             lblRegex.Enabled = enable;
             txtRegularExpression.Enabled = enable;
+            chkRightToLeft.Enabled = enable;
             rbContentUrlStartEnd.Enabled = enable;
             rbContentText.Enabled = enable;
             rbContentUrlRegex.Enabled = enable;
@@ -186,6 +188,7 @@ namespace Ketarin.Forms
 
                     // Set remaining controls
                     txtUrl.Text = CurrentVariable.Url;
+                    chkRightToLeft.Checked = CurrentVariable.RegexRightToLeft;
                     txtRegularExpression.Text = CurrentVariable.Regex;
 
                     switch (CurrentVariable.VariableType)
@@ -284,6 +287,7 @@ namespace Ketarin.Forms
         private void SetLayout(bool startEnd, bool regex, bool findAndUrl)
         {
             txtRegularExpression.Visible = regex;
+            chkRightToLeft.Visible = regex;
             lblRegex.Visible = regex;
             bUseAsEnd.Visible = startEnd;
             bUseAsStart.Visible = startEnd;
@@ -619,7 +623,10 @@ namespace Ketarin.Forms
 
             try
             {
-                Regex regex = new Regex(txtRegularExpression.Text, RegexOptions.IgnoreCase | RegexOptions.Singleline);
+                // Check if Regex is valid
+                new Regex(txtRegularExpression.Text);
+
+                // Set value
                 CurrentVariable.Regex = txtRegularExpression.Text;
             }
             catch (ArgumentException)
@@ -631,7 +638,13 @@ namespace Ketarin.Forms
             }
 
             txtRegularExpression.BackColor = Color.White;
-            
+
+            RefreshRtfFormatting();            
+        }
+
+        private void chkRightToLeft_CheckedChanged(object sender, EventArgs e)
+        {
+            CurrentVariable.RegexRightToLeft = chkRightToLeft.Checked;
             RefreshRtfFormatting();
         }
 

@@ -55,6 +55,7 @@ namespace Ketarin
         private ApplicationJob.UrlVariableCollection m_Parent = null;
         private Guid m_JobGuid = Guid.Empty;
         private int m_DownloadCount = 0;
+        private bool m_RegexRightToLeft = false;
         private static ApplicationJob.UrlVariableCollection m_GlobalVariables = null;
         /// <summary>
         /// Prevent recursion with the ExpandedUrl property.
@@ -71,6 +72,16 @@ namespace Ketarin
         {
             get { return m_DownloadCount; }
             set { m_DownloadCount = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets whether the regex has the 
+        /// right-to-left match option.
+        /// </summary>
+        public bool RegexRightToLeft
+        {
+            get { return m_RegexRightToLeft; }
+            set { m_RegexRightToLeft = value; }
         }
 
         /// <summary>
@@ -328,6 +339,7 @@ namespace Ketarin
             m_JobGuid = new Guid(reader["JobGuid"] as string);
             m_VariableType = (Type)Convert.ToInt32(reader["VariableType"]);
             m_TextualContent = reader["TextualContent"] as string;
+            m_RegexRightToLeft = Conversion.ToBoolean(reader["RegexRightToLeft"]);
         }
 
         public void Save(IDbTransaction transaction, Guid parentJobGuid)
@@ -336,8 +348,8 @@ namespace Ketarin
             using (IDbCommand command = conn.CreateCommand())
             {
                 command.Transaction = transaction;
-                command.CommandText = @"INSERT INTO variables (JobGuid, VariableName, Url, StartText, EndText, RegularExpression, CachedContent, VariableType, TextualContent)
-                                             VALUES (@JobGuid, @VariableName, @Url, @StartText, @EndText, @RegularExpression, @CachedContent, @VariableType, @TextualContent)";
+                command.CommandText = @"INSERT INTO variables (JobGuid, VariableName, Url, StartText, EndText, RegularExpression, CachedContent, VariableType, TextualContent, RegexRightToLeft)
+                                             VALUES (@JobGuid, @VariableName, @Url, @StartText, @EndText, @RegularExpression, @CachedContent, @VariableType, @TextualContent, @RegexRightToLeft)";
 
                 command.Parameters.Add(new SQLiteParameter("@JobGuid", DbManager.FormatGuid(parentJobGuid)));
                 command.Parameters.Add(new SQLiteParameter("@VariableName", m_Name));
@@ -345,6 +357,7 @@ namespace Ketarin
                 command.Parameters.Add(new SQLiteParameter("@StartText", m_StartText));
                 command.Parameters.Add(new SQLiteParameter("@EndText", m_EndText));
                 command.Parameters.Add(new SQLiteParameter("@RegularExpression", m_Regex));
+                command.Parameters.Add(new SQLiteParameter("@RegexRightToLeft", m_RegexRightToLeft));
                 command.Parameters.Add(new SQLiteParameter("@CachedContent", m_CachedContent));
                 command.Parameters.Add(new SQLiteParameter("@VariableType", m_VariableType));
                 command.Parameters.Add(new SQLiteParameter("@TextualContent", m_TextualContent));
@@ -668,7 +681,12 @@ namespace Ketarin
 
             try
             {
-                return new Regex(ExpandedRegex, RegexOptions.Singleline | RegexOptions.IgnoreCase);
+                RegexOptions options = RegexOptions.Singleline | RegexOptions.IgnoreCase;
+                if (m_RegexRightToLeft)
+                {
+                    options |= RegexOptions.RightToLeft;
+                }
+                return new Regex(ExpandedRegex, options);
             }
             catch (ArgumentException)
             {
