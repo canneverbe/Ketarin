@@ -110,6 +110,8 @@ namespace Ketarin.Forms
         /// </summary>
         public static void Log(string text)
         {
+            if (string.IsNullOrEmpty(text)) return;
+
             text = DateTime.Now.ToString() + ": " + text;
             m_Log.Enqueue(text);
 
