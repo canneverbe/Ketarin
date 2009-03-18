@@ -331,6 +331,7 @@ namespace Ketarin
             addColumns.Add("CachedContent", "ALTER TABLE variables ADD CachedContent TEXT");
             addColumns.Add("VariableType", "ALTER TABLE variables ADD VariableType INTEGER DEFAULT 0");
             addColumns.Add("TextualContent", "ALTER TABLE variables ADD TextualContent TEXT");
+            addColumns.Add("PostData", "ALTER TABLE variables ADD PostData TEXT");
 
             ExecuteUpgradeQueries(columns, addColumns);
 

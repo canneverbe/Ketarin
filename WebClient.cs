@@ -4,6 +4,8 @@ using System.Text;
 using System.Net;
 using System.Windows.Forms;
 using CDBurnerXP;
+using System.Web;
+using System.IO;
 
 namespace Ketarin
 {
@@ -13,6 +15,10 @@ namespace Ketarin
     /// </summary>
     class WebClient : System.Net.WebClient
     {
+        private string m_PostData = string.Empty;
+
+        #region Properties
+
         /// <summary>
         /// Gets a user agent. To prevent websites from
         /// blocking Ketarin, we'll just use some random
@@ -37,6 +43,19 @@ namespace Ketarin
             }
         }
 
+        /// <summary>
+        /// Gets or sets the POST data which is sent
+        /// along with the request.
+        /// </summary>
+        public string PostData
+        {
+            get { return m_PostData; }
+            set { m_PostData = value; }
+        }
+
+
+        #endregion
+
         public WebClient()
             : base()
         {
@@ -48,6 +67,19 @@ namespace Ketarin
             WebRequest request = base.GetWebRequest(address);
             // Make sure that the user defined timeout is used for all web requests!
             request.Timeout = Convert.ToInt32(Settings.GetValue("ConnectionTimeout", 10)) * 1000; // 10 seconds by default
+
+            // Need to append POST data?
+            if (!string.IsNullOrEmpty(m_PostData))
+            {
+                request.Method = "POST";
+                request.ContentType = "application/x-www-form-urlencoded";
+
+                Stream newStream = request.GetRequestStream();
+                byte[] bytes = Encoding.ASCII.GetBytes(m_PostData);
+                newStream.Write(bytes, 0, bytes.Length);
+                newStream.Close();
+            }
+
             return request;
         }
 
@@ -84,6 +116,28 @@ namespace Ketarin
 
                 return nextRequest.GetResponse();
             }
+        }
+
+        /// <summary>
+        /// Determines the key-value pairs from a post data string.
+        /// </summary>
+        internal static string[][] GetKeyValuePairs(string postData)
+        {
+            List<string[]> results = new List<string[]>();
+
+            string[] pairs = postData.Split('&');
+            foreach (string pair in pairs)
+            {
+                string[] keyValue = pair.Split('=');
+                if (keyValue.Length == 2)
+                {
+                    keyValue[0] = HttpUtility.UrlDecode(keyValue[0]);
+                    keyValue[1] = HttpUtility.UrlDecode(keyValue[1]);
+                    results.Add(keyValue);
+                }
+            }
+
+            return results.ToArray();
         }
     }
 }

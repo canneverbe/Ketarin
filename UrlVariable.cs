@@ -56,6 +56,7 @@ namespace Ketarin
         private Guid m_JobGuid = Guid.Empty;
         private int m_DownloadCount = 0;
         private bool m_RegexRightToLeft = false;
+        private string m_PostData;
         private static ApplicationJob.UrlVariableCollection m_GlobalVariables = null;
         /// <summary>
         /// Prevent recursion with the ExpandedUrl property.
@@ -143,6 +144,16 @@ namespace Ketarin
             set {
                 m_Regex = value ?? string.Empty;
             }
+        }
+
+        /// <summary>
+        /// Gets or sets the POST data which is
+        /// submitted along with the URL request.
+        /// </summary>
+        public string PostData
+        {
+            get { return m_PostData; }
+            set { m_PostData = value; }
         }
 
         /// <summary>
@@ -340,6 +351,7 @@ namespace Ketarin
             m_VariableType = (Type)Convert.ToInt32(reader["VariableType"]);
             m_TextualContent = reader["TextualContent"] as string;
             m_RegexRightToLeft = Conversion.ToBoolean(reader["RegexRightToLeft"]);
+            m_PostData = reader["PostData"] as string;
         }
 
         public void Save(IDbTransaction transaction, Guid parentJobGuid)
@@ -348,8 +360,8 @@ namespace Ketarin
             using (IDbCommand command = conn.CreateCommand())
             {
                 command.Transaction = transaction;
-                command.CommandText = @"INSERT INTO variables (JobGuid, VariableName, Url, StartText, EndText, RegularExpression, CachedContent, VariableType, TextualContent, RegexRightToLeft)
-                                             VALUES (@JobGuid, @VariableName, @Url, @StartText, @EndText, @RegularExpression, @CachedContent, @VariableType, @TextualContent, @RegexRightToLeft)";
+                command.CommandText = @"INSERT INTO variables (JobGuid, VariableName, Url, StartText, EndText, RegularExpression, CachedContent, VariableType, TextualContent, RegexRightToLeft, PostData)
+                                             VALUES (@JobGuid, @VariableName, @Url, @StartText, @EndText, @RegularExpression, @CachedContent, @VariableType, @TextualContent, @RegexRightToLeft, @PostData)";
 
                 command.Parameters.Add(new SQLiteParameter("@JobGuid", DbManager.FormatGuid(parentJobGuid)));
                 command.Parameters.Add(new SQLiteParameter("@VariableName", m_Name));
@@ -361,6 +373,8 @@ namespace Ketarin
                 command.Parameters.Add(new SQLiteParameter("@CachedContent", m_CachedContent));
                 command.Parameters.Add(new SQLiteParameter("@VariableType", m_VariableType));
                 command.Parameters.Add(new SQLiteParameter("@TextualContent", m_TextualContent));
+                command.Parameters.Add(new SQLiteParameter("@PostData", m_PostData));
+                
                 command.ExecuteNonQuery();
                 m_JobGuid = parentJobGuid;
             }
@@ -728,6 +742,7 @@ namespace Ketarin
                 try
                 {
                     string url = ExpandedUrl;
+                    client.PostData = this.PostData;
                     page = client.DownloadString(url);
                 }
                 catch (ArgumentException)
