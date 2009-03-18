@@ -107,7 +107,9 @@ namespace Ketarin.Forms
             // Get a copy of all variables
             foreach (KeyValuePair<string, UrlVariable> pair in job.Variables)
             {
-                m_Variables.Add(pair.Key, pair.Value.Clone() as UrlVariable);
+                UrlVariable clonedVariable = pair.Value.Clone() as UrlVariable;
+                m_Variables.Add(pair.Key, clonedVariable);
+                clonedVariable.Parent = m_Variables;
             }
         }
 
@@ -358,7 +360,7 @@ namespace Ketarin.Forms
                         {
                             Uri url = new Uri(CurrentVariable.ExpandedUrl);
                             if (dialog.Cancelled) return false;
-                            client.PostData = CurrentVariable.PostData;
+                            client.SetPostData(CurrentVariable);
                             CurrentVariable.TempContent = client.DownloadString(url);
                             return true;
                         };
