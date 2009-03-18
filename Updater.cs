@@ -477,6 +477,12 @@ namespace Ketarin
                 m_Errors.Add(new ApplicationJobError(job, ex));
                 m_Status[job] = Status.Failure;
             }
+            catch (CommandErrorException ex)
+            {
+                LogDialog.Log(job, ex);
+                m_Errors.Add(new ApplicationJobError(job, ex));
+                m_Status[job] = Status.Failure;
+            }
 
             m_Progress[job] = 100;
             OnStatusChanged(job);
@@ -636,8 +642,16 @@ namespace Ketarin
                 if (m_OnlyCheck || job.CheckForUpdatesOnly) return true;
 
                 string defaultPreCommand = Settings.GetValue("PreUpdateCommand", "") as string;
-                ExecuteCommand(job, defaultPreCommand);
-                ExecuteCommand(job, job.ExecutePreCommand);
+                if (ExecuteCommand(job, defaultPreCommand) == 1)
+                {
+                    LogDialog.Log(job, "Default pre-update command returned '1', download skipped");
+                    throw new CommandErrorException();
+                }
+                if (ExecuteCommand(job, job.ExecutePreCommand) == 1)
+                {
+                    LogDialog.Log(job, "Pre-update command returned '1', download skipped");
+                    throw new CommandErrorException();
+                }
 
                 // Read all file contents to a temporary location
                 string tmpLocation = Path.GetTempFileName();
@@ -782,10 +796,11 @@ namespace Ketarin
         /// <summary>
         /// Executes a given command for the given application (also resolves variables).
         /// </summary>
-        private static void ExecuteCommand(ApplicationJob job, string baseCommand)
+        /// <returns>Exit code of the command, if not run in background</returns>
+        private static int ExecuteCommand(ApplicationJob job, string baseCommand)
         {
             // Ignore empty commands
-            if (string.IsNullOrEmpty(baseCommand)) return;
+            if (string.IsNullOrEmpty(baseCommand)) return 0;
 
             baseCommand = baseCommand.Replace("\r\n", "\n");
 
@@ -846,8 +861,12 @@ namespace Ketarin
 
                     string result = proc.StandardOutput.ReadToEnd();
                     LogDialog.Log(job, "Command result: " + result);
+                    
+                    return proc.ExitCode;
                 }
             }
+
+            return 0;
         }
 
         /// <summary>
