@@ -43,17 +43,6 @@ namespace Ketarin
             }
         }
 
-        /// <summary>
-        /// Gets or sets the POST data which is sent
-        /// along with the request.
-        /// </summary>
-        public string PostData
-        {
-            get { return m_PostData; }
-            set { m_PostData = value; }
-        }
-
-
         #endregion
 
         public WebClient()
@@ -119,11 +108,38 @@ namespace Ketarin
         }
 
         /// <summary>
+        /// Sets the POST data which is sent
+        /// along with the request. Replaces variables.
+        /// </summary>
+        /// <param name="variable">The variable, which sends the request</param>
+        public void SetPostData(UrlVariable variable)
+        {
+            string[][] pairs = GetKeyValuePairs(variable.PostData);
+            if (variable.Parent != null)
+            {
+                foreach (string[] keyValue in pairs)
+                {
+                    keyValue[1] = variable.Parent.ReplaceAllInString(keyValue[1]);
+                }
+            }
+
+            StringBuilder sb = new StringBuilder();
+            foreach (string[] keyValue in pairs)
+            {
+                sb.Append(HttpUtility.UrlEncode(keyValue[0]) + "=" + HttpUtility.UrlEncode(keyValue[1]) + "&");
+            }
+
+            m_PostData = sb.ToString().TrimEnd('&');
+        }
+
+        /// <summary>
         /// Determines the key-value pairs from a post data string.
         /// </summary>
         internal static string[][] GetKeyValuePairs(string postData)
         {
             List<string[]> results = new List<string[]>();
+            // No data, no efforts
+            if (postData == null) return results.ToArray();
 
             string[] pairs = postData.Split('&');
             foreach (string pair in pairs)

@@ -742,7 +742,7 @@ namespace Ketarin
                 try
                 {
                     string url = ExpandedUrl;
-                    client.PostData = this.PostData;
+                    client.SetPostData(this);
                     page = client.DownloadString(url);
                 }
                 catch (ArgumentException)
