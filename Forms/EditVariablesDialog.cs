@@ -157,6 +157,7 @@ namespace Ketarin.Forms
             lblUrl.Enabled = enable;
             txtUrl.Enabled = enable;
             bLoad.Enabled = enable;
+            bPostData.Enabled = enable;
             lblFind.Enabled = enable;
             txtFind.Enabled = enable;
             bFind.Enabled = enable;
@@ -297,6 +298,7 @@ namespace Ketarin.Forms
             lblUrl.Visible = findAndUrl;
             txtUrl.Visible = findAndUrl;
             bLoad.Visible = findAndUrl;
+            bPostData.Visible = findAndUrl;
             rtfContent.ReadOnly = findAndUrl || ReadOnly;
         }
 
@@ -356,6 +358,7 @@ namespace Ketarin.Forms
                         {
                             Uri url = new Uri(CurrentVariable.ExpandedUrl);
                             if (dialog.Cancelled) return false;
+                            client.PostData = CurrentVariable.PostData;
                             CurrentVariable.TempContent = client.DownloadString(url);
                             return true;
                         };
@@ -660,6 +663,18 @@ namespace Ketarin.Forms
 
             // Save results
             m_Job.Variables = m_Variables;
+        }
+
+        private void bPostData_Click(object sender, EventArgs e)
+        {
+            using (PostDataEditor editor = new PostDataEditor())
+            {
+                editor.PostData = CurrentVariable.PostData;
+                if (editor.ShowDialog(this) == DialogResult.OK)
+                {
+                    CurrentVariable.PostData = editor.PostData;
+                }
+            }
         }
 
         #region Context menu

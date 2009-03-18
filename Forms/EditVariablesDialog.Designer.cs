@@ -55,6 +55,7 @@
             this.rbContentUrlRegex = new System.Windows.Forms.RadioButton();
             this.rbContentText = new System.Windows.Forms.RadioButton();
             this.chkRightToLeft = new System.Windows.Forms.CheckBox();
+            this.bPostData = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // lblVariables
@@ -84,7 +85,7 @@
             this.bCancel.Location = new System.Drawing.Point(527, 400);
             this.bCancel.Name = "bCancel";
             this.bCancel.Size = new System.Drawing.Size(75, 23);
-            this.bCancel.TabIndex = 20;
+            this.bCancel.TabIndex = 22;
             this.bCancel.Text = "Cancel";
             this.bCancel.UseVisualStyleBackColor = true;
             // 
@@ -95,7 +96,7 @@
             this.bOK.Location = new System.Drawing.Point(446, 400);
             this.bOK.Name = "bOK";
             this.bOK.Size = new System.Drawing.Size(75, 23);
-            this.bOK.TabIndex = 19;
+            this.bOK.TabIndex = 21;
             this.bOK.Text = "OK";
             this.bOK.UseVisualStyleBackColor = true;
             this.bOK.Click += new System.EventHandler(this.bOK_Click);
@@ -117,7 +118,7 @@
             this.txtUrl.Enabled = false;
             this.txtUrl.Location = new System.Drawing.Point(247, 104);
             this.txtUrl.Name = "txtUrl";
-            this.txtUrl.Size = new System.Drawing.Size(292, 20);
+            this.txtUrl.Size = new System.Drawing.Size(211, 20);
             this.txtUrl.TabIndex = 9;
             this.txtUrl.TextChanged += new System.EventHandler(this.txtUrl_TextChanged);
             // 
@@ -137,7 +138,7 @@
             this.rtfContent.Name = "rtfContent";
             this.rtfContent.ReadOnly = true;
             this.rtfContent.Size = new System.Drawing.Size(476, 193);
-            this.rtfContent.TabIndex = 17;
+            this.rtfContent.TabIndex = 18;
             this.rtfContent.Text = "";
             this.rtfContent.WordWrap = false;
             this.rtfContent.SelectionChanged += new System.EventHandler(this.rtfContent_SelectionChanged);
@@ -180,7 +181,7 @@
             this.bLoad.Location = new System.Drawing.Point(545, 102);
             this.bLoad.Name = "bLoad";
             this.bLoad.Size = new System.Drawing.Size(57, 23);
-            this.bLoad.TabIndex = 10;
+            this.bLoad.TabIndex = 11;
             this.bLoad.Text = "&Load";
             this.bLoad.UseVisualStyleBackColor = true;
             this.bLoad.Click += new System.EventHandler(this.bLoad_Click);
@@ -192,7 +193,7 @@
             this.bUseAsStart.Location = new System.Drawing.Point(126, 381);
             this.bUseAsStart.Name = "bUseAsStart";
             this.bUseAsStart.Size = new System.Drawing.Size(134, 23);
-            this.bUseAsStart.TabIndex = 18;
+            this.bUseAsStart.TabIndex = 19;
             this.bUseAsStart.Text = "&Use selection as start";
             this.bUseAsStart.UseVisualStyleBackColor = true;
             this.bUseAsStart.Click += new System.EventHandler(this.bUseAsStart_Click);
@@ -204,7 +205,7 @@
             this.bUseAsEnd.Location = new System.Drawing.Point(266, 381);
             this.bUseAsEnd.Name = "bUseAsEnd";
             this.bUseAsEnd.Size = new System.Drawing.Size(134, 23);
-            this.bUseAsEnd.TabIndex = 19;
+            this.bUseAsEnd.TabIndex = 20;
             this.bUseAsEnd.Text = "Us&e selection as end";
             this.bUseAsEnd.UseVisualStyleBackColor = true;
             this.bUseAsEnd.Click += new System.EventHandler(this.bUseAsEnd_Click);
@@ -239,7 +240,7 @@
             this.bFind.Location = new System.Drawing.Point(545, 127);
             this.bFind.Name = "bFind";
             this.bFind.Size = new System.Drawing.Size(57, 23);
-            this.bFind.TabIndex = 13;
+            this.bFind.TabIndex = 14;
             this.bFind.Text = "&Find";
             this.bFind.UseVisualStyleBackColor = true;
             this.bFind.Click += new System.EventHandler(this.bFind_Click);
@@ -251,7 +252,7 @@
             this.lblFind.Location = new System.Drawing.Point(123, 133);
             this.lblFind.Name = "lblFind";
             this.lblFind.Size = new System.Drawing.Size(118, 13);
-            this.lblFind.TabIndex = 11;
+            this.lblFind.TabIndex = 12;
             this.lblFind.Text = "&Search within contents:";
             // 
             // txtFind
@@ -262,7 +263,7 @@
             this.txtFind.Location = new System.Drawing.Point(247, 130);
             this.txtFind.Name = "txtFind";
             this.txtFind.Size = new System.Drawing.Size(292, 20);
-            this.txtFind.TabIndex = 12;
+            this.txtFind.TabIndex = 13;
             // 
             // lblDesc
             // 
@@ -282,7 +283,7 @@
             this.txtRegularExpression.Location = new System.Drawing.Point(247, 156);
             this.txtRegularExpression.Name = "txtRegularExpression";
             this.txtRegularExpression.Size = new System.Drawing.Size(292, 20);
-            this.txtRegularExpression.TabIndex = 15;
+            this.txtRegularExpression.TabIndex = 16;
             this.txtRegularExpression.TextChanged += new System.EventHandler(this.txtRegularExpression_TextChanged);
             // 
             // lblRegex
@@ -292,7 +293,7 @@
             this.lblRegex.Location = new System.Drawing.Point(123, 159);
             this.lblRegex.Name = "lblRegex";
             this.lblRegex.Size = new System.Drawing.Size(117, 13);
-            this.lblRegex.TabIndex = 14;
+            this.lblRegex.TabIndex = 15;
             this.lblRegex.Text = "Use regular e&xpression:";
             // 
             // rbContentUrlStartEnd
@@ -338,16 +339,29 @@
             this.chkRightToLeft.Location = new System.Drawing.Point(545, 158);
             this.chkRightToLeft.Name = "chkRightToLeft";
             this.chkRightToLeft.Size = new System.Drawing.Size(47, 17);
-            this.chkRightToLeft.TabIndex = 16;
+            this.chkRightToLeft.TabIndex = 17;
             this.chkRightToLeft.Text = "&RTL";
             this.chkRightToLeft.UseVisualStyleBackColor = true;
             this.chkRightToLeft.CheckedChanged += new System.EventHandler(this.chkRightToLeft_CheckedChanged);
+            // 
+            // bPostData
+            // 
+            this.bPostData.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.bPostData.Enabled = false;
+            this.bPostData.Location = new System.Drawing.Point(464, 102);
+            this.bPostData.Name = "bPostData";
+            this.bPostData.Size = new System.Drawing.Size(75, 23);
+            this.bPostData.TabIndex = 10;
+            this.bPostData.Text = "&POST data";
+            this.bPostData.UseVisualStyleBackColor = true;
+            this.bPostData.Click += new System.EventHandler(this.bPostData_Click);
             // 
             // EditVariablesDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(614, 435);
+            this.Controls.Add(this.bPostData);
             this.Controls.Add(this.chkRightToLeft);
             this.Controls.Add(this.rbContentText);
             this.Controls.Add(this.rbContentUrlRegex);
@@ -410,5 +424,6 @@
         private System.Windows.Forms.MenuItem cmnuCopyMatch;
         private System.Windows.Forms.MenuItem cmnuGoToMatch;
         private System.Windows.Forms.CheckBox chkRightToLeft;
+        private System.Windows.Forms.Button bPostData;
     }
 }

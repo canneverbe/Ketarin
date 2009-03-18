@@ -147,6 +147,12 @@
     <Compile Include="Forms\NewVariableDialog.Designer.cs">
       <DependentUpon>NewVariableDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\PostDataEditor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\PostDataEditor.Designer.cs">
+      <DependentUpon>PostDataEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\RenameFileDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -293,6 +299,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\NewVariableDialog.resx">
       <DependentUpon>NewVariableDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\PostDataEditor.resx">
+      <DependentUpon>PostDataEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\RenameFileDialog.resx">
       <DependentUpon>RenameFileDialog.cs</DependentUpon>
