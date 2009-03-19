@@ -73,6 +73,11 @@ namespace Ketarin
             return request;
         }
 
+        public new string DownloadString(string address)
+        {
+            return DownloadString(new Uri(address));
+        }
+
         public new string DownloadString(Uri address)
         {
             m_ReplacementString = string.Empty;
