@@ -16,6 +16,7 @@ namespace Ketarin
     class WebClient : System.Net.WebClient
     {
         private string m_PostData = string.Empty;
+        private string m_ReplacementString = string.Empty;
 
         #region Properties
 
@@ -70,6 +71,41 @@ namespace Ketarin
             }
 
             return request;
+        }
+
+        public new string DownloadString(Uri address)
+        {
+            m_ReplacementString = string.Empty;
+
+            try
+            {
+                return base.DownloadString(address);
+            }
+            catch (WebException)
+            {
+                if (!string.IsNullOrEmpty(m_ReplacementString))
+                {
+                    return m_ReplacementString;
+                }
+
+                throw;
+            }
+        }
+
+        protected override WebResponse GetWebResponse(WebRequest request)
+        {
+            WebResponse response = base.GetWebResponse(request);
+            
+            HttpWebResponse httpResponse = response as HttpWebResponse;
+
+            // If binary contents are sent, output information about the download
+            if (httpResponse != null && response.ContentType == "application/octet-stream" && response.ContentLength > 100000)
+            {
+                m_ReplacementString = "ResponseUri: " + httpResponse.ResponseUri + "\r\n";
+                m_ReplacementString += httpResponse.Headers.ToString();
+                return null;
+            }
+            return response;
         }
 
         /// <summary>
