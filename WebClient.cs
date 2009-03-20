@@ -21,6 +21,14 @@ namespace Ketarin
         #region Properties
 
         /// <summary>
+        /// Gets the plain POST data which is being ursed for a request.
+        /// </summary>
+        public string PostData
+        {
+            get { return m_PostData; }
+        }
+
+        /// <summary>
         /// Gets a user agent. To prevent websites from
         /// blocking Ketarin, we'll just use some random
         /// Internet Explorer / Firefox user agents.
@@ -160,6 +168,7 @@ namespace Ketarin
             {
                 foreach (string[] keyValue in pairs)
                 {
+                    keyValue[0] = variable.Parent.ReplaceAllInString(keyValue[0]);
                     keyValue[1] = variable.Parent.ReplaceAllInString(keyValue[1]);
                 }
             }
