@@ -332,6 +332,47 @@ namespace Ketarin
             }
         }
 
+        #region Drag and drop
+
+        protected override void OnDragOver(DragEventArgs drgevent)
+        {
+            base.OnDragOver(drgevent);
+
+            CheckDragDrop(drgevent);
+        }
+
+        protected override void OnDragEnter(DragEventArgs drgevent)
+        {
+            base.OnDragEnter(drgevent);
+
+            CheckDragDrop(drgevent);
+        }
+
+        private static void CheckDragDrop(DragEventArgs drgevent)
+        {
+            if (drgevent.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                drgevent.Effect = DragDropEffects.Copy;
+            }
+        }
+
+        protected override void OnDragDrop(DragEventArgs drgevent)
+        {
+            base.OnDragDrop(drgevent);
+
+            string[] files = drgevent.Data.GetData(DataFormats.FileDrop) as string[];
+            if (files != null && files.Length > 0)
+            {
+                foreach (string file in files)
+                {
+                    ImportFromFile(file);
+                }
+                UpdateList();
+            }
+        }
+
+        #endregion
+
         protected override void OnResize(EventArgs e)
         {
             base.OnResize(e);
@@ -806,19 +847,7 @@ namespace Ketarin
 
                 try
                 {
-                    ApplicationJob padImport = ApplicationJob.ImportFromPad(dialog.FileName);
-                    if (padImport != null)
-                    {
-                        ApplicationJobDialog newJob = new ApplicationJobDialog();
-                        newJob.ApplicationJob = padImport;
-                        if (newJob.ShowDialog(this) == DialogResult.OK)
-                        {
-                            SaveAndShowJob(newJob.ApplicationJob);
-                        }
-                        return;
-                    }
-
-                    ApplicationJob.ImportFromTemplateOrXml(this, dialog.FileName);
+                    ImportFromFile(dialog.FileName);
 
                     UpdateList();
                 }
@@ -826,6 +855,24 @@ namespace Ketarin
                 {
                     MessageBox.Show(this, "Failed to import the file: " + ex.Message, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
+            }
+        }
+
+        private void ImportFromFile(string file)
+        {
+            ApplicationJob padImport = ApplicationJob.ImportFromPad(file);
+            if (padImport != null)
+            {
+                ApplicationJobDialog newJob = new ApplicationJobDialog();
+                newJob.ApplicationJob = padImport;
+                if (newJob.ShowDialog(this) == DialogResult.OK)
+                {
+                    SaveAndShowJob(newJob.ApplicationJob);
+                }
+            }
+            else
+            {
+                ApplicationJob.ImportFromTemplateOrXml(this, file);
             }
         }
 
