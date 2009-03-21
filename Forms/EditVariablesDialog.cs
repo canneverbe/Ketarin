@@ -35,6 +35,11 @@ namespace Ketarin.Forms
         private bool m_Updating = false;
         private string m_MatchSelection = null;
         private int m_MatchPosition = -1;
+        private BrowserPreviewDialog m_Preview = null;
+
+        private delegate UrlVariable VariableResultDelegate();
+
+        #region Properties
 
         /// <summary>
         /// Gets or sets the currently used match for a given
@@ -43,16 +48,28 @@ namespace Ketarin.Forms
         public string MatchSelection
         {
             get { return m_MatchSelection; }
-            set {
+            set
+            {
                 m_MatchSelection = value;
                 cmnuCopyMatch.Enabled = !string.IsNullOrEmpty(m_MatchSelection);
                 cmnuGoToMatch.Enabled = cmnuCopyMatch.Enabled;
             }
         }
 
-        private delegate UrlVariable VariableResultDelegate();
-
-        #region Properties
+        /// <summary>
+        /// Gets an instance of the preview dialog
+        /// </summary>
+        protected BrowserPreviewDialog PreviewDialog
+        {
+            get
+            {
+                if (m_Preview == null)
+                {
+                    m_Preview = new BrowserPreviewDialog();
+                }
+                return m_Preview;
+            }
+        }
 
         /// <summary>
         /// The variable which is currently being edited.
@@ -120,7 +137,7 @@ namespace Ketarin.Forms
         {
             base.OnLoad(e);
 
-            RefreshListBox();
+            ReloadVariables(true);
         }
 
         protected override void OnClosed(EventArgs e)
@@ -134,13 +151,14 @@ namespace Ketarin.Forms
         /// <summary>
         /// Re-populates the ListBox with the available variables.
         /// </summary>
-        private void RefreshListBox()
+        private void ReloadVariables(bool updateList)
         {
             List<string> appVarNames = new List<string>();
-            lbVariables.Items.Clear();
+            if (updateList) lbVariables.Items.Clear();
+
             foreach (KeyValuePair<string, UrlVariable> pair in m_Variables)
             {
-                lbVariables.Items.Add(pair.Value);
+                if (updateList) lbVariables.Items.Add(pair.Value);
                 appVarNames.Add(pair.Value.Name);
             }
 
@@ -339,7 +357,7 @@ namespace Ketarin.Forms
                 if (dialog.ShowDialog(this) == DialogResult.OK)
                 {
                     m_Variables.Add(dialog.VariableName, new UrlVariable(dialog.VariableName, m_Variables));
-                    RefreshListBox();
+                    ReloadVariables(true);
                     lbVariables.SelectedItem = m_Variables[dialog.VariableName];
                 }
             }
@@ -353,15 +371,19 @@ namespace Ketarin.Forms
             {
                 using (WebClient client = new WebClient())
                 {
+                    string expandedUrl = null;
+                    string postData = null;
+
                     // Note: The Text property might modify the text value
                     using (ProgressDialog dialog = new ProgressDialog("Loading URL", "Please wait while the content is being downloaded..."))
                     {
                         dialog.OnDoWork = delegate()
                         {
-                            Uri url = new Uri(CurrentVariable.ExpandedUrl);
+                            expandedUrl = CurrentVariable.ExpandedUrl;
                             if (dialog.Cancelled) return false;
                             client.SetPostData(CurrentVariable);
-                            CurrentVariable.TempContent = client.DownloadString(url);
+                            postData = client.PostData;
+                            CurrentVariable.TempContent = client.DownloadString(new Uri(expandedUrl));
                             return true;
                         };
                         dialog.OnCancel = delegate()
@@ -376,13 +398,13 @@ namespace Ketarin.Forms
                             LogDialog.Log("Failed loading URL", dialog.Error);
 
                             // Check whether or not the URL is valid and show an error message if necessary
-                            if (dialog.Error is ArgumentNullException)
+                            if (dialog.Error is ArgumentNullException || string.IsNullOrEmpty(expandedUrl))
                             {
                                 MessageBox.Show(this, "The URL you entered is empty and cannot be loaded.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                             }
                             else if (dialog.Error is UriFormatException)
                             {
-                                MessageBox.Show(this, "The specified URL is not valid.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                MessageBox.Show(this, "The specified URL '" + expandedUrl + "' is not valid.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                             }
                             else
                             {
@@ -393,6 +415,12 @@ namespace Ketarin.Forms
 
                     rtfContent.Text = CurrentVariable.TempContent;
                     RefreshRtfFormatting();
+
+                    // Show page preview if desired
+                    if (cmnuBrowser.Checked)
+                    {
+                        PreviewDialog.ShowPreview(this, expandedUrl, postData);
+                    }
                 }
             }
             catch (Exception ex)
@@ -440,6 +468,7 @@ namespace Ketarin.Forms
                             CurrentVariable.Name = dialog.VariableName;
                             m_Variables.Add(CurrentVariable.Name, CurrentVariable);
                             lbVariables.RefreshItems();
+                            ReloadVariables(false);
                         }
                     }
                     break;
@@ -595,7 +624,7 @@ namespace Ketarin.Forms
             if (CurrentVariable == null) return;
 
             m_Variables.Remove(CurrentVariable.Name);
-            RefreshListBox();
+            ReloadVariables(true);
 
             if (lbVariables.Items.Count > 0)
             {
@@ -694,6 +723,28 @@ namespace Ketarin.Forms
         private void cmnuGoToMatch_Click(object sender, EventArgs e)
         {
             GoToMatch();
+        }
+
+        private void cmnuBrowser_Click(object sender, EventArgs e)
+        {
+            cmnuBrowser.Checked = !cmnuBrowser.Checked;
+            if (cmnuBrowser.Checked)
+            {
+                if (m_Preview == null)
+                {
+                    PreviewDialog.VisibleChanged += new EventHandler(PreviewDialog_VisibleChanged);
+                }
+                bLoad.PerformClick(); // Reload browser contents
+            }
+            else
+            {
+                PreviewDialog.Hide();
+            }
+        }
+
+        private void PreviewDialog_VisibleChanged(object sender, EventArgs e)
+        {
+            cmnuBrowser.Checked = PreviewDialog.Visible;
         }
 
         #endregion

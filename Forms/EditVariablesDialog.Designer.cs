@@ -40,6 +40,8 @@
             this.cmnuCopy = new System.Windows.Forms.MenuItem();
             this.cmnuCopyMatch = new System.Windows.Forms.MenuItem();
             this.cmnuGoToMatch = new System.Windows.Forms.MenuItem();
+            this.sepPreview = new System.Windows.Forms.MenuItem();
+            this.cmnuBrowser = new System.Windows.Forms.MenuItem();
             this.bLoad = new System.Windows.Forms.Button();
             this.bUseAsStart = new System.Windows.Forms.Button();
             this.bUseAsEnd = new System.Windows.Forms.Button();
@@ -149,7 +151,9 @@
             this.cmuRtf.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.cmnuCopy,
             this.cmnuCopyMatch,
-            this.cmnuGoToMatch});
+            this.cmnuGoToMatch,
+            this.sepPreview,
+            this.cmnuBrowser});
             // 
             // cmnuCopy
             // 
@@ -173,6 +177,17 @@
             this.cmnuGoToMatch.Shortcut = System.Windows.Forms.Shortcut.CtrlG;
             this.cmnuGoToMatch.Text = "&Go to match";
             this.cmnuGoToMatch.Click += new System.EventHandler(this.cmnuGoToMatch_Click);
+            // 
+            // sepPreview
+            // 
+            this.sepPreview.Index = 3;
+            this.sepPreview.Text = "-";
+            // 
+            // cmnuBrowser
+            // 
+            this.cmnuBrowser.Index = 4;
+            this.cmnuBrowser.Text = "&Show page preview";
+            this.cmnuBrowser.Click += new System.EventHandler(this.cmnuBrowser_Click);
             // 
             // bLoad
             // 
@@ -336,6 +351,7 @@
             // 
             this.chkRightToLeft.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.chkRightToLeft.AutoSize = true;
+            this.chkRightToLeft.Enabled = false;
             this.chkRightToLeft.Location = new System.Drawing.Point(545, 158);
             this.chkRightToLeft.Name = "chkRightToLeft";
             this.chkRightToLeft.Size = new System.Drawing.Size(47, 17);
@@ -425,5 +441,7 @@
         private System.Windows.Forms.MenuItem cmnuGoToMatch;
         private System.Windows.Forms.CheckBox chkRightToLeft;
         private System.Windows.Forms.Button bPostData;
+        private System.Windows.Forms.MenuItem sepPreview;
+        private System.Windows.Forms.MenuItem cmnuBrowser;
     }
 }
