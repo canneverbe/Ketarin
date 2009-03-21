@@ -105,6 +105,12 @@
     <Compile Include="Forms\ApplicationJobDialog.Designer.cs">
       <DependentUpon>ApplicationJobDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\BrowserPreviewDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\BrowserPreviewDialog.Designer.cs">
+      <DependentUpon>BrowserPreviewDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\DeleteApplicationDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -278,6 +284,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ApplicationJobDialog.resx">
       <DependentUpon>ApplicationJobDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\BrowserPreviewDialog.resx">
+      <DependentUpon>BrowserPreviewDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\DeleteApplicationDialog.resx">
       <DependentUpon>DeleteApplicationDialog.cs</DependentUpon>
