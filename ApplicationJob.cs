@@ -749,7 +749,10 @@ namespace Ketarin
                     // Remove element LastUpdated
                     element.RemoveChild(element["LastUpdated"]);
                     // Remove element PreviousLocation
-                    element.RemoveChild(element["PreviousLocation"]);
+                    if (element["PreviousLocation"] != null)
+                    {
+                        element.RemoveChild(element["PreviousLocation"]);
+                    }
                 }
                 
                 xmlResult = doc.InnerXml;
