@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using System.IO;
 
 namespace Ketarin.Forms
 {
@@ -12,6 +13,7 @@ namespace Ketarin.Forms
     {
         private static LogDialog m_Instance;
         private static Queue<string> m_Log = new Queue<string>();
+        private static List<string> m_FullLog = new List<string>();
 
         #region Properties
 
@@ -57,6 +59,11 @@ namespace Ketarin.Forms
 
                 m_Instance.txtLog.SelectionStart = m_Instance.txtLog.Text.Length;
             }
+        }
+
+        public static void SaveLogToFile(string filename)
+        {
+            File.WriteAllText(filename, string.Join(Environment.NewLine, m_FullLog.ToArray()));
         }
 
         #region Public Log() functions
@@ -114,6 +121,7 @@ namespace Ketarin.Forms
 
             text = DateTime.Now.ToString() + ": " + text;
             m_Log.Enqueue(text);
+            m_FullLog.Add(text);
 
             if (m_Instance != null)
             {

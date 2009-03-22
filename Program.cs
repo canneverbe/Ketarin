@@ -16,14 +16,13 @@
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 using System;
-using System.Collections.Generic;
+using System.IO;
+using System.Net;
+using System.Threading;
 using System.Windows.Forms;
 using CDBurnerXP;
-using System.Threading;
-using System.Runtime.InteropServices;
+using Ketarin.Forms;
 using Microsoft.Win32;
-using System.Net;
-using System.IO;
 
 namespace Ketarin
 {
@@ -128,6 +127,12 @@ namespace Ketarin
             else
             {
                 Application.Run(new MainForm());
+
+                string logFile = arguments["log"];
+                if (!string.IsNullOrEmpty(logFile))
+                {
+                    LogDialog.SaveLogToFile(logFile);
+                }
             }
         }
 
