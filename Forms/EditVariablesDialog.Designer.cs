@@ -186,7 +186,7 @@
             // cmnuBrowser
             // 
             this.cmnuBrowser.Index = 4;
-            this.cmnuBrowser.Text = "&Show page preview";
+            this.cmnuBrowser.Text = "&Show in webbrowser";
             this.cmnuBrowser.Click += new System.EventHandler(this.cmnuBrowser_Click);
             // 
             // bLoad

@@ -53,7 +53,7 @@
             this.SavePosition = true;
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
-            this.Text = "Webbrowser Preview";
+            this.Text = "Webbrowser View";
             this.ResumeLayout(false);
 
         }
