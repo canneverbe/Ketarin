@@ -123,7 +123,7 @@ namespace Ketarin
                     Console.WriteLine("Could export to the specified location: " + ex.Message);
                 }
             }
-            // ...or lanch the GUI.
+            // ...or launch the GUI.
             else
             {
                 Application.Run(new MainForm());
