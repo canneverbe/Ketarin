@@ -812,6 +812,10 @@ namespace Ketarin
                 // Replace variable: file
                 baseCommand = UrlVariable.Replace(baseCommand, "file", "\"" + job.PreviousLocation + "\"");
             }
+            else
+            {
+                baseCommand = UrlVariable.GlobalVariables.ReplaceAllInString(baseCommand);
+            }
 
             // Replace variable: root
             try
