@@ -280,19 +280,19 @@ namespace Ketarin
                     LogDialog.Log("Could not determine {url:*} variables", ex);
                 }
 
+                // Some date/time variables, only if they were not user defined
+                string[] dateTimeVariables = new string[] { "dd", "ddd", "dddd", "hh", "HH", "mm", "MM", "MMM", "MMMM", "ss", "tt", "yy", "yyyy", "zz", "zzz" };
+                foreach (string dateTimeVar in dateTimeVariables)
+                {
+                    if (!ContainsKey(dateTimeVar))
+                    {
+                        value = value.Replace("{" + dateTimeVar + "}", DateTime.Now.ToString(dateTimeVar));
+                    }
+                }
+
                 // Job-specific data / non global variables
                 if (m_Parent != null)
                 {
-                    // Some date/time variables, only if they were not user defined
-                    string[] dateTimeVars = new string[] { "dd", "ddd", "dddd", "hh", "HH", "mm", "MM", "MMM", "MMMM", "ss", "tt", "yy", "yyyy", "zz", "zzz" };
-                    foreach (string dateTimeVar in dateTimeVars)
-                    {
-                        if (!ContainsKey(dateTimeVar))
-                        {
-                            value = value.Replace("{" + dateTimeVar + "}", DateTime.Now.ToString(dateTimeVar));
-                        }
-                    }
-
                     if (!string.IsNullOrEmpty(m_Parent.Category))
                     {
                         value = UrlVariable.Replace(value, "category", m_Parent.Category);

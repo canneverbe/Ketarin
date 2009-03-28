@@ -131,7 +131,14 @@ namespace Ketarin
                 string logFile = arguments["log"];
                 if (!string.IsNullOrEmpty(logFile))
                 {
-                    LogDialog.SaveLogToFile(logFile);
+                    try
+                    {
+                        LogDialog.SaveLogToFile(logFile);
+                    }
+                    catch (Exception)
+                    {
+                        // ignore errors
+                    }
                 }
             }
         }
