@@ -133,6 +133,7 @@ namespace Ketarin
                 {
                     try
                     {
+                        logFile = UrlVariable.GlobalVariables.ReplaceAllInString(logFile);
                         LogDialog.SaveLogToFile(logFile);
                     }
                     catch (Exception)
