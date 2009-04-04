@@ -56,6 +56,7 @@
             this.mnuView = new System.Windows.Forms.MenuItem();
             this.mnuLog = new System.Windows.Forms.MenuItem();
             this.mnuShowGroups = new System.Windows.Forms.MenuItem();
+            this.mnuShowStatusBar = new System.Windows.Forms.MenuItem();
             this.mnuHelp = new System.Windows.Forms.MenuItem();
             this.mnuTutorial = new System.Windows.Forms.MenuItem();
             this.mnuAbout = new System.Windows.Forms.MenuItem();
@@ -71,7 +72,7 @@
             this.colCategory = new CDBurnerXP.Controls.OLVColumn();
             this.colCustomValue = new CDBurnerXP.Controls.OLVColumn();
             this.m_VistaMenu = new CDBurnerXP.Controls.VistaMenu(this.components);
-            this.sbAddApplication = new wyDay.Controls.SplitButton();
+            this.bAddApplication = new wyDay.Controls.SplitButton();
             this.bRun = new wyDay.Controls.SplitButton();
             this.cmuRun = new System.Windows.Forms.ContextMenu();
             this.cmnuCheckAndDownload = new System.Windows.Forms.MenuItem();
@@ -80,8 +81,12 @@
             this.cmnuTrayIconMenu = new System.Windows.Forms.ContextMenu();
             this.cmnuShow = new System.Windows.Forms.MenuItem();
             this.cmnuExit = new System.Windows.Forms.MenuItem();
+            this.statusBar = new System.Windows.Forms.StatusStrip();
+            this.tbSelectedApplications = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tbTotalApplications = new System.Windows.Forms.ToolStripStatusLabel();
             ((System.ComponentModel.ISupportInitialize)(this.olvJobs)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.m_VistaMenu)).BeginInit();
+            this.statusBar.SuspendLayout();
             this.SuspendLayout();
             // 
             // imlStatus
@@ -256,7 +261,8 @@
             this.mnuView.Index = 1;
             this.mnuView.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.mnuLog,
-            this.mnuShowGroups});
+            this.mnuShowGroups,
+            this.mnuShowStatusBar});
             this.mnuView.Text = "&View";
             // 
             // mnuLog
@@ -271,6 +277,12 @@
             this.mnuShowGroups.Index = 1;
             this.mnuShowGroups.Text = "Show &groups";
             this.mnuShowGroups.Click += new System.EventHandler(this.mnuShowGroups_Click);
+            // 
+            // mnuShowStatusBar
+            // 
+            this.mnuShowStatusBar.Index = 2;
+            this.mnuShowStatusBar.Text = "Show status &bar";
+            this.mnuShowStatusBar.Click += new System.EventHandler(this.mnuShowStatusBar_Click);
             // 
             // mnuHelp
             // 
@@ -348,7 +360,7 @@
             this.olvJobs.Location = new System.Drawing.Point(12, 12);
             this.olvJobs.Name = "olvJobs";
             this.olvJobs.OwnerDraw = true;
-            this.olvJobs.Size = new System.Drawing.Size(658, 242);
+            this.olvJobs.Size = new System.Drawing.Size(658, 252);
             this.olvJobs.SmallImageList = this.imlStatus;
             this.olvJobs.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.olvJobs.TabIndex = 0;
@@ -357,6 +369,7 @@
             this.olvJobs.DoubleClick += new System.EventHandler(this.olvJobs_DoubleClick);
             this.olvJobs.KeyDown += new System.Windows.Forms.KeyEventHandler(this.olvJobs_KeyDown);
             this.olvJobs.SelectedIndexChanged += new System.EventHandler(this.olvJobs_SelectedIndexChanged);
+            this.olvJobs.SelectionChanged += new System.EventHandler(this.olvJobs_SelectionChanged);
             // 
             // colName
             // 
@@ -400,27 +413,27 @@
             // 
             this.m_VistaMenu.ContainerControl = this;
             // 
-            // sbAddApplication
+            // bAddApplication
             // 
-            this.sbAddApplication.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.sbAddApplication.AutoSize = true;
-            this.sbAddApplication.Image = global::Ketarin.Properties.Resources.AddSmall;
-            this.sbAddApplication.Location = new System.Drawing.Point(12, 260);
-            this.sbAddApplication.Name = "sbAddApplication";
-            this.sbAddApplication.Size = new System.Drawing.Size(150, 24);
-            this.sbAddApplication.SplitMenu = this.cmuAdd;
-            this.sbAddApplication.TabIndex = 3;
-            this.sbAddApplication.Text = "&Add new application";
-            this.sbAddApplication.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.sbAddApplication.UseVisualStyleBackColor = true;
-            this.sbAddApplication.Click += new System.EventHandler(this.sbAddApplication_Click);
+            this.bAddApplication.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.bAddApplication.AutoSize = true;
+            this.bAddApplication.Image = global::Ketarin.Properties.Resources.AddSmall;
+            this.bAddApplication.Location = new System.Drawing.Point(12, 270);
+            this.bAddApplication.Name = "bAddApplication";
+            this.bAddApplication.Size = new System.Drawing.Size(150, 24);
+            this.bAddApplication.SplitMenu = this.cmuAdd;
+            this.bAddApplication.TabIndex = 3;
+            this.bAddApplication.Text = "&Add new application";
+            this.bAddApplication.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.bAddApplication.UseVisualStyleBackColor = true;
+            this.bAddApplication.Click += new System.EventHandler(this.sbAddApplication_Click);
             // 
             // bRun
             // 
             this.bRun.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.bRun.AutoSize = true;
             this.bRun.Image = global::Ketarin.Properties.Resources.Restart;
-            this.bRun.Location = new System.Drawing.Point(168, 260);
+            this.bRun.Location = new System.Drawing.Point(168, 270);
             this.bRun.Name = "bRun";
             this.bRun.Size = new System.Drawing.Size(116, 24);
             this.bRun.SplitMenu = this.cmuRun;
@@ -473,14 +486,42 @@
             this.cmnuExit.Text = "E&xit";
             this.cmnuExit.Click += new System.EventHandler(this.cmnuExit_Click);
             // 
+            // statusBar
+            // 
+            this.statusBar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tbSelectedApplications,
+            this.tbTotalApplications});
+            this.statusBar.Location = new System.Drawing.Point(0, 282);
+            this.statusBar.Name = "statusBar";
+            this.statusBar.Size = new System.Drawing.Size(682, 24);
+            this.statusBar.TabIndex = 5;
+            this.statusBar.Text = "statusBar";
+            this.statusBar.Visible = false;
+            // 
+            // tbSelectedApplications
+            // 
+            this.tbSelectedApplications.Name = "tbSelectedApplications";
+            this.tbSelectedApplications.Size = new System.Drawing.Size(130, 19);
+            this.tbSelectedApplications.Text = "Selected applications: 0";
+            // 
+            // tbTotalApplications
+            // 
+            this.tbTotalApplications.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Left;
+            this.tbTotalApplications.Name = "tbTotalApplications";
+            this.tbTotalApplications.Size = new System.Drawing.Size(537, 19);
+            this.tbTotalApplications.Spring = true;
+            this.tbTotalApplications.Text = "Number of applications: 0";
+            this.tbTotalApplications.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
             // MainForm
             // 
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(682, 295);
+            this.ClientSize = new System.Drawing.Size(682, 306);
+            this.Controls.Add(this.statusBar);
             this.Controls.Add(this.bRun);
-            this.Controls.Add(this.sbAddApplication);
+            this.Controls.Add(this.bAddApplication);
             this.Controls.Add(this.olvJobs);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Menu = this.mnuMain;
@@ -490,6 +531,8 @@
             this.Text = "Ketarin";
             ((System.ComponentModel.ISupportInitialize)(this.olvJobs)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.m_VistaMenu)).EndInit();
+            this.statusBar.ResumeLayout(false);
+            this.statusBar.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -521,7 +564,7 @@
         private System.Windows.Forms.MenuItem menuItem7;
         private System.Windows.Forms.MenuItem mnuExportSelected;
         private System.Windows.Forms.MenuItem mnuImport;
-        private wyDay.Controls.SplitButton sbAddApplication;
+        private wyDay.Controls.SplitButton bAddApplication;
         private System.Windows.Forms.ContextMenu cmuAdd;
         private System.Windows.Forms.MenuItem cmnuAdd;
         private System.Windows.Forms.MenuItem cmnuImportFile;
@@ -547,6 +590,10 @@
         private System.Windows.Forms.MenuItem cmnuCheckForUpdate;
         private System.Windows.Forms.MenuItem mnuLog;
         private System.Windows.Forms.MenuItem mnuShowGroups;
+        private System.Windows.Forms.StatusStrip statusBar;
+        private System.Windows.Forms.ToolStripStatusLabel tbSelectedApplications;
+        private System.Windows.Forms.ToolStripStatusLabel tbTotalApplications;
+        private System.Windows.Forms.MenuItem mnuShowStatusBar;
     }
 }
 
