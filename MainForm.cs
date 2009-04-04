@@ -395,9 +395,13 @@ namespace Ketarin
         {
             base.OnLoad(e);
 
-            mnuShowGroups.Checked = Convert.ToBoolean(Settings.GetValue("Ketarin", "ShowGroups", true));
+            mnuShowGroups.Checked = Conversion.ToBoolean(Settings.GetValue("Ketarin", "ShowGroups", true));
             olvJobs.ShowGroups = mnuShowGroups.Checked;
             m_CustomColumn = Settings.GetValue("CustomColumn", "") as string;
+            if (Conversion.ToBoolean(Settings.GetValue("Ketarin", "ShowStatusBar", false)))
+            {
+                mnuShowStatusBar.PerformClick();
+            }
 
             UpdateList();
 
@@ -444,6 +448,7 @@ namespace Ketarin
             base.OnClosing(e);
 
             Settings.SetValue("Ketarin", "ShowGroups", olvJobs.ShowGroups);
+            Settings.SetValue("Ketarin", "ShowStatusBar", statusBar.Visible);
             Settings.SetValue("Ketarin", "ShowLog", mnuLog.Checked);
 
             if (m_Updater.IsBusy)
@@ -486,6 +491,7 @@ namespace Ketarin
             olvJobs.AddObject(job);
             olvJobs.SelectedObject = job;
             olvJobs.EnsureVisible(olvJobs.SelectedIndex);
+            UpdateStatusbar();
         }
 
         private void cmnuImport_Click(object sender, EventArgs e)
@@ -506,6 +512,7 @@ namespace Ketarin
                         newJobs.Add(existing);
                         m_Jobs = newJobs.ToArray();
                         olvJobs.AddObject(existing);
+                        UpdateStatusbar();
                     }
                     olvJobs.SelectedObject = existing;
                     olvJobs.SelectedItem.EnsureVisible();
@@ -638,6 +645,7 @@ namespace Ketarin
             {
                 olvJobs.RemoveObjects(olvJobs.SelectedObjects);
                 m_Jobs = new List<ApplicationJob>(DbManager.GetJobs()).ToArray();
+                UpdateStatusbar();
             }
         }
 
@@ -723,8 +731,14 @@ namespace Ketarin
                 olvJobs.AddObject(job);
                 olvJobs.EnsureVisible(olvJobs.IndexOf(job));
                 olvJobs.SelectedObject = job;
+                UpdateStatusbar();
             }
             catch (Exception) { }
+        }
+
+        private void olvJobs_SelectionChanged(object sender, EventArgs e)
+        {
+            UpdateStatusbar();
         }
 
         private void olvJobs_SelectedIndexChanged(object sender, EventArgs e)
@@ -796,6 +810,28 @@ namespace Ketarin
                 olvJobs.ShowGroups = true;
                 olvJobs.BuildGroups();
                 mnuShowGroups.Checked = true;
+            }
+        }
+
+        private void mnuShowStatusBar_Click(object sender, EventArgs e)
+        {
+            if (mnuShowStatusBar.Checked)
+            {
+                statusBar.Visible = false;
+                mnuShowStatusBar.Checked = false;
+
+                olvJobs.Bounds = new Rectangle(olvJobs.Left, olvJobs.Top, olvJobs.Width, olvJobs.Height + statusBar.Height);
+                bRun.Top = olvJobs.Bottom + 7;
+                bAddApplication.Top = olvJobs.Bottom + 7;
+            }
+            else
+            {
+                statusBar.Visible = true;
+                mnuShowStatusBar.Checked = true;
+
+                olvJobs.Bounds = new Rectangle(olvJobs.Left, olvJobs.Top, olvJobs.Width, olvJobs.Height - statusBar.Height);
+                bRun.Top = olvJobs.Bottom + 7;
+                bAddApplication.Top = olvJobs.Bottom + 7;
             }
         }
 
@@ -884,8 +920,15 @@ namespace Ketarin
                 {
                     m_CustomColumn = Settings.GetValue("CustomColumn", "") as string;
                     olvJobs.RefreshObjects(m_Jobs);
+                    UpdateStatusbar();
                 }
             }
+        }
+
+        private void UpdateStatusbar()
+        {
+            tbTotalApplications.Text = "Number of applications: " + olvJobs.Items.Count;
+            tbSelectedApplications.Text = "Selected applications: " + olvJobs.SelectedIndices.Count;
         }
 
         private void mnuLog_Click(object sender, EventArgs e)
@@ -930,7 +973,6 @@ namespace Ketarin
         }
 
         #endregion
-
 
     }
 }
