@@ -142,7 +142,10 @@ namespace Ketarin
 
                     try
                     {
-                        MakeBackups();
+                        if (!m_DbConn.ConnectionString.Contains("New=True;"))
+                        {
+                            MakeBackups();
+                        }
                     }
                     catch (Exception)
                     {
