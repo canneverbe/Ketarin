@@ -139,6 +139,16 @@ namespace Ketarin
                 {
                     m_DbConn = NewConnection;
                     Settings.Provider = new DbManager.SettingsProvider();
+
+                    try
+                    {
+                        MakeBackups();
+                    }
+                    catch (Exception)
+                    {
+                        // We can ignore these kind of errors
+                        Ketarin.Forms.LogDialog.Log("Creating database backup failed.");
+                    }
                 }
                 return m_DbConn;
             }
@@ -180,20 +190,10 @@ namespace Ketarin
                 {
                     connString += "New=True;";
                 }
-                else
-                {
-                    try
-                    {
-                        MakeBackups();
-                    }
-                    catch (Exception)
-                    {
-                        // We can ignore these kind of errors
-                        Ketarin.Forms.LogDialog.Log("Creating database backup failed.");
-                    }
-                }
+
                 connection = new SQLiteConnection(connString);
                 connection.Open();
+
                 return connection;
             }
         }
@@ -206,7 +206,7 @@ namespace Ketarin
         private static void MakeBackups()
         {
             // Only try to create a backup once per instance
-            if (m_BackupDone) return;
+            if (m_BackupDone || !(bool)Settings.GetValue("CreateDatabaseBackups", true)) return;
             m_BackupDone = true;
 
             DateTime oldestBackup = DateTime.MaxValue;

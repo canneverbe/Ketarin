@@ -58,18 +58,19 @@
             this.tpGeneral = new System.Windows.Forms.TabPage();
             this.chkMinToTray = new System.Windows.Forms.CheckBox();
             this.chkUpdateOnlineDatabase = new System.Windows.Forms.CheckBox();
+            this.sepGlobalVariables = new CDBurnerXP.Controls.Separator();
             this.tpConnection = new System.Windows.Forms.TabPage();
+            this.sepProxy = new CDBurnerXP.Controls.Separator();
             this.tpCommands = new System.Windows.Forms.TabPage();
+            this.txtPreUpdateCommand = new Ketarin.Forms.TextBox();
             this.lblPreUpdateCommand = new System.Windows.Forms.Label();
             this.lblPostUpdateAllCommand = new System.Windows.Forms.Label();
             this.lblPostUpdateCommand = new System.Windows.Forms.Label();
-            this.bExport = new System.Windows.Forms.Button();
-            this.sepGlobalVariables = new CDBurnerXP.Controls.Separator();
-            this.sepProxy = new CDBurnerXP.Controls.Separator();
-            this.txtPreUpdateCommand = new Ketarin.Forms.TextBox();
             this.txtPostUpdateAllCommand = new Ketarin.Forms.TextBox();
             this.txtPostUpdateCommand = new Ketarin.Forms.TextBox();
+            this.bExport = new System.Windows.Forms.Button();
             this.bImport = new System.Windows.Forms.Button();
+            this.chkBackups = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.nConnectionTimeout)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nProxyPort)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nNumThreads)).BeginInit();
@@ -117,7 +118,7 @@
             // 
             this.txtCustomColumn.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtCustomColumn.Location = new System.Drawing.Point(149, 111);
+            this.txtCustomColumn.Location = new System.Drawing.Point(149, 130);
             this.txtCustomColumn.Name = "txtCustomColumn";
             this.txtCustomColumn.Size = new System.Drawing.Size(239, 20);
             this.txtCustomColumn.TabIndex = 5;
@@ -125,7 +126,7 @@
             // lblCustomColumn
             // 
             this.lblCustomColumn.AutoSize = true;
-            this.lblCustomColumn.Location = new System.Drawing.Point(6, 114);
+            this.lblCustomColumn.Location = new System.Drawing.Point(6, 133);
             this.lblCustomColumn.Name = "lblCustomColumn";
             this.lblCustomColumn.Size = new System.Drawing.Size(137, 13);
             this.lblCustomColumn.TabIndex = 4;
@@ -289,7 +290,7 @@
             // 
             this.cboGlobalVariables.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboGlobalVariables.FormattingEnabled = true;
-            this.cboGlobalVariables.Location = new System.Drawing.Point(54, 172);
+            this.cboGlobalVariables.Location = new System.Drawing.Point(54, 187);
             this.cboGlobalVariables.Name = "cboGlobalVariables";
             this.cboGlobalVariables.Size = new System.Drawing.Size(106, 21);
             this.cboGlobalVariables.Sorted = true;
@@ -300,7 +301,7 @@
             // 
             this.txtGlobalVariableValue.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtGlobalVariableValue.Location = new System.Drawing.Point(215, 172);
+            this.txtGlobalVariableValue.Location = new System.Drawing.Point(215, 187);
             this.txtGlobalVariableValue.Name = "txtGlobalVariableValue";
             this.txtGlobalVariableValue.Size = new System.Drawing.Size(173, 20);
             this.txtGlobalVariableValue.TabIndex = 10;
@@ -309,7 +310,7 @@
             // lblVarName
             // 
             this.lblVarName.AutoSize = true;
-            this.lblVarName.Location = new System.Drawing.Point(10, 175);
+            this.lblVarName.Location = new System.Drawing.Point(10, 190);
             this.lblVarName.Name = "lblVarName";
             this.lblVarName.Size = new System.Drawing.Size(38, 13);
             this.lblVarName.TabIndex = 7;
@@ -318,7 +319,7 @@
             // lblvalue
             // 
             this.lblvalue.AutoSize = true;
-            this.lblvalue.Location = new System.Drawing.Point(172, 175);
+            this.lblvalue.Location = new System.Drawing.Point(172, 190);
             this.lblvalue.Name = "lblvalue";
             this.lblvalue.Size = new System.Drawing.Size(37, 13);
             this.lblvalue.TabIndex = 9;
@@ -327,7 +328,7 @@
             // bAdd
             // 
             this.bAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.bAdd.Location = new System.Drawing.Point(232, 198);
+            this.bAdd.Location = new System.Drawing.Point(232, 213);
             this.bAdd.Name = "bAdd";
             this.bAdd.Size = new System.Drawing.Size(75, 23);
             this.bAdd.TabIndex = 11;
@@ -339,7 +340,7 @@
             // 
             this.bRemove.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.bRemove.Enabled = false;
-            this.bRemove.Location = new System.Drawing.Point(313, 198);
+            this.bRemove.Location = new System.Drawing.Point(313, 213);
             this.bRemove.Name = "bRemove";
             this.bRemove.Size = new System.Drawing.Size(75, 23);
             this.bRemove.TabIndex = 12;
@@ -396,6 +397,7 @@
             // 
             // tpGeneral
             // 
+            this.tpGeneral.Controls.Add(this.chkBackups);
             this.tpGeneral.Controls.Add(this.chkMinToTray);
             this.tpGeneral.Controls.Add(this.chkUpdateOnlineDatabase);
             this.tpGeneral.Controls.Add(this.bRemove);
@@ -437,6 +439,18 @@
             this.chkUpdateOnlineDatabase.Text = "&Check for updates in the online database";
             this.chkUpdateOnlineDatabase.UseVisualStyleBackColor = true;
             // 
+            // sepGlobalVariables
+            // 
+            this.sepGlobalVariables.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.sepGlobalVariables.ForeColor = System.Drawing.SystemColors.ActiveCaption;
+            this.sepGlobalVariables.Location = new System.Drawing.Point(3, 159);
+            this.sepGlobalVariables.Name = "sepGlobalVariables";
+            this.sepGlobalVariables.Size = new System.Drawing.Size(385, 23);
+            this.sepGlobalVariables.TabIndex = 6;
+            this.sepGlobalVariables.Text = "Global variables";
+            this.sepGlobalVariables.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
             // tpConnection
             // 
             this.tpConnection.Controls.Add(this.nConnectionTimeout);
@@ -462,6 +476,18 @@
             this.tpConnection.Text = "Connection";
             this.tpConnection.UseVisualStyleBackColor = true;
             // 
+            // sepProxy
+            // 
+            this.sepProxy.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.sepProxy.ForeColor = System.Drawing.SystemColors.ActiveCaption;
+            this.sepProxy.Location = new System.Drawing.Point(3, 93);
+            this.sepProxy.Name = "sepProxy";
+            this.sepProxy.Size = new System.Drawing.Size(375, 23);
+            this.sepProxy.TabIndex = 7;
+            this.sepProxy.Text = "HTTP proxy settings";
+            this.sepProxy.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
             // tpCommands
             // 
             this.tpCommands.Controls.Add(this.txtPreUpdateCommand);
@@ -477,6 +503,19 @@
             this.tpCommands.TabIndex = 2;
             this.tpCommands.Text = "Commands";
             this.tpCommands.UseVisualStyleBackColor = true;
+            // 
+            // txtPreUpdateCommand
+            // 
+            this.txtPreUpdateCommand.AcceptsReturn = true;
+            this.txtPreUpdateCommand.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtPreUpdateCommand.Location = new System.Drawing.Point(6, 25);
+            this.txtPreUpdateCommand.Multiline = true;
+            this.txtPreUpdateCommand.Name = "txtPreUpdateCommand";
+            this.txtPreUpdateCommand.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.txtPreUpdateCommand.Size = new System.Drawing.Size(382, 50);
+            this.txtPreUpdateCommand.TabIndex = 1;
+            this.txtPreUpdateCommand.WordWrap = false;
             // 
             // lblPreUpdateCommand
             // 
@@ -505,53 +544,6 @@
             this.lblPostUpdateCommand.TabIndex = 2;
             this.lblPostUpdateCommand.Text = "&Default command to execute after updating an application:";
             // 
-            // bExport
-            // 
-            this.bExport.Location = new System.Drawing.Point(12, 295);
-            this.bExport.Name = "bExport";
-            this.bExport.Size = new System.Drawing.Size(75, 23);
-            this.bExport.TabIndex = 1;
-            this.bExport.Text = "Export...";
-            this.bExport.UseVisualStyleBackColor = true;
-            this.bExport.Click += new System.EventHandler(this.bExport_Click);
-            // 
-            // sepGlobalVariables
-            // 
-            this.sepGlobalVariables.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.sepGlobalVariables.ForeColor = System.Drawing.SystemColors.ActiveCaption;
-            this.sepGlobalVariables.Location = new System.Drawing.Point(3, 144);
-            this.sepGlobalVariables.Name = "sepGlobalVariables";
-            this.sepGlobalVariables.Size = new System.Drawing.Size(385, 23);
-            this.sepGlobalVariables.TabIndex = 6;
-            this.sepGlobalVariables.Text = "Global variables";
-            this.sepGlobalVariables.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // sepProxy
-            // 
-            this.sepProxy.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.sepProxy.ForeColor = System.Drawing.SystemColors.ActiveCaption;
-            this.sepProxy.Location = new System.Drawing.Point(3, 93);
-            this.sepProxy.Name = "sepProxy";
-            this.sepProxy.Size = new System.Drawing.Size(375, 23);
-            this.sepProxy.TabIndex = 7;
-            this.sepProxy.Text = "HTTP proxy settings";
-            this.sepProxy.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // txtPreUpdateCommand
-            // 
-            this.txtPreUpdateCommand.AcceptsReturn = true;
-            this.txtPreUpdateCommand.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtPreUpdateCommand.Location = new System.Drawing.Point(6, 25);
-            this.txtPreUpdateCommand.Multiline = true;
-            this.txtPreUpdateCommand.Name = "txtPreUpdateCommand";
-            this.txtPreUpdateCommand.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtPreUpdateCommand.Size = new System.Drawing.Size(382, 50);
-            this.txtPreUpdateCommand.TabIndex = 1;
-            this.txtPreUpdateCommand.WordWrap = false;
-            // 
             // txtPostUpdateAllCommand
             // 
             this.txtPostUpdateAllCommand.AcceptsReturn = true;
@@ -578,6 +570,16 @@
             this.txtPostUpdateCommand.TabIndex = 3;
             this.txtPostUpdateCommand.WordWrap = false;
             // 
+            // bExport
+            // 
+            this.bExport.Location = new System.Drawing.Point(12, 295);
+            this.bExport.Name = "bExport";
+            this.bExport.Size = new System.Drawing.Size(75, 23);
+            this.bExport.TabIndex = 1;
+            this.bExport.Text = "Export...";
+            this.bExport.UseVisualStyleBackColor = true;
+            this.bExport.Click += new System.EventHandler(this.bExport_Click);
+            // 
             // bImport
             // 
             this.bImport.Location = new System.Drawing.Point(93, 295);
@@ -587,6 +589,16 @@
             this.bImport.Text = "Import...";
             this.bImport.UseVisualStyleBackColor = true;
             this.bImport.Click += new System.EventHandler(this.bImport_Click);
+            // 
+            // chkBackups
+            // 
+            this.chkBackups.AutoSize = true;
+            this.chkBackups.Location = new System.Drawing.Point(6, 103);
+            this.chkBackups.Name = "chkBackups";
+            this.chkBackups.Size = new System.Drawing.Size(212, 17);
+            this.chkBackups.TabIndex = 13;
+            this.chkBackups.Text = "Automatically create database &backups";
+            this.chkBackups.UseVisualStyleBackColor = true;
             // 
             // SettingsDialog
             // 
@@ -665,5 +677,6 @@
         private System.Windows.Forms.Label lblPreUpdateCommand;
         private System.Windows.Forms.Button bExport;
         private System.Windows.Forms.Button bImport;
+        private System.Windows.Forms.CheckBox chkBackups;
     }
 }

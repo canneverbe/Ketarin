@@ -68,6 +68,7 @@ namespace Ketarin.Forms
             txtPreUpdateCommand.Text = Settings.GetValue("PreUpdateCommand", "") as string;
 
             chkUpdateAtStartup.Checked = (bool)Settings.GetValue("UpdateAtStartup", false);
+            chkBackups.Checked = (bool)Settings.GetValue("CreateDatabaseBackups", true);
             txtCustomColumn.Text = Settings.GetValue("CustomColumn", "") as string;
             chkAvoidBeta.Checked = (bool)Settings.GetValue("AvoidFileHippoBeta", false);
             chkUpdateOnlineDatabase.Checked = (bool)Settings.GetValue("UpdateOnlineDatabase", true);
@@ -98,6 +99,7 @@ namespace Ketarin.Forms
             Settings.SetValue("RetryCount", Convert.ToInt32(nNumRetries.Value));
             Settings.SetValue("UpdateOnlineDatabase", chkUpdateOnlineDatabase.Checked);
             Settings.SetValue("MinimizeToTray", chkMinToTray.Checked);
+            Settings.SetValue("CreateDatabaseBackups", chkBackups.Checked);
 
             Settings.SetValue("ProxyPort", nProxyPort.Value);
             Settings.SetValue("ProxyServer", txtProxyServer.Text);
