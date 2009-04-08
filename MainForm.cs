@@ -759,10 +759,30 @@ namespace Ketarin
 
         private void olvJobs_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyData == Keys.Enter)
+            switch (e.KeyData)
             {
-                ApplicationJob job = olvJobs.SelectedObject as ApplicationJob;
-                EditJob(job);
+                case Keys.Enter:
+                    ApplicationJob job = olvJobs.SelectedObject as ApplicationJob;
+                    EditJob(job);
+                    break;
+
+                case Keys.Control | Keys.D:
+                    foreach (ApplicationJob selectedJob in olvJobs.SelectedObjects)
+                    {
+                        selectedJob.Enabled = false;
+                        selectedJob.Save();
+                        olvJobs.RefreshObject(selectedJob);
+                    }
+                    break;
+
+                case Keys.Control | Keys.E:
+                    foreach (ApplicationJob selectedJob in olvJobs.SelectedObjects)
+                    {
+                        selectedJob.Enabled = true;
+                        selectedJob.Save();
+                        olvJobs.RefreshObject(selectedJob);
+                    }
+                    break;
             }
         }
 
