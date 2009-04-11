@@ -613,6 +613,23 @@ namespace Ketarin
             }
         }
 
+        private void mnuInvert_Click(object sender, EventArgs e)
+        {
+            int[] selectedIndices = new int[olvJobs.SelectedIndices.Count];
+            olvJobs.SelectedIndices.CopyTo(selectedIndices, 0);
+            List<int> listSelectedIndices = new List<int>(selectedIndices);
+
+            olvJobs.DeselectAll();
+
+            for (int i = 0; i < olvJobs.Items.Count; i++)
+            {
+                if (!listSelectedIndices.Contains(i))
+                {
+                    olvJobs.SelectedIndices.Add(i);
+                }
+            }
+        }
+
         private void cmuUpdate_Click(object sender, EventArgs e)
         {
             if (m_Updater.IsBusy) return;

@@ -43,6 +43,7 @@
             this.cmnuCopy = new System.Windows.Forms.MenuItem();
             this.cmnuPaste = new System.Windows.Forms.MenuItem();
             this.mnuSelectAll = new System.Windows.Forms.MenuItem();
+            this.mnuInvert = new System.Windows.Forms.MenuItem();
             this.mnuMain = new System.Windows.Forms.MainMenu(this.components);
             this.mnuFile = new System.Windows.Forms.MenuItem();
             this.mnuNew = new System.Windows.Forms.MenuItem();
@@ -108,7 +109,8 @@
             this.cmnuDelete,
             this.cmnuCopy,
             this.cmnuPaste,
-            this.mnuSelectAll});
+            this.mnuSelectAll,
+            this.mnuInvert});
             this.cmnuJobs.Popup += new System.EventHandler(this.cmnuJobs_Popup);
             // 
             // cmnuUpdate
@@ -187,6 +189,13 @@
             this.mnuSelectAll.Shortcut = System.Windows.Forms.Shortcut.CtrlA;
             this.mnuSelectAll.Text = "Select &all";
             this.mnuSelectAll.Click += new System.EventHandler(this.mnuSelectAll_Click);
+            // 
+            // mnuInvert
+            // 
+            this.mnuInvert.Index = 11;
+            this.mnuInvert.Shortcut = System.Windows.Forms.Shortcut.CtrlI;
+            this.mnuInvert.Text = "In&vert selection";
+            this.mnuInvert.Click += new System.EventHandler(this.mnuInvert_Click);
             // 
             // mnuMain
             // 
@@ -594,6 +603,7 @@
         private System.Windows.Forms.ToolStripStatusLabel tbSelectedApplications;
         private System.Windows.Forms.ToolStripStatusLabel tbTotalApplications;
         private System.Windows.Forms.MenuItem mnuShowStatusBar;
+        private System.Windows.Forms.MenuItem mnuInvert;
     }
 }
 
