@@ -465,6 +465,7 @@ namespace Ketarin
         {
             m_Jobs = new List<ApplicationJob>(DbManager.GetJobs()).ToArray();
             olvJobs.SetObjects(m_Jobs);
+            UpdateStatusbar();
         }
 
         #region Add button
