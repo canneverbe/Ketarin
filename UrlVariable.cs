@@ -574,6 +574,15 @@ namespace Ketarin
                     {
                         return content;
                     }
+                case "filename":
+                    try
+                    {
+                        return Path.GetFileName(content);
+                    }
+                    catch
+                    {
+                        return content;
+                    }
                 case "toupper":
                     return content.ToUpper();
                 case "tolower":
