@@ -430,6 +430,10 @@ namespace Ketarin
                 case (Keys.Control | Keys.Enter):
                     cmnuOpenFolder.PerformClick();
                     return true;
+
+                case (Keys.Control | Keys.Enter | Keys.Shift):
+                    cmnuOpenFile.PerformClick();
+                    return true;
             }
 
             foreach (MenuItem item in cmnuJobs.MenuItems)
@@ -606,11 +610,19 @@ namespace Ketarin
             try
             {
                 ApplicationJob job = olvJobs.SelectedObject as ApplicationJob;
-                System.Diagnostics.Process.Start("explorer", " /select," + job.PreviousLocation);
+                OpenDownloadFolder(job);
             }
             catch (Exception)
             {
                 // ignore if fails for whatever reason
+            }
+        }
+
+        private static void OpenDownloadFolder(ApplicationJob job)
+        {
+            if (job != null)
+            {
+                System.Diagnostics.Process.Start("explorer", " /select," + job.PreviousLocation);
             }
         }
 
@@ -772,7 +784,14 @@ namespace Ketarin
         {
             ApplicationJob job = olvJobs.SelectedObject as ApplicationJob;
 
-            EditJob(job);
+            if (Control.ModifierKeys == Keys.Shift)
+            {
+                OpenDownloadFolder(job);
+            }
+            else
+            {
+                EditJob(job);
+            }
         }
 
         private void olvJobs_KeyDown(object sender, KeyEventArgs e)
