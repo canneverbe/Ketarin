@@ -1130,8 +1130,11 @@ namespace Ketarin
                 {
                     fileName = disposition.Substring(pos + token.Length);
                     fileName = fileName.Replace("\"", "");
+                    int endPos = fileName.IndexOf(';');
+                    fileName = fileName.Substring(0, endPos);
+
                     // Make sure that no relative paths are being injected (security issue)
-                    fileName = Path.GetFileName(fileName.TrimEnd(';'));
+                    fileName = Path.GetFileName(fileName);
 
                     fileName = PathEx.ReplaceInvalidFileNameChars(fileName);
                 }
