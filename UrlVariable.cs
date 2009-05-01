@@ -632,6 +632,9 @@ namespace Ketarin
                         return content.Replace(parts[1], parts[2]);
                     }
                     break;
+
+                case "formatfilesize":
+                    return CDBurnerXP.IO.FormatFileSize.Format(Conversion.ToInt(content));
             }
 
             return content;

@@ -20,11 +20,27 @@ namespace Ketarin.Forms
         /// <summary>
         /// Returns the name of the custom column variable, without { and }.
         /// </summary>
-        public static string CustomColumnVariableName
+        public static string CustomColumnVariableName1
         {
             get
             {
                 string var = Settings.GetValue("CustomColumn") as string;
+                if (!string.IsNullOrEmpty(var))
+                {
+                    return var.Trim('{', '}');
+                }
+                return string.Empty;
+            }
+        }
+
+        /// <summary>
+        /// Returns the name of the second custom column variable, without { and }.
+        /// </summary>
+        public static string CustomColumnVariableName2
+        {
+            get
+            {
+                string var = Settings.GetValue("CustomColumn2") as string;
                 if (!string.IsNullOrEmpty(var))
                 {
                     return var.Trim('{', '}');
@@ -70,6 +86,7 @@ namespace Ketarin.Forms
             chkUpdateAtStartup.Checked = (bool)Settings.GetValue("UpdateAtStartup", false);
             chkBackups.Checked = (bool)Settings.GetValue("CreateDatabaseBackups", true);
             txtCustomColumn.Text = Settings.GetValue("CustomColumn", "") as string;
+            txtCustomColumn2.Text = Settings.GetValue("CustomColumn2", "") as string;
             chkAvoidBeta.Checked = (bool)Settings.GetValue("AvoidFileHippoBeta", false);
             chkUpdateOnlineDatabase.Checked = (bool)Settings.GetValue("UpdateOnlineDatabase", true);
             nConnectionTimeout.Value = Convert.ToDecimal(Settings.GetValue("ConnectionTimeout", 10.0));
@@ -93,6 +110,7 @@ namespace Ketarin.Forms
 
             Settings.SetValue("UpdateAtStartup", chkUpdateAtStartup.Checked);
             Settings.SetValue("CustomColumn", txtCustomColumn.Text);
+            Settings.SetValue("CustomColumn2", txtCustomColumn2.Text);
             Settings.SetValue("AvoidFileHippoBeta", chkAvoidBeta.Checked);
             Settings.SetValue("ConnectionTimeout", nConnectionTimeout.Value);
             Settings.SetValue("ThreadCount", Convert.ToInt32(nNumThreads.Value));

@@ -40,7 +40,8 @@ namespace Ketarin
         private ApplicationJob[] m_Jobs = null;
         private Updater m_Updater = new Updater();
         // For caching purposes
-        private string m_CustomColumn = string.Empty;
+        private string m_CustomColumn1 = string.Empty;
+        private string m_CustomColumn2 = string.Empty;
         private FormWindowState m_PreviousState = FormWindowState.Normal;
 
         #region ProgressRenderer
@@ -223,10 +224,19 @@ namespace Ketarin
             colProgress.Renderer = new ProgressRenderer(m_Updater, 0, 100);
             colCustomValue.AspectGetter = delegate(object x)
             {
-                if (string.IsNullOrEmpty(m_CustomColumn)) return null;
+                if (string.IsNullOrEmpty(m_CustomColumn1)) return null;
 
-                m_CustomColumn = SettingsDialog.CustomColumnVariableName;
-                string varFind = "{" + m_CustomColumn + "}";
+                m_CustomColumn1 = SettingsDialog.CustomColumnVariableName1;
+                string varFind = "{" + m_CustomColumn1 + "}";
+                string value = ((ApplicationJob)x).Variables.ReplaceAllInString(varFind, DateTime.MinValue, null, true);
+                return (varFind == value) ? string.Empty : value;
+            };
+            colCustomValue2.AspectGetter = delegate(object x)
+            {
+                if (string.IsNullOrEmpty(m_CustomColumn2)) return null;
+
+                m_CustomColumn2 = SettingsDialog.CustomColumnVariableName2;
+                string varFind = "{" + m_CustomColumn2 + "}";
                 string value = ((ApplicationJob)x).Variables.ReplaceAllInString(varFind, DateTime.MinValue, null, true);
                 return (varFind == value) ? string.Empty : value;
             };
@@ -397,7 +407,8 @@ namespace Ketarin
 
             mnuShowGroups.Checked = Conversion.ToBoolean(Settings.GetValue("Ketarin", "ShowGroups", true));
             olvJobs.ShowGroups = mnuShowGroups.Checked;
-            m_CustomColumn = Settings.GetValue("CustomColumn", "") as string;
+            m_CustomColumn1 = SettingsDialog.CustomColumnVariableName1;
+            m_CustomColumn2 = SettingsDialog.CustomColumnVariableName2;
             if (Conversion.ToBoolean(Settings.GetValue("Ketarin", "ShowStatusBar", false)))
             {
                 mnuShowStatusBar.PerformClick();
@@ -975,7 +986,8 @@ namespace Ketarin
             {
                 if (dialog.ShowDialog(this) == DialogResult.OK)
                 {
-                    m_CustomColumn = Settings.GetValue("CustomColumn", "") as string;
+                    m_CustomColumn1 = SettingsDialog.CustomColumnVariableName1;
+                    m_CustomColumn2 = SettingsDialog.CustomColumnVariableName2;
                     olvJobs.RefreshObjects(m_Jobs);
                     UpdateStatusbar();
                 }

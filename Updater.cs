@@ -405,10 +405,16 @@ namespace Ketarin
 
                         // If there is a custom column variable, and it has not been been downloaded yet,
                         // make sure that we fetch it now "unnecessarily" so that the column contains a current value.
-                        string customColumn = SettingsDialog.CustomColumnVariableName;
-                        if (!string.IsNullOrEmpty(customColumn) && !job.Variables.HasVariableBeenDownloaded(customColumn))
+                        string customColumn1 = SettingsDialog.CustomColumnVariableName1;
+                        string customColumn2 = SettingsDialog.CustomColumnVariableName2;
+                        if (!string.IsNullOrEmpty(customColumn1) && !job.Variables.HasVariableBeenDownloaded(customColumn1))
                         {
-                            job.Variables.ReplaceAllInString("{" + customColumn + "}");
+                            job.Variables.ReplaceAllInString("{" + customColumn1 + "}");
+                            job.Save(); // cached variable content
+                        }
+                        if (!string.IsNullOrEmpty(customColumn2) && !job.Variables.HasVariableBeenDownloaded(customColumn2))
+                        {
+                            job.Variables.ReplaceAllInString("{" + customColumn2 + "}");
                             job.Save(); // cached variable content
                         }
 

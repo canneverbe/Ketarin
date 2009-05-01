@@ -237,13 +237,21 @@ namespace Ketarin
             {
                 if (value == null) return value;
 
-                // Try to provide file date if missing
-                if (fileDate == DateTime.MinValue && m_Parent != null && !string.IsNullOrEmpty(m_Parent.PreviousLocation))
+                if (m_Parent != null && !string.IsNullOrEmpty(m_Parent.PreviousLocation))
                 {
                     try
                     {
                         FileInfo info = new FileInfo(m_Parent.PreviousLocation);
-                        fileDate = info.LastWriteTime;
+                        // Try to provide file date if missing
+                        if (fileDate == DateTime.MinValue)
+                        {
+                            fileDate = info.LastWriteTime;
+                        }
+                        // Provide file size
+                        if (info.Exists)
+                        {
+                            value = UrlVariable.Replace(value, "filesize", info.Length.ToString());
+                        }
                     }
                     catch (Exception)
                     {
