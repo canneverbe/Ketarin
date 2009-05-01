@@ -72,6 +72,7 @@
             this.colTarget = new CDBurnerXP.Controls.OLVColumn();
             this.colCategory = new CDBurnerXP.Controls.OLVColumn();
             this.colCustomValue = new CDBurnerXP.Controls.OLVColumn();
+            this.colCustomValue2 = new CDBurnerXP.Controls.OLVColumn();
             this.m_VistaMenu = new CDBurnerXP.Controls.VistaMenu(this.components);
             this.bAddApplication = new wyDay.Controls.SplitButton();
             this.bRun = new wyDay.Controls.SplitButton();
@@ -346,6 +347,7 @@
             this.olvJobs.AllColumns.Add(this.colTarget);
             this.olvJobs.AllColumns.Add(this.colCategory);
             this.olvJobs.AllColumns.Add(this.colCustomValue);
+            this.olvJobs.AllColumns.Add(this.colCustomValue2);
             this.olvJobs.AllowColumnReorder = true;
             this.olvJobs.AlternateRowBackColor = System.Drawing.Color.Empty;
             this.olvJobs.AlwaysGroupByColumn = null;
@@ -417,6 +419,12 @@
             this.colCustomValue.AspectName = null;
             this.colCustomValue.IsVisible = false;
             this.colCustomValue.Text = "Custom Value";
+            // 
+            // colCustomValue2
+            // 
+            this.colCustomValue2.AspectName = null;
+            this.colCustomValue2.IsVisible = false;
+            this.colCustomValue2.Text = "Custom Value 2";
             // 
             // m_VistaMenu
             // 
@@ -604,6 +612,7 @@
         private System.Windows.Forms.ToolStripStatusLabel tbTotalApplications;
         private System.Windows.Forms.MenuItem mnuShowStatusBar;
         private System.Windows.Forms.MenuItem mnuInvert;
+        private CDBurnerXP.Controls.OLVColumn colCustomValue2;
     }
 }
 

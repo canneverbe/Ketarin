@@ -56,6 +56,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.tcSettings = new System.Windows.Forms.TabControl();
             this.tpGeneral = new System.Windows.Forms.TabPage();
+            this.chkBackups = new System.Windows.Forms.CheckBox();
             this.chkMinToTray = new System.Windows.Forms.CheckBox();
             this.chkUpdateOnlineDatabase = new System.Windows.Forms.CheckBox();
             this.sepGlobalVariables = new CDBurnerXP.Controls.Separator();
@@ -70,7 +71,8 @@
             this.txtPostUpdateCommand = new Ketarin.Forms.TextBox();
             this.bExport = new System.Windows.Forms.Button();
             this.bImport = new System.Windows.Forms.Button();
-            this.chkBackups = new System.Windows.Forms.CheckBox();
+            this.txtCustomColumn2 = new System.Windows.Forms.TextBox();
+            this.lblCustomColumn2 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.nConnectionTimeout)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nProxyPort)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nNumThreads)).BeginInit();
@@ -85,7 +87,7 @@
             // 
             this.bCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.bCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.bCancel.Location = new System.Drawing.Point(339, 295);
+            this.bCancel.Location = new System.Drawing.Point(339, 321);
             this.bCancel.Name = "bCancel";
             this.bCancel.Size = new System.Drawing.Size(75, 23);
             this.bCancel.TabIndex = 4;
@@ -96,7 +98,7 @@
             // 
             this.bOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.bOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.bOK.Location = new System.Drawing.Point(258, 295);
+            this.bOK.Location = new System.Drawing.Point(258, 321);
             this.bOK.Name = "bOK";
             this.bOK.Size = new System.Drawing.Size(75, 23);
             this.bOK.TabIndex = 3;
@@ -118,10 +120,10 @@
             // 
             this.txtCustomColumn.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtCustomColumn.Location = new System.Drawing.Point(149, 130);
+            this.txtCustomColumn.Location = new System.Drawing.Point(158, 130);
             this.txtCustomColumn.Name = "txtCustomColumn";
-            this.txtCustomColumn.Size = new System.Drawing.Size(239, 20);
-            this.txtCustomColumn.TabIndex = 5;
+            this.txtCustomColumn.Size = new System.Drawing.Size(230, 20);
+            this.txtCustomColumn.TabIndex = 6;
             // 
             // lblCustomColumn
             // 
@@ -129,7 +131,7 @@
             this.lblCustomColumn.Location = new System.Drawing.Point(6, 133);
             this.lblCustomColumn.Name = "lblCustomColumn";
             this.lblCustomColumn.Size = new System.Drawing.Size(137, 13);
-            this.lblCustomColumn.TabIndex = 4;
+            this.lblCustomColumn.TabIndex = 5;
             this.lblCustomColumn.Text = "&Variable for custom column:";
             // 
             // chkAvoidBeta
@@ -290,48 +292,48 @@
             // 
             this.cboGlobalVariables.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboGlobalVariables.FormattingEnabled = true;
-            this.cboGlobalVariables.Location = new System.Drawing.Point(54, 187);
+            this.cboGlobalVariables.Location = new System.Drawing.Point(54, 210);
             this.cboGlobalVariables.Name = "cboGlobalVariables";
             this.cboGlobalVariables.Size = new System.Drawing.Size(106, 21);
             this.cboGlobalVariables.Sorted = true;
-            this.cboGlobalVariables.TabIndex = 8;
+            this.cboGlobalVariables.TabIndex = 11;
             this.cboGlobalVariables.SelectedIndexChanged += new System.EventHandler(this.cboGlobalVariables_SelectedIndexChanged);
             // 
             // txtGlobalVariableValue
             // 
             this.txtGlobalVariableValue.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtGlobalVariableValue.Location = new System.Drawing.Point(215, 187);
+            this.txtGlobalVariableValue.Location = new System.Drawing.Point(215, 210);
             this.txtGlobalVariableValue.Name = "txtGlobalVariableValue";
             this.txtGlobalVariableValue.Size = new System.Drawing.Size(173, 20);
-            this.txtGlobalVariableValue.TabIndex = 10;
+            this.txtGlobalVariableValue.TabIndex = 13;
             this.txtGlobalVariableValue.TextChanged += new System.EventHandler(this.txtGlobalVariableValue_TextChanged);
             // 
             // lblVarName
             // 
             this.lblVarName.AutoSize = true;
-            this.lblVarName.Location = new System.Drawing.Point(10, 190);
+            this.lblVarName.Location = new System.Drawing.Point(10, 213);
             this.lblVarName.Name = "lblVarName";
             this.lblVarName.Size = new System.Drawing.Size(38, 13);
-            this.lblVarName.TabIndex = 7;
+            this.lblVarName.TabIndex = 10;
             this.lblVarName.Text = "&Name:";
             // 
             // lblvalue
             // 
             this.lblvalue.AutoSize = true;
-            this.lblvalue.Location = new System.Drawing.Point(172, 190);
+            this.lblvalue.Location = new System.Drawing.Point(172, 213);
             this.lblvalue.Name = "lblvalue";
             this.lblvalue.Size = new System.Drawing.Size(37, 13);
-            this.lblvalue.TabIndex = 9;
+            this.lblvalue.TabIndex = 12;
             this.lblvalue.Text = "&Value:";
             // 
             // bAdd
             // 
             this.bAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.bAdd.Location = new System.Drawing.Point(232, 213);
+            this.bAdd.Location = new System.Drawing.Point(232, 236);
             this.bAdd.Name = "bAdd";
             this.bAdd.Size = new System.Drawing.Size(75, 23);
-            this.bAdd.TabIndex = 11;
+            this.bAdd.TabIndex = 14;
             this.bAdd.Text = "&Add";
             this.bAdd.UseVisualStyleBackColor = true;
             this.bAdd.Click += new System.EventHandler(this.bAdd_Click);
@@ -340,10 +342,10 @@
             // 
             this.bRemove.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.bRemove.Enabled = false;
-            this.bRemove.Location = new System.Drawing.Point(313, 213);
+            this.bRemove.Location = new System.Drawing.Point(313, 236);
             this.bRemove.Name = "bRemove";
             this.bRemove.Size = new System.Drawing.Size(75, 23);
-            this.bRemove.TabIndex = 12;
+            this.bRemove.TabIndex = 15;
             this.bRemove.Text = "&Remove";
             this.bRemove.UseVisualStyleBackColor = true;
             this.bRemove.Click += new System.EventHandler(this.bRemove_Click);
@@ -392,11 +394,13 @@
             this.tcSettings.Location = new System.Drawing.Point(12, 12);
             this.tcSettings.Name = "tcSettings";
             this.tcSettings.SelectedIndex = 0;
-            this.tcSettings.Size = new System.Drawing.Size(402, 268);
+            this.tcSettings.Size = new System.Drawing.Size(402, 294);
             this.tcSettings.TabIndex = 0;
             // 
             // tpGeneral
             // 
+            this.tpGeneral.Controls.Add(this.lblCustomColumn2);
+            this.tpGeneral.Controls.Add(this.txtCustomColumn2);
             this.tpGeneral.Controls.Add(this.chkBackups);
             this.tpGeneral.Controls.Add(this.chkMinToTray);
             this.tpGeneral.Controls.Add(this.chkUpdateOnlineDatabase);
@@ -414,10 +418,20 @@
             this.tpGeneral.Location = new System.Drawing.Point(4, 22);
             this.tpGeneral.Name = "tpGeneral";
             this.tpGeneral.Padding = new System.Windows.Forms.Padding(3);
-            this.tpGeneral.Size = new System.Drawing.Size(394, 242);
+            this.tpGeneral.Size = new System.Drawing.Size(394, 268);
             this.tpGeneral.TabIndex = 0;
             this.tpGeneral.Text = "General";
             this.tpGeneral.UseVisualStyleBackColor = true;
+            // 
+            // chkBackups
+            // 
+            this.chkBackups.AutoSize = true;
+            this.chkBackups.Location = new System.Drawing.Point(6, 103);
+            this.chkBackups.Name = "chkBackups";
+            this.chkBackups.Size = new System.Drawing.Size(212, 17);
+            this.chkBackups.TabIndex = 4;
+            this.chkBackups.Text = "Automatically create database &backups";
+            this.chkBackups.UseVisualStyleBackColor = true;
             // 
             // chkMinToTray
             // 
@@ -444,10 +458,10 @@
             this.sepGlobalVariables.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.sepGlobalVariables.ForeColor = System.Drawing.SystemColors.ActiveCaption;
-            this.sepGlobalVariables.Location = new System.Drawing.Point(3, 159);
+            this.sepGlobalVariables.Location = new System.Drawing.Point(3, 182);
             this.sepGlobalVariables.Name = "sepGlobalVariables";
             this.sepGlobalVariables.Size = new System.Drawing.Size(385, 23);
-            this.sepGlobalVariables.TabIndex = 6;
+            this.sepGlobalVariables.TabIndex = 9;
             this.sepGlobalVariables.Text = "Global variables";
             this.sepGlobalVariables.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -572,7 +586,8 @@
             // 
             // bExport
             // 
-            this.bExport.Location = new System.Drawing.Point(12, 295);
+            this.bExport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.bExport.Location = new System.Drawing.Point(12, 321);
             this.bExport.Name = "bExport";
             this.bExport.Size = new System.Drawing.Size(75, 23);
             this.bExport.TabIndex = 1;
@@ -582,7 +597,8 @@
             // 
             // bImport
             // 
-            this.bImport.Location = new System.Drawing.Point(93, 295);
+            this.bImport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.bImport.Location = new System.Drawing.Point(93, 321);
             this.bImport.Name = "bImport";
             this.bImport.Size = new System.Drawing.Size(75, 23);
             this.bImport.TabIndex = 2;
@@ -590,21 +606,29 @@
             this.bImport.UseVisualStyleBackColor = true;
             this.bImport.Click += new System.EventHandler(this.bImport_Click);
             // 
-            // chkBackups
+            // txtCustomColumn2
             // 
-            this.chkBackups.AutoSize = true;
-            this.chkBackups.Location = new System.Drawing.Point(6, 103);
-            this.chkBackups.Name = "chkBackups";
-            this.chkBackups.Size = new System.Drawing.Size(212, 17);
-            this.chkBackups.TabIndex = 13;
-            this.chkBackups.Text = "Automatically create database &backups";
-            this.chkBackups.UseVisualStyleBackColor = true;
+            this.txtCustomColumn2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtCustomColumn2.Location = new System.Drawing.Point(158, 156);
+            this.txtCustomColumn2.Name = "txtCustomColumn2";
+            this.txtCustomColumn2.Size = new System.Drawing.Size(230, 20);
+            this.txtCustomColumn2.TabIndex = 8;
+            // 
+            // lblCustomColumn2
+            // 
+            this.lblCustomColumn2.AutoSize = true;
+            this.lblCustomColumn2.Location = new System.Drawing.Point(6, 159);
+            this.lblCustomColumn2.Name = "lblCustomColumn2";
+            this.lblCustomColumn2.Size = new System.Drawing.Size(146, 13);
+            this.lblCustomColumn2.TabIndex = 7;
+            this.lblCustomColumn2.Text = "&Variable for custom column 2:";
             // 
             // SettingsDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(426, 330);
+            this.ClientSize = new System.Drawing.Size(426, 356);
             this.Controls.Add(this.bImport);
             this.Controls.Add(this.bExport);
             this.Controls.Add(this.tcSettings);
@@ -678,5 +702,7 @@
         private System.Windows.Forms.Button bExport;
         private System.Windows.Forms.Button bImport;
         private System.Windows.Forms.CheckBox chkBackups;
+        private System.Windows.Forms.Label lblCustomColumn2;
+        private System.Windows.Forms.TextBox txtCustomColumn2;
     }
 }
