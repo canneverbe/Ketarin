@@ -795,9 +795,13 @@ namespace Ketarin
         {
             ApplicationJob job = olvJobs.SelectedObject as ApplicationJob;
 
-            if (Control.ModifierKeys == Keys.Shift)
+            if (Control.ModifierKeys == Keys.Control)
             {
                 OpenDownloadFolder(job);
+            }
+            else if (Control.ModifierKeys == Keys.Alt)
+            {
+                cmnuOpenFile.PerformClick();
             }
             else
             {
