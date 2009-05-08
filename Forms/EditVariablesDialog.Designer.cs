@@ -38,6 +38,7 @@
             this.rtfContent = new System.Windows.Forms.RichTextBox();
             this.cmuRtf = new System.Windows.Forms.ContextMenu();
             this.cmnuCopy = new System.Windows.Forms.MenuItem();
+            this.cmnuPaste = new System.Windows.Forms.MenuItem();
             this.cmnuCopyMatch = new System.Windows.Forms.MenuItem();
             this.cmnuGoToMatch = new System.Windows.Forms.MenuItem();
             this.sepPreview = new System.Windows.Forms.MenuItem();
@@ -150,6 +151,7 @@
             // 
             this.cmuRtf.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.cmnuCopy,
+            this.cmnuPaste,
             this.cmnuCopyMatch,
             this.cmnuGoToMatch,
             this.sepPreview,
@@ -163,29 +165,36 @@
             this.cmnuCopy.Text = "&Copy";
             this.cmnuCopy.Click += new System.EventHandler(this.cmnuCopy_Click);
             // 
+            // cmnuPaste
+            // 
+            this.cmnuPaste.Index = 1;
+            this.cmnuPaste.Shortcut = System.Windows.Forms.Shortcut.CtrlV;
+            this.cmnuPaste.Text = "&Paste";
+            this.cmnuPaste.Click += new System.EventHandler(this.cmnuPaste_Click);
+            // 
             // cmnuCopyMatch
             // 
             this.cmnuCopyMatch.Enabled = false;
-            this.cmnuCopyMatch.Index = 1;
+            this.cmnuCopyMatch.Index = 2;
             this.cmnuCopyMatch.Shortcut = System.Windows.Forms.Shortcut.CtrlM;
             this.cmnuCopyMatch.Text = "Copy &match";
             this.cmnuCopyMatch.Click += new System.EventHandler(this.cmnuCopyMatch_Click);
             // 
             // cmnuGoToMatch
             // 
-            this.cmnuGoToMatch.Index = 2;
+            this.cmnuGoToMatch.Index = 3;
             this.cmnuGoToMatch.Shortcut = System.Windows.Forms.Shortcut.CtrlG;
             this.cmnuGoToMatch.Text = "&Go to match";
             this.cmnuGoToMatch.Click += new System.EventHandler(this.cmnuGoToMatch_Click);
             // 
             // sepPreview
             // 
-            this.sepPreview.Index = 3;
+            this.sepPreview.Index = 4;
             this.sepPreview.Text = "-";
             // 
             // cmnuBrowser
             // 
-            this.cmnuBrowser.Index = 4;
+            this.cmnuBrowser.Index = 5;
             this.cmnuBrowser.Text = "&Show in webbrowser";
             this.cmnuBrowser.Click += new System.EventHandler(this.cmnuBrowser_Click);
             // 
@@ -443,5 +452,6 @@
         private System.Windows.Forms.Button bPostData;
         private System.Windows.Forms.MenuItem sepPreview;
         private System.Windows.Forms.MenuItem cmnuBrowser;
+        private System.Windows.Forms.MenuItem cmnuPaste;
     }
 }

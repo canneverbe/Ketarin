@@ -715,6 +715,11 @@ namespace Ketarin.Forms
             SafeClipboard.SetData(rtfContent.SelectedText, true);
         }
 
+        private void cmnuPaste_Click(object sender, EventArgs e)
+        {
+            rtfContent.Paste();
+        }
+
         private void cmnuCopyMatch_Click(object sender, EventArgs e)
         {
             SafeClipboard.SetData(MatchSelection, true);
