@@ -33,6 +33,7 @@
             this.tblMain = new System.Windows.Forms.TableLayoutPanel();
             this.lblPlaceholderName = new System.Windows.Forms.Label();
             this.txtValue = new System.Windows.Forms.TextBox();
+            this.cboValue = new System.Windows.Forms.ComboBox();
             this.tblMain.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -99,6 +100,15 @@
             this.txtValue.Size = new System.Drawing.Size(244, 20);
             this.txtValue.TabIndex = 1;
             // 
+            // cboValue
+            // 
+            this.cboValue.FormattingEnabled = true;
+            this.cboValue.Location = new System.Drawing.Point(87, 41);
+            this.cboValue.Name = "cboValue";
+            this.cboValue.Size = new System.Drawing.Size(244, 21);
+            this.cboValue.TabIndex = 3;
+            this.cboValue.Visible = false;
+            // 
             // SetPlaceholderDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -106,6 +116,7 @@
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.ClientSize = new System.Drawing.Size(343, 86);
+            this.Controls.Add(this.cboValue);
             this.Controls.Add(this.tblMain);
             this.Controls.Add(this.bOK);
             this.Controls.Add(this.bCancel);
@@ -131,5 +142,6 @@
         private System.Windows.Forms.TableLayoutPanel tblMain;
         private System.Windows.Forms.Label lblPlaceholderName;
         private System.Windows.Forms.TextBox txtValue;
+        private System.Windows.Forms.ComboBox cboValue;
     }
 }
