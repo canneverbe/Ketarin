@@ -817,6 +817,7 @@ namespace Ketarin
 
                 using (SetPlaceholderDialog dialog = new SetPlaceholderDialog(name))
                 {
+                    dialog.Options = element.GetAttribute("options");
                     dialog.Value = element.GetAttribute("value");
                     // Abort importing if cancelled
                     if (dialog.ShowDialog(owner) == DialogResult.Cancel) return null;

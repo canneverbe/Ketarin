@@ -23,11 +23,41 @@ namespace Ketarin.Forms
         {
             get
             {
+                if (tblMain.Controls.Contains(cboValue))
+                {
+                    return cboValue.Text as string;
+                }
                 return txtValue.Text;
             }
             set
             {
                 txtValue.Text = value;
+                cboValue.Text = value;
+            }
+        }
+
+        /// <summary>
+        /// Allows to specify a number of possible options (pipe separated).
+        /// </summary>
+        public string Options
+        {
+            set
+            {
+                if (string.IsNullOrEmpty(value))
+                {
+                    cboValue.Visible = false;
+                    txtValue.Visible = true;
+                }
+                else
+                {
+                    cboValue.Visible = true;
+                    cboValue.Bounds = txtValue.Bounds;
+                    tblMain.Controls.Remove(txtValue);
+                    tblMain.Controls.Add(cboValue);
+                    txtValue.Visible = false;
+
+                    cboValue.Items.AddRange(value.Split('|'));
+                }
             }
         }
 
