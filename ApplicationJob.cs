@@ -734,6 +734,13 @@ namespace Ketarin
                 }
             }
 
+            // Change encoding
+            if (doc.FirstChild.NodeType == XmlNodeType.XmlDeclaration)
+            {
+                XmlDeclaration xmlDeclaration = (XmlDeclaration)doc.FirstChild;
+                xmlDeclaration.Encoding = "utf-8";
+            }
+
             return doc.InnerXml;
         }
 
