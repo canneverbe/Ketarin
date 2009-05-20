@@ -47,6 +47,7 @@ namespace Ketarin
         private DownloadBetaType m_DownloadBeta = DownloadBetaType.Default;
         private string m_VariableChangeIndicator = string.Empty;
         private string m_VariableChangeIndicatorLastContent = null;
+        private string m_CachedPadFileVersion = null;
         private bool m_CheckForUpdateOnly = false;
 
         public enum SourceType
@@ -68,6 +69,17 @@ namespace Ketarin
         {
             get { return m_DownloadBeta; }
             set { m_DownloadBeta = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the version information
+        /// scraped from a PAD file.
+        /// </summary>
+        [XmlIgnore()]
+        internal string CachedPadFileVersion
+        {
+            get { return m_CachedPadFileVersion; }
+            set { m_CachedPadFileVersion = value; }
         }
 
         /// <summary>
@@ -309,15 +321,23 @@ namespace Ketarin
                     value = UrlVariable.Replace(value, "appname", m_Parent.Name);
                     value = UrlVariable.Replace(value, "appguid", DbManager.FormatGuid(m_Parent.Guid));
 
-                    // FileHippo version
-                    if (m_Parent.DownloadSourceType == SourceType.FileHippo && !ContainsKey("version"))
+                    if (!ContainsKey("version"))
                     {
-                        if (!onlyCachedContent)
+                        // FileHippo version
+                        if (m_Parent.DownloadSourceType == SourceType.FileHippo)
                         {
-                            m_Parent.FileHippoVersion = ExternalServices.FileHippoVersion(m_Parent.FileHippoId, m_Parent.AvoidDownloadBeta);
-                            m_VersionDownloaded = true;
+                            if (!onlyCachedContent)
+                            {
+                                m_Parent.FileHippoVersion = ExternalServices.FileHippoVersion(m_Parent.FileHippoId, m_Parent.AvoidDownloadBeta);
+                                m_VersionDownloaded = true;
+                            }
+                            value = UrlVariable.Replace(value, "version", m_Parent.FileHippoVersion);
                         }
-                        value = UrlVariable.Replace(value, "version", m_Parent.FileHippoVersion);
+                        else if (!string.IsNullOrEmpty(m_Parent.CachedPadFileVersion))
+                        {
+                            // or PAD file version as alternative
+                            value = UrlVariable.Replace(value, "version", m_Parent.CachedPadFileVersion);
+                        }
                     }
                 }
 
@@ -631,6 +651,7 @@ namespace Ketarin
 
             XmlNodeList progNames = doc.GetElementsByTagName("Program_Name");
             XmlNodeList downloadUrls = doc.GetElementsByTagName("Primary_Download_URL");
+            XmlNodeList versionInfos = doc.GetElementsByTagName("Filename_Versioned");
 
             if (progNames.Count == 0 && downloadUrls.Count == 0) return null;
 
@@ -643,6 +664,10 @@ namespace Ketarin
             if (downloadUrls.Count > 0)
             {
                 job.FixedDownloadUrl = doc.GetElementsByTagName("Primary_Download_URL")[0].InnerText;
+            }
+            if (versionInfos.Count > 0)
+            {
+                job.CachedPadFileVersion = doc.GetElementsByTagName("Filename_Versioned")[0].InnerText;
             }
 
             return job;
@@ -946,7 +971,8 @@ namespace Ketarin
                                                    VariableChangeIndicator = @VariableChangeIndicator,
                                                    VariableChangeIndicatorLastContent = @VariableChangeIndicatorLastContent,
                                                    ExclusiveDownload = @ExclusiveDownload,
-                                                   CheckForUpdateOnly = @CheckForUpdateOnly
+                                                   CheckForUpdateOnly = @CheckForUpdateOnly,
+                                                   CachedPadFileVersion = @CachedPadFileVersion
                                              WHERE JobGuid = @JobGuid";
 
                                 command.Parameters.Add(new SQLiteParameter("@ApplicationName", Name));
@@ -970,6 +996,7 @@ namespace Ketarin
                                 command.Parameters.Add(new SQLiteParameter("@VariableChangeIndicatorLastContent", m_VariableChangeIndicatorLastContent));
                                 command.Parameters.Add(new SQLiteParameter("@ExclusiveDownload", m_ExclusiveDownload));
                                 command.Parameters.Add(new SQLiteParameter("@CheckForUpdateOnly", m_CheckForUpdateOnly));
+                                command.Parameters.Add(new SQLiteParameter("@CachedPadFileVersion", m_CachedPadFileVersion));
                                 
                                 if (m_DownloadDate.HasValue)
                                 {
@@ -993,8 +1020,8 @@ namespace Ketarin
                             using (IDbCommand command = conn.CreateCommand())
                             {
                                 command.Transaction = transaction;
-                                command.CommandText = @"INSERT INTO jobs (ApplicationName, FixedDownloadUrl, DateAdded, TargetPath, LastUpdated, IsEnabled, FileHippoId, DeletePreviousFile, SourceType, ExecuteCommand, ExecutePreCommand, Category, JobGuid, CanBeShared, ShareApplication, HttpReferer, FileHippoVersion, DownloadBeta, DownloadDate, VariableChangeIndicator, VariableChangeIndicatorLastContent, ExclusiveDownload, CheckForUpdateOnly)
-                                                 VALUES (@ApplicationName, @FixedDownloadUrl, @DateAdded, @TargetPath, @LastUpdated, @IsEnabled, @FileHippoId, @DeletePreviousFile, @SourceType, @ExecuteCommand, @ExecutePreCommand, @Category, @JobGuid, @CanBeShared, @ShareApplication, @HttpReferer, @FileHippoVersion, @DownloadBeta, @DownloadDate, @VariableChangeIndicator, NULL, @ExclusiveDownload, @CheckForUpdateOnly)";
+                                command.CommandText = @"INSERT INTO jobs (ApplicationName, FixedDownloadUrl, DateAdded, TargetPath, LastUpdated, IsEnabled, FileHippoId, DeletePreviousFile, SourceType, ExecuteCommand, ExecutePreCommand, Category, JobGuid, CanBeShared, ShareApplication, HttpReferer, FileHippoVersion, DownloadBeta, DownloadDate, VariableChangeIndicator, VariableChangeIndicatorLastContent, ExclusiveDownload, CheckForUpdateOnly, CachedPadFileVersion)
+                                                 VALUES (@ApplicationName, @FixedDownloadUrl, @DateAdded, @TargetPath, @LastUpdated, @IsEnabled, @FileHippoId, @DeletePreviousFile, @SourceType, @ExecuteCommand, @ExecutePreCommand, @Category, @JobGuid, @CanBeShared, @ShareApplication, @HttpReferer, @FileHippoVersion, @DownloadBeta, @DownloadDate, @VariableChangeIndicator, NULL, @ExclusiveDownload, @CheckForUpdateOnly, @CachedPadFileVersion)";
 
                                 command.Parameters.Add(new SQLiteParameter("@ApplicationName", Name));
                                 command.Parameters.Add(new SQLiteParameter("@FixedDownloadUrl", m_FixedDownloadUrl));
@@ -1018,6 +1045,7 @@ namespace Ketarin
                                 command.Parameters.Add(new SQLiteParameter("@VariableChangeLastContent", m_VariableChangeIndicatorLastContent));
                                 command.Parameters.Add(new SQLiteParameter("@ExclusiveDownload", m_ExclusiveDownload));
                                 command.Parameters.Add(new SQLiteParameter("@CheckForUpdateOnly", m_CheckForUpdateOnly));
+                                command.Parameters.Add(new SQLiteParameter("@CachedPadFileVersion", m_CachedPadFileVersion));
                                 
                                 if (m_DownloadDate.HasValue)
                                 {
@@ -1076,6 +1104,7 @@ namespace Ketarin
             m_VariableChangeIndicatorLastContent = reader["VariableChangeIndicatorLastContent"] as string;
             m_ExclusiveDownload = Convert.ToBoolean(reader["ExclusiveDownload"]);
             m_CheckForUpdateOnly = Convert.ToBoolean(reader["CheckForUpdateOnly"]);
+            m_CachedPadFileVersion = reader["CachedPadFileVersion"] as string;
             
             if (reader["DownloadBeta"] != DBNull.Value)
             {

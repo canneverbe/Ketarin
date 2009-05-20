@@ -613,6 +613,7 @@ namespace Ketarin
                         ApplicationJob padJob = ApplicationJob.ImportFromPad(httpResponse);
                         if (padJob != null)
                         {
+                            job.CachedPadFileVersion = padJob.CachedPadFileVersion;
                             return DoDownload(job, new Uri(padJob.FixedDownloadUrl));
                         }
                     }
