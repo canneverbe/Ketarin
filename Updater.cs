@@ -321,7 +321,7 @@ namespace Ketarin
                 foreach (ApplicationJob job in m_Jobs)
                 {
                     // Skip if disabled
-                    if (!job.Enabled) continue;
+                    if (!job.Enabled && m_Jobs.Length > 1) continue;
 
                     // Wait until we can start a new thread:
                     // - Thread limit is not reached

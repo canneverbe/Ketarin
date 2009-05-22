@@ -155,7 +155,7 @@ namespace Ketarin
                 ApplicationJob job = (ApplicationJob)x;
                 
                 // Gray icon if disabled
-                if (!job.Enabled && !string.IsNullOrEmpty(job.PreviousLocation))
+                if (!job.Enabled && !string.IsNullOrEmpty(job.PreviousLocation) && m_Updater.GetStatus(job) == Updater.Status.Idle)
                 {
                     try
                     {
