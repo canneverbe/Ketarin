@@ -710,6 +710,8 @@ namespace Ketarin
             
             ApplicationJob job = olvJobs.SelectedObject as ApplicationJob;
 
+            if (string.IsNullOrEmpty(job.PreviousLocation)) return;
+
             using (RenameFileDialog dialog = new RenameFileDialog())
             {
                 dialog.FileName = job.PreviousLocation;
