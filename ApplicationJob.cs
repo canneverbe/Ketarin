@@ -1315,7 +1315,14 @@ namespace Ketarin
             HttpWebResponse httpResponse = netResponse as HttpWebResponse;
             if (httpResponse != null)
             {
-                lastModified = httpResponse.LastModified;
+                try
+                {
+                    lastModified = httpResponse.LastModified;
+                }
+                catch (ProtocolViolationException)
+                {
+                    return DateTime.Now;
+                }
             }
             return lastModified;
         }
