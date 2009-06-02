@@ -635,6 +635,9 @@ namespace Ketarin
 
                 case "formatfilesize":
                     return CDBurnerXP.IO.FormatFileSize.Format(Conversion.ToInt(content));
+
+                case "startuppath":
+                    return System.Windows.Forms.Application.StartupPath;
             }
 
             return content;
