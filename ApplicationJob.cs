@@ -253,6 +253,8 @@ namespace Ketarin
                 {
                     try
                     {
+                        value = UrlVariable.Replace(value, "file", m_Parent.PreviousLocation);
+
                         FileInfo info = new FileInfo(m_Parent.PreviousLocation);
                         // Try to provide file date if missing
                         if (fileDate == DateTime.MinValue)
