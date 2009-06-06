@@ -768,6 +768,7 @@ namespace Ketarin
             {
                 ApplicationJob job = ApplicationJob.ImportFromXmlString(SafeClipboard.GetData(DataFormats.Text) as string);
                 job.Guid = Guid.NewGuid();
+                job.PreviousLocation = null;
                 job.CanBeShared = true;
                 job.Save();
 
