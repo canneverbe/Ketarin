@@ -653,7 +653,8 @@ namespace Ketarin
 
             XmlNodeList progNames = doc.GetElementsByTagName("Program_Name");
             XmlNodeList downloadUrls = doc.GetElementsByTagName("Primary_Download_URL");
-            XmlNodeList versionInfos = doc.GetElementsByTagName("Filename_Versioned");
+            XmlNodeList versionInfos = doc.GetElementsByTagName("Program_Version");
+            XmlNodeList versionInfos2 = doc.GetElementsByTagName("Filename_Versioned");
 
             if (progNames.Count == 0 && downloadUrls.Count == 0) return null;
 
@@ -668,6 +669,10 @@ namespace Ketarin
                 job.FixedDownloadUrl = doc.GetElementsByTagName("Primary_Download_URL")[0].InnerText;
             }
             if (versionInfos.Count > 0)
+            {
+                job.CachedPadFileVersion = doc.GetElementsByTagName("Program_Version")[0].InnerText;
+            }
+            else if (versionInfos2.Count > 0)
             {
                 job.CachedPadFileVersion = doc.GetElementsByTagName("Filename_Versioned")[0].InnerText;
             }
