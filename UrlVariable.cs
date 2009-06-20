@@ -517,17 +517,14 @@ namespace Ketarin
                         if (parts.Length > 2)
                         {
                             Regex regex = new Regex(parts[1], RegexOptions.Singleline);
-                            Match match = regex.Match(content);
-                            if (match.Success)
-                            {
-                                content = content.Remove(match.Index, match.Length);
-                                // Use $x as group references
+                            return regex.Replace(content, delegate(Match match) {
+                                string result = parts[2];
                                 for (int i = 0; i < match.Groups.Count; i++)
                                 {
-                                    parts[2] = parts[2].Replace("$" + i, match.Groups[i].Value);
+                                    result = result.Replace("$" + i, match.Groups[i].Value);
                                 }
-                                return content.Insert(match.Index, parts[2]);
-                            }
+                                return result;                                
+                            });
                         }
                     }
                     catch (ArgumentException ex)
