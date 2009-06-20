@@ -516,7 +516,7 @@ namespace Ketarin
                     {
                         if (parts.Length > 2)
                         {
-                            Regex regex = new Regex(parts[1], RegexOptions.Singleline);
+                            Regex regex = new Regex(parts[1], RegexOptions.Singleline | RegexOptions.IgnoreCase);
                             return regex.Replace(content, delegate(Match match) {
                                 string result = parts[2];
                                 for (int i = 0; i < match.Groups.Count; i++)
