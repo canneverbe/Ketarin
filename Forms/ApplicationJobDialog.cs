@@ -352,6 +352,10 @@ namespace Ketarin.Forms
                     thread.IsBackground = true;
                     thread.Start(job);
                 }
+                catch (System.Net.WebException ex)
+                {
+                    MessageBox.Show(this, "Your application could not be submitted to the online database because of an connection error: " + ex.Message, "Connection error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
                 finally
                 {
                     Cursor = Cursors.Default;
