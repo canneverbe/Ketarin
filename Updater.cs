@@ -646,7 +646,11 @@ namespace Ketarin
                 }
 
                 // Skip downloading!
-                if (m_OnlyCheck || job.CheckForUpdatesOnly) return true;
+                if (m_OnlyCheck || job.CheckForUpdatesOnly)
+                {
+                    LogDialog.Log(job, "Skipped downloading updates");
+                    return true;
+                }
 
                 string defaultPreCommand = Settings.GetValue("PreUpdateCommand", "") as string;
                 if (ExecuteCommand(job, defaultPreCommand) == 1)
