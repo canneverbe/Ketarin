@@ -423,7 +423,7 @@ namespace Ketarin
 
             if ((bool)Settings.GetValue("UpdateAtStartup", false))
             {
-                RunJobs(false);
+                RunJobs(false, false);
             }
 
             // Check applications for updates
@@ -548,7 +548,7 @@ namespace Ketarin
             }
             else
             {
-                RunJobs(false);
+                RunJobs(false, false);
             }
         }
 
@@ -559,7 +559,24 @@ namespace Ketarin
 
         private void cmnuOnlyCheck_Click(object sender, EventArgs e)
         {
-            RunJobs(true);
+            RunJobs(true, false);
+        }
+
+        private void cmnuForceDownload_Click(object sender, EventArgs e)
+        {
+            if (olvJobs.SelectedObjects.Count == 0)
+            {
+                RunJobs(false, true);
+            }
+            else
+            {
+                List<ApplicationJob> jobs = new List<ApplicationJob>();
+                foreach (ApplicationJob job in olvJobs.SelectedObjects)
+                {
+                    jobs.Add(job);
+                }
+                RunJobs(jobs.ToArray(), false, true);
+            }
         }
 
         #endregion
@@ -568,8 +585,10 @@ namespace Ketarin
         /// Updates all items, using the same order as the
         /// items in the list (considers sorting).
         /// </summary>
-        private void RunJobs(bool onlyCheck)
+        private void RunJobs(bool onlyCheck, bool forceDownload)
         {
+            if (m_Updater.IsBusy) return;
+
             List<ApplicationJob> jobs = new List<ApplicationJob>();
             OLVListItem startItem = null;
 
@@ -582,10 +601,10 @@ namespace Ketarin
                 }
             } while (startItem != null);
 
-            RunJobs(jobs.ToArray(), onlyCheck);
+            RunJobs(jobs.ToArray(), onlyCheck, forceDownload);
         }
 
-        private void RunJobs(ApplicationJob[] jobs, bool onlyCheck)
+        private void RunJobs(ApplicationJob[] jobs, bool onlyCheck, bool forceDownload)
         {
             bRun.Text = "Cancel";
             bRun.SplitMenu = null;
@@ -595,7 +614,7 @@ namespace Ketarin
             mnuExportAll.Enabled = false;
             mnuImport.Enabled = false;
 
-            m_Updater.BeginUpdate(jobs, onlyCheck);
+            m_Updater.BeginUpdate(jobs, onlyCheck, forceDownload);
             olvJobs.RefreshObjects(jobs);
         }
 
@@ -656,11 +675,9 @@ namespace Ketarin
 
         private void cmuUpdate_Click(object sender, EventArgs e)
         {
-            if (m_Updater.IsBusy) return;
-
             if (olvJobs.SelectedObjects.Count == 0)
             {
-                RunJobs(false);
+                RunJobs(false, false);
             }
             else
             {
@@ -669,7 +686,7 @@ namespace Ketarin
                 {
                     jobs.Add(job);
                 }
-                RunJobs(jobs.ToArray(), false);
+                RunJobs(jobs.ToArray(), false, false);
             }
         }
 
@@ -697,6 +714,7 @@ namespace Ketarin
             cmnuDelete.Enabled = (olvJobs.SelectedIndices.Count > 0 && !m_Updater.IsBusy);
             cmnuUpdate.Enabled = (!m_Updater.IsBusy);
             cmnuCheckForUpdate.Enabled = (!m_Updater.IsBusy);
+            cmnuForceDownload.Enabled = (!m_Updater.IsBusy);
             cmnuOpenFile.Enabled = (job != null && !m_Updater.IsBusy && !string.IsNullOrEmpty(job.PreviousLocation) && File.Exists(job.PreviousLocation));
             cmnuOpenFolder.Enabled = (job != null && !string.IsNullOrEmpty(job.PreviousLocation) && File.Exists(job.PreviousLocation));
             cmnuRename.Enabled = cmnuOpenFile.Enabled;
@@ -741,11 +759,11 @@ namespace Ketarin
 
             if (jobs.Count == 0)
             {
-                RunJobs(true);
+                RunJobs(true, false);
             }
             else
             {
-                RunJobs(jobs.ToArray(), true);
+                RunJobs(jobs.ToArray(), true, false);
             }
         }
 
@@ -1049,6 +1067,7 @@ namespace Ketarin
         }
 
         #endregion
+
 
     }
 }
