@@ -32,6 +32,7 @@ namespace Ketarin
         private List<ApplicationJobError> m_Errors;
         private byte m_NoProgressCounter = 0;
         private bool m_OnlyCheck = false;
+        private bool m_ForceDownload = false;
         private int m_ThreadLimit = 2;
         private List<Thread> m_Threads = new List<Thread>();
         private List<string> m_NoAutoReferer = new List<string>(new string[] {"sourceforge.net"});
@@ -222,12 +223,13 @@ namespace Ketarin
         /// applications asynchronously.
         /// </summary>
         /// <param name="onlyCheck">Specifies whether or not to download the updates</param>
-        public void BeginUpdate(ApplicationJob[] jobs, bool onlyCheck)
+        public void BeginUpdate(ApplicationJob[] jobs, bool onlyCheck, bool forceDownload)
         {
             m_IsBusy = true;
             m_Jobs = jobs;
             m_ThreadLimit = Convert.ToInt32(Settings.GetValue("ThreadCount", 2));
             m_OnlyCheck = onlyCheck;
+            m_ForceDownload = forceDownload;
 
             // Initialise progress and status
             m_Progress = new Dictionary<ApplicationJob, short>();
@@ -628,7 +630,7 @@ namespace Ketarin
                 LogDialog.Log(job, "Determined target file name: " + targetFileName);
 
                 // Only download, if the file size or date has changed
-                if (!job.RequiresDownload(response, targetFileName))
+                if (!m_ForceDownload && !job.RequiresDownload(response, targetFileName))
                 {
                     m_Status[job] = Status.UpdateSuccessful;
 
@@ -646,7 +648,7 @@ namespace Ketarin
                 }
 
                 // Skip downloading!
-                if (m_OnlyCheck || job.CheckForUpdatesOnly)
+                if (!m_ForceDownload && (m_OnlyCheck || job.CheckForUpdatesOnly))
                 {
                     LogDialog.Log(job, "Skipped downloading updates");
                     return true;
