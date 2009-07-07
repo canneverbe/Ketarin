@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Text;
 using System.Net;
 using System.Windows.Forms;
+using CDBurnerXP;
 using CookComputing.XmlRpc;
 
 namespace Ketarin.Forms
@@ -105,6 +106,21 @@ namespace Ketarin.Forms
                         resultJob.ExecuteCommand = string.Empty;
                         resultJob.TargetPath = string.Empty;
                         resultJob.PreviousLocation = string.Empty;
+
+                        // If possible, determine some values based on the default
+                        // values for a new application.
+                        string defaultXml = Settings.GetValue("DefaultApplication", "") as string;
+                        if (!string.IsNullOrEmpty(defaultXml))
+                        {
+                            ApplicationJob defaultApp = ApplicationJob.LoadFromXml(defaultXml);
+                            if (defaultApp != null)
+                            {
+                                resultJob.TargetPath = defaultApp.TargetPath;
+                                resultJob.ExecuteCommand = defaultApp.ExecuteCommand;
+                                resultJob.ExecutePreCommand = defaultApp.ExecutePreCommand;
+                            }
+                        }
+
                         resultJob.Save();
                     }
                 }
