@@ -144,12 +144,20 @@ namespace Ketarin.Forms
             }
             else
             {
-                if (Visible && text != null) {
-                    txtLog.AppendText(text);
-                    txtLog.AppendText(Environment.NewLine);
+                if (Visible) {
+                    AppendText(text);
 
                     txtLog.SelectionStart = m_Instance.txtLog.Text.Length;
                 }
+            }
+        }
+
+        private void AppendText(string text)
+        {
+            if (text != null)
+            {
+                txtLog.AppendText(text);
+                txtLog.AppendText(Environment.NewLine);
             }
         }
 
