@@ -18,6 +18,17 @@ namespace Ketarin.Forms
                 case Keys.Control | Keys.A:
                     SelectAll();
                     return true;
+
+                case Keys.Control | Keys.Back:
+                    // Find non-space char
+                    int i = SelectionStart - 1;
+                    while (i > 0 && Text[i] == ' ') i--;
+                    // Delete everything to the space
+                    while (i >= 0 && Text[i] != ' ') i--;
+                    // Update text
+                    this.Text = Text.Substring(0, ++i);
+                    SelectionStart = i;
+                    return true;
             }
 
             return base.ProcessCmdKey(ref msg, keyData);
