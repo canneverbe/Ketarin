@@ -86,7 +86,7 @@ namespace Ketarin
         /// </summary>
         public static string DatabasePath
         {
-            set { DbManager.m_DatabasePath = value; }
+            set { DbManager.m_DatabasePath = (value == null) ? null : Path.GetFullPath(value); }
             get { return DbManager.m_DatabasePath; }
         }
 
@@ -216,7 +216,7 @@ namespace Ketarin
             string oldestBackupFile = null;
             int backupCount = 0;
 
-            string fullPath = Path.GetFullPath(m_DatabasePath);
+            string fullPath = m_DatabasePath;
             // Determine the number of backups and the oldest backup
             foreach (string file in Directory.GetFiles(Path.GetDirectoryName(fullPath)))
             {
