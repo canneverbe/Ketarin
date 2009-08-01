@@ -1338,5 +1338,35 @@ namespace Ketarin
         {
             return Name;
         }
+
+        /// <summary>
+        /// Determines whether or not this application matches the given search critera.
+        /// <param name="subject">Lowercased search string</param>
+        /// </summary>
+        public bool MatchesSearchCriteria(string[] subjects, string customColumn1, string customColumn2)
+        {
+            StringBuilder fulltext = new StringBuilder(Name);
+            fulltext.Append(Category);
+            fulltext.Append(TargetPath);
+
+            string value = Variables.ReplaceAllInString(customColumn1, DateTime.MinValue, null, true);
+            fulltext.Append(value);
+
+            value = Variables.ReplaceAllInString(customColumn2, DateTime.MinValue, null, true);
+            fulltext.Append(value);
+
+            string result = fulltext.ToString().ToLower();
+
+            // Boolean search: All subjects must be matched
+            foreach (string subject in subjects)
+            {
+                if (!result.Contains(subject))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
     }
 }

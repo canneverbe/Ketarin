@@ -1,0 +1,230 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Windows.Forms;
+using System.Drawing;
+using CDBurnerXP.Controls;
+using CDBurnerXP.IO;
+using System.Windows.Forms.VisualStyles;
+using Ketarin.Forms;
+
+namespace Ketarin
+{
+    public class ApplicationJobsListView : ObjectListView
+    {
+        private SearchPanel searchPanel = new SearchPanel();
+        private Ketarin.Forms.TextBox searchTextBox = new Ketarin.Forms.TextBox();
+        private ApplicationJob[] preSearchList = null;
+
+        #region ProgressRenderer
+
+        public class ProgressRenderer : BarRenderer
+        {
+            private Updater m_Updater = null;
+
+            public ProgressRenderer(Updater updater, int min, int max)
+                : base(min, max)
+            {
+                m_Updater = updater;
+            }
+
+            public override void Render(Graphics g, Rectangle r)
+            {
+                ApplicationJob job = RowObject as ApplicationJob;
+                // Do not draw anything if the updater is not currently working
+                if (m_Updater.GetProgress(job) == -1 || !job.Enabled)
+                {
+                    base.DrawBackground(g, r);
+                    return;
+                }
+
+                base.Render(g, r);
+
+                long fileSize = m_Updater.GetDownloadSize(job);
+                // No file size has been determined yet
+                if (fileSize == -2) return;
+
+                using (Brush fontBrush = new SolidBrush(SystemColors.WindowText))
+                {
+                    StringFormat format = new StringFormat();
+                    format.Alignment = StringAlignment.Center;
+                    format.LineAlignment = StringAlignment.Center;
+
+                    string text = FormatFileSize.Format(fileSize);
+                    if (fileSize < 0)
+                    {
+                        text = "(unknown)";
+                    }
+                    g.DrawString(text, new Font(this.Font, FontStyle.Bold), fontBrush, r, format);
+                }
+            }
+        }
+
+        #endregion
+
+        #region Search panel
+
+        private class SearchPanel : Panel
+        {
+            protected override void OnPaint(PaintEventArgs e)
+            {
+                base.OnPaint(e);
+
+                using (Pen pen = new Pen(VisualStyleInformation.TextControlBorder))
+                {
+                    e.Graphics.DrawLine(pen, 0, 0, Width, 0);
+                    e.Graphics.DrawLine(Pens.White, 0, 1, Width, 1);
+                }
+            }
+        }
+
+        private class CloseButton : Panel
+        {
+            private Bitmap drawImage = Properties.Resources.CloseSearch;
+
+            protected override void OnPaint(PaintEventArgs e)
+            {
+                base.OnPaint(e);
+
+                e.Graphics.DrawImage(drawImage, new Point(0, 0));
+            }
+
+            protected override void OnMouseMove(MouseEventArgs e)
+            {
+                base.OnMouseMove(e);
+
+                drawImage = Properties.Resources.CloseSearchHover;
+                Invalidate();
+            }
+
+            protected override void OnMouseDown(MouseEventArgs e)
+            {
+                base.OnMouseDown(e);
+
+                drawImage = Properties.Resources.CloseSearchDown;
+                Invalidate();
+            }
+
+            protected override void OnMouseLeave(EventArgs e)
+            {
+                base.OnMouseLeave(e);
+
+                drawImage = Properties.Resources.CloseSearch;
+                Invalidate();
+            }
+        }
+
+        #endregion
+
+        public void Initialize()
+        {
+            searchPanel.Dock = DockStyle.Bottom;
+            searchPanel.AutoSize = true;
+            searchPanel.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            searchPanel.Visible = false;
+            searchPanel.BackColor = SystemColors.Control;
+
+            Label searchLabel = new Label();
+            searchLabel.Text = "&Search: ";
+            searchLabel.Location = new Point(25, 7);
+            searchLabel.AutoSize = true;
+
+            searchTextBox.Width = 200;
+            searchTextBox.Location = new Point(searchLabel.GetPreferredSize(searchLabel.Size).Width + 25, 4);
+            searchTextBox.TextChanged += new EventHandler(searchTextBox_TextChanged);
+
+
+            CloseButton closeButton = new CloseButton();
+            closeButton.Size = new Size(16, 16);
+            closeButton.Location = new Point(3, 6);
+            closeButton.Click += new EventHandler(closeButton_Click);
+
+            searchPanel.Controls.Add(closeButton);
+            searchPanel.Controls.Add(searchLabel);
+            searchPanel.Controls.Add(searchTextBox);
+
+            this.Controls.Add(searchPanel);
+        }
+
+        private void closeButton_Click(object sender, EventArgs e)
+        {
+            HideSearch();
+        }
+
+        private void searchTextBox_TextChanged(object sender, EventArgs e)
+        {
+            // Restore original list if no search text is given
+            if (string.IsNullOrEmpty(searchTextBox.Text))
+            {
+                SetObjects(this.preSearchList);
+                return;
+            }
+
+            // No search if not visible
+            if (!this.searchPanel.Visible)
+            {
+                return;
+            }
+
+            if (preSearchList == null)
+            {
+                preSearchList = this.Objects as ApplicationJob[];
+            }
+            
+            // Nothing to do if empty
+            if (preSearchList == null || preSearchList.Length == 0)
+            {
+                return;
+            }
+
+            List<ApplicationJob> filteredList = new List<ApplicationJob>();
+
+            // Cache some data
+            string customColumn1 = "{" + SettingsDialog.CustomColumnVariableName1 + "}";
+            string customColumn2 = "{" + SettingsDialog.CustomColumnVariableName2 + "}";
+
+            string[] searchText = searchTextBox.Text.ToLower().Split(' ');
+
+            foreach (ApplicationJob job in preSearchList)
+            {
+                if (job.MatchesSearchCriteria(searchText, customColumn1, customColumn2))
+                {
+                    filteredList.Add(job);
+                }
+            }
+
+            this.SetObjects(filteredList.ToArray());
+        }
+
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            switch (keyData)
+            {
+                case Keys.Control | Keys.F:
+                    ShowSearch();
+                    return true;
+
+                case Keys.Escape:
+                    HideSearch();
+                    return true;
+            }
+
+            return base.ProcessCmdKey(ref msg, keyData);
+        }
+
+        /// <summary>
+        /// Shows the search bar and sets the focus to it.
+        /// </summary>
+        public void ShowSearch()
+        {
+            this.searchPanel.Visible = true;
+            this.searchTextBox.Focus();
+        }
+
+        private void HideSearch()
+        {
+            this.searchPanel.Visible = false;
+            this.searchTextBox.Text = string.Empty;
+        }
+    }
+}

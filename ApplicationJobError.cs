@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Ketarin
 {
-    class ApplicationJobError
+    public class ApplicationJobError
     {
         private ApplicationJob m_ApplicationJob;
         private Exception m_Error;

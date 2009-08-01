@@ -81,6 +81,9 @@
   <ItemGroup>
     <Compile Include="ApplicationJob.cs" />
     <Compile Include="ApplicationJobError.cs" />
+    <Compile Include="ApplicationJobsListView.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="CommandErrorException.cs" />
     <Compile Include="CommandLineParser.cs" />
     <Compile Include="ContextMenuCustomiser.cs" />
@@ -422,6 +425,9 @@
     <None Include="Resources\Restart.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Icon\CloseSearch.png" />
+    <None Include="Icon\CloseSearchDown.png" />
+    <None Include="Icon\CloseSearchHover.png" />
     <Content Include="ketarin.ico" />
     <None Include="Resources\New.png" />
     <None Include="Resources\Symbol Information.png" />

@@ -20,7 +20,7 @@ namespace Ketarin
     /// Handles the updating process of a list of
     /// application jobs.
     /// </summary>
-    class Updater
+    public class Updater
     {
         private ApplicationJob[] m_Jobs = null;
         private Dictionary<ApplicationJob, short> m_Progress = null;

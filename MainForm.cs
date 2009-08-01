@@ -44,52 +44,6 @@ namespace Ketarin
         private string m_CustomColumn2 = string.Empty;
         private FormWindowState m_PreviousState = FormWindowState.Normal;
 
-        #region ProgressRenderer
-
-        private class ProgressRenderer : BarRenderer
-        {
-            private Updater m_Updater = null;
-
-            public ProgressRenderer(Updater updater, int min, int max)
-                : base(min, max)
-            {
-                m_Updater = updater;
-            }
-
-            public override void Render(Graphics g, Rectangle r)
-            {
-                ApplicationJob job = RowObject as ApplicationJob;
-                // Do not draw anything if the updater is not currently working
-                if (m_Updater.GetProgress(job) == -1 || !job.Enabled)
-                {
-                    base.DrawBackground(g, r);
-                    return;
-                }
-
-                base.Render(g, r);
-
-                long fileSize = m_Updater.GetDownloadSize(job);
-                // No file size has been determined yet
-                if (fileSize == -2) return;
-
-                using (Brush fontBrush = new SolidBrush(SystemColors.WindowText))
-                {
-                    StringFormat format = new StringFormat();
-                    format.Alignment = StringAlignment.Center;
-                    format.LineAlignment = StringAlignment.Center;
-
-                    string text = FormatFileSize.Format(fileSize);
-                    if (fileSize < 0)
-                    {
-                        text = "(unknown)";
-                    }
-                    g.DrawString(text, new Font(this.Font, FontStyle.Bold), fontBrush, r, format);
-                }
-            }
-        }
-
-        #endregion
-
         public static Bitmap MakeGrayscale(Bitmap original)
         {
             //create a blank bitmap the same size as original
@@ -131,6 +85,7 @@ namespace Ketarin
         public MainForm()
         {
             InitializeComponent();
+            olvJobs.Initialize();
             olvJobs.ContextMenu = cmnuJobs;
 
             colName.AspectGetter = delegate(object x) { return ((ApplicationJob)x).Name; };
@@ -221,7 +176,7 @@ namespace Ketarin
             };
 
             colProgress.AspectGetter = delegate(object x) { return m_Updater.GetProgress(x as ApplicationJob); };
-            colProgress.Renderer = new ProgressRenderer(m_Updater, 0, 100);
+            colProgress.Renderer = new ApplicationJobsListView.ProgressRenderer(m_Updater, 0, 100);
             colCustomValue.AspectGetter = delegate(object x)
             {
                 if (string.IsNullOrEmpty(m_CustomColumn1)) return null;
@@ -1048,6 +1003,11 @@ namespace Ketarin
             catch (Exception)
             {
             }
+        }
+
+        private void mnuFind_Click(object sender, EventArgs e)
+        {
+            olvJobs.ShowSearch();            
         }
 
         #endregion
