@@ -89,6 +89,7 @@
             this.statusBar = new System.Windows.Forms.StatusStrip();
             this.tbSelectedApplications = new System.Windows.Forms.ToolStripStatusLabel();
             this.tbTotalApplications = new System.Windows.Forms.ToolStripStatusLabel();
+            this.mnuAutoScroll = new System.Windows.Forms.MenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.olvJobs)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.m_VistaMenu)).BeginInit();
             this.statusBar.SuspendLayout();
@@ -290,6 +291,7 @@
             this.mnuLog,
             this.mnuShowGroups,
             this.mnuShowStatusBar,
+            this.mnuAutoScroll,
             this.mnuFind});
             this.mnuView.Text = "&View";
             // 
@@ -314,7 +316,7 @@
             // 
             // mnuFind
             // 
-            this.mnuFind.Index = 3;
+            this.mnuFind.Index = 4;
             this.mnuFind.Shortcut = System.Windows.Forms.Shortcut.CtrlF;
             this.mnuFind.Text = "&Find";
             this.mnuFind.Click += new System.EventHandler(this.mnuFind_Click);
@@ -555,6 +557,13 @@
             this.tbTotalApplications.Text = "Number of applications: 0";
             this.tbTotalApplications.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
+            // mnuAutoScroll
+            // 
+            this.mnuAutoScroll.Checked = true;
+            this.mnuAutoScroll.Index = 3;
+            this.mnuAutoScroll.Text = "Auto scroll";
+            this.mnuAutoScroll.Click += new System.EventHandler(this.mnuAutoScroll_Click);
+            // 
             // MainForm
             // 
             this.AllowDrop = true;
@@ -641,6 +650,7 @@
         private System.Windows.Forms.MenuItem cmnuForceDownload;
         private System.Windows.Forms.MenuItem cmnuSepUpdates;
         private System.Windows.Forms.MenuItem mnuFind;
+        private System.Windows.Forms.MenuItem mnuAutoScroll;
     }
 }
 

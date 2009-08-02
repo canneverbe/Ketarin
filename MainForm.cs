@@ -245,7 +245,7 @@ namespace Ketarin
             this.BeginInvoke((MethodInvoker)delegate() {
                 olvJobs.RefreshObject(e.ApplicationJob);
                 int index = olvJobs.IndexOf(e.ApplicationJob);
-                if (index >= 0)
+                if (index >= 0 && mnuAutoScroll.Checked)
                 {
                     olvJobs.EnsureVisible(index);
                 }
@@ -1010,6 +1010,12 @@ namespace Ketarin
             olvJobs.ShowSearch();            
         }
 
+
+        private void mnuAutoScroll_Click(object sender, EventArgs e)
+        {
+            mnuAutoScroll.Checked = !mnuAutoScroll.Checked;
+        }
+
         #endregion
 
         #region Tray Icon Menu
@@ -1027,7 +1033,6 @@ namespace Ketarin
         }
 
         #endregion
-
 
     }
 }
