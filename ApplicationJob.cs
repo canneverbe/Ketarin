@@ -1358,12 +1358,12 @@ namespace Ketarin
             value = Variables.ReplaceAllInString(customColumn2, DateTime.MinValue, null, true);
             fulltext.Append(value);
 
-            string result = fulltext.ToString().ToLower();
+            string fulltextToLower = fulltext.ToString().ToLower();
 
             // Boolean search: All subjects must be matched
             foreach (string subject in subjects)
             {
-                if (!result.Contains(subject))
+                if (!fulltextToLower.Contains(subject))
                 {
                     return false;
                 }

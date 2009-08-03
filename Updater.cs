@@ -36,6 +36,7 @@ namespace Ketarin
         private int m_ThreadLimit = 2;
         private List<Thread> m_Threads = new List<Thread>();
         private List<string> m_NoAutoReferer = new List<string>(new string[] {"sourceforge.net"});
+        private CookieContainer m_Cookies = new CookieContainer();
 
         #region Properties
 
@@ -576,6 +577,10 @@ namespace Ketarin
             HttpWebRequest httpRequest = req as HttpWebRequest;
             if (httpRequest != null)
             {
+                // Store cookies for future requests. Some sites
+                // check for previously stored cookies before allowing to download.
+                httpRequest.CookieContainer = m_Cookies;
+
                 // If we have an HTTP request, some sites may require a correct referer
                 // for the download.
                 // If there there are variables defined (from which most likely the download link
