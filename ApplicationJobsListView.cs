@@ -198,6 +198,8 @@ namespace Ketarin
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
+            int openVariable = 0;
+
             switch (keyData)
             {
                 case Keys.Control | Keys.F:
@@ -207,6 +209,41 @@ namespace Ketarin
                 case Keys.Escape:
                     HideSearch();
                     return true;
+
+                // Open specific variable in browser
+                case Keys.Control | Keys.D1: openVariable = 1; break;
+                case Keys.Control | Keys.D2: openVariable = 2; break;
+                case Keys.Control | Keys.D3: openVariable = 3; break;
+                case Keys.Control | Keys.D4: openVariable = 4; break;
+                case Keys.Control | Keys.D5: openVariable = 5; break;
+                case Keys.Control | Keys.D6: openVariable = 6; break;
+                case Keys.Control | Keys.D7: openVariable = 7; break;
+                case Keys.Control | Keys.D8: openVariable = 8; break;
+                case Keys.Control | Keys.D9: openVariable = 9; break;
+            }
+
+            // Open specific variable in browser
+            if (openVariable > 0)
+            {
+                ApplicationJob job = SelectedObject as ApplicationJob;
+                if (job != null)
+                {
+                    int count = 0;
+                    foreach (UrlVariable variable in job.Variables.Values)
+                    {
+                        count++;
+                        if (count == openVariable)
+                        {
+                            try
+                            {
+                                System.Diagnostics.Process.Start(variable.ExpandedUrl);
+                            }
+                            catch (Exception) { }
+                            break;
+                        }
+                    }
+                    return true;
+                }
             }
 
             return base.ProcessCmdKey(ref msg, keyData);
