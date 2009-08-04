@@ -1369,13 +1369,38 @@ namespace Ketarin
             // Boolean search: All subjects must be matched
             foreach (string subject in subjects)
             {
-                if (!fulltextToLower.Contains(subject))
+                if (!MatchesSubject(subject, fulltextToLower))
                 {
                     return false;
                 }
             }
 
             return true;
+        }
+
+        /// <summary>
+        /// Determines whether or not this application matches a specific search subject.
+        /// </summary>
+        /// <param name="fulltextToLower">All textual data of the application combined in a lowercased string</param>
+        private bool MatchesSubject(string subject, string fulltextToLower)
+        {
+            int colonPos = subject.IndexOf(':');
+            if (colonPos > 0)
+            {
+                string keyword = subject.Substring(0, colonPos);
+                string searchSubject = subject.Substring(colonPos + 1);
+
+                if (!string.IsNullOrEmpty(searchSubject))
+                {
+                    switch (keyword)
+                    {
+                        case "inurl":
+                            return this.FixedDownloadUrl.ToLower().Contains(searchSubject);
+                    }
+                }
+            }
+
+            return fulltextToLower.Contains(subject);
         }
     }
 }
