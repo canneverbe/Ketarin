@@ -273,7 +273,14 @@ namespace Ketarin
                         {
                             try
                             {
-                                System.Diagnostics.Process.Start(variable.ExpandedUrl);
+                                if (variable.VariableType == UrlVariable.Type.Textual)
+                                {
+                                    System.Diagnostics.Process.Start(variable.ExpandedTextualContent);
+                                }
+                                else
+                                {
+                                    System.Diagnostics.Process.Start(variable.ExpandedUrl);
+                                }
                             }
                             catch (Exception) { }
                             break;
