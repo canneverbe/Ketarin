@@ -404,7 +404,7 @@ namespace Ketarin
 
             foreach (MenuItem item in cmnuJobs.MenuItems)
             {
-                if ((int)item.Shortcut == (int)keyData)
+                if ((int)item.Shortcut == (int)keyData && item.Enabled)
                 {
                     item.PerformClick();
                     return true;
