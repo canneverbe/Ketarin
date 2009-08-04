@@ -15,6 +15,15 @@ namespace Ketarin
         private SearchPanel searchPanel = new SearchPanel();
         private Ketarin.Forms.TextBox searchTextBox = new Ketarin.Forms.TextBox();
         private ApplicationJob[] preSearchList = null;
+        private CheckBox enabledJobsCheckbox = new CheckBox();
+
+        protected bool IsDefaultFilter
+        {
+            get
+            {
+                return string.IsNullOrEmpty(searchTextBox.Text) && (enabledJobsCheckbox.CheckState == CheckState.Indeterminate);
+            }
+        }
 
         #region ProgressRenderer
 
@@ -139,11 +148,25 @@ namespace Ketarin
             closeButton.Location = new Point(3, 6);
             closeButton.Click += new EventHandler(closeButton_Click);
 
+            enabledJobsCheckbox.Text = "Show &enabled applications";
+            enabledJobsCheckbox.ThreeState = true;
+            enabledJobsCheckbox.Location = new Point(searchTextBox.Right + 6, 6);
+            enabledJobsCheckbox.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            enabledJobsCheckbox.AutoSize = true;
+            enabledJobsCheckbox.CheckState = CheckState.Indeterminate;
+            enabledJobsCheckbox.CheckStateChanged += new EventHandler(enabledJobsCheckbox_CheckStateChanged);
+
             searchPanel.Controls.Add(closeButton);
             searchPanel.Controls.Add(searchLabel);
             searchPanel.Controls.Add(searchTextBox);
+            searchPanel.Controls.Add(enabledJobsCheckbox);
 
             this.Controls.Add(searchPanel);
+        }
+
+        private void enabledJobsCheckbox_CheckStateChanged(object sender, EventArgs e)
+        {
+            RefreshFilter();
         }
 
         private void closeButton_Click(object sender, EventArgs e)
@@ -153,8 +176,13 @@ namespace Ketarin
 
         private void searchTextBox_TextChanged(object sender, EventArgs e)
         {
+            RefreshFilter();
+        }
+
+        private void RefreshFilter()
+        {
             // Restore original list if no search text is given
-            if (string.IsNullOrEmpty(searchTextBox.Text))
+            if (IsDefaultFilter)
             {
                 SetObjects(this.preSearchList);
                 return;
@@ -170,7 +198,7 @@ namespace Ketarin
             {
                 preSearchList = this.Objects as ApplicationJob[];
             }
-            
+
             // Nothing to do if empty
             if (preSearchList == null || preSearchList.Length == 0)
             {
@@ -187,6 +215,15 @@ namespace Ketarin
 
             foreach (ApplicationJob job in preSearchList)
             {
+                // Filter job by enabled status
+                if (enabledJobsCheckbox.CheckState != CheckState.Indeterminate)
+                {
+                    if (enabledJobsCheckbox.Checked != job.Enabled)
+                    {
+                        continue;
+                    }
+                }
+
                 if (job.MatchesSearchCriteria(searchText, customColumn1, customColumn2))
                 {
                     filteredList.Add(job);
@@ -262,6 +299,7 @@ namespace Ketarin
         {
             this.searchPanel.Visible = false;
             this.searchTextBox.Text = string.Empty;
+            this.enabledJobsCheckbox.CheckState = CheckState.Indeterminate;
         }
     }
 }

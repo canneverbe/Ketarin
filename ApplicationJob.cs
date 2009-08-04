@@ -1348,6 +1348,12 @@ namespace Ketarin
         /// </summary>
         public bool MatchesSearchCriteria(string[] subjects, string customColumn1, string customColumn2)
         {
+            // Always matches if no subject is given
+            if (subjects.Length == 0 || (subjects.Length == 1 && string.IsNullOrEmpty(subjects[0])))
+            {
+                return true;
+            }
+
             StringBuilder fulltext = new StringBuilder(Name);
             fulltext.Append(Category);
             fulltext.Append(TargetPath);
