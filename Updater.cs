@@ -630,6 +630,12 @@ namespace Ketarin
                     }
                 }
 
+                long fileSize = GetContentLength(response);
+                if (fileSize == 0)
+                {
+                    throw new IOException("Source file on server is empty (ContentLength = 0).");
+                }
+
                 string targetFileName = job.GetTargetFile(response);
 
                 LogDialog.Log(job, "Determined target file name: " + targetFileName);
@@ -681,8 +687,7 @@ namespace Ketarin
                     {
                         int byteCount = 0;
                         int readBytes = 0;
-                        long length = GetContentLength(response);
-                        m_Size[job] = length;
+                        m_Size[job] = fileSize;
 
                         do
                         {
@@ -692,7 +697,7 @@ namespace Ketarin
                             readBytes = sourceFile.Read(buffer, 0, 1024);
                             if (readBytes > 0) targetFile.Write(buffer, 0, readBytes);
                             byteCount += readBytes;
-                            OnProgressChanged(byteCount, length, job);
+                            OnProgressChanged(byteCount, fileSize, job);
 
                         } while (readBytes > 0);
                     }
