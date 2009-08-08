@@ -16,6 +16,7 @@ namespace Ketarin
         private Ketarin.Forms.TextBox searchTextBox = new Ketarin.Forms.TextBox();
         private ApplicationJob[] preSearchList = null;
         private CheckBox enabledJobsCheckbox = new CheckBox();
+        private const string defaultEmptyMessage = "No applications have been added yet.";
 
         protected bool IsDefaultFilter
         {
@@ -127,6 +128,8 @@ namespace Ketarin
 
         public void Initialize()
         {
+            EmptyListMsg = defaultEmptyMessage;
+
             searchPanel.Dock = DockStyle.Bottom;
             searchPanel.AutoSize = true;
             searchPanel.AutoSizeMode = AutoSizeMode.GrowAndShrink;
@@ -300,13 +303,16 @@ namespace Ketarin
         {
             this.searchPanel.Visible = true;
             this.searchTextBox.Focus();
+            this.EmptyListMsg = "No applications match your search criteria.";
         }
 
         private void HideSearch()
         {
+            this.EmptyListMsg = defaultEmptyMessage;
             this.searchPanel.Visible = false;
             this.searchTextBox.Text = string.Empty;
             this.enabledJobsCheckbox.CheckState = CheckState.Indeterminate;
+            this.preSearchList = null;
         }
     }
 }
