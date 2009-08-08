@@ -388,7 +388,6 @@
             this.colProgress,
             this.colTarget,
             this.colCategory});
-            this.olvJobs.EmptyListMsg = "No applications have been added yet.";
             this.olvJobs.FullRowSelect = true;
             this.olvJobs.HideSelection = false;
             this.olvJobs.HighlightBackgroundColor = System.Drawing.Color.Empty;
