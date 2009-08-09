@@ -185,7 +185,7 @@ namespace Ketarin
         private void RefreshFilter()
         {
             // Restore original list if no search text is given
-            if (IsDefaultFilter)
+            if (IsDefaultFilter && this.preSearchList != null)
             {
                 SetObjects(this.preSearchList);
                 return;
