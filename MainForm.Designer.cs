@@ -60,6 +60,7 @@
             this.mnuLog = new System.Windows.Forms.MenuItem();
             this.mnuShowGroups = new System.Windows.Forms.MenuItem();
             this.mnuShowStatusBar = new System.Windows.Forms.MenuItem();
+            this.mnuAutoScroll = new System.Windows.Forms.MenuItem();
             this.mnuFind = new System.Windows.Forms.MenuItem();
             this.mnuHelp = new System.Windows.Forms.MenuItem();
             this.mnuTutorial = new System.Windows.Forms.MenuItem();
@@ -89,7 +90,6 @@
             this.statusBar = new System.Windows.Forms.StatusStrip();
             this.tbSelectedApplications = new System.Windows.Forms.ToolStripStatusLabel();
             this.tbTotalApplications = new System.Windows.Forms.ToolStripStatusLabel();
-            this.mnuAutoScroll = new System.Windows.Forms.MenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.olvJobs)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.m_VistaMenu)).BeginInit();
             this.statusBar.SuspendLayout();
@@ -313,6 +313,13 @@
             this.mnuShowStatusBar.Index = 2;
             this.mnuShowStatusBar.Text = "Show status &bar";
             this.mnuShowStatusBar.Click += new System.EventHandler(this.mnuShowStatusBar_Click);
+            // 
+            // mnuAutoScroll
+            // 
+            this.mnuAutoScroll.Checked = true;
+            this.mnuAutoScroll.Index = 3;
+            this.mnuAutoScroll.Text = "&Auto scroll";
+            this.mnuAutoScroll.Click += new System.EventHandler(this.mnuAutoScroll_Click);
             // 
             // mnuFind
             // 
@@ -555,13 +562,6 @@
             this.tbTotalApplications.Spring = true;
             this.tbTotalApplications.Text = "Number of applications: 0";
             this.tbTotalApplications.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // mnuAutoScroll
-            // 
-            this.mnuAutoScroll.Checked = true;
-            this.mnuAutoScroll.Index = 3;
-            this.mnuAutoScroll.Text = "Auto scroll";
-            this.mnuAutoScroll.Click += new System.EventHandler(this.mnuAutoScroll_Click);
             // 
             // MainForm
             // 
