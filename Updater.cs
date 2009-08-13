@@ -636,7 +636,7 @@ namespace Ketarin
                     throw new IOException("Source file on server is empty (ContentLength = 0).");
                 }
 
-                string targetFileName = job.GetTargetFile(response);
+                string targetFileName = job.GetTargetFile(response, urlToRequest.AbsoluteUri);
 
                 LogDialog.Log(job, "Determined target file name: " + targetFileName);
 

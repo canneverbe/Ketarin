@@ -1134,12 +1134,12 @@ namespace Ketarin
             m_Guid = new Guid(guid);
         }
 
-        public string GetTargetFile(WebResponse netResponse)
+        public string GetTargetFile(WebResponse netResponse, string alternateFileName)
         {
             string targetLocation = Environment.ExpandEnvironmentVariables(TargetPath);
 
             // Allow variables in target locations as well
-            targetLocation = Variables.ReplaceAllInString(targetLocation, GetLastModified(netResponse), GetFileNameFromWebResponse(netResponse), false);
+            targetLocation = Variables.ReplaceAllInString(targetLocation, GetLastModified(netResponse), GetFileNameFromWebResponse(netResponse, alternateFileName), false);
 
             // If carried on a USB stick, allow using the drive name
             try
@@ -1150,7 +1150,7 @@ namespace Ketarin
 
             if (TargetIsFolder || Directory.Exists(targetLocation))
             {
-                string fileName = GetFileNameFromWebResponse(netResponse);
+                string fileName = GetFileNameFromWebResponse(netResponse, alternateFileName);
                 targetLocation = Path.Combine(targetLocation, fileName);
             }
 
@@ -1171,7 +1171,7 @@ namespace Ketarin
         /// Returns the result file name of a web response. If possible, the
         /// content disposition headers are considered as well.
         /// </summary>
-        private static string GetFileNameFromWebResponse(WebResponse netResponse)
+        private static string GetFileNameFromWebResponse(WebResponse netResponse, string alternateFileName)
         {
             string fileName = Path.GetFileName(netResponse.ResponseUri.AbsolutePath);
 
@@ -1198,7 +1198,13 @@ namespace Ketarin
                 }
             }
 
+            if (string.IsNullOrEmpty(fileName) && !string.IsNullOrEmpty(alternateFileName))
+            {
+                fileName = Path.GetFileName(alternateFileName);
+            }
+
             fileName = fileName.Replace("%20", " ");
+
             return fileName;
         }
 
