@@ -1244,31 +1244,35 @@ namespace Ketarin
         {
             LogDialog.Log(this, "Checking if update is required...");
 
-            FileInfo current;
-            try
-            {
-                current = new FileInfo(targetFile);
-            }
-            catch (ArgumentException)
-            {
-                throw new TargetPathInvalidException(targetFile);
-            }
-            catch (NotSupportedException)
-            {
-                throw new TargetPathInvalidException(targetFile);
-            }
+            FileInfo current = null;
 
-            if (!current.Exists && !string.IsNullOrEmpty(m_PreviousLocation) && m_DeletePreviousFile)
+            if (!string.IsNullOrEmpty(targetFile))
             {
-                // The file does not exist at the target location.
-                // Check if the previously downloaded file still matches.
-                current = new FileInfo(m_PreviousLocation);
-            }
+                try
+                {
+                    current = new FileInfo(targetFile);
+                }
+                catch (ArgumentException)
+                {
+                    throw new TargetPathInvalidException(targetFile);
+                }
+                catch (NotSupportedException)
+                {
+                    throw new TargetPathInvalidException(targetFile);
+                }
 
-            if (!current.Exists)
-            {
-                LogDialog.Log(this, string.Format("Update required, '{0}' does not yet exist", targetFile));
-                return true;
+                if (!current.Exists && !string.IsNullOrEmpty(m_PreviousLocation) && m_DeletePreviousFile)
+                {
+                    // The file does not exist at the target location.
+                    // Check if the previously downloaded file still matches.
+                    current = new FileInfo(m_PreviousLocation);
+                }
+
+                if (!current.Exists)
+                {
+                    LogDialog.Log(this, string.Format("Update required, '{0}' does not yet exist", targetFile));
+                    return true;
+                }
             }
 
             // Check a variable's contents?
@@ -1312,6 +1316,8 @@ namespace Ketarin
                     return md5Result;
                 }
             }
+
+            if (current == null) return false;
 
             // Remote date must be greater than our local date
             // However, if the remote date is very close to DateTime.Now, it is incorrect (scripts)

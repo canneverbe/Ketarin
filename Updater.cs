@@ -534,6 +534,22 @@ namespace Ketarin
             }
 
             requestedUrl = downloadUrl;
+
+            if (string.IsNullOrEmpty(downloadUrl))
+            {
+                // No download URL specified, only check if update is required
+                if (job.RequiresDownload(null, null))
+                {
+                    m_Status[job] = Status.UpdateSuccessful;
+                    return true;
+                }
+                else
+                {
+                    m_Status[job] = Status.NoUpdate;
+                    return false;
+                }
+            }
+
             Uri url = new Uri(downloadUrl);
 
             return DoDownload(job, url);

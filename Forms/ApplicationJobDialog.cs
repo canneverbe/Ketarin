@@ -289,18 +289,10 @@ namespace Ketarin.Forms
 
         private void bOK_Click(object sender, EventArgs e)
         {
-            // Check that a target location is given
-            if (string.IsNullOrEmpty(txtTarget.Text))
-            {
-                MessageBox.Show(this, "You did not specify a target location.", tpApplication.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                DialogResult = DialogResult.None;
-                return;
-            }
-
             // Check that name is not empty
             if (string.IsNullOrEmpty(txtApplicationName.Text))
             {
-                MessageBox.Show(this, "The application name must not be empty.", tpApplication.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(this, "The application name must not be empty.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 DialogResult = DialogResult.None;
                 return;
             }
@@ -308,13 +300,22 @@ namespace Ketarin.Forms
             // Check for valid URL
             if (rbFixedUrl.Checked && string.IsNullOrEmpty(txtFixedUrl.Text))
             {
-                MessageBox.Show(this, "The URL must not be empty.", tpApplication.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                DialogResult = DialogResult.None;
-                return;
+                MessageBox.Show(this, "You did not enter a download URL. The application will not be downloaded as long as no URL is specified.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
-            else if (rbFileHippo.Checked && String.IsNullOrEmpty(txtFileHippoId.Text))
+            else
             {
-                MessageBox.Show(this, "You did not specify a FileHippo ID.\r\nYou can paste the desired URL from the FileHippo.com website, the ID will be extracted automatically.", tpApplication.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                // Check that a target location is given
+                if (string.IsNullOrEmpty(txtTarget.Text))
+                {
+                    MessageBox.Show(this, "You did not specify a target location.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    DialogResult = DialogResult.None;
+                    return;
+                }
+            }
+
+            if (rbFileHippo.Checked && String.IsNullOrEmpty(txtFileHippoId.Text))
+            {
+                MessageBox.Show(this, "You did not specify a FileHippo ID.\r\nYou can paste the desired URL from the FileHippo.com website, the ID will be extracted automatically.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 DialogResult = DialogResult.None;
                 return;
             }
