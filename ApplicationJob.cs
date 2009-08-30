@@ -1368,7 +1368,7 @@ namespace Ketarin
 
         /// <summary>
         /// Determines whether or not this application matches the given search critera.
-        /// <param name="subject">Lowercased search string</param>
+        /// <param name="subjects">Lowercased search subjects</param>
         /// </summary>
         public bool MatchesSearchCriteria(string[] subjects, string customColumn1, string customColumn2)
         {
@@ -1419,7 +1419,32 @@ namespace Ketarin
                     switch (keyword)
                     {
                         case "inurl":
+                            // Search for URLs with a certain content
                             return this.FixedDownloadUrl.ToLower().Contains(searchSubject);
+
+                        case "incommand":
+                            // Search for commands with a certain content
+                            return (this.ExecuteCommand != null && this.ExecuteCommand.ToLower().Contains(searchSubject)) || (this.ExecutePreCommand != null && this.ExecutePreCommand.ToLower().Contains(searchSubject));
+
+                        case "invarname":
+                            // Check for variables with a certain name
+                            StringBuilder varNames = new StringBuilder();
+                            foreach (UrlVariable variable in this.Variables.Values)
+                            {
+                                varNames.Append(variable.Name);
+                            }
+
+                            return varNames.ToString().ToLower().Contains(searchSubject);
+
+                        case "invarurl":
+                            // Check for variables with certain URLs
+                            StringBuilder varUrls = new StringBuilder();
+                            foreach (UrlVariable variable in this.Variables.Values)
+                            {
+                                varUrls.Append(variable.Url);
+                            }
+
+                            return varUrls.ToString().ToLower().Contains(searchSubject);
                     }
                 }
             }
