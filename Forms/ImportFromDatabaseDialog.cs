@@ -88,7 +88,7 @@ namespace Ketarin.Forms
                 {
                     IKetarinRpc proxy = XmlRpcProxyGen.Create<IKetarinRpc>();
                     string xml = proxy.GetApplication(app.ShareId);
-                    ApplicationJob resultJob = ApplicationJob.LoadFromXml(xml);
+                    ApplicationJob resultJob = ApplicationJob.LoadOneFromXml(xml);
                     // For security reasons, we remove some of the properties
                     // if it's not the users own job
                     if (!DbManager.ApplicationExists(resultJob.Guid))
@@ -112,7 +112,7 @@ namespace Ketarin.Forms
                         string defaultXml = Settings.GetValue("DefaultApplication", "") as string;
                         if (!string.IsNullOrEmpty(defaultXml))
                         {
-                            ApplicationJob defaultApp = ApplicationJob.LoadFromXml(defaultXml);
+                            ApplicationJob defaultApp = ApplicationJob.LoadOneFromXml(defaultXml);
                             if (defaultApp != null)
                             {
                                 resultJob.TargetPath = defaultApp.TargetPath;
