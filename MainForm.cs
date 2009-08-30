@@ -674,7 +674,7 @@ namespace Ketarin
             cmnuOpenFile.Enabled = (job != null && !m_Updater.IsBusy && !string.IsNullOrEmpty(job.PreviousLocation) && File.Exists(job.PreviousLocation));
             cmnuOpenFolder.Enabled = (job != null && !string.IsNullOrEmpty(job.PreviousLocation) && File.Exists(job.PreviousLocation));
             cmnuRename.Enabled = cmnuOpenFile.Enabled;
-            cmnuCopy.Enabled = (job != null);
+            cmnuCopy.Enabled = (olvJobs.SelectedObjects.Count != 0);
             cmnuPaste.Enabled = SafeClipboard.IsDataPresent(DataFormats.Text);
         }
 
@@ -725,10 +725,13 @@ namespace Ketarin
 
         private void cmnuCopy_Click(object sender, EventArgs e)
         {
-            ApplicationJob job = olvJobs.SelectedObject as ApplicationJob;
-            if (job == null) return;
+            List<ApplicationJob> jobs = new List<ApplicationJob>();
+            foreach (ApplicationJob job in olvJobs.SelectedObjects)
+            {
+                jobs.Add(job);
+            }
 
-            SafeClipboard.SetData(job.GetXml(), false);
+            SafeClipboard.SetData(ApplicationJob.GetXml(jobs, false), false);
         }
 
         private void mnuSelectAll_Click(object sender, EventArgs e)
@@ -740,15 +743,21 @@ namespace Ketarin
         {
             try
             {
-                ApplicationJob job = ApplicationJob.LoadFromXml(SafeClipboard.GetData(DataFormats.Text) as string);
-                job.Guid = Guid.NewGuid();
-                job.PreviousLocation = null;
-                job.CanBeShared = true;
-                job.Save();
+                ApplicationJob[] jobs = ApplicationJob.LoadFromXml(SafeClipboard.GetData(DataFormats.Text) as string);
+                if (jobs == null || jobs.Length == 0) return;
 
-                olvJobs.AddObject(job);
-                olvJobs.EnsureVisible(olvJobs.IndexOf(job));
-                olvJobs.SelectedObject = job;
+                foreach (ApplicationJob job in jobs)
+                {
+                    job.Guid = Guid.NewGuid();
+                    job.PreviousLocation = null;
+                    job.CanBeShared = true;
+                    job.Save();
+                    olvJobs.AddObject(job);
+                }
+
+                // Go to last job
+                olvJobs.EnsureVisible(olvJobs.IndexOf(jobs[jobs.Length - 1]));
+                olvJobs.SelectedObject = jobs[jobs.Length - 1];
                 UpdateStatusbar();
             }
             catch (Exception) { }

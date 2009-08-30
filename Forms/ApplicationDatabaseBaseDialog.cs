@@ -55,7 +55,7 @@ namespace Ketarin.Forms
 
                 IKetarinRpc proxy = XmlRpcProxyGen.Create<IKetarinRpc>();
                 string xml = proxy.GetApplication(app.ShareId);
-                ApplicationJob resultJob = ApplicationJob.LoadFromXml(xml);
+                ApplicationJob resultJob = ApplicationJob.LoadOneFromXml(xml);
 
                 using (ApplicationJobDialog dialog = new ApplicationJobDialog())
                 {

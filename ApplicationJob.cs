@@ -590,7 +590,7 @@ namespace Ketarin
 
             foreach (string xml in xmlValues)
             {
-                ApplicationJob job = LoadFromXml(xml);
+                ApplicationJob job = LoadOneFromXml(xml);
                 if (job.Guid == Guid)
                 {
                     // The right job is found, update now
@@ -687,7 +687,7 @@ namespace Ketarin
         /// Imports one or more ApplicationJobs from an XML file.
         /// </summary>
         /// <returns>The last imported ApplicationJob</returns>
-        public static ApplicationJob ImportFromXml(string fileName)
+        public static ApplicationJob[] ImportFromXml(string fileName)
         {
             return ImportFromXmlString(File.ReadAllText(fileName));
         }
@@ -696,7 +696,7 @@ namespace Ketarin
         /// Imports one or more ApplicationJobs from a piece of XML.
         /// </summary>
         /// <returns>The last imported ApplicationJob</returns>
-        public static ApplicationJob ImportFromXmlString(string xml)
+        public static ApplicationJob[] ImportFromXmlString(string xml)
         {
             using (StringReader textReader = new StringReader(xml))
             {
@@ -812,11 +812,11 @@ namespace Ketarin
         }
 
         /// <summary>
-        /// Creates one application job from the given XML,
+        /// Creates one or more application jobs from the given XML,
         /// without saving it.
         /// </summary>
         /// <returns>The last imported ApplicationJob</returns>
-        public static ApplicationJob LoadFromXml(string xml)
+        public static ApplicationJob[] LoadFromXml(string xml)
         {
             using (StringReader textReader = new StringReader(xml))
             {
@@ -825,6 +825,17 @@ namespace Ketarin
                     return ImportFromXml(reader, false);
                 }
             }
+        }
+
+        /// <summary>
+        /// Creates a single application job from the given XML,
+        /// without saving it.
+        /// </summary>
+        /// <returns>The last imported ApplicationJob</returns>
+        public static ApplicationJob LoadOneFromXml(string xml)
+        {
+            ApplicationJob[] jobs = LoadFromXml(xml);
+            return (jobs.Length == 0) ? null : jobs[0];
         }
 
         /// <summary>
@@ -898,7 +909,8 @@ namespace Ketarin
                 element.ParentNode.ReplaceChild(doc.CreateTextNode(values[name]), element);
             }
 
-            return ImportFromXmlString(doc.OuterXml);
+            ApplicationJob[] jobs = ImportFromXmlString(doc.OuterXml);
+            return (jobs.Length > 0) ? jobs[0] : null;
         }
 
         /// <summary>
@@ -906,7 +918,7 @@ namespace Ketarin
         /// provided by an XmlReader.
         /// </summary>
         /// <returns>The last imported ApplicationJob</returns>
-        private static ApplicationJob ImportFromXml(XmlReader reader, bool save)
+        private static ApplicationJob[] ImportFromXml(XmlReader reader, bool save)
         {
             XmlSerializer serializer = new XmlSerializer(typeof(ApplicationJob));
             // Find the start position
@@ -918,7 +930,7 @@ namespace Ketarin
                 }
             }
 
-            ApplicationJob lastJob = null;
+            List<ApplicationJob> importedJobs = new List<ApplicationJob>();
 
             // Read each job
             while (true)
@@ -928,10 +940,10 @@ namespace Ketarin
 
                 // If a job already exists, only update it!
                 if (save) importedJob.Save();
-                lastJob = importedJob;
+                importedJobs.Add(importedJob);
             }
 
-            return lastJob;
+            return importedJobs.ToArray();
         }
 
         /// <summary>

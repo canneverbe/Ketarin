@@ -89,7 +89,7 @@ namespace Ketarin.Forms
             string defaultXml = Settings.GetValue("DefaultApplication", "") as string;
             if (!string.IsNullOrEmpty(defaultXml))
             {
-                m_ApplicationJob = ApplicationJob.LoadFromXml(defaultXml);
+                m_ApplicationJob = ApplicationJob.LoadOneFromXml(defaultXml);
                 ReadApplication();
             }
         }
