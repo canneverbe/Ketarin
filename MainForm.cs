@@ -361,6 +361,7 @@ namespace Ketarin
             base.OnLoad(e);
 
             mnuShowGroups.Checked = Conversion.ToBoolean(Settings.GetValue("Ketarin", "ShowGroups", true));
+            mnuAutoScroll.Checked = Conversion.ToBoolean(Settings.GetValue("Ketarin", "AutoScroll", true));
             olvJobs.ShowGroups = mnuShowGroups.Checked;
             m_CustomColumn1 = SettingsDialog.CustomColumnVariableName1;
             m_CustomColumn2 = SettingsDialog.CustomColumnVariableName2;
@@ -421,6 +422,7 @@ namespace Ketarin
             Settings.SetValue("Ketarin", "ShowGroups", olvJobs.ShowGroups);
             Settings.SetValue("Ketarin", "ShowStatusBar", statusBar.Visible);
             Settings.SetValue("Ketarin", "ShowLog", mnuLog.Checked);
+            Settings.SetValue("Ketarin", "AutoScroll", mnuAutoScroll.Checked);
 
             if (m_Updater.IsBusy)
             {
