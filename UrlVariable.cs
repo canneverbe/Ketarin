@@ -555,6 +555,8 @@ namespace Ketarin
                     }
                 case "ext":
                     return Path.GetExtension(content).TrimStart('.');
+                case "basefile":
+                    return Path.GetFileNameWithoutExtension(content);
                 case "directory":
                     try
                     {
