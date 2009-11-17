@@ -205,7 +205,9 @@ namespace Ketarin
             {
                 mnuLog.Checked = LogDialog.Instance.Visible;
             });
-            
+
+            this.olvJobs.FilterChanged += new EventHandler(olvJobs_FilterChanged);
+
             imlStatus.Images.Add(Properties.Resources.Document);
             imlStatus.Images.Add(Properties.Resources.Import);
             imlStatus.Images.Add(Properties.Resources.New);
@@ -657,9 +659,8 @@ namespace Ketarin
 
         private void cmnuDelete_Click(object sender, EventArgs e)
         {
-            if (DeleteApplicationDialog.Show(this, olvJobs.SelectedObjects))
+            if (olvJobs.DeleteSelectedApplications())
             {
-                olvJobs.RemoveObjects(olvJobs.SelectedObjects);
                 m_Jobs = new List<ApplicationJob>(DbManager.GetJobs()).ToArray();
                 UpdateStatusbar();
             }
@@ -773,6 +774,14 @@ namespace Ketarin
         private void olvJobs_SelectedIndexChanged(object sender, EventArgs e)
         {
             cmnuJobs_Popup(sender, e);
+        }
+
+        private void olvJobs_FilterChanged(object sender, EventArgs e)
+        {
+            bAddApplication.Enabled = olvJobs.IsDefaultFilter;
+            mnuNew.Enabled = olvJobs.IsDefaultFilter;
+            cmnuImportFile.Enabled = olvJobs.IsDefaultFilter && !m_Updater.IsBusy;
+            mnuImport.Enabled = olvJobs.IsDefaultFilter && !m_Updater.IsBusy;
         }
 
         #endregion

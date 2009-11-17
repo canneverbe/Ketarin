@@ -305,7 +305,7 @@
             // 
             this.mnuShowGroups.Checked = true;
             this.mnuShowGroups.Index = 1;
-            this.mnuShowGroups.Text = "Show &groups";
+            this.mnuShowGroups.Text = "Show gr&oups";
             this.mnuShowGroups.Click += new System.EventHandler(this.mnuShowGroups_Click);
             // 
             // mnuShowStatusBar

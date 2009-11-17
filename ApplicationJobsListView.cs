@@ -14,17 +14,29 @@ namespace Ketarin
     {
         private SearchPanel searchPanel = new SearchPanel();
         private Ketarin.Forms.TextBox searchTextBox = new Ketarin.Forms.TextBox();
-        private ApplicationJob[] preSearchList = null;
+        private List<ApplicationJob> preSearchList = null;
         private CheckBox enabledJobsCheckbox = new CheckBox();
         private const string defaultEmptyMessage = "No applications have been added yet.";
 
-        protected bool IsDefaultFilter
+        /// <summary>
+        /// Fires when the filter of the ListView has changed.
+        /// </summary>
+        public event EventHandler FilterChanged;
+
+        #region Properties
+
+        /// <summary>
+        /// Gets whether or not the default filter (that is, none) is active.
+        /// </summary>
+        public bool IsDefaultFilter
         {
             get
             {
                 return string.IsNullOrEmpty(searchTextBox.Text) && (enabledJobsCheckbox.CheckState == CheckState.Indeterminate);
             }
         }
+
+        #endregion
 
         #region ProgressRenderer
 
@@ -187,7 +199,8 @@ namespace Ketarin
             // Restore original list if no search text is given
             if (IsDefaultFilter && this.preSearchList != null)
             {
-                SetObjects(this.preSearchList);
+                SetObjects(this.preSearchList.ToArray());
+                OnFilterChanged();
                 return;
             }
 
@@ -199,11 +212,16 @@ namespace Ketarin
 
             if (preSearchList == null)
             {
-                preSearchList = this.Objects as ApplicationJob[];
+                List <ApplicationJob> applications = new List<ApplicationJob>();
+                foreach (ApplicationJob job in this.Objects)
+                {
+                    applications.Add(job);
+                }
+                preSearchList = applications;
             }
 
             // Nothing to do if empty
-            if (preSearchList == null || preSearchList.Length == 0)
+            if (preSearchList == null || preSearchList.Count == 0)
             {
                 return;
             }
@@ -234,6 +252,15 @@ namespace Ketarin
             }
 
             this.SetObjects(filteredList.ToArray());
+            OnFilterChanged();
+        }
+
+        protected virtual void OnFilterChanged()
+        {
+            if (FilterChanged != null)
+            {
+                FilterChanged(this, null);
+            }
         }
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
@@ -313,6 +340,33 @@ namespace Ketarin
             this.searchTextBox.Text = string.Empty;
             this.enabledJobsCheckbox.CheckState = CheckState.Indeterminate;
             this.preSearchList = null;
+        }
+
+        /// <summary>
+        /// Deletes all selected applications after user confirmation.
+        /// </summary>
+        /// <returns>true, if applications have been deleted</returns>
+        public bool DeleteSelectedApplications()
+        {
+            if (SelectedObjects.Count == 0)
+            {
+                return false;
+            }
+
+            if (DeleteApplicationDialog.Show(this, SelectedObjects))
+            {
+                if (preSearchList != null)
+                {
+                    foreach (ApplicationJob job in SelectedObjects)
+                    {
+                        preSearchList.Remove(job);
+                    }
+                }
+                RemoveObjects(SelectedObjects);
+                return true;
+            }
+
+            return false;
         }
     }
 }

@@ -428,7 +428,9 @@
     <None Include="Icon\CloseSearch.png" />
     <None Include="Icon\CloseSearchDown.png" />
     <None Include="Icon\CloseSearchHover.png" />
-    <Content Include="ketarin.ico" />
+    <Content Include="ketarin.ico">
+      <Generator>up</Generator>
+    </Content>
     <None Include="Resources\New.png" />
     <None Include="Resources\Symbol Information.png" />
     <None Include="Resources\Document Restricted.png" />
