@@ -25,7 +25,7 @@ namespace Ketarin
         private ApplicationJob[] m_Jobs = null;
         private Dictionary<ApplicationJob, short> m_Progress = null;
         private Dictionary<ApplicationJob, Status> m_Status = null;
-        private Dictionary<ApplicationJob, long> m_Size = new Dictionary<ApplicationJob,long>();
+        private Dictionary<ApplicationJob, long> m_Size = new Dictionary<ApplicationJob, long>();
         private bool m_CancelUpdates = false;
         private bool m_IsBusy = false;
         protected int m_LastProgress = -1;
@@ -35,7 +35,7 @@ namespace Ketarin
         private bool m_ForceDownload = false;
         private int m_ThreadLimit = 2;
         private List<Thread> m_Threads = new List<Thread>();
-        private List<string> m_NoAutoReferer = new List<string>(new string[] {"sourceforge.net"});
+        private List<string> m_NoAutoReferer = new List<string>(new string[] { "sourceforge.net" });
         private CookieContainer m_Cookies = new CookieContainer();
 
         #region Properties
@@ -101,7 +101,8 @@ namespace Ketarin
 
             #endregion
 
-            public JobProgressChangedEventArgs(int progressPercentage, ApplicationJob job) : base(progressPercentage, null)
+            public JobProgressChangedEventArgs(int progressPercentage, ApplicationJob job)
+                : base(progressPercentage, null)
             {
                 m_Job = job;
             }
@@ -159,12 +160,12 @@ namespace Ketarin
         /// Occurs when the download progress of an application changed.
         /// </summary>
         public event EventHandler<JobProgressChangedEventArgs> ProgressChanged;
-        
+
         /// <summary>
         /// Occurs when the upgrade status of an application changed.
         /// </summary>
         public event EventHandler<JobStatusChangedEventArgs> StatusChanged;
-        
+
         /// <summary>
         /// Occurs when the updater has finished the whole upgrade process.
         /// </summary>
@@ -474,6 +475,13 @@ namespace Ketarin
                 m_Errors.Add(new ApplicationJobError(job, ex, requestedUrl));
                 m_Status[job] = Status.Failure;
             }
+            catch (NotSupportedException ex)
+            {
+                // Invalid URI prefix
+                LogDialog.Log(job, ex);
+                m_Errors.Add(new ApplicationJobError(job, ex, requestedUrl));
+                m_Status[job] = Status.Failure;
+            }
             catch (NonBinaryFileException ex)
             {
                 LogDialog.Log(job, ex);
@@ -611,7 +619,7 @@ namespace Ketarin
                         break;
                     }
                 }
-                
+
                 if (!string.IsNullOrEmpty(job.HttpReferer))
                 {
                     httpRequest.Referer = job.HttpReferer;
@@ -640,7 +648,7 @@ namespace Ketarin
                             return DoDownload(job, new Uri(padJob.FixedDownloadUrl));
                         }
                     }
-                    if (response.ContentType.StartsWith("text/html") )
+                    if (response.ContentType.StartsWith("text/html"))
                     {
                         throw NonBinaryFileException.Create(response.ContentType, httpResponse.StatusCode);
                     }
@@ -873,12 +881,16 @@ namespace Ketarin
 
             using (Process proc = Process.Start(cmdExe))
             {
-                // Clean all the cmd.exe headers
-                string clean = string.Empty;
-                do
-                {
-                    clean = proc.StandardOutput.ReadLine();
-                } while (!string.IsNullOrEmpty(clean));
+                StringBuilder commandResult = new StringBuilder();
+
+                // Set the event handler to asynchronously read the command output.
+                proc.OutputDataReceived += new DataReceivedEventHandler(delegate(object sendingProcess, DataReceivedEventArgs outLine)
+                    {
+                        if (!string.IsNullOrEmpty(outLine.Data)) commandResult.AppendLine(outLine.Data);
+                    });
+
+                // Start the asynchronous read of the command output stream.
+                proc.BeginOutputReadLine();
 
                 // Input commands
                 using (proc.StandardInput)
@@ -898,10 +910,11 @@ namespace Ketarin
                 if (!executeBackground)
                 {
                     proc.WaitForExit();
-
-                    string result = proc.StandardOutput.ReadToEnd();
-                    LogDialog.Log(job, "Command result: " + result);
-                    
+                    string commandResultString = commandResult.ToString();
+                    if (!string.IsNullOrEmpty(commandResultString))
+                    {
+                        LogDialog.Log(job, "Command result: " + commandResultString);
+                    }
                     return proc.ExitCode;
                 }
             }
