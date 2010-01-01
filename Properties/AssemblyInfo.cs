@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Canneverbe Limited")]
 [assembly: AssemblyProduct("Ketarin")]
-[assembly: AssemblyCopyright("© Canneverbe Limited 2008")]
+[assembly: AssemblyCopyright("© Canneverbe Limited 2008-2009")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -32,5 +32,5 @@ using System.Runtime.InteropServices;
 // Sie können alle Werte angeben oder die standardmäßigen Build- und Revisionsnummern 
 // übernehmen, indem Sie "*" eingeben:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.8.302")]
-[assembly: AssemblyFileVersion("1.0.8.302")]
+[assembly: AssemblyVersion("1.0.9.309")]
+[assembly: AssemblyFileVersion("1.0.9.309")]
