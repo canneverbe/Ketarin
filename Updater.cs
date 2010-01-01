@@ -607,7 +607,7 @@ namespace Ketarin
 
                 // If we have an HTTP request, some sites may require a correct referer
                 // for the download.
-                // If there there are variables defined (from which most likely the download link
+                // If there are variables defined (from which most likely the download link
                 // or version is being extracted), we'll just use the first variable's URL as referer.
                 // The user still has the option to set a custom referer.
                 // Note: Some websites don't "like" certain referers
