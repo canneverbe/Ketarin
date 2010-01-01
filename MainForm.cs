@@ -230,6 +230,8 @@ namespace Ketarin
                 mnuExportAll.Enabled = true;
                 mnuImport.Enabled = true;
                 olvJobs.Refresh();
+                // Refresh sorting (last updated column for example)
+                olvJobs.Sort();
 
                 if (m_Updater.Errors.Length > 0)
                 {
