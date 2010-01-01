@@ -79,7 +79,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\cdbxp-bin\trunk\CsLib\CDBurnerXP\IO\Debug.cs">
+    <Compile Include="m:\CsLib\CDBurnerXP\IO\Debug.cs">
       <Link>CDBurnerXP\Debug.cs</Link>
     </Compile>
     <Compile Include="ApplicationJob.cs" />
@@ -197,76 +197,76 @@
     </Compile>
     <Compile Include="ftplib.cs" />
     <Compile Include="IKetarinRpc.cs" />
-    <Compile Include="M:\trunk\CsLib\CDBurnerXP\Controls\ListView.cs">
+    <Compile Include="M:\CsLib\CDBurnerXP\Controls\ListView.cs">
       <Link>CDBurnerXP\ListView.cs</Link>
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="M:\trunk\CsLib\CDBurnerXP\Controls\MarqueeProgressBar.cs">
+    <Compile Include="M:\CsLib\CDBurnerXP\Controls\MarqueeProgressBar.cs">
       <Link>CDBurnerXP\MarqueeProgressBar.cs</Link>
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="M:\trunk\CsLib\CDBurnerXP\Controls\ObjectListView.cs">
+    <Compile Include="M:\CsLib\CDBurnerXP\Controls\ObjectListView.cs">
       <Link>CDBurnerXP\ObjectListView.cs</Link>
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="M:\trunk\CsLib\CDBurnerXP\Controls\OwnerDrawnMenu.cs">
+    <Compile Include="M:\CsLib\CDBurnerXP\Controls\OwnerDrawnMenu.cs">
       <Link>CDBurnerXP\OwnerDrawnMenu.cs</Link>
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="M:\trunk\CsLib\CDBurnerXP\Controls\VistaMenu.cs">
+    <Compile Include="M:\CsLib\CDBurnerXP\Controls\VistaMenu.cs">
       <Link>CDBurnerXP\VistaMenu.cs</Link>
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="M:\trunk\CsLib\CDBurnerXP\Controls\WebLink.cs">
+    <Compile Include="M:\CsLib\CDBurnerXP\Controls\WebLink.cs">
       <Link>CDBurnerXP\WebLink.cs</Link>
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="M:\trunk\CsLib\CDBurnerXP\Conversion.cs">
+    <Compile Include="M:\CsLib\CDBurnerXP\Conversion.cs">
       <Link>CDBurnerXP\Conversion.cs</Link>
     </Compile>
-    <Compile Include="M:\trunk\CsLib\CDBurnerXP\Forms\ControlRedrawLock.cs">
+    <Compile Include="M:\CsLib\CDBurnerXP\Forms\ControlRedrawLock.cs">
       <Link>CDBurnerXP\ControlRedrawLock.cs</Link>
     </Compile>
-    <Compile Include="M:\trunk\CsLib\CDBurnerXP\Forms\PersistentForm.cs">
+    <Compile Include="M:\CsLib\CDBurnerXP\Forms\PersistentForm.cs">
       <Link>CDBurnerXP\PersistentForm.cs</Link>
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="M:\trunk\CsLib\CDBurnerXP\Forms\ProgressDialog.cs">
+    <Compile Include="M:\CsLib\CDBurnerXP\Forms\ProgressDialog.cs">
       <Link>CDBurnerXP\ProgressDialog.cs</Link>
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="M:\trunk\CsLib\CDBurnerXP\Forms\ProgressDialog.designer.cs">
+    <Compile Include="M:\CsLib\CDBurnerXP\Forms\ProgressDialog.designer.cs">
       <Link>CDBurnerXP\ProgressDialog.designer.cs</Link>
       <DependentUpon>ProgressDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="M:\trunk\CsLib\CDBurnerXP\GenericEventArgs.cs">
+    <Compile Include="M:\CsLib\CDBurnerXP\GenericEventArgs.cs">
       <Link>CDBurnerXP\GenericEventArgs.cs</Link>
     </Compile>
-    <Compile Include="M:\trunk\CsLib\CDBurnerXP\IO\FormatFileSize.cs">
+    <Compile Include="M:\CsLib\CDBurnerXP\IO\FormatFileSize.cs">
       <Link>CDBurnerXP\FormatFileSize.cs</Link>
     </Compile>
-    <Compile Include="M:\trunk\CsLib\CDBurnerXP\IO\PathEx.cs">
+    <Compile Include="M:\CsLib\CDBurnerXP\IO\PathEx.cs">
       <Link>CDBurnerXP\PathEx.cs</Link>
     </Compile>
-    <Compile Include="M:\trunk\CsLib\CDBurnerXP\IO\SafeClipboard.cs">
+    <Compile Include="M:\CsLib\CDBurnerXP\IO\SafeClipboard.cs">
       <Link>CDBurnerXP\SafeClipboard.cs</Link>
     </Compile>
-    <Compile Include="M:\trunk\CsLib\CDBurnerXP\Settings.cs">
+    <Compile Include="M:\CsLib\CDBurnerXP\Settings.cs">
       <Link>CDBurnerXP\Settings.cs</Link>
     </Compile>
-    <Compile Include="M:\trunk\CsLib\CDBurnerXP\Utility.cs">
+    <Compile Include="M:\CsLib\CDBurnerXP\Utility.cs">
       <Link>CDBurnerXP\Utility.cs</Link>
     </Compile>
-    <Compile Include="M:\trunk\CsLib\Win32\IconReader.cs">
+    <Compile Include="M:\CsLib\Win32\IconReader.cs">
       <Link>CDBurnerXP\IconReader.cs</Link>
     </Compile>
-    <Compile Include="M:\trunk\CsLib\Win32\Kernel32.cs">
+    <Compile Include="M:\CsLib\Win32\Kernel32.cs">
       <Link>CDBurnerXP\Kernel32.cs</Link>
     </Compile>
-    <Compile Include="M:\trunk\CsLib\Win32\Shell32.cs">
+    <Compile Include="M:\CsLib\Win32\Shell32.cs">
       <Link>CDBurnerXP\Shell32.cs</Link>
     </Compile>
-    <Compile Include="M:\trunk\CsLib\Win32\User32.cs">
+    <Compile Include="M:\CsLib\Win32\User32.cs">
       <Link>CDBurnerXP\User32.cs</Link>
     </Compile>
     <Compile Include="MainForm.cs">
@@ -275,7 +275,7 @@
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="M:\trunk\CsLib\CDBurnerXP\Controls\Separator.cs">
+    <Compile Include="M:\CsLib\CDBurnerXP\Controls\Separator.cs">
       <Link>CDBurnerXP\Separator.cs</Link>
       <SubType>Component</SubType>
     </Compile>
@@ -330,7 +330,7 @@
     <EmbeddedResource Include="Forms\SimilarApplicationsDialog.resx">
       <DependentUpon>SimilarApplicationsDialog.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="M:\trunk\CsLib\CDBurnerXP\Forms\ProgressDialog.resx">
+    <EmbeddedResource Include="M:\CsLib\CDBurnerXP\Forms\ProgressDialog.resx">
       <Link>CDBurnerXP\ProgressDialog.resx</Link>
       <DependentUpon>ProgressDialog.cs</DependentUpon>
     </EmbeddedResource>
