@@ -127,19 +127,19 @@ namespace Ketarin
             else
             {
                 Application.Run(new MainForm());
+            }
 
-                string logFile = arguments["log"];
-                if (!string.IsNullOrEmpty(logFile))
+            string logFile = arguments["log"];
+            if (!string.IsNullOrEmpty(logFile))
+            {
+                try
                 {
-                    try
-                    {
-                        logFile = UrlVariable.GlobalVariables.ReplaceAllInString(logFile);
-                        LogDialog.SaveLogToFile(logFile);
-                    }
-                    catch (Exception)
-                    {
-                        // ignore errors
-                    }
+                    logFile = UrlVariable.GlobalVariables.ReplaceAllInString(logFile);
+                    LogDialog.SaveLogToFile(logFile);
+                }
+                catch (Exception)
+                {
+                    // ignore errors
                 }
             }
         }
