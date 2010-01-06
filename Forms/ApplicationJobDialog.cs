@@ -146,6 +146,7 @@ namespace Ketarin.Forms
             txtExecuteBefore.SetVariableNames(new string[] { "file", "root", "category", "appname" }, appVarNames.ToArray());
             txtFixedUrl.SetVariableNames(new string[] { "category", "appname" }, appVarNames.ToArray());
             txtTarget.SetVariableNames(new string[] { "category", "appname" }, appVarNames.ToArray());
+            txtSpoofReferer.SetVariableNames(new string[] { "category", "appname" }, appVarNames.ToArray());
             txtUseVariablesForChanges.SetVariableNames(appVarNames.ToArray());
         }
 
