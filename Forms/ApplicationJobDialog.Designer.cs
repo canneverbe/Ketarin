@@ -51,7 +51,7 @@
             this.sepDownload = new CDBurnerXP.Controls.Separator();
             this.chkShareOnline = new System.Windows.Forms.CheckBox();
             this.lblSpoofReferer = new System.Windows.Forms.Label();
-            this.txtSpoofReferer = new System.Windows.Forms.TextBox();
+            this.txtSpoofReferer = new VariableTextBox();
             this.rbBetaDefault = new System.Windows.Forms.RadioButton();
             this.lblBetaVersions = new System.Windows.Forms.Label();
             this.rbAlwaysDownload = new System.Windows.Forms.RadioButton();
@@ -601,7 +601,7 @@
         private System.Windows.Forms.ComboBox cboCategory;
         private System.Windows.Forms.CheckBox chkShareOnline;
         private System.Windows.Forms.Label lblSpoofReferer;
-        private System.Windows.Forms.TextBox txtSpoofReferer;
+        private VariableTextBox txtSpoofReferer;
         private System.Windows.Forms.RadioButton rbBetaDefault;
         private System.Windows.Forms.Label lblBetaVersions;
         private System.Windows.Forms.RadioButton rbAlwaysDownload;

@@ -622,7 +622,7 @@ namespace Ketarin
 
                 if (!string.IsNullOrEmpty(job.HttpReferer))
                 {
-                    httpRequest.Referer = job.HttpReferer;
+                    httpRequest.Referer = job.Variables.ReplaceAllInString(job.HttpReferer);
                 }
 
                 LogDialog.Log(job, "Using referer: " + (string.IsNullOrEmpty(httpRequest.Referer) ? "(none)" : httpRequest.Referer));
