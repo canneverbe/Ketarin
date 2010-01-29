@@ -712,7 +712,7 @@ namespace Ketarin
         /// </summary>
         public string GetXml()
         {
-            return GetXml(new ApplicationJob[] { this }, false);
+            return GetXml(new ApplicationJob[] { this }, false, Encoding.UTF8);
         }
 
         /// <summary>
@@ -759,7 +759,7 @@ namespace Ketarin
         /// </summary>
         /// <param name="jobs">The jobs which should be included in the XML</param>
         /// <param name="isTemplate">Determines whether or not a template should be generated. Templates lack a few properties.</param>
-        public static string GetXml(System.Collections.IEnumerable jobs, bool isTemplate)
+        public static string GetXml(System.Collections.IEnumerable jobs, bool isTemplate, Encoding encoding)
         {
             XmlSerializer serializer = new XmlSerializer(typeof(ApplicationJob));
             XmlWriterSettings settings = new XmlWriterSettings();
@@ -769,6 +769,7 @@ namespace Ketarin
 
             using (XmlWriter xmlWriter = XmlWriter.Create(output, settings))
             {
+                xmlWriter.WriteProcessingInstruction("xml", "version='1.0', encoding='" + encoding.WebName + "'");
                 xmlWriter.WriteStartElement("Jobs");
                 foreach (ApplicationJob job in jobs)
                 {

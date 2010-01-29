@@ -482,7 +482,7 @@ namespace Ketarin.Forms
         {
             // Save entered values as default for next time
             WriteApplication();
-            string xml = ApplicationJob.GetXml(new ApplicationJob[] { ApplicationJob }, true);
+            string xml = ApplicationJob.GetXml(new ApplicationJob[] { ApplicationJob }, true, Encoding.UTF8);
             Settings.SetValue("DefaultApplication", xml);
         }
 
