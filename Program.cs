@@ -113,10 +113,10 @@ namespace Ketarin
             else if (arguments["export"] != null)
             {
                 ApplicationJob[] jobs = DbManager.GetJobs();
-                string exportedXml = ApplicationJob.GetXml(jobs, false);
+                string exportedXml = ApplicationJob.GetXml(jobs, false, System.Text.Encoding.UTF8);
                 try
                 {
-                    File.WriteAllText(arguments["export"] as string, exportedXml); 
+                    File.WriteAllText(arguments["export"] as string, exportedXml, System.Text.Encoding.UTF8); 
                 }
                 catch (Exception ex)
                 {

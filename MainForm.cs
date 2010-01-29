@@ -736,7 +736,7 @@ namespace Ketarin
                 jobs.Add(job);
             }
 
-            SafeClipboard.SetData(ApplicationJob.GetXml(jobs, false), false);
+            SafeClipboard.SetData(ApplicationJob.GetXml(jobs, false, Encoding.UTF8), false);
         }
 
         private void mnuSelectAll_Click(object sender, EventArgs e)
@@ -931,7 +931,7 @@ namespace Ketarin
 
                 try
                 {
-                    File.WriteAllText(dialog.FileName, ApplicationJob.GetXml(objects, dialog.FilterIndex == 2));
+                    File.WriteAllText(dialog.FileName, ApplicationJob.GetXml(objects, dialog.FilterIndex == 2, Encoding.UTF8), Encoding.UTF8);
                 }
                 catch (Exception ex)
                 {
