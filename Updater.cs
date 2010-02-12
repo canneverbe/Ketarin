@@ -754,6 +754,17 @@ namespace Ketarin
 
                 try
                 {
+                    FileInfo downloadedFileInfo = new FileInfo(tmpLocation);
+                    job.LastFileSize = downloadedFileInfo.Length;
+                    job.LastFileDate = downloadedFileInfo.LastWriteTime;
+                }
+                catch (Exception ex)
+                {
+                    LogDialog.Log(job, ex);
+                }
+
+                try
+                {
                     // Before copying, we might have to create the directory
                     Directory.CreateDirectory(Path.GetDirectoryName(targetFileName));
 

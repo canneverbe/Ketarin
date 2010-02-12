@@ -325,6 +325,9 @@ namespace Ketarin
             addColumns.Add("VariableChangeIndicator", "ALTER TABLE jobs ADD VariableChangeIndicator TEXT");
             addColumns.Add("VariableChangeIndicatorLastContent", "ALTER TABLE jobs ADD VariableChangeIndicatorLastContent TEXT");
             addColumns.Add("CachedPadFileVersion", "ALTER TABLE jobs ADD CachedPadFileVersion TEXT");
+            addColumns.Add("LastFileSize", "ALTER TABLE jobs ADD LastFileSize INTEGER DEFAULT 0");
+            addColumns.Add("LastFileDate", "ALTER TABLE jobs ADD LastFileDate Date");
+            addColumns.Add("IgnoreFileInformation", "ALTER TABLE jobs ADD IgnoreFileInformation INTEGER DEFAULT 0");
 
             ExecuteUpgradeQueries(columns, addColumns);
 

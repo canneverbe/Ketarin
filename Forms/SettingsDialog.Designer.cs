@@ -56,6 +56,8 @@
             this.label1 = new System.Windows.Forms.Label();
             this.tcSettings = new System.Windows.Forms.TabControl();
             this.tpGeneral = new System.Windows.Forms.TabPage();
+            this.lblCustomColumn2 = new System.Windows.Forms.Label();
+            this.txtCustomColumn2 = new System.Windows.Forms.TextBox();
             this.chkBackups = new System.Windows.Forms.CheckBox();
             this.chkMinToTray = new System.Windows.Forms.CheckBox();
             this.chkUpdateOnlineDatabase = new System.Windows.Forms.CheckBox();
@@ -71,8 +73,6 @@
             this.txtPostUpdateCommand = new Ketarin.Forms.TextBox();
             this.bExport = new System.Windows.Forms.Button();
             this.bImport = new System.Windows.Forms.Button();
-            this.txtCustomColumn2 = new System.Windows.Forms.TextBox();
-            this.lblCustomColumn2 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.nConnectionTimeout)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nProxyPort)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nNumThreads)).BeginInit();
@@ -169,7 +169,7 @@
             0,
             0});
             this.nConnectionTimeout.Name = "nConnectionTimeout";
-            this.nConnectionTimeout.Size = new System.Drawing.Size(210, 20);
+            this.nConnectionTimeout.Size = new System.Drawing.Size(46, 20);
             this.nConnectionTimeout.TabIndex = 1;
             this.nConnectionTimeout.Value = new decimal(new int[] {
             1,
@@ -181,7 +181,7 @@
             // 
             this.lblSeconds.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lblSeconds.AutoSize = true;
-            this.lblSeconds.Location = new System.Drawing.Point(331, 11);
+            this.lblSeconds.Location = new System.Drawing.Point(166, 11);
             this.lblSeconds.Name = "lblSeconds";
             this.lblSeconds.Size = new System.Drawing.Size(47, 13);
             this.lblSeconds.TabIndex = 2;
@@ -280,7 +280,7 @@
             0,
             0});
             this.nNumThreads.Name = "nNumThreads";
-            this.nNumThreads.Size = new System.Drawing.Size(264, 20);
+            this.nNumThreads.Size = new System.Drawing.Size(46, 20);
             this.nNumThreads.TabIndex = 4;
             this.nNumThreads.Value = new decimal(new int[] {
             2,
@@ -366,7 +366,7 @@
             0,
             0});
             this.nNumRetries.Name = "nNumRetries";
-            this.nNumRetries.Size = new System.Drawing.Size(264, 20);
+            this.nNumRetries.Size = new System.Drawing.Size(46, 20);
             this.nNumRetries.TabIndex = 6;
             this.nNumRetries.Value = new decimal(new int[] {
             1,
@@ -422,6 +422,24 @@
             this.tpGeneral.TabIndex = 0;
             this.tpGeneral.Text = "General";
             this.tpGeneral.UseVisualStyleBackColor = true;
+            // 
+            // lblCustomColumn2
+            // 
+            this.lblCustomColumn2.AutoSize = true;
+            this.lblCustomColumn2.Location = new System.Drawing.Point(6, 159);
+            this.lblCustomColumn2.Name = "lblCustomColumn2";
+            this.lblCustomColumn2.Size = new System.Drawing.Size(146, 13);
+            this.lblCustomColumn2.TabIndex = 7;
+            this.lblCustomColumn2.Text = "&Variable for custom column 2:";
+            // 
+            // txtCustomColumn2
+            // 
+            this.txtCustomColumn2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtCustomColumn2.Location = new System.Drawing.Point(158, 156);
+            this.txtCustomColumn2.Name = "txtCustomColumn2";
+            this.txtCustomColumn2.Size = new System.Drawing.Size(230, 20);
+            this.txtCustomColumn2.TabIndex = 8;
             // 
             // chkBackups
             // 
@@ -485,7 +503,7 @@
             this.tpConnection.Location = new System.Drawing.Point(4, 22);
             this.tpConnection.Name = "tpConnection";
             this.tpConnection.Padding = new System.Windows.Forms.Padding(3);
-            this.tpConnection.Size = new System.Drawing.Size(394, 242);
+            this.tpConnection.Size = new System.Drawing.Size(394, 268);
             this.tpConnection.TabIndex = 1;
             this.tpConnection.Text = "Connection";
             this.tpConnection.UseVisualStyleBackColor = true;
@@ -513,7 +531,7 @@
             this.tpCommands.Location = new System.Drawing.Point(4, 22);
             this.tpCommands.Name = "tpCommands";
             this.tpCommands.Padding = new System.Windows.Forms.Padding(3);
-            this.tpCommands.Size = new System.Drawing.Size(394, 242);
+            this.tpCommands.Size = new System.Drawing.Size(394, 268);
             this.tpCommands.TabIndex = 2;
             this.tpCommands.Text = "Commands";
             this.tpCommands.UseVisualStyleBackColor = true;
@@ -605,24 +623,6 @@
             this.bImport.Text = "Import...";
             this.bImport.UseVisualStyleBackColor = true;
             this.bImport.Click += new System.EventHandler(this.bImport_Click);
-            // 
-            // txtCustomColumn2
-            // 
-            this.txtCustomColumn2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtCustomColumn2.Location = new System.Drawing.Point(158, 156);
-            this.txtCustomColumn2.Name = "txtCustomColumn2";
-            this.txtCustomColumn2.Size = new System.Drawing.Size(230, 20);
-            this.txtCustomColumn2.TabIndex = 8;
-            // 
-            // lblCustomColumn2
-            // 
-            this.lblCustomColumn2.AutoSize = true;
-            this.lblCustomColumn2.Location = new System.Drawing.Point(6, 159);
-            this.lblCustomColumn2.Name = "lblCustomColumn2";
-            this.lblCustomColumn2.Size = new System.Drawing.Size(146, 13);
-            this.lblCustomColumn2.TabIndex = 7;
-            this.lblCustomColumn2.Text = "&Variable for custom column 2:";
             // 
             // SettingsDialog
             // 
