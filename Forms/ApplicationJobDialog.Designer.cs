@@ -59,6 +59,7 @@
             this.tcApplication = new System.Windows.Forms.TabControl();
             this.tpApplication = new System.Windows.Forms.TabPage();
             this.tpSettings = new System.Windows.Forms.TabPage();
+            this.chkIgnoreFileInformation = new System.Windows.Forms.CheckBox();
             this.chkCheckForUpdatesOnly = new System.Windows.Forms.CheckBox();
             this.chkDownloadExclusively = new System.Windows.Forms.CheckBox();
             this.txtUseVariablesForChanges = new Ketarin.Forms.VariableTextBox();
@@ -69,13 +70,18 @@
             this.txtExecuteAfter = new Ketarin.Forms.VariableTextBox();
             this.lblExecuteCommand = new System.Windows.Forms.Label();
             this.bSaveAsDefault = new System.Windows.Forms.Button();
-            this.chkIgnoreFileInformation = new System.Windows.Forms.CheckBox();
+            this.tpInformation = new System.Windows.Forms.TabPage();
+            this.lblWebsite = new System.Windows.Forms.Label();
+            this.txtWebsite = new System.Windows.Forms.TextBox();
+            this.lblNotes = new System.Windows.Forms.Label();
+            this.txtNotes = new System.Windows.Forms.TextBox();
             this.panel1.SuspendLayout();
             this.pnlTarget.SuspendLayout();
             this.tcApplication.SuspendLayout();
             this.tpApplication.SuspendLayout();
             this.tpSettings.SuspendLayout();
             this.tpCommands.SuspendLayout();
+            this.tpInformation.SuspendLayout();
             this.SuspendLayout();
             // 
             // bCancel
@@ -393,6 +399,7 @@
             this.tcApplication.Controls.Add(this.tpApplication);
             this.tcApplication.Controls.Add(this.tpSettings);
             this.tcApplication.Controls.Add(this.tpCommands);
+            this.tcApplication.Controls.Add(this.tpInformation);
             this.tcApplication.Location = new System.Drawing.Point(12, 12);
             this.tcApplication.Name = "tcApplication";
             this.tcApplication.SelectedIndex = 0;
@@ -440,6 +447,16 @@
             this.tpSettings.TabIndex = 1;
             this.tpSettings.Text = "Advanced settings";
             this.tpSettings.UseVisualStyleBackColor = true;
+            // 
+            // chkIgnoreFileInformation
+            // 
+            this.chkIgnoreFileInformation.AutoSize = true;
+            this.chkIgnoreFileInformation.Location = new System.Drawing.Point(6, 100);
+            this.chkIgnoreFileInformation.Name = "chkIgnoreFileInformation";
+            this.chkIgnoreFileInformation.Size = new System.Drawing.Size(297, 17);
+            this.chkIgnoreFileInformation.TabIndex = 4;
+            this.chkIgnoreFileInformation.Text = "Ignore file infor&mation (do not re-download if file is missing)";
+            this.chkIgnoreFileInformation.UseVisualStyleBackColor = true;
             // 
             // chkCheckForUpdatesOnly
             // 
@@ -547,15 +564,56 @@
             this.bSaveAsDefault.UseVisualStyleBackColor = true;
             this.bSaveAsDefault.Click += new System.EventHandler(this.bSaveAsDefault_Click);
             // 
-            // chkOnlyDatabaseComparison
+            // tpInformation
             // 
-            this.chkIgnoreFileInformation.AutoSize = true;
-            this.chkIgnoreFileInformation.Location = new System.Drawing.Point(6, 100);
-            this.chkIgnoreFileInformation.Name = "chkOnlyDatabaseComparison";
-            this.chkIgnoreFileInformation.Size = new System.Drawing.Size(297, 17);
-            this.chkIgnoreFileInformation.TabIndex = 4;
-            this.chkIgnoreFileInformation.Text = "Ignore file infor&mation (do not re-download if file is missing)";
-            this.chkIgnoreFileInformation.UseVisualStyleBackColor = true;
+            this.tpInformation.Controls.Add(this.txtNotes);
+            this.tpInformation.Controls.Add(this.lblNotes);
+            this.tpInformation.Controls.Add(this.txtWebsite);
+            this.tpInformation.Controls.Add(this.lblWebsite);
+            this.tpInformation.Location = new System.Drawing.Point(4, 22);
+            this.tpInformation.Name = "tpInformation";
+            this.tpInformation.Size = new System.Drawing.Size(375, 239);
+            this.tpInformation.TabIndex = 3;
+            this.tpInformation.Text = "Information";
+            this.tpInformation.UseVisualStyleBackColor = true;
+            // 
+            // lblWebsite
+            // 
+            this.lblWebsite.AutoSize = true;
+            this.lblWebsite.Location = new System.Drawing.Point(3, 10);
+            this.lblWebsite.Name = "lblWebsite";
+            this.lblWebsite.Size = new System.Drawing.Size(49, 13);
+            this.lblWebsite.TabIndex = 0;
+            this.lblWebsite.Text = "&Website:";
+            // 
+            // txtWebsite
+            // 
+            this.txtWebsite.Location = new System.Drawing.Point(58, 7);
+            this.txtWebsite.Name = "txtWebsite";
+            this.txtWebsite.Size = new System.Drawing.Size(311, 20);
+            this.txtWebsite.TabIndex = 1;
+            // 
+            // lblNotes
+            // 
+            this.lblNotes.AutoSize = true;
+            this.lblNotes.Location = new System.Drawing.Point(3, 39);
+            this.lblNotes.Name = "lblNotes";
+            this.lblNotes.Size = new System.Drawing.Size(38, 13);
+            this.lblNotes.TabIndex = 3;
+            this.lblNotes.Text = "N&otes:";
+            // 
+            // txtNotes
+            // 
+            this.txtNotes.AcceptsReturn = true;
+            this.txtNotes.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtNotes.Location = new System.Drawing.Point(6, 55);
+            this.txtNotes.Multiline = true;
+            this.txtNotes.Name = "txtNotes";
+            this.txtNotes.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.txtNotes.Size = new System.Drawing.Size(363, 178);
+            this.txtNotes.TabIndex = 4;
             // 
             // ApplicationJobDialog
             // 
@@ -584,6 +642,8 @@
             this.tpSettings.PerformLayout();
             this.tpCommands.ResumeLayout(false);
             this.tpCommands.PerformLayout();
+            this.tpInformation.ResumeLayout(false);
+            this.tpInformation.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -632,5 +692,10 @@
         private System.Windows.Forms.Button bSaveAsDefault;
         private System.Windows.Forms.CheckBox chkCheckForUpdatesOnly;
         private System.Windows.Forms.CheckBox chkIgnoreFileInformation;
+        private System.Windows.Forms.TabPage tpInformation;
+        private System.Windows.Forms.Label lblNotes;
+        private System.Windows.Forms.TextBox txtWebsite;
+        private System.Windows.Forms.Label lblWebsite;
+        private System.Windows.Forms.TextBox txtNotes;
     }
 }

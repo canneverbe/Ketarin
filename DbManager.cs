@@ -328,6 +328,8 @@ namespace Ketarin
             addColumns.Add("LastFileSize", "ALTER TABLE jobs ADD LastFileSize INTEGER DEFAULT 0");
             addColumns.Add("LastFileDate", "ALTER TABLE jobs ADD LastFileDate Date");
             addColumns.Add("IgnoreFileInformation", "ALTER TABLE jobs ADD IgnoreFileInformation INTEGER DEFAULT 0");
+            addColumns.Add("UserNotes", "ALTER TABLE jobs ADD UserNotes TEXT");
+            addColumns.Add("WebsiteUrl", "ALTER TABLE jobs ADD WebsiteUrl TEXT");
 
             ExecuteUpgradeQueries(columns, addColumns);
 

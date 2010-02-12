@@ -804,7 +804,21 @@ namespace Ketarin
             }
             else
             {
-                EditJob(job);
+                bool openWebsite = (bool)Settings.GetValue("OpenWebsiteOnDoubleClick", false);
+                if (openWebsite && !string.IsNullOrEmpty(job.WebsiteUrl))
+                {
+                    try
+                    {
+                        System.Diagnostics.Process.Start(job.WebsiteUrl);
+                    }
+                    catch (Exception)
+                    {
+                    }
+                }
+                else
+                {
+                    EditJob(job);
+                }
             }
         }
 
