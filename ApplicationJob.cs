@@ -61,6 +61,16 @@ namespace Ketarin
         #region Properties
 
         /// <summary>
+        /// Gets or sets the website of the application.
+        /// </summary>
+        public string WebsiteUrl { get; set; }
+
+        /// <summary>
+        /// Gets or sets the custom notes for an application.
+        /// </summary>
+        public string UserNotes { get; set; }
+
+        /// <summary>
         /// Gets or sets the last size of the file which
         /// has been downloaded for the application.
         /// </summary>
@@ -953,27 +963,40 @@ namespace Ketarin
                 {
                     using (SQLiteTransaction transaction = conn.BeginTransaction())
                     {
-                        if (DbManager.ApplicationExists(conn, m_Guid))
+                        if (!DbManager.ApplicationExists(conn, m_Guid))
                         {
-                            // Important: Once CanBeShared is set to false,
-                            // it can never be true again (ownership does not change)
-                            using (IDbCommand command = conn.CreateCommand())
-                            {
-                                command.Transaction = transaction;
-                                command.CommandText = "SELECT CanBeShared FROM jobs WHERE JobGuid = @JobGuid";
-                                command.Parameters.Add(new SQLiteParameter("@JobGuid", DbManager.FormatGuid(m_Guid)));
-                                bool canBeShared = Convert.ToBoolean(command.ExecuteScalar());
-                                if (!canBeShared)
-                                {
-                                    m_CanBeShared = false;
-                                }
-                            }
+                            if (m_Guid == Guid.Empty) m_Guid = Guid.NewGuid();
 
-                            // Update existing job
+                            // Insert stub, update afterwards.
                             using (IDbCommand command = conn.CreateCommand())
                             {
                                 command.Transaction = transaction;
-                                command.CommandText = @"UPDATE jobs
+                                command.CommandText = @"INSERT INTO jobs (JobGuid, CanBeShared) VALUES (@JobGuid, @CanBeShared)";
+                                command.Parameters.Add(new SQLiteParameter("@JobGuid", DbManager.FormatGuid(m_Guid)));
+                                command.Parameters.Add(new SQLiteParameter("@CanBeShared", m_CanBeShared));
+                                command.ExecuteNonQuery();
+                            }
+                        }
+
+                        // Important: Once CanBeShared is set to false,
+                        // it can never be true again (ownership does not change)
+                        using (IDbCommand command = conn.CreateCommand())
+                        {
+                            command.Transaction = transaction;
+                            command.CommandText = "SELECT CanBeShared FROM jobs WHERE JobGuid = @JobGuid";
+                            command.Parameters.Add(new SQLiteParameter("@JobGuid", DbManager.FormatGuid(m_Guid)));
+                            bool canBeShared = Convert.ToBoolean(command.ExecuteScalar());
+                            if (!canBeShared)
+                            {
+                                m_CanBeShared = false;
+                            }
+                        }
+
+                        // Update existing job
+                        using (IDbCommand command = conn.CreateCommand())
+                        {
+                            command.Transaction = transaction;
+                            command.CommandText = @"UPDATE jobs
                                                SET ApplicationName = @ApplicationName,
                                                    FixedDownloadUrl = @FixedDownloadUrl,
                                                    TargetPath = @TargetPath,
@@ -999,98 +1022,51 @@ namespace Ketarin
                                                    CachedPadFileVersion = @CachedPadFileVersion,
                                                    LastFileDate = @LastFileDate,
                                                    LastFileSize = @LastFileSize,
-                                                   IgnoreFileInformation = @IgnoreFileInformation
+                                                   IgnoreFileInformation = @IgnoreFileInformation,
+                                                   UserNotes = @UserNotes,
+                                                   WebsiteUrl = @WebsiteUrl
                                              WHERE JobGuid = @JobGuid";
 
-                                command.Parameters.Add(new SQLiteParameter("@ApplicationName", Name));
-                                command.Parameters.Add(new SQLiteParameter("@FixedDownloadUrl", m_FixedDownloadUrl));
-                                command.Parameters.Add(new SQLiteParameter("@TargetPath", m_TargetPath));
-                                command.Parameters.Add(new SQLiteParameter("@LastUpdated", m_LastUpdated));
-                                command.Parameters.Add(new SQLiteParameter("@IsEnabled", m_Enabled));
-                                command.Parameters.Add(new SQLiteParameter("@FileHippoId", m_FileHippoId));
-                                command.Parameters.Add(new SQLiteParameter("@DeletePreviousFile", m_DeletePreviousFile));
-                                command.Parameters.Add(new SQLiteParameter("@PreviousLocation", m_PreviousLocation));
-                                command.Parameters.Add(new SQLiteParameter("@SourceType", m_SourceType));
-                                command.Parameters.Add(new SQLiteParameter("@ExecuteCommand", m_ExecutePostCommand));
-                                command.Parameters.Add(new SQLiteParameter("@ExecutePreCommand", ExecutePreCommand));
-                                command.Parameters.Add(new SQLiteParameter("@Category", m_Category));
-                                command.Parameters.Add(new SQLiteParameter("@CanBeShared", m_CanBeShared));
-                                command.Parameters.Add(new SQLiteParameter("@ShareApplication", m_ShareApplication));
-                                command.Parameters.Add(new SQLiteParameter("@HttpReferer", m_HttpReferer));
-                                command.Parameters.Add(new SQLiteParameter("@FileHippoVersion", m_FileHippoVersion));
-                                command.Parameters.Add(new SQLiteParameter("@DownloadBeta", (int)DownloadBeta));
-                                command.Parameters.Add(new SQLiteParameter("@VariableChangeIndicator", m_VariableChangeIndicator));
-                                command.Parameters.Add(new SQLiteParameter("@VariableChangeIndicatorLastContent", m_VariableChangeIndicatorLastContent));
-                                command.Parameters.Add(new SQLiteParameter("@ExclusiveDownload", ExclusiveDownload));
-                                command.Parameters.Add(new SQLiteParameter("@CheckForUpdateOnly", CheckForUpdatesOnly));
-                                command.Parameters.Add(new SQLiteParameter("@CachedPadFileVersion", CachedPadFileVersion));
-                                command.Parameters.Add(new SQLiteParameter("@LastFileDate", LastFileDate));
-                                command.Parameters.Add(new SQLiteParameter("@LastFileSize", LastFileSize));
-                                command.Parameters.Add(new SQLiteParameter("@IgnoreFileInformation", IgnoreFileInformation));
-                                
-                                if (DownloadDate.HasValue)
-                                {
-                                    command.Parameters.Add(new SQLiteParameter("@DownloadDate", DownloadDate.Value));
-                                }
-                                else
-                                {
-                                    command.Parameters.Add(new SQLiteParameter("@DownloadDate", DBNull.Value));
-                                }
+                            command.Parameters.Add(new SQLiteParameter("@ApplicationName", Name));
+                            command.Parameters.Add(new SQLiteParameter("@FixedDownloadUrl", m_FixedDownloadUrl));
+                            command.Parameters.Add(new SQLiteParameter("@TargetPath", m_TargetPath));
+                            command.Parameters.Add(new SQLiteParameter("@LastUpdated", m_LastUpdated));
+                            command.Parameters.Add(new SQLiteParameter("@IsEnabled", m_Enabled));
+                            command.Parameters.Add(new SQLiteParameter("@FileHippoId", m_FileHippoId));
+                            command.Parameters.Add(new SQLiteParameter("@DeletePreviousFile", m_DeletePreviousFile));
+                            command.Parameters.Add(new SQLiteParameter("@PreviousLocation", m_PreviousLocation));
+                            command.Parameters.Add(new SQLiteParameter("@SourceType", m_SourceType));
+                            command.Parameters.Add(new SQLiteParameter("@ExecuteCommand", m_ExecutePostCommand));
+                            command.Parameters.Add(new SQLiteParameter("@ExecutePreCommand", ExecutePreCommand));
+                            command.Parameters.Add(new SQLiteParameter("@Category", m_Category));
+                            command.Parameters.Add(new SQLiteParameter("@CanBeShared", m_CanBeShared));
+                            command.Parameters.Add(new SQLiteParameter("@ShareApplication", m_ShareApplication));
+                            command.Parameters.Add(new SQLiteParameter("@HttpReferer", m_HttpReferer));
+                            command.Parameters.Add(new SQLiteParameter("@FileHippoVersion", m_FileHippoVersion));
+                            command.Parameters.Add(new SQLiteParameter("@DownloadBeta", (int)DownloadBeta));
+                            command.Parameters.Add(new SQLiteParameter("@VariableChangeIndicator", m_VariableChangeIndicator));
+                            command.Parameters.Add(new SQLiteParameter("@VariableChangeIndicatorLastContent", m_VariableChangeIndicatorLastContent));
+                            command.Parameters.Add(new SQLiteParameter("@ExclusiveDownload", ExclusiveDownload));
+                            command.Parameters.Add(new SQLiteParameter("@CheckForUpdateOnly", CheckForUpdatesOnly));
+                            command.Parameters.Add(new SQLiteParameter("@CachedPadFileVersion", CachedPadFileVersion));
+                            command.Parameters.Add(new SQLiteParameter("@LastFileDate", LastFileDate));
+                            command.Parameters.Add(new SQLiteParameter("@LastFileSize", LastFileSize));
+                            command.Parameters.Add(new SQLiteParameter("@IgnoreFileInformation", IgnoreFileInformation));
+                            command.Parameters.Add(new SQLiteParameter("@UserNotes", UserNotes));
+                            command.Parameters.Add(new SQLiteParameter("@WebsiteUrl", WebsiteUrl));
 
-                                command.Parameters.Add(new SQLiteParameter("@JobGuid", DbManager.FormatGuid(m_Guid)));
-
-                                command.ExecuteNonQuery();
-                            }
-                        }
-                        else
-                        {
-                            if (m_Guid == Guid.Empty) m_Guid = Guid.NewGuid();
-
-                            // Insert a new job
-                            using (IDbCommand command = conn.CreateCommand())
+                            if (DownloadDate.HasValue)
                             {
-                                command.Transaction = transaction;
-                                command.CommandText = @"INSERT INTO jobs (ApplicationName, FixedDownloadUrl, DateAdded, TargetPath, LastUpdated, IsEnabled, FileHippoId, DeletePreviousFile, SourceType, ExecuteCommand, ExecutePreCommand, Category, JobGuid, CanBeShared, ShareApplication, HttpReferer, FileHippoVersion, DownloadBeta, DownloadDate, VariableChangeIndicator, VariableChangeIndicatorLastContent, ExclusiveDownload, CheckForUpdateOnly, CachedPadFileVersion, LastFileDate, LastFileSize, IgnoreFileInformation)
-                                                 VALUES (@ApplicationName, @FixedDownloadUrl, @DateAdded, @TargetPath, @LastUpdated, @IsEnabled, @FileHippoId, @DeletePreviousFile, @SourceType, @ExecuteCommand, @ExecutePreCommand, @Category, @JobGuid, @CanBeShared, @ShareApplication, @HttpReferer, @FileHippoVersion, @DownloadBeta, @DownloadDate, @VariableChangeIndicator, NULL, @ExclusiveDownload, @CheckForUpdateOnly, @CachedPadFileVersion, @LastFileDate, @LastFileSize, @IgnoreFileInformation)";
-
-                                command.Parameters.Add(new SQLiteParameter("@ApplicationName", Name));
-                                command.Parameters.Add(new SQLiteParameter("@FixedDownloadUrl", m_FixedDownloadUrl));
-                                command.Parameters.Add(new SQLiteParameter("@DateAdded", DateTime.Now));
-                                command.Parameters.Add(new SQLiteParameter("@LastUpdated", m_LastUpdated));
-                                command.Parameters.Add(new SQLiteParameter("@TargetPath", m_TargetPath));
-                                command.Parameters.Add(new SQLiteParameter("@IsEnabled", m_Enabled));
-                                command.Parameters.Add(new SQLiteParameter("@DeletePreviousFile", m_DeletePreviousFile));
-                                command.Parameters.Add(new SQLiteParameter("@FileHippoId", m_FileHippoId));
-                                command.Parameters.Add(new SQLiteParameter("@SourceType", m_SourceType));
-                                command.Parameters.Add(new SQLiteParameter("@ExecuteCommand", m_ExecutePostCommand));
-                                command.Parameters.Add(new SQLiteParameter("@ExecutePreCommand", ExecutePreCommand));
-                                command.Parameters.Add(new SQLiteParameter("@Category", m_Category));
-                                command.Parameters.Add(new SQLiteParameter("@JobGuid", DbManager.FormatGuid(m_Guid)));
-                                command.Parameters.Add(new SQLiteParameter("@CanBeShared", m_CanBeShared));
-                                command.Parameters.Add(new SQLiteParameter("@ShareApplication", m_ShareApplication));
-                                command.Parameters.Add(new SQLiteParameter("@HttpReferer", m_HttpReferer));
-                                command.Parameters.Add(new SQLiteParameter("@FileHippoVersion", m_FileHippoVersion));
-                                command.Parameters.Add(new SQLiteParameter("@DownloadBeta", (int)DownloadBeta));
-                                command.Parameters.Add(new SQLiteParameter("@VariableChangeIndicator", m_VariableChangeIndicator));
-                                command.Parameters.Add(new SQLiteParameter("@VariableChangeLastContent", m_VariableChangeIndicatorLastContent));
-                                command.Parameters.Add(new SQLiteParameter("@ExclusiveDownload", ExclusiveDownload));
-                                command.Parameters.Add(new SQLiteParameter("@CheckForUpdateOnly", CheckForUpdatesOnly));
-                                command.Parameters.Add(new SQLiteParameter("@CachedPadFileVersion", CachedPadFileVersion));
-                                command.Parameters.Add(new SQLiteParameter("@LastFileDate", LastFileDate));
-                                command.Parameters.Add(new SQLiteParameter("@LastFileSize", LastFileSize));
-                                command.Parameters.Add(new SQLiteParameter("@IgnoreFileInformation", IgnoreFileInformation));
-                                
-                                if (DownloadDate.HasValue)
-                                {
-                                    command.Parameters.Add(new SQLiteParameter("@DownloadDate", DownloadDate.Value));
-                                }
-                                else
-                                {
-                                    command.Parameters.Add(new SQLiteParameter("@DownloadDate", DBNull.Value));
-                                }
-
-                                command.ExecuteNonQuery();
+                                command.Parameters.Add(new SQLiteParameter("@DownloadDate", DownloadDate.Value));
                             }
+                            else
+                            {
+                                command.Parameters.Add(new SQLiteParameter("@DownloadDate", DBNull.Value));
+                            }
+
+                            command.Parameters.Add(new SQLiteParameter("@JobGuid", DbManager.FormatGuid(m_Guid)));
+
+                            command.ExecuteNonQuery();
                         }
 
                         Dictionary<string, UrlVariable> variables = Variables;
@@ -1141,6 +1117,8 @@ namespace Ketarin
             LastFileSize = Convert.ToInt64(reader["LastFileSize"]);
             LastFileDate = reader["LastUpdated"] as DateTime?;
             IgnoreFileInformation = Convert.ToBoolean(reader["IgnoreFileInformation"]);
+            UserNotes = reader["UserNotes"] as string;
+            WebsiteUrl = reader["WebsiteUrl"] as string;
 
             if (reader["DownloadBeta"] != DBNull.Value)
             {

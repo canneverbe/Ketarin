@@ -93,6 +93,7 @@ namespace Ketarin.Forms
             nNumThreads.Value = Convert.ToDecimal(Settings.GetValue("ThreadCount", 2));
             nNumRetries.Value = Convert.ToDecimal(Settings.GetValue("RetryCount", 1));
             chkMinToTray.Checked = (bool)Settings.GetValue("MinimizeToTray", false);
+            chkOpenWebsite.Checked = (bool)Settings.GetValue("OpenWebsiteOnDoubleClick", false);
 
             nProxyPort.Value = Convert.ToInt16(Settings.GetValue("ProxyPort", 0));
             txtProxyServer.Text = Settings.GetValue("ProxyServer", "") as string;
@@ -118,6 +119,7 @@ namespace Ketarin.Forms
             Settings.SetValue("UpdateOnlineDatabase", chkUpdateOnlineDatabase.Checked);
             Settings.SetValue("MinimizeToTray", chkMinToTray.Checked);
             Settings.SetValue("CreateDatabaseBackups", chkBackups.Checked);
+            Settings.SetValue("OpenWebsiteOnDoubleClick", chkOpenWebsite.Checked);
 
             Settings.SetValue("ProxyPort", nProxyPort.Value);
             Settings.SetValue("ProxyServer", txtProxyServer.Text);

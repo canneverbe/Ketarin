@@ -182,6 +182,9 @@ namespace Ketarin.Forms
             rbAlwaysDownload.Checked = (ApplicationJob.DownloadBeta == ApplicationJob.DownloadBetaType.AlwaysDownload);
             txtUseVariablesForChanges.Text = m_ApplicationJob.VariableChangeIndicator;
             chkIgnoreFileInformation.Checked = m_ApplicationJob.IgnoreFileInformation;
+
+            txtWebsite.Text = m_ApplicationJob.WebsiteUrl;
+            txtNotes.Text = m_ApplicationJob.UserNotes;
         }
 
         /// <summary>
@@ -209,6 +212,9 @@ namespace Ketarin.Forms
             m_ApplicationJob.VariableChangeIndicator = txtUseVariablesForChanges.Text;
             m_ApplicationJob.CheckForUpdatesOnly = chkCheckForUpdatesOnly.Checked;
             m_ApplicationJob.IgnoreFileInformation = chkIgnoreFileInformation.Checked;
+
+            m_ApplicationJob.WebsiteUrl = txtWebsite.Text;
+            m_ApplicationJob.UserNotes = txtNotes.Text;
 
             if (rbAlwaysDownload.Checked)
             {
