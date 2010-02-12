@@ -32,7 +32,6 @@ namespace Ketarin
         private string m_FileHippoId = string.Empty;
         private string m_FileHippoVersion = string.Empty;
         private bool m_DeletePreviousFile = false;
-        private bool m_ExclusiveDownload = false;
         private string m_PreviousLocation = string.Empty;
         private SourceType m_SourceType = SourceType.FixedUrl;
         private UrlVariableCollection m_Variables = null;
@@ -41,14 +40,10 @@ namespace Ketarin
         private string m_Category = string.Empty;
         private Guid m_Guid = Guid.Empty;
         private bool m_CanBeShared = true;
-        private DateTime? m_DownloadDate = null;        
         private bool m_ShareApplication = false;
         private string m_HttpReferer = string.Empty;
-        private DownloadBetaType m_DownloadBeta = DownloadBetaType.Default;
         private string m_VariableChangeIndicator = string.Empty;
         private string m_VariableChangeIndicatorLastContent = null;
-        private string m_CachedPadFileVersion = null;
-        private bool m_CheckForUpdateOnly = false;
 
         public enum SourceType
         {
@@ -65,32 +60,39 @@ namespace Ketarin
 
         #region Properties
 
-        public DownloadBetaType DownloadBeta
-        {
-            get { return m_DownloadBeta; }
-            set { m_DownloadBeta = value; }
-        }
+        /// <summary>
+        /// Gets or sets the last size of the file which
+        /// has been downloaded for the application.
+        /// </summary>
+        public long LastFileSize { get; set; }
+
+        /// <summary>
+        /// Gets or sets the last write time of the file which
+        /// has been downloaded for the application.
+        /// </summary>
+        public DateTime? LastFileDate { get; set; }
+
+        /// <summary>
+        /// Specifies whether or not to ignore the file based information.
+        /// If true, only the information in database will be compared, and Ketarin
+        /// will not re-download if the file is missing.
+        /// </summary>
+        public bool IgnoreFileInformation { get; set; }
+
+        public DownloadBetaType DownloadBeta  { get; set; }
 
         /// <summary>
         /// Gets or sets the version information
         /// scraped from a PAD file.
         /// </summary>
         [XmlIgnore()]
-        internal string CachedPadFileVersion
-        {
-            get { return m_CachedPadFileVersion; }
-            set { m_CachedPadFileVersion = value; }
-        }
+        internal string CachedPadFileVersion { get; set; }
 
         /// <summary>
         /// The last updated date of the application
         /// in the online database.
         /// </summary>
-        public DateTime? DownloadDate
-        {
-            get { return m_DownloadDate; }
-            set { m_DownloadDate = value; }
-        }
+        public DateTime? DownloadDate { get; set; }
 
         /// <summary>
         /// Gets or sets whether or not the application should
@@ -98,11 +100,7 @@ namespace Ketarin
         /// For example, you might not want to include downloading
         /// huge applications.
         /// </summary>
-        public bool CheckForUpdatesOnly
-        {
-            get { return m_CheckForUpdateOnly; }
-            set { m_CheckForUpdateOnly = value; }
-        }
+        public bool CheckForUpdatesOnly { get; set; }
 
         /// <summary>
         /// Gets or sets the variable, which is used as change indicator.
@@ -149,11 +147,7 @@ namespace Ketarin
         /// may be downloaded simultaneously with other
         /// applications.
         /// </summary>
-        public bool ExclusiveDownload
-        {
-            get { return m_ExclusiveDownload; }
-            set { m_ExclusiveDownload = value; }
-        }
+        public bool ExclusiveDownload { get; set; }
 
         /// <summary>
         /// Gets or sets a referer which is used 
@@ -540,12 +534,12 @@ namespace Ketarin
             get
             {
                 bool defaultValue = (bool)Settings.GetValue("AvoidFileHippoBeta", false);
-                if (m_DownloadBeta == DownloadBetaType.Default)
+                if (DownloadBeta == DownloadBetaType.Default)
                 {
                     return defaultValue;
                 }
 
-                return (m_DownloadBeta == DownloadBetaType.Avoid);
+                return (DownloadBeta == DownloadBetaType.Avoid);
             }
         }
 
@@ -1002,7 +996,10 @@ namespace Ketarin
                                                    VariableChangeIndicatorLastContent = @VariableChangeIndicatorLastContent,
                                                    ExclusiveDownload = @ExclusiveDownload,
                                                    CheckForUpdateOnly = @CheckForUpdateOnly,
-                                                   CachedPadFileVersion = @CachedPadFileVersion
+                                                   CachedPadFileVersion = @CachedPadFileVersion,
+                                                   LastFileDate = @LastFileDate,
+                                                   LastFileSize = @LastFileSize,
+                                                   IgnoreFileInformation = @IgnoreFileInformation
                                              WHERE JobGuid = @JobGuid";
 
                                 command.Parameters.Add(new SQLiteParameter("@ApplicationName", Name));
@@ -1021,16 +1018,19 @@ namespace Ketarin
                                 command.Parameters.Add(new SQLiteParameter("@ShareApplication", m_ShareApplication));
                                 command.Parameters.Add(new SQLiteParameter("@HttpReferer", m_HttpReferer));
                                 command.Parameters.Add(new SQLiteParameter("@FileHippoVersion", m_FileHippoVersion));
-                                command.Parameters.Add(new SQLiteParameter("@DownloadBeta", (int)m_DownloadBeta));
+                                command.Parameters.Add(new SQLiteParameter("@DownloadBeta", (int)DownloadBeta));
                                 command.Parameters.Add(new SQLiteParameter("@VariableChangeIndicator", m_VariableChangeIndicator));
                                 command.Parameters.Add(new SQLiteParameter("@VariableChangeIndicatorLastContent", m_VariableChangeIndicatorLastContent));
-                                command.Parameters.Add(new SQLiteParameter("@ExclusiveDownload", m_ExclusiveDownload));
-                                command.Parameters.Add(new SQLiteParameter("@CheckForUpdateOnly", m_CheckForUpdateOnly));
-                                command.Parameters.Add(new SQLiteParameter("@CachedPadFileVersion", m_CachedPadFileVersion));
+                                command.Parameters.Add(new SQLiteParameter("@ExclusiveDownload", ExclusiveDownload));
+                                command.Parameters.Add(new SQLiteParameter("@CheckForUpdateOnly", CheckForUpdatesOnly));
+                                command.Parameters.Add(new SQLiteParameter("@CachedPadFileVersion", CachedPadFileVersion));
+                                command.Parameters.Add(new SQLiteParameter("@LastFileDate", LastFileDate));
+                                command.Parameters.Add(new SQLiteParameter("@LastFileSize", LastFileSize));
+                                command.Parameters.Add(new SQLiteParameter("@IgnoreFileInformation", IgnoreFileInformation));
                                 
-                                if (m_DownloadDate.HasValue)
+                                if (DownloadDate.HasValue)
                                 {
-                                    command.Parameters.Add(new SQLiteParameter("@DownloadDate", m_DownloadDate.Value));
+                                    command.Parameters.Add(new SQLiteParameter("@DownloadDate", DownloadDate.Value));
                                 }
                                 else
                                 {
@@ -1050,8 +1050,8 @@ namespace Ketarin
                             using (IDbCommand command = conn.CreateCommand())
                             {
                                 command.Transaction = transaction;
-                                command.CommandText = @"INSERT INTO jobs (ApplicationName, FixedDownloadUrl, DateAdded, TargetPath, LastUpdated, IsEnabled, FileHippoId, DeletePreviousFile, SourceType, ExecuteCommand, ExecutePreCommand, Category, JobGuid, CanBeShared, ShareApplication, HttpReferer, FileHippoVersion, DownloadBeta, DownloadDate, VariableChangeIndicator, VariableChangeIndicatorLastContent, ExclusiveDownload, CheckForUpdateOnly, CachedPadFileVersion)
-                                                 VALUES (@ApplicationName, @FixedDownloadUrl, @DateAdded, @TargetPath, @LastUpdated, @IsEnabled, @FileHippoId, @DeletePreviousFile, @SourceType, @ExecuteCommand, @ExecutePreCommand, @Category, @JobGuid, @CanBeShared, @ShareApplication, @HttpReferer, @FileHippoVersion, @DownloadBeta, @DownloadDate, @VariableChangeIndicator, NULL, @ExclusiveDownload, @CheckForUpdateOnly, @CachedPadFileVersion)";
+                                command.CommandText = @"INSERT INTO jobs (ApplicationName, FixedDownloadUrl, DateAdded, TargetPath, LastUpdated, IsEnabled, FileHippoId, DeletePreviousFile, SourceType, ExecuteCommand, ExecutePreCommand, Category, JobGuid, CanBeShared, ShareApplication, HttpReferer, FileHippoVersion, DownloadBeta, DownloadDate, VariableChangeIndicator, VariableChangeIndicatorLastContent, ExclusiveDownload, CheckForUpdateOnly, CachedPadFileVersion, LastFileDate, LastFileSize, IgnoreFileInformation)
+                                                 VALUES (@ApplicationName, @FixedDownloadUrl, @DateAdded, @TargetPath, @LastUpdated, @IsEnabled, @FileHippoId, @DeletePreviousFile, @SourceType, @ExecuteCommand, @ExecutePreCommand, @Category, @JobGuid, @CanBeShared, @ShareApplication, @HttpReferer, @FileHippoVersion, @DownloadBeta, @DownloadDate, @VariableChangeIndicator, NULL, @ExclusiveDownload, @CheckForUpdateOnly, @CachedPadFileVersion, @LastFileDate, @LastFileSize, @IgnoreFileInformation)";
 
                                 command.Parameters.Add(new SQLiteParameter("@ApplicationName", Name));
                                 command.Parameters.Add(new SQLiteParameter("@FixedDownloadUrl", m_FixedDownloadUrl));
@@ -1070,16 +1070,19 @@ namespace Ketarin
                                 command.Parameters.Add(new SQLiteParameter("@ShareApplication", m_ShareApplication));
                                 command.Parameters.Add(new SQLiteParameter("@HttpReferer", m_HttpReferer));
                                 command.Parameters.Add(new SQLiteParameter("@FileHippoVersion", m_FileHippoVersion));
-                                command.Parameters.Add(new SQLiteParameter("@DownloadBeta", (int)m_DownloadBeta));
+                                command.Parameters.Add(new SQLiteParameter("@DownloadBeta", (int)DownloadBeta));
                                 command.Parameters.Add(new SQLiteParameter("@VariableChangeIndicator", m_VariableChangeIndicator));
                                 command.Parameters.Add(new SQLiteParameter("@VariableChangeLastContent", m_VariableChangeIndicatorLastContent));
-                                command.Parameters.Add(new SQLiteParameter("@ExclusiveDownload", m_ExclusiveDownload));
-                                command.Parameters.Add(new SQLiteParameter("@CheckForUpdateOnly", m_CheckForUpdateOnly));
-                                command.Parameters.Add(new SQLiteParameter("@CachedPadFileVersion", m_CachedPadFileVersion));
+                                command.Parameters.Add(new SQLiteParameter("@ExclusiveDownload", ExclusiveDownload));
+                                command.Parameters.Add(new SQLiteParameter("@CheckForUpdateOnly", CheckForUpdatesOnly));
+                                command.Parameters.Add(new SQLiteParameter("@CachedPadFileVersion", CachedPadFileVersion));
+                                command.Parameters.Add(new SQLiteParameter("@LastFileDate", LastFileDate));
+                                command.Parameters.Add(new SQLiteParameter("@LastFileSize", LastFileSize));
+                                command.Parameters.Add(new SQLiteParameter("@IgnoreFileInformation", IgnoreFileInformation));
                                 
-                                if (m_DownloadDate.HasValue)
+                                if (DownloadDate.HasValue)
                                 {
-                                    command.Parameters.Add(new SQLiteParameter("@DownloadDate", m_DownloadDate.Value));
+                                    command.Parameters.Add(new SQLiteParameter("@DownloadDate", DownloadDate.Value));
                                 }
                                 else
                                 {
@@ -1132,16 +1135,19 @@ namespace Ketarin
             m_HttpReferer = reader["HttpReferer"] as string;
             m_VariableChangeIndicator = reader["VariableChangeIndicator"] as string;
             m_VariableChangeIndicatorLastContent = reader["VariableChangeIndicatorLastContent"] as string;
-            m_ExclusiveDownload = Convert.ToBoolean(reader["ExclusiveDownload"]);
-            m_CheckForUpdateOnly = Convert.ToBoolean(reader["CheckForUpdateOnly"]);
-            m_CachedPadFileVersion = reader["CachedPadFileVersion"] as string;
-            
+            ExclusiveDownload = Convert.ToBoolean(reader["ExclusiveDownload"]);
+            CheckForUpdatesOnly = Convert.ToBoolean(reader["CheckForUpdateOnly"]);
+            CachedPadFileVersion = reader["CachedPadFileVersion"] as string;
+            LastFileSize = Convert.ToInt64(reader["LastFileSize"]);
+            LastFileDate = reader["LastUpdated"] as DateTime?;
+            IgnoreFileInformation = Convert.ToBoolean(reader["IgnoreFileInformation"]);
+
             if (reader["DownloadBeta"] != DBNull.Value)
             {
-                m_DownloadBeta = (DownloadBetaType)Convert.ToInt32(reader["DownloadBeta"]);
+                DownloadBeta = (DownloadBetaType)Convert.ToInt32(reader["DownloadBeta"]);
             }
             // An application has not been downloaded necessarily
-            m_DownloadDate = (reader["DownloadDate"] != DBNull.Value) ? reader["DownloadDate"] as DateTime? : null;
+            DownloadDate = (reader["DownloadDate"] != DBNull.Value) ? reader["DownloadDate"] as DateTime? : null;
             
             string guid = reader["JobGuid"] as string;
             m_Guid = new Guid(guid);
@@ -1269,7 +1275,7 @@ namespace Ketarin
                     current = new FileInfo(m_PreviousLocation);
                 }
 
-                if (!current.Exists)
+                if (!IgnoreFileInformation && !current.Exists)
                 {
                     LogDialog.Log(this, string.Format("Update required, '{0}' does not yet exist", targetFile));
                     return true;
@@ -1318,18 +1324,32 @@ namespace Ketarin
                 }
             }
 
-            if (current == null) return false;
-
             // Remote date must be greater than our local date
             // However, if the remote date is very close to DateTime.Now, it is incorrect (scripts)
             TimeSpan toNowDiff = DateTime.Now - GetLastModified(netResponse);
             bool disregardDate = Math.Abs(toNowDiff.TotalSeconds) <= 0.1;
 
-            TimeSpan diff = GetLastModified(netResponse) - current.LastWriteTime;
-            bool fileSizeMismatch = (current.Length != netResponse.ContentLength && netResponse.ContentLength >= 0);
-            bool dateMismatch = (!disregardDate && diff > TimeSpan.Zero);
-            bool result = (fileSizeMismatch || dateMismatch);
+            if (current == null) return false;
 
+            bool fileSizeMismatch = false, dateMismatch = false;
+
+            if (IgnoreFileInformation)
+            {
+                if (LastFileDate.HasValue)
+                {
+                    TimeSpan diff = GetLastModified(netResponse) - LastFileDate.Value;
+                    dateMismatch = (!disregardDate && diff > TimeSpan.Zero);
+                }
+                fileSizeMismatch = (LastFileSize != netResponse.ContentLength && netResponse.ContentLength >= 0);
+            }
+            else
+            {
+                TimeSpan diff = GetLastModified(netResponse) - current.LastWriteTime;
+                fileSizeMismatch = (current.Length != netResponse.ContentLength && netResponse.ContentLength >= 0);
+                dateMismatch = (!disregardDate && diff > TimeSpan.Zero);
+            }
+
+            bool result = (fileSizeMismatch || dateMismatch);
             LogDialog.Log(this, fileSizeMismatch, dateMismatch);
 
             return result;
