@@ -1318,7 +1318,10 @@ namespace Ketarin
                     TimeSpan diff = GetLastModified(netResponse) - LastFileDate.Value;
                     dateMismatch = (!disregardDate && diff > TimeSpan.Zero);
                 }
-                fileSizeMismatch = (LastFileSize != netResponse.ContentLength && netResponse.ContentLength >= 0);
+                if (LastFileSize > 0)
+                {
+                    fileSizeMismatch = (LastFileSize != netResponse.ContentLength && netResponse.ContentLength >= 0);
+                }
             }
             else
             {
