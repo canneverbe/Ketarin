@@ -57,6 +57,8 @@ namespace Ketarin.Forms
                 txtApplicationName.ReadOnly = value;
                 txtExecuteAfter.ReadOnly = value;
                 txtExecuteBefore.ReadOnly = value;
+                txtNotes.ReadOnly = value;
+                txtWebsite.ReadOnly = value;
                 txtFixedUrl.ReadOnly = value;
                 txtTarget.ReadOnly = value;
                 txtSpoofReferer.ReadOnly = value;
@@ -67,6 +69,8 @@ namespace Ketarin.Forms
                 chkDeletePrevious.Enabled = enable;
                 chkEnabled.Enabled = enable;
                 chkShareOnline.Enabled = enable;
+                chkCheckForUpdatesOnly.Enabled = enable;
+                chkIgnoreFileInformation.Enabled = enable;
                 rbAlwaysDownload.Enabled = enable;
                 rbBetaAvoid.Enabled = enable;
                 rbBetaDefault.Enabled = enable;
