@@ -56,6 +56,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.tcSettings = new System.Windows.Forms.TabControl();
             this.tpGeneral = new System.Windows.Forms.TabPage();
+            this.chkOpenWebsite = new System.Windows.Forms.CheckBox();
             this.lblCustomColumn2 = new System.Windows.Forms.Label();
             this.txtCustomColumn2 = new System.Windows.Forms.TextBox();
             this.chkBackups = new System.Windows.Forms.CheckBox();
@@ -73,7 +74,6 @@
             this.txtPostUpdateCommand = new Ketarin.Forms.TextBox();
             this.bExport = new System.Windows.Forms.Button();
             this.bImport = new System.Windows.Forms.Button();
-            this.chkOpenWebsite = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.nConnectionTimeout)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nProxyPort)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nNumThreads)).BeginInit();
@@ -425,6 +425,16 @@
             this.tpGeneral.Text = "General";
             this.tpGeneral.UseVisualStyleBackColor = true;
             // 
+            // chkOpenWebsite
+            // 
+            this.chkOpenWebsite.AutoSize = true;
+            this.chkOpenWebsite.Location = new System.Drawing.Point(6, 126);
+            this.chkOpenWebsite.Name = "chkOpenWebsite";
+            this.chkOpenWebsite.Size = new System.Drawing.Size(337, 17);
+            this.chkOpenWebsite.TabIndex = 5;
+            this.chkOpenWebsite.Text = "Ope&n website when double-clicking on an application (if specified)";
+            this.chkOpenWebsite.UseVisualStyleBackColor = true;
+            // 
             // lblCustomColumn2
             // 
             this.lblCustomColumn2.AutoSize = true;
@@ -554,7 +564,7 @@
             // lblPreUpdateCommand
             // 
             this.lblPreUpdateCommand.AutoSize = true;
-            this.lblPreUpdateCommand.Location = new System.Drawing.Point(6, 9);
+            this.lblPreUpdateCommand.Location = new System.Drawing.Point(3, 9);
             this.lblPreUpdateCommand.Name = "lblPreUpdateCommand";
             this.lblPreUpdateCommand.Size = new System.Drawing.Size(292, 13);
             this.lblPreUpdateCommand.TabIndex = 0;
@@ -563,7 +573,7 @@
             // lblPostUpdateAllCommand
             // 
             this.lblPostUpdateAllCommand.AutoSize = true;
-            this.lblPostUpdateAllCommand.Location = new System.Drawing.Point(6, 200);
+            this.lblPostUpdateAllCommand.Location = new System.Drawing.Point(3, 200);
             this.lblPostUpdateAllCommand.Name = "lblPostUpdateAllCommand";
             this.lblPostUpdateAllCommand.Size = new System.Drawing.Size(250, 13);
             this.lblPostUpdateAllCommand.TabIndex = 4;
@@ -572,7 +582,7 @@
             // lblPostUpdateCommand
             // 
             this.lblPostUpdateCommand.AutoSize = true;
-            this.lblPostUpdateCommand.Location = new System.Drawing.Point(6, 105);
+            this.lblPostUpdateCommand.Location = new System.Drawing.Point(3, 105);
             this.lblPostUpdateCommand.Name = "lblPostUpdateCommand";
             this.lblPostUpdateCommand.Size = new System.Drawing.Size(283, 13);
             this.lblPostUpdateCommand.TabIndex = 2;
@@ -625,16 +635,6 @@
             this.bImport.Text = "Import...";
             this.bImport.UseVisualStyleBackColor = true;
             this.bImport.Click += new System.EventHandler(this.bImport_Click);
-            // 
-            // chkOpenWebsite
-            // 
-            this.chkOpenWebsite.AutoSize = true;
-            this.chkOpenWebsite.Location = new System.Drawing.Point(6, 126);
-            this.chkOpenWebsite.Name = "chkOpenWebsite";
-            this.chkOpenWebsite.Size = new System.Drawing.Size(337, 17);
-            this.chkOpenWebsite.TabIndex = 5;
-            this.chkOpenWebsite.Text = "Ope&n website when double-clicking on an application (if specified)";
-            this.chkOpenWebsite.UseVisualStyleBackColor = true;
             // 
             // SettingsDialog
             // 
