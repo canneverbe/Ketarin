@@ -773,7 +773,7 @@ namespace Ketarin
 
             using (XmlWriter xmlWriter = XmlWriter.Create(output, settings))
             {
-                xmlWriter.WriteProcessingInstruction("xml", "version='1.0', encoding='" + encoding.WebName + "'");
+                xmlWriter.WriteProcessingInstruction("xml", "version='1.0' encoding='" + encoding.WebName + "'");
                 xmlWriter.WriteStartElement("Jobs");
                 foreach (ApplicationJob job in jobs)
                 {
