@@ -278,6 +278,8 @@ namespace Ketarin
                     olvJobs.EnsureVisible(index);
                 }
 
+                UpdateNumByStatus();
+
                 // Icon text length limited to 64 chars
                 string text = "Currently working on: " + e.ApplicationJob.Name;
                 if (text.Length >= 64)
@@ -399,6 +401,7 @@ namespace Ketarin
             }
 
             UpdateList();
+            UpdateNumByStatus();
 
             if (Convert.ToBoolean(Settings.GetValue("Ketarin", "ShowLog", false)))
             {
@@ -1039,6 +1042,31 @@ namespace Ketarin
         {
             tbTotalApplications.Text = "Number of applications: " + olvJobs.Items.Count;
             tbSelectedApplications.Text = "Selected applications: " + olvJobs.SelectedIndices.Count;
+        }
+
+        /// <summary>
+        /// Updates the application count by status in the status bar.
+        /// </summary>
+        private void UpdateNumByStatus()
+        {
+            int idle = 0;
+            int failed = 0;
+            int finished = 0;
+            
+            foreach (ApplicationJob job in m_Jobs)
+            {
+                switch (m_Updater.GetStatus(job))
+                {
+                    case Updater.Status.Idle: idle++; break;
+                    case Updater.Status.Failure: failed++; break;
+                    case Updater.Status.NoUpdate:
+                    case Updater.Status.UpdateAvailable:
+                    case Updater.Status.UpdateSuccessful:
+                        finished++; break;
+                }
+            }
+
+            tbNumByStatus.Text = string.Format("By status: {0} Idle, {1} Finished, {2} Failed", idle, finished, failed);
         }
 
         private void mnuLog_Click(object sender, EventArgs e)
