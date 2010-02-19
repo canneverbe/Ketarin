@@ -71,10 +71,10 @@ namespace Ketarin
         {
             Idle,
             Downloading,
+            UpdateAvailable,
             UpdateSuccessful,
             NoUpdate,
             Failure,
-            UpdateAvailable
         }
 
         #region JobProgressChangedEventArgs

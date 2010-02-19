@@ -228,10 +228,10 @@ namespace Ketarin
 
             imlStatus.Images.Add(Properties.Resources.Document);
             imlStatus.Images.Add(Properties.Resources.Import);
+            imlStatus.Images.Add(Properties.Resources.New);
             imlStatus.Images.Add(Properties.Resources.NewDownloaded);
             imlStatus.Images.Add(Properties.Resources.Symbol_Check);
             imlStatus.Images.Add(Properties.Resources.Symbol_Delete);
-            imlStatus.Images.Add(Properties.Resources.New);
             imlStatus.Images.Add(Properties.Resources.Document_Restricted);
         }
 
