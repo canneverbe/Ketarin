@@ -231,7 +231,12 @@ namespace Ketarin
                 mnuImport.Enabled = true;
                 olvJobs.Refresh();
                 // Refresh sorting (last updated column for example)
-                olvJobs.Sort();
+                // If groups are enabled, sorting causes the list to scroll back
+                // to the top. We'd like to avoid that.
+                if (!olvJobs.ShowGroups)
+                {
+                    olvJobs.Sort();
+                }
 
                 if (m_Updater.Errors.Length > 0)
                 {
