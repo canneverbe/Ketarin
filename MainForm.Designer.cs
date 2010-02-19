@@ -90,6 +90,7 @@
             this.cmnuExit = new System.Windows.Forms.MenuItem();
             this.statusBar = new System.Windows.Forms.StatusStrip();
             this.tbSelectedApplications = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tbNumByStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.tbTotalApplications = new System.Windows.Forms.ToolStripStatusLabel();
             ((System.ComponentModel.ISupportInitialize)(this.olvJobs)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.m_VistaMenu)).BeginInit();
@@ -549,6 +550,7 @@
             // 
             this.statusBar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tbSelectedApplications,
+            this.tbNumByStatus,
             this.tbTotalApplications});
             this.statusBar.Location = new System.Drawing.Point(0, 282);
             this.statusBar.Name = "statusBar";
@@ -563,11 +565,18 @@
             this.tbSelectedApplications.Size = new System.Drawing.Size(130, 19);
             this.tbSelectedApplications.Text = "Selected applications: 0";
             // 
+            // tbNumByStatus
+            // 
+            this.tbNumByStatus.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Left;
+            this.tbNumByStatus.Name = "tbNumByStatus";
+            this.tbNumByStatus.Size = new System.Drawing.Size(197, 19);
+            this.tbNumByStatus.Text = "By status: 0 Idle, 0 Finished, 0 Failed";
+            // 
             // tbTotalApplications
             // 
             this.tbTotalApplications.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Left;
             this.tbTotalApplications.Name = "tbTotalApplications";
-            this.tbTotalApplications.Size = new System.Drawing.Size(537, 19);
+            this.tbTotalApplications.Size = new System.Drawing.Size(309, 19);
             this.tbTotalApplications.Spring = true;
             this.tbTotalApplications.Text = "Number of applications: 0";
             this.tbTotalApplications.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -660,6 +669,7 @@
         private System.Windows.Forms.MenuItem mnuFind;
         private System.Windows.Forms.MenuItem mnuAutoScroll;
         private CDBurnerXP.Controls.OLVColumn colStatus;
+        private System.Windows.Forms.ToolStripStatusLabel tbNumByStatus;
     }
 }
 
