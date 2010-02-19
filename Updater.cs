@@ -73,7 +73,8 @@ namespace Ketarin
             Downloading,
             UpdateSuccessful,
             NoUpdate,
-            Failure
+            Failure,
+            UpdateAvailable
         }
 
         #region JobProgressChangedEventArgs
@@ -405,7 +406,7 @@ namespace Ketarin
                     try
                     {
                         numTries++;
-                        m_Status[job] = DoDownload(job, out requestedUrl) ? Status.UpdateSuccessful : Status.NoUpdate;
+                        m_Status[job] = DoDownload(job, out requestedUrl);
 
                         // If there is a custom column variable, and it has not been been downloaded yet,
                         // make sure that we fetch it now "unnecessarily" so that the column contains a current value.
@@ -527,7 +528,7 @@ namespace Ketarin
         /// <param name="job">The job to process</param>
         /// <param name="requestedUrl">The URL from which has been downloaded</param>
         /// <returns>true, if a new update has been found and downloaded, false otherwise</returns>
-        protected bool DoDownload(ApplicationJob job, out string requestedUrl)
+        protected Status DoDownload(ApplicationJob job, out string requestedUrl)
         {
             string downloadUrl = string.Empty;
             if (job.DownloadSourceType == ApplicationJob.SourceType.FileHippo)
@@ -548,13 +549,11 @@ namespace Ketarin
                 // No download URL specified, only check if update is required
                 if (job.RequiresDownload(null, null))
                 {
-                    m_Status[job] = Status.UpdateSuccessful;
-                    return true;
+                    return Status.UpdateAvailable;
                 }
                 else
                 {
-                    m_Status[job] = Status.NoUpdate;
-                    return false;
+                    return Status.NoUpdate;
                 }
             }
 
@@ -572,7 +571,7 @@ namespace Ketarin
         /// <param name="job">The job to process</param>
         /// <param name="urlToRequest">URL from which should be downloaded</param>
         /// <returns>true, if a new update has been found and downloaded, false otherwise</returns>
-        protected bool DoDownload(ApplicationJob job, Uri urlToRequest)
+        protected Status DoDownload(ApplicationJob job, Uri urlToRequest)
         {
             // Lower security policies
             try
@@ -667,8 +666,6 @@ namespace Ketarin
                 // Only download, if the file size or date has changed
                 if (!m_ForceDownload && !job.RequiresDownload(response, targetFileName))
                 {
-                    m_Status[job] = Status.UpdateSuccessful;
-
                     // If file already exists (created by user),
                     // the download is not necessary. We still need to
                     // set the file name.
@@ -679,14 +676,14 @@ namespace Ketarin
                         job.PreviousLocation = targetFileName;
                     }
                     job.Save();
-                    return false;
+                    return Status.NoUpdate;
                 }
 
                 // Skip downloading!
                 if (!m_ForceDownload && (m_OnlyCheck || job.CheckForUpdatesOnly))
                 {
                     LogDialog.Log(job, "Skipped downloading updates");
-                    return true;
+                    return Status.UpdateAvailable;
                 }
 
                 string defaultPreCommand = Settings.GetValue("PreUpdateCommand", "") as string;
@@ -729,10 +726,9 @@ namespace Ketarin
 
                 if (m_CancelUpdates)
                 {
-                    m_Status[job] = Status.Failure;
                     m_Progress[job] = 0;
                     OnStatusChanged(job);
-                    return false;
+                    return Status.Failure;
                 }
 
                 // If each version has a different file name (version number),
@@ -801,7 +797,7 @@ namespace Ketarin
                 ExecuteCommand(job, job.ExecuteCommand);
             }
 
-            return true;
+            return Status.UpdateSuccessful;
         }
 
         /// <summary>

@@ -434,6 +434,7 @@
     <Content Include="ketarin.ico">
       <Generator>up</Generator>
     </Content>
+    <None Include="Resources\NewDownloaded.png" />
     <None Include="Resources\New.png" />
     <None Include="Resources\Symbol Information.png" />
     <None Include="Resources\Document Restricted.png" />
