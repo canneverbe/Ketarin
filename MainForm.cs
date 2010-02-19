@@ -155,6 +155,24 @@ namespace Ketarin
                 return (int)m_Updater.GetStatus(job);
             };
 
+            colStatus.AspectGetter = delegate(object x)
+            {
+                return m_Updater.GetStatus(x as ApplicationJob);
+            };
+            colStatus.AspectToStringConverter = delegate(object x)
+            {
+                switch ((Updater.Status)x)
+                {
+                    case Updater.Status.Downloading: return "Downloading";
+                    case Updater.Status.Failure: return "Failed";
+                    case Updater.Status.Idle: return "Idle";
+                    case Updater.Status.NoUpdate: return "No update";
+                    case Updater.Status.UpdateSuccessful: return "Updated";
+                    case Updater.Status.UpdateAvailable: return "Update available";
+                }
+                return string.Empty;
+            };
+
             colTarget.AspectGetter = delegate(object x) {
                 ApplicationJob job = x as ApplicationJob;
                 return job.Variables.ReplaceAllInString(job.TargetPath, DateTime.MinValue, null, true);
@@ -210,9 +228,10 @@ namespace Ketarin
 
             imlStatus.Images.Add(Properties.Resources.Document);
             imlStatus.Images.Add(Properties.Resources.Import);
-            imlStatus.Images.Add(Properties.Resources.New);
+            imlStatus.Images.Add(Properties.Resources.NewDownloaded);
             imlStatus.Images.Add(Properties.Resources.Symbol_Check);
             imlStatus.Images.Add(Properties.Resources.Symbol_Delete);
+            imlStatus.Images.Add(Properties.Resources.New);
             imlStatus.Images.Add(Properties.Resources.Document_Restricted);
         }
 

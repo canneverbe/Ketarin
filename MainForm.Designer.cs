@@ -77,6 +77,7 @@
             this.colCategory = new CDBurnerXP.Controls.OLVColumn();
             this.colCustomValue = new CDBurnerXP.Controls.OLVColumn();
             this.colCustomValue2 = new CDBurnerXP.Controls.OLVColumn();
+            this.colStatus = new CDBurnerXP.Controls.OLVColumn();
             this.m_VistaMenu = new CDBurnerXP.Controls.VistaMenu(this.components);
             this.bAddApplication = new wyDay.Controls.SplitButton();
             this.bRun = new wyDay.Controls.SplitButton();
@@ -382,6 +383,7 @@
             this.olvJobs.AllColumns.Add(this.colCategory);
             this.olvJobs.AllColumns.Add(this.colCustomValue);
             this.olvJobs.AllColumns.Add(this.colCustomValue2);
+            this.olvJobs.AllColumns.Add(this.colStatus);
             this.olvJobs.AllowColumnReorder = true;
             this.olvJobs.AlternateRowBackColor = System.Drawing.Color.Empty;
             this.olvJobs.AlwaysGroupByColumn = null;
@@ -410,10 +412,10 @@
             this.olvJobs.TabIndex = 0;
             this.olvJobs.UseCompatibleStateImageBehavior = false;
             this.olvJobs.View = System.Windows.Forms.View.Details;
-            this.olvJobs.DoubleClick += new System.EventHandler(this.olvJobs_DoubleClick);
             this.olvJobs.KeyDown += new System.Windows.Forms.KeyEventHandler(this.olvJobs_KeyDown);
-            this.olvJobs.SelectedIndexChanged += new System.EventHandler(this.olvJobs_SelectedIndexChanged);
             this.olvJobs.SelectionChanged += new System.EventHandler(this.olvJobs_SelectionChanged);
+            this.olvJobs.SelectedIndexChanged += new System.EventHandler(this.olvJobs_SelectedIndexChanged);
+            this.olvJobs.DoubleClick += new System.EventHandler(this.olvJobs_DoubleClick);
             // 
             // colName
             // 
@@ -458,6 +460,13 @@
             this.colCustomValue2.AspectName = null;
             this.colCustomValue2.IsVisible = false;
             this.colCustomValue2.Text = "Custom Value 2";
+            // 
+            // colStatus
+            // 
+            this.colStatus.AspectName = null;
+            this.colStatus.IsVisible = false;
+            this.colStatus.Text = "Status";
+            this.colStatus.Width = 80;
             // 
             // m_VistaMenu
             // 
@@ -650,6 +659,7 @@
         private System.Windows.Forms.MenuItem cmnuSepUpdates;
         private System.Windows.Forms.MenuItem mnuFind;
         private System.Windows.Forms.MenuItem mnuAutoScroll;
+        private CDBurnerXP.Controls.OLVColumn colStatus;
     }
 }
 
