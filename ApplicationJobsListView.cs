@@ -16,7 +16,7 @@ namespace Ketarin
         private Ketarin.Forms.TextBox searchTextBox = new Ketarin.Forms.TextBox();
         private List<ApplicationJob> preSearchList = null;
         private CheckBox enabledJobsCheckbox = new CheckBox();
-        private const string defaultEmptyMessage = "No applications have been added yet.";
+        public const string DefaultEmptyMessage = "No applications have been added yet.";
 
         /// <summary>
         /// Fires when the filter of the ListView has changed.
@@ -140,8 +140,6 @@ namespace Ketarin
 
         public void Initialize()
         {
-            EmptyListMsg = defaultEmptyMessage;
-
             searchPanel.Dock = DockStyle.Bottom;
             searchPanel.AutoSize = true;
             searchPanel.AutoSizeMode = AutoSizeMode.GrowAndShrink;
@@ -335,7 +333,7 @@ namespace Ketarin
 
         private void HideSearch()
         {
-            this.EmptyListMsg = defaultEmptyMessage;
+            this.EmptyListMsg = DefaultEmptyMessage;
             this.searchPanel.Visible = false;
             this.searchTextBox.Text = string.Empty;
             this.enabledJobsCheckbox.CheckState = CheckState.Indeterminate;

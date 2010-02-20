@@ -467,9 +467,26 @@ namespace Ketarin
 
         private void UpdateList()
         {
-            m_Jobs = new List<ApplicationJob>(DbManager.GetJobs()).ToArray();
-            olvJobs.SetObjects(m_Jobs);
-            UpdateStatusbar();
+            Cursor = Cursors.WaitCursor;
+            try
+            {
+                m_Jobs = new List<ApplicationJob>(DbManager.GetJobs()).ToArray();
+                if (m_Jobs.Length > 0)
+                {
+                    olvJobs.EmptyListMsg = "Loading applications...";
+                    Application.DoEvents();
+                }
+                else
+                {
+                    olvJobs.EmptyListMsg = ApplicationJobsListView.DefaultEmptyMessage;
+                }
+                olvJobs.SetObjects(m_Jobs);
+                UpdateStatusbar();
+            }
+            finally
+            {
+                Cursor = Cursors.Default;
+            }
         }
 
         #region Add button

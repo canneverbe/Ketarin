@@ -501,22 +501,57 @@ namespace Ketarin
         /// </summary>
         public static ApplicationJob[] GetJobs()
         {
-            IDbCommand command = Connection.CreateCommand();
-            command.CommandText = "SELECT * FROM jobs ORDER BY ApplicationName";
-
-            List<ApplicationJob> result = new List<ApplicationJob>();
-
-            using (IDataReader reader = command.ExecuteReader())
+            Dictionary<Guid, List<UrlVariable>> allVariables = new Dictionary<Guid, List<UrlVariable>>();
+            using (IDbCommand command = Connection.CreateCommand())
             {
-                while (reader.Read())
+                command.CommandText = "SELECT * FROM variables";
+
+                using (IDataReader reader = command.ExecuteReader())
                 {
-                    ApplicationJob job = new ApplicationJob();
-                    job.Hydrate(reader);
-                    result.Add(job);
+                    while (reader.Read())
+                    {
+                        UrlVariable variable = new UrlVariable();
+                        variable.Hydrate(reader);
+
+                        Guid jobGuid = new Guid(reader["JobGuid"] as string);
+
+                        if (!allVariables.ContainsKey(jobGuid))
+                        {
+                            allVariables[jobGuid] = new List<UrlVariable>();
+                        }
+
+                        allVariables[jobGuid].Add(variable);
+                    }
                 }
             }
 
-            return result.ToArray();
+            using (IDbCommand command = Connection.CreateCommand())
+            {
+                command.CommandText = "SELECT * FROM jobs ORDER BY ApplicationName";
+
+                List<ApplicationJob> result = new List<ApplicationJob>();
+
+                using (IDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        ApplicationJob job = new ApplicationJob();
+                        job.Hydrate(reader);
+
+                        if (allVariables.ContainsKey(job.Guid))
+                        {
+                            foreach (UrlVariable var in allVariables[job.Guid])
+                            {
+                                job.Variables.Add(var.Name, var);
+                            }
+                        }
+
+                        result.Add(job);
+                    }
+                }
+
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -524,21 +559,42 @@ namespace Ketarin
         /// </summary>
         public static ApplicationJob GetJob(Guid appGuid)
         {
-            IDbCommand command = Connection.CreateCommand();
-            command.CommandText = "SELECT * FROM jobs WHERE JobGuid = @JobGuid";
-            command.Parameters.Add(new SQLiteParameter("@JobGuid", FormatGuid(appGuid)));
+            ApplicationJob job = null;
 
-            using (IDataReader reader = command.ExecuteReader())
+            using (IDbCommand command = Connection.CreateCommand())
             {
-                if (reader.Read())
+                command.CommandText = "SELECT * FROM jobs WHERE JobGuid = @JobGuid";
+                command.Parameters.Add(new SQLiteParameter("@JobGuid", FormatGuid(appGuid)));
+
+                using (IDataReader reader = command.ExecuteReader())
                 {
-                    ApplicationJob job = new ApplicationJob();
-                    job.Hydrate(reader);
-                    return job;
+                    if (reader.Read())
+                    {
+                        job = new ApplicationJob();
+                        job.Hydrate(reader);
+                    }
                 }
             }
 
-            return null;
+            if (job != null)
+            {
+                using (IDbCommand command = Connection.CreateCommand())
+                {
+                    command.CommandText = @"SELECT * FROM variables WHERE JobGuid = @JobGuid";
+                    command.Parameters.Add(new SQLiteParameter("@JobGuid", DbManager.FormatGuid(appGuid)));
+                    using (IDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            UrlVariable variable = new UrlVariable(job.Variables);
+                            variable.Hydrate(reader);
+                            job.Variables.Add(variable.Name, variable);
+                        }
+                    }
+                }
+            }
+
+            return job;
         }
 
 
