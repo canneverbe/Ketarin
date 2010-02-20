@@ -376,34 +376,6 @@ namespace Ketarin
         public UrlVariableCollection Variables
         {
             get {
-                lock (this)
-                {
-                    // Load variables on demand
-                    if (m_Variables == null)
-                    {
-                        m_Variables = new UrlVariableCollection(this);
-                        if (m_Guid != Guid.Empty)
-                        {
-                            using (SQLiteConnection conn = DbManager.NewConnection)
-                            {
-                                using (IDbCommand command = conn.CreateCommand())
-                                {
-                                    command.CommandText = @"SELECT * FROM variables WHERE JobGuid = @JobGuid";
-                                    command.Parameters.Add(new SQLiteParameter("@JobGuid", DbManager.FormatGuid(m_Guid)));
-                                    using (IDataReader reader = command.ExecuteReader())
-                                    {
-                                        while (reader.Read())
-                                        {
-                                            UrlVariable variable = new UrlVariable(m_Variables);
-                                            variable.Hydrate(reader);
-                                            m_Variables.Add(variable.Name, variable);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
                 return m_Variables;
             }
             set
@@ -558,6 +530,14 @@ namespace Ketarin
         }
 
         #endregion
+
+        /// <summary>
+        /// Creates a new instance of an application job.
+        /// </summary>
+        public ApplicationJob()
+        {
+            m_Variables = new ApplicationJob.UrlVariableCollection(this);
+        }
 
         /// <summary>
         /// Deletes this job from the database.
