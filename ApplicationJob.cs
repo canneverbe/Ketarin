@@ -193,6 +193,7 @@ namespace Ketarin
         {
             private ApplicationJob m_Parent;
             private bool m_VersionDownloaded = false;
+            private FileInfo cachedInfo = null;
 
             #region Properties
 
@@ -262,16 +263,19 @@ namespace Ketarin
                             value = UrlVariable.Replace(value, "file", m_Parent.PreviousLocation);
                         }
 
-                        FileInfo info = new FileInfo(m_Parent.PreviousLocation);
+                        if (cachedInfo == null || cachedInfo.FullName != m_Parent.PreviousLocation)
+                        {
+                            cachedInfo = new FileInfo(m_Parent.PreviousLocation);
+                        }
                         // Try to provide file date if missing
                         if (fileDate == DateTime.MinValue)
                         {
-                            fileDate = info.LastWriteTime;
+                            fileDate = cachedInfo.LastWriteTime;
                         }
                         // Provide file size
-                        if (info.Exists)
+                        if (cachedInfo.Exists)
                         {
-                            value = UrlVariable.Replace(value, "filesize", info.Length.ToString());
+                            value = UrlVariable.Replace(value, "filesize", cachedInfo.Length.ToString());
                         }
                     }
                     catch (Exception)
