@@ -37,6 +37,7 @@ namespace Ketarin
         private List<Thread> m_Threads = new List<Thread>();
         private List<string> m_NoAutoReferer = new List<string>(new string[] { "sourceforge.net" });
         private CookieContainer m_Cookies = new CookieContainer();
+        private static List<WebRequest> m_Requests = new List<WebRequest>();
 
         #region Properties
 
@@ -181,11 +182,40 @@ namespace Ketarin
         #region Public control methods
 
         /// <summary>
+        /// Allows all routines involved in the update to
+        /// store the corresponding WebRequest here. When the user
+        /// cancels the process, these WebRequests wil be aborted,
+        /// so that it finishes more or less instantly.
+        /// </summary>
+        internal static void AddRequestToCancel(WebRequest reqest)
+        {
+            lock (m_Requests)
+            {
+                m_Requests.Add(reqest);
+            }
+        }
+
+        /// <summary>
         /// Cancels the updating progress.
         /// </summary>
         public void Cancel()
         {
             m_CancelUpdates = true;
+            lock (m_Requests)
+            {
+                foreach (WebRequest req in m_Requests)
+                {
+                    try
+                    {
+                        req.Abort();
+                    }
+                    catch (NotSupportedException)
+                    {
+                        continue;
+                    }
+                }
+                m_Requests.Clear();
+            }
         }
 
         /// <summary>
@@ -428,6 +458,14 @@ namespace Ketarin
                     }
                     catch (Exception ex)
                     {
+                        WebException webException = ex as WebException;
+                        if (webException != null && webException.Status == WebExceptionStatus.RequestCanceled)
+                        {
+                            // User cancelled the process -> Do nothing
+                            m_Status[job] = Status.Failure;
+                            break;
+                        }
+
                         // Only throw an exception if we have run out of tries
                         if (numTries == maxTries)
                         {
@@ -595,6 +633,7 @@ namespace Ketarin
             job.Variables.ResetDownloadCount();
 
             WebRequest req = WebRequest.CreateDefault(urlToRequest);
+            AddRequestToCancel(req);
             req.Timeout = Convert.ToInt32(Settings.GetValue("ConnectionTimeout", 10)) * 1000; // 10 seconds by default
 
             HttpWebRequest httpRequest = req as HttpWebRequest;

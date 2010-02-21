@@ -71,6 +71,7 @@ namespace Ketarin
             WebRequest request = base.GetWebRequest(address);
             // Make sure that the user defined timeout is used for all web requests!
             request.Timeout = Convert.ToInt32(Settings.GetValue("ConnectionTimeout", 10)) * 1000; // 10 seconds by default
+            Updater.AddRequestToCancel(request);
 
             // Need to append POST data?
             if (!string.IsNullOrEmpty(m_PostData))
