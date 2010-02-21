@@ -263,6 +263,7 @@ namespace Ketarin
             m_ThreadLimit = Convert.ToInt32(Settings.GetValue("ThreadCount", 2));
             m_OnlyCheck = onlyCheck;
             m_ForceDownload = forceDownload;
+            m_Requests.Clear();
 
             // Initialise progress and status
             m_Progress = new Dictionary<ApplicationJob, short>();
