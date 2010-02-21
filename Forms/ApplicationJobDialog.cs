@@ -406,13 +406,7 @@ namespace Ketarin.Forms
         private void txtFileHippoId_TextChanged(object sender, EventArgs e)
         {
             rbFileHippo.Checked = true;
-            // If someone pasted the full URL, extract the ID from it
-            Regex regex = new Regex(@"filehippo\.com/download_([0-9a-z._-]+)/", RegexOptions.IgnoreCase | RegexOptions.Singleline);
-            Match id = regex.Match(txtFileHippoId.Text);
-            if (id.Groups.Count > 1)
-            {
-                txtFileHippoId.Text = id.Groups[1].Value;
-            }
+            txtFileHippoId.Text = ExternalServices.GetFileHippoIdFromUrl(txtFileHippoId.Text);
 
             RefreshVariables();
         }

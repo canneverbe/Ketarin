@@ -18,8 +18,18 @@ namespace Ketarin
         private string m_PostData = string.Empty;
         private string m_ReplacementString = string.Empty;
         private static string m_UserAgent = null;
+        private Uri m_ResponseUri = null;
 
         #region Properties
+
+        /// <summary>
+        /// If the WebClient has been redirected after a request,
+        /// this specifies the new URL.
+        /// </summary>
+        public Uri ResponseUri
+        {
+            get { return m_ResponseUri; }
+        }
 
         /// <summary>
         /// Gets the plain POST data which is being ursed for a request.
@@ -117,6 +127,11 @@ namespace Ketarin
             WebResponse response = base.GetWebResponse(request);
             
             HttpWebResponse httpResponse = response as HttpWebResponse;
+
+            if (httpResponse != null)
+            {
+                m_ResponseUri = httpResponse.ResponseUri;
+            }
 
             // If binary contents are sent, output information about the download
             if (httpResponse != null && response.ContentType == "application/octet-stream" && response.ContentLength > 100000)

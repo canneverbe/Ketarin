@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Net;
 using System.Text.RegularExpressions;
+using Ketarin.Forms;
 
 namespace Ketarin
 {
@@ -11,6 +12,23 @@ namespace Ketarin
     /// </summary>
     static class ExternalServices
     {
+        /// <summary>
+        /// If the given URL contains a FileHippo ID, it is returned.
+        /// </summary>
+        /// <returns>The original URL if no ID is found</returns>
+        public static string GetFileHippoIdFromUrl(string url)
+        {
+            // If someone pasted the full URL, extract the ID from it
+            Regex regex = new Regex(@"filehippo\.com/download_([0-9a-z._-]+)/", RegexOptions.IgnoreCase | RegexOptions.Singleline);
+            Match id = regex.Match(url);
+            if (id.Groups.Count > 1)
+            {
+                return id.Groups[1].Value;
+            }
+
+            return url;
+        }
+
         /// <summary>
         /// Determines the download URL for a FileHippo application with the given ID.
         /// </summary>
@@ -26,6 +44,17 @@ namespace Ketarin
             using (WebClient client = new WebClient())
             {
                 overviewPage = client.DownloadString(url);
+
+                // If FileHippo redirects to a new name, extract it the actual ID.
+                if (client.ResponseUri != null)
+                {
+                    string newId = GetFileHippoIdFromUrl(client.ResponseUri.ToString());
+                    if (!string.IsNullOrEmpty(newId) && fileId != newId && newId != client.ResponseUri.ToString())
+                    {
+                        LogDialog.Log(string.Format("FileHippo ID '{0}' has been renamed to '{1}'.", fileId, newId));
+                        fileId = newId;
+                    }
+                }
             }
 
             if (avoidBeta && FileHippoIsBeta(overviewPage))
@@ -35,7 +64,10 @@ namespace Ketarin
 
             string findUrl = string.Format("/download_{0}/download/", fileId);
             int pos = overviewPage.IndexOf(findUrl);
-            if (pos < 0) return string.Empty;
+            if (pos < 0)
+            {
+                throw new WebException("FileHippo ID '" + fileId + "' does not exist.", WebExceptionStatus.ReceiveFailure);
+            }
             pos += findUrl.Length;
 
             string downloadUrl = string.Format("http://www.filehippo.com/download_{0}/download/{1}/", fileId, overviewPage.Substring(pos, 32));
