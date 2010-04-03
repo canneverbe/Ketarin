@@ -54,7 +54,7 @@ namespace Ketarin
             {
                 ApplicationJob job = RowObject as ApplicationJob;
                 // Do not draw anything if the updater is not currently working
-                if (m_Updater.GetProgress(job) == -1 || !job.Enabled)
+                if (m_Updater.GetProgress(job) == -1)
                 {
                     base.DrawBackground(g, r);
                     return;

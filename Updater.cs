@@ -270,7 +270,7 @@ namespace Ketarin
             m_Status = new Dictionary<ApplicationJob, Status>();
             foreach (ApplicationJob job in m_Jobs)
             {
-                m_Progress[job] = 0;
+                m_Progress[job] = (short)((forceDownload || job.Enabled) ? 0 : -1);
                 bool res = m_Progress.ContainsKey(job);
                 m_Status[job] = 0;
                 m_Size[job] = -2;
