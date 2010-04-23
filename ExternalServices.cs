@@ -180,6 +180,16 @@ namespace Ketarin
             {
                 md5Page = client.DownloadString(url);
 
+                // If FileHippo redirects to a new name, extract it the actual ID.
+                if (client.ResponseUri != null)
+                {
+                    string newId = GetFileHippoIdFromUrl(client.ResponseUri.ToString());
+                    if (!string.IsNullOrEmpty(newId) && fileId != newId && newId != client.ResponseUri.ToString())
+                    {
+                        return FileHippoMd5(newId, avoidBeta);
+                    }
+                }
+
                 if (avoidBeta && FileHippoIsBeta(md5Page))
                 {
                     md5Page = GetNonBetaPageContent(md5Page, fileId);
