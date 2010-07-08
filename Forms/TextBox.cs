@@ -11,6 +11,24 @@ namespace Ketarin.Forms
     /// </summary>
     class TextBox : System.Windows.Forms.TextBox
     {
+        public override string Text
+        {
+            get
+            {
+                return base.Text;
+            }
+            set
+            {
+                // Normalise line endings
+                if (!string.IsNullOrEmpty(value))
+                {
+                    value = value.Replace("\r\n", "\n");
+                    value = value.Replace("\n", "\r\n");
+                }
+                base.Text = value;
+            }
+        }
+
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
             switch (keyData)
