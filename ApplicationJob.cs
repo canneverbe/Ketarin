@@ -13,6 +13,7 @@ using System.Xml.Serialization;
 using CDBurnerXP;
 using CDBurnerXP.IO;
 using Ketarin.Forms;
+using System.Reflection;
 
 namespace Ketarin
 {
@@ -333,6 +334,12 @@ namespace Ketarin
 
                     value = UrlVariable.Replace(value, "appname", m_Parent.Name);
                     value = UrlVariable.Replace(value, "appguid", DbManager.FormatGuid(m_Parent.Guid));
+                    
+                    // Allow to access all public properties of the object per "property:X" variable.
+                    foreach (PropertyInfo property in m_Parent.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
+                    {
+                        value = UrlVariable.Replace(value, "property:" + property.Name, Convert.ToString(property.GetValue(m_Parent, null)));
+                    }
 
                     if (!ContainsKey("version"))
                     {
