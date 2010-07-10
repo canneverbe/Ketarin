@@ -324,6 +324,13 @@ namespace Ketarin
                     }
                 }
 
+                // Unix timestamp
+                value = UrlVariable.Replace(value, "time", RpcApplication.DotNetToUnix(DateTime.Now).ToString());
+                for (int i = 1; i <= 12; i++)
+                {
+                    value = UrlVariable.Replace(value, "time-" + i, RpcApplication.DotNetToUnix(DateTime.Now.AddHours(-i)).ToString());
+                }
+
                 // Job-specific data / non global variables
                 if (m_Parent != null)
                 {
