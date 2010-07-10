@@ -533,6 +533,33 @@ namespace Ketarin
                     }
                     return string.Empty;
 
+                case "multireplace":
+                case "multireplacei":
+                    if (parts.Length > 3)
+                    {
+                        if (string.IsNullOrEmpty(parts[1])) break;
+                        
+                        // Exmaple: multireplace:,:a,b,c:1,2,3
+                        char delimiter = parts[1][0];
+                        
+                        string[] search = parts[2].Split(delimiter);
+                        string[] replace = parts[3].Split(delimiter);
+                        for (int i = 0; i < search.Length; i++)
+                        {
+                            if (parts[0] == "multireplacei")
+                            {
+                                content = ReplaceEx(content, search[i], replace[i]);
+                            }
+                            else
+                            {
+                                content = content.Replace(search[i], replace[i]);
+                            }
+                        }
+
+                        return content;
+                    }
+                    break;
+
                 case "regex":
                     try
                     {
@@ -640,6 +667,34 @@ namespace Ketarin
             }
 
             return content;
+        }
+
+        /// <summary>
+        /// Case insensitive replacement.
+        /// http://www.codeproject.com/KB/string/fastestcscaseinsstringrep.aspx
+        /// </summary>
+        private static string ReplaceEx(string original, string pattern, string replacement) 
+        {
+            int count, position0, position1;
+            count = position0 = position1 = 0;
+            string upperString = original.ToUpper();
+            string upperPattern = pattern.ToUpper();
+            int inc = (original.Length / pattern.Length) *
+                      (replacement.Length - pattern.Length);
+            char[] chars = new char[original.Length + Math.Max(0, inc)];
+            while ((position1 = upperString.IndexOf(upperPattern,
+                                              position0)) != -1)
+            {
+                for (int i = position0; i < position1; ++i)
+                    chars[count++] = original[i];
+                for (int i = 0; i < replacement.Length; ++i)
+                    chars[count++] = replacement[i];
+                position0 = position1 + pattern.Length;
+            }
+            if (position0 == 0) return original;
+            for (int i = position0; i < original.Length; ++i)
+                chars[count++] = original[i];
+            return new string(chars, 0, count);
         }
 
         /// <summary>
