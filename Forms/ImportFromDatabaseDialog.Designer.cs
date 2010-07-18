@@ -89,6 +89,7 @@
             this.Controls.Add(this.txtSearchSubject);
             this.Controls.Add(this.bSearch);
             this.Name = "ImportFromDatabaseDialog";
+            this.Text = "Import Application";
             this.Controls.SetChildIndex(this.bCancel, 0);
             this.Controls.SetChildIndex(this.lblResults, 0);
             this.Controls.SetChildIndex(this.olvApplications, 0);
