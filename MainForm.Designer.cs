@@ -38,6 +38,7 @@
             this.cmnuSepUpdates = new System.Windows.Forms.MenuItem();
             this.cmnuOpenFile = new System.Windows.Forms.MenuItem();
             this.cmnuOpenFolder = new System.Windows.Forms.MenuItem();
+            this.cmnuProperties = new System.Windows.Forms.MenuItem();
             this.cmnuRename = new System.Windows.Forms.MenuItem();
             this.menuItem4 = new System.Windows.Forms.MenuItem();
             this.cmnuEdit = new System.Windows.Forms.MenuItem();
@@ -112,6 +113,7 @@
             this.cmnuSepUpdates,
             this.cmnuOpenFile,
             this.cmnuOpenFolder,
+            this.cmnuProperties,
             this.cmnuRename,
             this.menuItem4,
             this.cmnuEdit,
@@ -162,58 +164,67 @@
             this.cmnuOpenFolder.Text = "Ope&n folder";
             this.cmnuOpenFolder.Click += new System.EventHandler(this.cmnuOpenFolder_Click);
             // 
+            // cmnuProperties
+            // 
+            this.cmnuProperties.Enabled = false;
+            this.cmnuProperties.Index = 6;
+            this.cmnuProperties.Shortcut = System.Windows.Forms.Shortcut.F9;
+            this.cmnuProperties.Text = "File propertie&s";
+            this.cmnuProperties.Click += new System.EventHandler(this.cmnuProperties_Click);
+            // 
             // cmnuRename
             // 
             this.cmnuRename.Enabled = false;
-            this.cmnuRename.Index = 6;
+            this.cmnuRename.Index = 7;
             this.cmnuRename.Shortcut = System.Windows.Forms.Shortcut.F2;
             this.cmnuRename.Text = "&Rename file";
             this.cmnuRename.Click += new System.EventHandler(this.cmnuRename_Click);
             // 
             // menuItem4
             // 
-            this.menuItem4.Index = 7;
+            this.menuItem4.Index = 8;
             this.menuItem4.Text = "-";
             // 
             // cmnuEdit
             // 
+            this.cmnuEdit.DefaultItem = true;
             this.cmnuEdit.Enabled = false;
-            this.cmnuEdit.Index = 8;
+            this.cmnuEdit.Index = 9;
             this.cmnuEdit.Text = "&Edit";
             this.cmnuEdit.Click += new System.EventHandler(this.cmnuEdit_Click);
             // 
             // cmnuDelete
             // 
             this.cmnuDelete.Enabled = false;
-            this.cmnuDelete.Index = 9;
+            this.cmnuDelete.Index = 10;
             this.cmnuDelete.Shortcut = System.Windows.Forms.Shortcut.Del;
             this.cmnuDelete.Text = "&Delete";
             this.cmnuDelete.Click += new System.EventHandler(this.cmnuDelete_Click);
             // 
             // cmnuCopy
             // 
-            this.cmnuCopy.Index = 10;
+            this.cmnuCopy.Index = 11;
             this.cmnuCopy.Shortcut = System.Windows.Forms.Shortcut.CtrlC;
             this.cmnuCopy.Text = "&Copy";
             this.cmnuCopy.Click += new System.EventHandler(this.cmnuCopy_Click);
             // 
             // cmnuPaste
             // 
-            this.cmnuPaste.Index = 11;
+            this.cmnuPaste.Index = 12;
             this.cmnuPaste.Shortcut = System.Windows.Forms.Shortcut.CtrlV;
             this.cmnuPaste.Text = "&Paste";
             this.cmnuPaste.Click += new System.EventHandler(this.cmnuPaste_Click);
             // 
             // mnuSelectAll
             // 
-            this.mnuSelectAll.Index = 12;
+            this.mnuSelectAll.Index = 13;
             this.mnuSelectAll.Shortcut = System.Windows.Forms.Shortcut.CtrlA;
             this.mnuSelectAll.Text = "Select &all";
             this.mnuSelectAll.Click += new System.EventHandler(this.mnuSelectAll_Click);
             // 
             // mnuInvert
             // 
-            this.mnuInvert.Index = 13;
+            this.mnuInvert.Index = 14;
             this.mnuInvert.Shortcut = System.Windows.Forms.Shortcut.CtrlI;
             this.mnuInvert.Text = "In&vert selection";
             this.mnuInvert.Click += new System.EventHandler(this.mnuInvert_Click);
@@ -576,7 +587,7 @@
             // 
             this.tbTotalApplications.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Left;
             this.tbTotalApplications.Name = "tbTotalApplications";
-            this.tbTotalApplications.Size = new System.Drawing.Size(309, 19);
+            this.tbTotalApplications.Size = new System.Drawing.Size(340, 19);
             this.tbTotalApplications.Spring = true;
             this.tbTotalApplications.Text = "Number of applications: 0";
             this.tbTotalApplications.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -670,6 +681,7 @@
         private System.Windows.Forms.MenuItem mnuAutoScroll;
         private CDBurnerXP.Controls.OLVColumn colStatus;
         private System.Windows.Forms.ToolStripStatusLabel tbNumByStatus;
+        private System.Windows.Forms.MenuItem cmnuProperties;
     }
 }
 
