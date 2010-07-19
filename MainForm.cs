@@ -32,6 +32,7 @@ using CDBurnerXP.Forms;
 using System.Xml;
 using System.Xml.Serialization;
 using System.Drawing.Imaging;
+using System.Runtime.InteropServices;
 
 namespace Ketarin
 {
@@ -641,6 +642,19 @@ namespace Ketarin
             }
         }
 
+        private void cmnuProperties_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                ApplicationJob job = olvJobs.SelectedObject as ApplicationJob;
+                Shell32.ShowFileProperties(job.PreviousLocation);
+            }
+            catch (Exception)
+            {
+                // ignore if fails for whatever reason
+            }
+        }
+
         private void cmnuOpenFolder_Click(object sender, EventArgs e)
         {
             try
@@ -721,6 +735,7 @@ namespace Ketarin
             cmnuCheckForUpdate.Enabled = (!m_Updater.IsBusy);
             cmnuForceDownload.Enabled = (!m_Updater.IsBusy);
             cmnuOpenFile.Enabled = (job != null && !m_Updater.IsBusy && !string.IsNullOrEmpty(job.PreviousLocation) && File.Exists(job.PreviousLocation));
+            cmnuProperties.Enabled = (job != null && !m_Updater.IsBusy && !string.IsNullOrEmpty(job.PreviousLocation) && File.Exists(job.PreviousLocation));
             cmnuOpenFolder.Enabled = (job != null && !string.IsNullOrEmpty(job.PreviousLocation) && File.Exists(job.PreviousLocation));
             cmnuRename.Enabled = cmnuOpenFile.Enabled;
             cmnuCopy.Enabled = (olvJobs.SelectedObjects.Count != 0);
