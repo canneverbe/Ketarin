@@ -1143,7 +1143,8 @@ namespace Ketarin
             // If carried on a USB stick, allow using the drive name
             try
             {
-                targetLocation = targetLocation.Replace("{root}", Path.GetPathRoot(Application.StartupPath));
+                targetLocation = UrlVariable.Replace(targetLocation, "root", Path.GetPathRoot(Application.StartupPath));
+                targetLocation = UrlVariable.Replace(targetLocation, "startuppath", Application.StartupPath);
             }
             catch (ArgumentException) { }
 
