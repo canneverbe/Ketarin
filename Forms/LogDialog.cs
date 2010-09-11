@@ -53,8 +53,8 @@ namespace Ketarin.Forms
             {
                 while (m_Log.Count > 0)
                 {
-                    txtLog.AppendText(m_Log.Dequeue());
-                    txtLog.AppendText(Environment.NewLine);
+                    AppendText(m_Log.Dequeue());
+                    AppendText(Environment.NewLine);
                 }
 
                 m_Instance.txtLog.SelectionStart = m_Instance.txtLog.Text.Length;
