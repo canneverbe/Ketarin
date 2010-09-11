@@ -54,7 +54,6 @@ namespace Ketarin.Forms
                 while (m_Log.Count > 0)
                 {
                     AppendText(m_Log.Dequeue());
-                    AppendText(Environment.NewLine);
                 }
 
                 m_Instance.txtLog.SelectionStart = m_Instance.txtLog.Text.Length;
