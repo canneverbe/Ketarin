@@ -24,7 +24,7 @@ namespace Ketarin
     {
         private ApplicationJob[] m_Jobs = null;
         private Dictionary<ApplicationJob, short> m_Progress = null;
-        private Dictionary<ApplicationJob, Status> m_Status = null;
+        private Dictionary<ApplicationJob, Status> m_Status = new Dictionary<ApplicationJob,Status>();
         private Dictionary<ApplicationJob, long> m_Size = new Dictionary<ApplicationJob, long>();
         private bool m_CancelUpdates = false;
         private bool m_IsBusy = false;
@@ -267,12 +267,12 @@ namespace Ketarin
 
             // Initialise progress and status
             m_Progress = new Dictionary<ApplicationJob, short>();
-            m_Status = new Dictionary<ApplicationJob, Status>();
+
             foreach (ApplicationJob job in m_Jobs)
             {
                 m_Progress[job] = (short)((forceDownload || job.Enabled) ? 0 : -1);
                 bool res = m_Progress.ContainsKey(job);
-                m_Status[job] = 0;
+                m_Status[job] = Status.Idle;
                 m_Size[job] = -2;
             }
             m_Threads.Clear();
