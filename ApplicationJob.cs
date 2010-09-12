@@ -856,8 +856,13 @@ namespace Ketarin
         /// <param name="filename">File name of the XML file</param>
         public static ApplicationJob ImportFromTemplateOrXml(IWin32Window owner, string filename)
         {
+            return ImportFromTemplateOrXml(owner, File.ReadAllText(filename), true);
+        }
+
+        public static ApplicationJob ImportFromTemplateOrXml(IWin32Window owner, string xml, bool isString)
+        {
             XmlDocument doc = new XmlDocument();
-            doc.LoadXml(File.ReadAllText(filename));
+            doc.LoadXml(xml);
 
             XmlNodeList placeholdersList = doc.GetElementsByTagName("placeholder");
             
