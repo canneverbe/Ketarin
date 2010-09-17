@@ -408,7 +408,7 @@ namespace Ketarin.Forms
                             }
                             else
                             {
-                                MessageBox.Show(this, "The contents of the URL could not be loaded.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                MessageBox.Show(this, "The contents of the URL can not be loaded: " + dialog.Error.Message, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                             }
                         }
                     }
