@@ -81,13 +81,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\cdbxp-bin\trunk\CsLib\CDBurnerXP\Controls\AutoSizeLayout.cs">
-      <Link>CDBurnerXP\AutoSizeLayout.cs</Link>
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="..\cdbxp-bin\trunk\CsLib\CDBurnerXP\Controls\PanelCollection.cs">
-      <Link>CDBurnerXP\PanelCollection.cs</Link>
-    </Compile>
     <Compile Include="CopyFileInstruction.cs" />
     <Compile Include="CustomSetupInstruction.cs" />
     <Compile Include="Forms\CopyFileInstructionDialog.cs">
@@ -125,17 +118,26 @@
     </Compile>
     <Compile Include="M:\CsLib\CDBurnerXP\Controls\AdvancedListBox.cs">
       <Link>CDBurnerXP\AdvancedListBox.cs</Link>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="M:\CsLib\CDBurnerXP\Controls\AdvancedListBox.designer.cs">
       <Link>CDBurnerXP\AdvancedListBox.designer.cs</Link>
       <DependentUpon>AdvancedListBox.cs</DependentUpon>
     </Compile>
+    <Compile Include="M:\CsLib\CDBurnerXP\Controls\AutoSizeLayout.cs">
+      <Link>CDBurnerXP\AutoSizeLayout.cs</Link>
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="M:\CsLib\CDBurnerXP\Controls\ListBoxPanel.cs">
       <Link>CDBurnerXP\ListBoxPanel.cs</Link>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="M:\CsLib\CDBurnerXP\Controls\ListBoxPanel.designer.cs">
       <Link>CDBurnerXP\ListBoxPanel.designer.cs</Link>
       <DependentUpon>ListBoxPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="M:\CsLib\CDBurnerXP\Controls\PanelCollection.cs">
+      <Link>CDBurnerXP\PanelCollection.cs</Link>
     </Compile>
     <Compile Include="Scintilla\AutoComplete.cs" />
     <Compile Include="Scintilla\CallTip.cs" />
