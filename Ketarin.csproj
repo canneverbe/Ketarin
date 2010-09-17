@@ -55,6 +55,7 @@
     <DebugType>full</DebugType>
     <PlatformTarget>x86</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <OutputPath>bin\x86\Release\</OutputPath>
@@ -63,6 +64,7 @@
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>x86</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -79,6 +81,159 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\cdbxp-bin\trunk\CsLib\CDBurnerXP\Controls\AdvancedListBox.cs">
+      <Link>CDBurnerXP\AdvancedListBox.cs</Link>
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="..\cdbxp-bin\trunk\CsLib\CDBurnerXP\Controls\AdvancedListBox.designer.cs">
+      <Link>CDBurnerXP\AdvancedListBox.designer.cs</Link>
+      <DependentUpon>AdvancedListBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\cdbxp-bin\trunk\CsLib\CDBurnerXP\Controls\AutoSizeLayout.cs">
+      <Link>CDBurnerXP\AutoSizeLayout.cs</Link>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="..\cdbxp-bin\trunk\CsLib\CDBurnerXP\Controls\ListBoxPanel.cs">
+      <Link>CDBurnerXP\ListBoxPanel.cs</Link>
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="..\cdbxp-bin\trunk\CsLib\CDBurnerXP\Controls\ListBoxPanel.designer.cs">
+      <Link>CDBurnerXP\ListBoxPanel.designer.cs</Link>
+      <DependentUpon>ListBoxPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\cdbxp-bin\trunk\CsLib\CDBurnerXP\Controls\PanelCollection.cs">
+      <Link>CDBurnerXP\PanelCollection.cs</Link>
+    </Compile>
+    <Compile Include="CopyFileInstruction.cs" />
+    <Compile Include="CustomSetupInstruction.cs" />
+    <Compile Include="Forms\CopyFileInstructionDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\CopyFileInstructionDialog.Designer.cs">
+      <DependentUpon>CopyFileInstructionDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\CustomSetupInstructionDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\CustomSetupInstructionDialog.Designer.cs">
+      <DependentUpon>CustomSetupInstructionDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\InstallingApplicationsDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\InstallingApplicationsDialog.Designer.cs">
+      <DependentUpon>InstallingApplicationsDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\SetupInstructionListBoxPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\InstructionBaseDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\InstructionBaseDialog.Designer.cs">
+      <DependentUpon>InstructionBaseDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\StartProcessInstructionDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\StartProcessInstructionDialog.Designer.cs">
+      <DependentUpon>StartProcessInstructionDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Scintilla\AutoComplete.cs" />
+    <Compile Include="Scintilla\CallTip.cs" />
+    <Compile Include="Scintilla\Caret.cs" />
+    <Compile Include="Scintilla\Clipboard.cs" />
+    <Compile Include="Scintilla\Commands.cs" />
+    <Compile Include="Scintilla\Configuration\CommandConfig.cs" />
+    <Compile Include="Scintilla\Configuration\Configuration.cs" />
+    <Compile Include="Scintilla\Configuration\ConfigurationManager.cs" />
+    <Compile Include="Scintilla\Configuration\IndicatorsConfig.cs" />
+    <Compile Include="Scintilla\Configuration\KeyWordConfigList.cs" />
+    <Compile Include="Scintilla\Configuration\LexerProperties.cs" />
+    <Compile Include="Scintilla\Configuration\MarginConfig.cs" />
+    <Compile Include="Scintilla\Configuration\MarkersConfig.cs" />
+    <Compile Include="Scintilla\Configuration\SnippetsConfig.cs" />
+    <Compile Include="Scintilla\Configuration\StyleConfig.cs" />
+    <Compile Include="Scintilla\Constants.cs" />
+    <Compile Include="Scintilla\Document.cs" />
+    <Compile Include="Scintilla\DocumentNavigation.cs" />
+    <Compile Include="Scintilla\DropMarker.cs" />
+    <Compile Include="Scintilla\EndOfLine.cs" />
+    <Compile Include="Scintilla\Enums.cs" />
+    <Compile Include="Scintilla\EventArgs.cs" />
+    <Compile Include="Scintilla\FindReplace\FindReplace.cs" />
+    <Compile Include="Scintilla\FindReplace\FindReplaceDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Scintilla\FindReplace\FindReplaceDialog.Designer.cs">
+      <DependentUpon>FindReplaceDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Scintilla\FindReplace\IncrementalSearcher.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Scintilla\FindReplace\IncrementalSearcher.Designer.cs">
+      <DependentUpon>IncrementalSearcher.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Scintilla\FlagsDesigner.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Scintilla\Folding.cs" />
+    <Compile Include="Scintilla\GoTo.cs" />
+    <Compile Include="Scintilla\GoToDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Scintilla\GoToDialog.designer.cs">
+      <DependentUpon>GoToDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Scintilla\HotspotStyle.cs" />
+    <Compile Include="Scintilla\INativeScintilla.cs" />
+    <Compile Include="Scintilla\Indentation.cs" />
+    <Compile Include="Scintilla\Indicator.cs" />
+    <Compile Include="Scintilla\Lexing.cs" />
+    <Compile Include="Scintilla\Line.cs" />
+    <Compile Include="Scintilla\LinesCollection.cs" />
+    <Compile Include="Scintilla\LineWrap.cs" />
+    <Compile Include="Scintilla\LongLines.cs" />
+    <Compile Include="Scintilla\Margins.cs" />
+    <Compile Include="Scintilla\Markers.cs" />
+    <Compile Include="Scintilla\NativeMethods.cs" />
+    <Compile Include="Scintilla\NativeStructs.cs" />
+    <Compile Include="Scintilla\Printing\PageInformation.cs" />
+    <Compile Include="Scintilla\Printing\PageSettings.cs" />
+    <Compile Include="Scintilla\Printing\PrintDocument.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Scintilla\Printing\Printing.cs" />
+    <Compile Include="Scintilla\Range.cs" />
+    <Compile Include="Scintilla\Scintilla.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Scintilla\Scintilla.INativeScintilla.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Scintilla\ScintillaDesigner.cs" />
+    <Compile Include="Scintilla\ScintillaHelperBase.cs" />
+    <Compile Include="Scintilla\Scrolling.cs" />
+    <Compile Include="Scintilla\SearchFlags.cs" />
+    <Compile Include="Scintilla\Selection.cs" />
+    <Compile Include="Scintilla\Snippets\Snippet.cs" />
+    <Compile Include="Scintilla\Snippets\SnippetChooser.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Scintilla\Snippets\SnippetChooser.Designer.cs">
+      <DependentUpon>SnippetChooser.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Scintilla\Snippets\SnippetLinkEnd.cs" />
+    <Compile Include="Scintilla\Snippets\SnippetLinks.cs" />
+    <Compile Include="Scintilla\Snippets\SnippetList.cs" />
+    <Compile Include="Scintilla\Snippets\SnippetManager.cs" />
+    <Compile Include="Scintilla\Style.cs" />
+    <Compile Include="Scintilla\UndoRedo.cs" />
+    <Compile Include="Scintilla\Utils.cs" />
+    <Compile Include="Scintilla\Whitespace.cs" />
+    <Compile Include="Scintilla\WhitespaceStringConverter.cs" />
+    <Compile Include="Scintilla\XpmAdapter.cs" />
+    <Compile Include="SetupInstruction.cs" />
     <Compile Include="m:\CsLib\CDBurnerXP\IO\Debug.cs">
       <Link>CDBurnerXP\Debug.cs</Link>
     </Compile>
@@ -282,6 +437,14 @@
     <Compile Include="NonBinaryFileException.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="..\cdbxp-bin\trunk\CsLib\CDBurnerXP\Controls\AdvancedListBox.resx">
+      <Link>CDBurnerXP\AdvancedListBox.resx</Link>
+      <DependentUpon>AdvancedListBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\cdbxp-bin\trunk\CsLib\CDBurnerXP\Controls\ListBoxPanel.resx">
+      <Link>CDBurnerXP\ListBoxPanel.resx</Link>
+      <DependentUpon>ListBoxPanel.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\AboutDialog.resx">
       <DependentUpon>AboutDialog.cs</DependentUpon>
     </EmbeddedResource>
@@ -294,6 +457,18 @@
     <EmbeddedResource Include="Forms\BrowserPreviewDialog.resx">
       <DependentUpon>BrowserPreviewDialog.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\CopyFileInstructionDialog.resx">
+      <DependentUpon>CopyFileInstructionDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\CustomSetupInstructionDialog.resx">
+      <DependentUpon>CustomSetupInstructionDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\InstallingApplicationsDialog.resx">
+      <DependentUpon>InstallingApplicationsDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SetupInstructionListBoxPanel.resx">
+      <DependentUpon>SetupInstructionListBoxPanel.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\DeleteApplicationDialog.resx">
       <DependentUpon>DeleteApplicationDialog.cs</DependentUpon>
     </EmbeddedResource>
@@ -305,6 +480,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ImportFromDatabaseDialog.resx">
       <DependentUpon>ImportFromDatabaseDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\InstructionBaseDialog.resx">
+      <DependentUpon>InstructionBaseDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\LogDialog.resx">
       <DependentUpon>LogDialog.cs</DependentUpon>
@@ -327,6 +505,9 @@
     <EmbeddedResource Include="Forms\SettingsDialog.resx">
       <DependentUpon>SettingsDialog.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\StartProcessInstructionDialog.resx">
+      <DependentUpon>StartProcessInstructionDialog.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\SimilarApplicationsDialog.resx">
       <DependentUpon>SimilarApplicationsDialog.cs</DependentUpon>
     </EmbeddedResource>
@@ -341,6 +522,18 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Scintilla\FindReplace\FindReplaceDialog.resx">
+      <DependentUpon>FindReplaceDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Scintilla\FindReplace\IncrementalSearcher.resx">
+      <DependentUpon>IncrementalSearcher.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Scintilla\GoToDialog.resx">
+      <DependentUpon>GoToDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Scintilla\Snippets\SnippetChooser.resx">
+      <DependentUpon>SnippetChooser.cs</DependentUpon>
     </EmbeddedResource>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -360,6 +553,7 @@
     <Compile Include="SplitButton.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="StartProcessInstruction.cs" />
     <Compile Include="TargetPathInvalidException.cs" />
     <Compile Include="Updater.cs" />
     <Compile Include="UrlVariable.cs" />
@@ -431,9 +625,186 @@
     <None Include="Icon\CloseSearch.png" />
     <None Include="Icon\CloseSearchDown.png" />
     <None Include="Icon\CloseSearchHover.png" />
+    <None Include="Icon\Setup.png" />
     <Content Include="ketarin.ico">
       <Generator>up</Generator>
     </Content>
+    <None Include="Resources\DeleteHS.png" />
+    <None Include="Resources\GoToNextMessage - Copy.png" />
+    <None Include="Resources\GoToNextMessage.png" />
+    <None Include="Resources\GoToPreviousMessage.png" />
+    <None Include="Resources\LineColorHS.png" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\cs.xml" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\default.xml" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\html.xml" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\js.xml" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerKeywordListNames\ada.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerKeywordListNames\apdl.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerKeywordListNames\asm.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerKeywordListNames\asn1.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerKeywordListNames\au3.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerKeywordListNames\ave.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerKeywordListNames\baan.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerKeywordListNames\bash.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerKeywordListNames\batch.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerKeywordListNames\blitsbasic.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerKeywordListNames\bullant.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerKeywordListNames\caml.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerKeywordListNames\clw.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerKeywordListNames\clwnocase.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerKeywordListNames\cmake.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerKeywordListNames\conf.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerKeywordListNames\cpp.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerKeywordListNames\cppnocase.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerKeywordListNames\csound.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerKeywordListNames\css.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerKeywordListNames\d.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerKeywordListNames\diff.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerKeywordListNames\eiffel.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerKeywordListNames\eiffelkw.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerKeywordListNames\erlang.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerKeywordListNames\errorlist.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerKeywordListNames\escript.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerKeywordListNames\f77.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerKeywordListNames\flagship.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerKeywordListNames\forth.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerKeywordListNames\fortran.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerKeywordListNames\freebasic.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerKeywordListNames\gap.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerKeywordListNames\gui4cli.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerKeywordListNames\haskell.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerKeywordListNames\hypertext.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerKeywordListNames\innosetup.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerKeywordListNames\kix.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerKeywordListNames\latex.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerKeywordListNames\lisp.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerKeywordListNames\lot.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerKeywordListNames\lout.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerKeywordListNames\lua.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerKeywordListNames\make.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerKeywordListNames\matlab.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerKeywordListNames\metapost.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerKeywordListNames\mmixal.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerKeywordListNames\mssql.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerKeywordListNames\nncrontab.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerKeywordListNames\nsis.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerKeywordListNames\null.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerKeywordListNames\octave.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerKeywordListNames\opal.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerKeywordListNames\pascal.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerKeywordListNames\perl.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerKeywordListNames\phpscript.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerKeywordListNames\plm.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerKeywordListNames\pov.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerKeywordListNames\powerbasic.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerKeywordListNames\progress.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerKeywordListNames\props.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerKeywordListNames\ps.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerKeywordListNames\purebasic.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerKeywordListNames\python.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerKeywordListNames\rebol.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerKeywordListNames\ruby.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerKeywordListNames\scriptol.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerKeywordListNames\smalltalk.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerKeywordListNames\specman.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerKeywordListNames\spice.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerKeywordListNames\sql.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerKeywordListNames\tads3.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerKeywordListNames\tcl.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerKeywordListNames\tex.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerKeywordListNames\vb.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerKeywordListNames\vbscript.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerKeywordListNames\verilog.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerKeywordListNames\vhdl.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerKeywordListNames\xml.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerKeywordListNames\yaml.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerStyleNames\ada.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerStyleNames\apdl.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerStyleNames\asm.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerStyleNames\asn1.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerStyleNames\au3.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerStyleNames\ave.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerStyleNames\baan.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerStyleNames\bash.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerStyleNames\batch.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerStyleNames\blitsbasic.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerStyleNames\bullant.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerStyleNames\caml.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerStyleNames\clw.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerStyleNames\clwnocase.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerStyleNames\cmake.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerStyleNames\conf.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerStyleNames\cpp.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerStyleNames\cppnocase.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerStyleNames\csound.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerStyleNames\css.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerStyleNames\d.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerStyleNames\diff.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerStyleNames\eiffel.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerStyleNames\eiffelkw.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerStyleNames\erlang.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerStyleNames\errorlist.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerStyleNames\escript.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerStyleNames\f77.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerStyleNames\flagship.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerStyleNames\forth.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerStyleNames\fortran.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerStyleNames\freebasic.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerStyleNames\gap.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerStyleNames\gui4cli.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerStyleNames\haskell.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerStyleNames\hypertext.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerStyleNames\innosetup.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerStyleNames\kix.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerStyleNames\latext.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerStyleNames\lisp.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerStyleNames\lot.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerStyleNames\lout.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerStyleNames\lua.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerStyleNames\make.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerStyleNames\matlab.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerStyleNames\metapost.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerStyleNames\mmixal.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerStyleNames\mssql.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerStyleNames\nncrontab.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerStyleNames\nsis.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerStyleNames\null.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerStyleNames\octave.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerStyleNames\opal.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerStyleNames\pascal.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerStyleNames\perl.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerStyleNames\phpscript.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerStyleNames\plm.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerStyleNames\pov.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerStyleNames\powerbasic.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerStyleNames\progress.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerStyleNames\props.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerStyleNames\ps.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerStyleNames\purebasic.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerStyleNames\python.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerStyleNames\rebol.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerStyleNames\ruby.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerStyleNames\scriptol.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerStyleNames\smalltalk.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerStyleNames\specman.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerStyleNames\spice.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerStyleNames\sql.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerStyleNames\tads3.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerStyleNames\tcl.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerStyleNames\tex.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerStyleNames\vb.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerStyleNames\vbscript.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerStyleNames\verilog.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerStyleNames\vhdl.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerStyleNames\xml.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\LexerStyleNames\yaml.txt" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\mssql.xml" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\pgsql.xml" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\python.xml" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\vbscript.xml" />
+    <EmbeddedResource Include="Scintilla\Configuration\Builtin\xml.xml" />
+    <None Include="Resources\Arrow Down.png" />
+    <None Include="Resources\Arrow Up.png" />
     <None Include="Resources\NewDownloaded.png" />
     <None Include="Resources\New.png" />
     <None Include="Resources\Symbol Information.png" />

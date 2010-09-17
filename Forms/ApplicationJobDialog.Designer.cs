@@ -69,12 +69,20 @@
             this.lblCommandBefore = new System.Windows.Forms.Label();
             this.txtExecuteAfter = new Ketarin.Forms.VariableTextBox();
             this.lblExecuteCommand = new System.Windows.Forms.Label();
-            this.bSaveAsDefault = new System.Windows.Forms.Button();
             this.tpInformation = new System.Windows.Forms.TabPage();
-            this.lblWebsite = new System.Windows.Forms.Label();
-            this.txtWebsite = new System.Windows.Forms.TextBox();
-            this.lblNotes = new System.Windows.Forms.Label();
             this.txtNotes = new System.Windows.Forms.TextBox();
+            this.lblNotes = new System.Windows.Forms.Label();
+            this.txtWebsite = new System.Windows.Forms.TextBox();
+            this.lblWebsite = new System.Windows.Forms.Label();
+            this.tpSetup = new System.Windows.Forms.TabPage();
+            this.splitButton1 = new wyDay.Controls.SplitButton();
+            this.cmnuAddInstruction = new System.Windows.Forms.ContextMenu();
+            this.mnuStartProcess = new System.Windows.Forms.MenuItem();
+            this.mnuCopyFile = new System.Windows.Forms.MenuItem();
+            this.mnuCustomCommand = new System.Windows.Forms.MenuItem();
+            this.label1 = new System.Windows.Forms.Label();
+            this.instructionsListBox = new CDBurnerXP.Controls.AdvancedListBox();
+            this.bSaveAsDefault = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.pnlTarget.SuspendLayout();
             this.tcApplication.SuspendLayout();
@@ -82,6 +90,7 @@
             this.tpSettings.SuspendLayout();
             this.tpCommands.SuspendLayout();
             this.tpInformation.SuspendLayout();
+            this.tpSetup.SuspendLayout();
             this.SuspendLayout();
             // 
             // bCancel
@@ -400,6 +409,7 @@
             this.tcApplication.Controls.Add(this.tpSettings);
             this.tcApplication.Controls.Add(this.tpCommands);
             this.tcApplication.Controls.Add(this.tpInformation);
+            this.tcApplication.Controls.Add(this.tpSetup);
             this.tcApplication.Location = new System.Drawing.Point(12, 12);
             this.tcApplication.Name = "tcApplication";
             this.tcApplication.SelectedIndex = 0;
@@ -553,17 +563,6 @@
             this.lblExecuteCommand.TabIndex = 2;
             this.lblExecuteCommand.Text = "Execute the following command &after downloading:";
             // 
-            // bSaveAsDefault
-            // 
-            this.bSaveAsDefault.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bSaveAsDefault.Location = new System.Drawing.Point(12, 292);
-            this.bSaveAsDefault.Name = "bSaveAsDefault";
-            this.bSaveAsDefault.Size = new System.Drawing.Size(99, 23);
-            this.bSaveAsDefault.TabIndex = 98;
-            this.bSaveAsDefault.Text = "Save as &default";
-            this.bSaveAsDefault.UseVisualStyleBackColor = true;
-            this.bSaveAsDefault.Click += new System.EventHandler(this.bSaveAsDefault_Click);
-            // 
             // tpInformation
             // 
             this.tpInformation.Controls.Add(this.txtNotes);
@@ -577,31 +576,6 @@
             this.tpInformation.Text = "Information";
             this.tpInformation.UseVisualStyleBackColor = true;
             // 
-            // lblWebsite
-            // 
-            this.lblWebsite.AutoSize = true;
-            this.lblWebsite.Location = new System.Drawing.Point(3, 10);
-            this.lblWebsite.Name = "lblWebsite";
-            this.lblWebsite.Size = new System.Drawing.Size(49, 13);
-            this.lblWebsite.TabIndex = 0;
-            this.lblWebsite.Text = "&Website:";
-            // 
-            // txtWebsite
-            // 
-            this.txtWebsite.Location = new System.Drawing.Point(58, 7);
-            this.txtWebsite.Name = "txtWebsite";
-            this.txtWebsite.Size = new System.Drawing.Size(311, 20);
-            this.txtWebsite.TabIndex = 1;
-            // 
-            // lblNotes
-            // 
-            this.lblNotes.AutoSize = true;
-            this.lblNotes.Location = new System.Drawing.Point(3, 39);
-            this.lblNotes.Name = "lblNotes";
-            this.lblNotes.Size = new System.Drawing.Size(38, 13);
-            this.lblNotes.TabIndex = 3;
-            this.lblNotes.Text = "N&otes:";
-            // 
             // txtNotes
             // 
             this.txtNotes.AcceptsReturn = true;
@@ -614,6 +588,112 @@
             this.txtNotes.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.txtNotes.Size = new System.Drawing.Size(363, 178);
             this.txtNotes.TabIndex = 4;
+            // 
+            // lblNotes
+            // 
+            this.lblNotes.AutoSize = true;
+            this.lblNotes.Location = new System.Drawing.Point(3, 39);
+            this.lblNotes.Name = "lblNotes";
+            this.lblNotes.Size = new System.Drawing.Size(38, 13);
+            this.lblNotes.TabIndex = 3;
+            this.lblNotes.Text = "N&otes:";
+            // 
+            // txtWebsite
+            // 
+            this.txtWebsite.Location = new System.Drawing.Point(58, 7);
+            this.txtWebsite.Name = "txtWebsite";
+            this.txtWebsite.Size = new System.Drawing.Size(311, 20);
+            this.txtWebsite.TabIndex = 1;
+            // 
+            // lblWebsite
+            // 
+            this.lblWebsite.AutoSize = true;
+            this.lblWebsite.Location = new System.Drawing.Point(3, 10);
+            this.lblWebsite.Name = "lblWebsite";
+            this.lblWebsite.Size = new System.Drawing.Size(49, 13);
+            this.lblWebsite.TabIndex = 0;
+            this.lblWebsite.Text = "&Website:";
+            // 
+            // tpSetup
+            // 
+            this.tpSetup.Controls.Add(this.splitButton1);
+            this.tpSetup.Controls.Add(this.label1);
+            this.tpSetup.Controls.Add(this.instructionsListBox);
+            this.tpSetup.Location = new System.Drawing.Point(4, 22);
+            this.tpSetup.Name = "tpSetup";
+            this.tpSetup.Padding = new System.Windows.Forms.Padding(3);
+            this.tpSetup.Size = new System.Drawing.Size(375, 239);
+            this.tpSetup.TabIndex = 4;
+            this.tpSetup.Text = "Setup";
+            this.tpSetup.UseVisualStyleBackColor = true;
+            // 
+            // splitButton1
+            // 
+            this.splitButton1.AutoSize = true;
+            this.splitButton1.Location = new System.Drawing.Point(6, 210);
+            this.splitButton1.Name = "splitButton1";
+            this.splitButton1.SeparateDropdownButton = false;
+            this.splitButton1.Size = new System.Drawing.Size(105, 23);
+            this.splitButton1.SplitMenu = this.cmnuAddInstruction;
+            this.splitButton1.TabIndex = 3;
+            this.splitButton1.Text = "Add instruction";
+            this.splitButton1.UseVisualStyleBackColor = true;
+            // 
+            // cmnuAddInstruction
+            // 
+            this.cmnuAddInstruction.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.mnuStartProcess,
+            this.mnuCopyFile,
+            this.mnuCustomCommand});
+            // 
+            // mnuStartProcess
+            // 
+            this.mnuStartProcess.Index = 0;
+            this.mnuStartProcess.Text = "&Start process...";
+            this.mnuStartProcess.Click += new System.EventHandler(this.mnuStartProcess_Click);
+            // 
+            // mnuCopyFile
+            // 
+            this.mnuCopyFile.Index = 1;
+            this.mnuCopyFile.Text = "&Copy file...";
+            this.mnuCopyFile.Click += new System.EventHandler(this.mnuCopyFile_Click);
+            // 
+            // mnuCustomCommand
+            // 
+            this.mnuCustomCommand.Index = 2;
+            this.mnuCustomCommand.Text = "C&ustom command...";
+            this.mnuCustomCommand.Click += new System.EventHandler(this.mnuCustomCommand_Click);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(3, 9);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(150, 13);
+            this.label1.TabIndex = 2;
+            this.label1.Text = "I&nstructions to follow for setup:";
+            // 
+            // instructionsListBox
+            // 
+            this.instructionsListBox.AutoScroll = true;
+            this.instructionsListBox.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.instructionsListBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.instructionsListBox.Location = new System.Drawing.Point(6, 25);
+            this.instructionsListBox.Name = "instructionsListBox";
+            this.instructionsListBox.SelectedPanel = null;
+            this.instructionsListBox.Size = new System.Drawing.Size(363, 179);
+            this.instructionsListBox.TabIndex = 0;
+            // 
+            // bSaveAsDefault
+            // 
+            this.bSaveAsDefault.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.bSaveAsDefault.Location = new System.Drawing.Point(12, 292);
+            this.bSaveAsDefault.Name = "bSaveAsDefault";
+            this.bSaveAsDefault.Size = new System.Drawing.Size(99, 23);
+            this.bSaveAsDefault.TabIndex = 98;
+            this.bSaveAsDefault.Text = "Save as &default";
+            this.bSaveAsDefault.UseVisualStyleBackColor = true;
+            this.bSaveAsDefault.Click += new System.EventHandler(this.bSaveAsDefault_Click);
             // 
             // ApplicationJobDialog
             // 
@@ -644,6 +724,8 @@
             this.tpCommands.PerformLayout();
             this.tpInformation.ResumeLayout(false);
             this.tpInformation.PerformLayout();
+            this.tpSetup.ResumeLayout(false);
+            this.tpSetup.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -697,5 +779,13 @@
         private System.Windows.Forms.TextBox txtWebsite;
         private System.Windows.Forms.Label lblWebsite;
         private System.Windows.Forms.TextBox txtNotes;
+        private System.Windows.Forms.TabPage tpSetup;
+        private wyDay.Controls.SplitButton splitButton1;
+        private System.Windows.Forms.Label label1;
+        private CDBurnerXP.Controls.AdvancedListBox instructionsListBox;
+        private System.Windows.Forms.ContextMenu cmnuAddInstruction;
+        private System.Windows.Forms.MenuItem mnuCopyFile;
+        private System.Windows.Forms.MenuItem mnuCustomCommand;
+        private System.Windows.Forms.MenuItem mnuStartProcess;
     }
 }

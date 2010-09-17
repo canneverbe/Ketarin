@@ -13,7 +13,7 @@ namespace wyDay.Controls
     public class SplitButton : Button
     {
         private PushButtonState _state;
-
+        private bool separateDropdownButton = true;
 
         private const int SplitSectionWidth = 18;
 
@@ -36,6 +36,20 @@ namespace wyDay.Controls
         }
 
         #region Properties
+
+        /// <summary>
+        /// Determines whether or not the dropdown
+        /// button is considered a separate button.
+        /// If this is set to false, the main button
+        /// area will also trigger the context menu and
+        /// not have any function on its own.
+        /// </summary>
+        [DefaultValue(true)]
+        public bool SeparateDropdownButton
+        {
+            get { return separateDropdownButton; }
+            set { separateDropdownButton = value; }
+        }
 
         [Browsable(false)]
         public override ContextMenuStrip ContextMenuStrip
@@ -285,7 +299,7 @@ namespace wyDay.Controls
             if (m_SplitMenu != null && e.Button == MouseButtons.Left && !isMouseEntered)
                 skipNextOpen = true;
 
-            if (dropDownRectangle.Contains(e.Location) && !isSplitMenuVisible && e.Button == MouseButtons.Left)
+            if ((!separateDropdownButton || dropDownRectangle.Contains(e.Location)) && !isSplitMenuVisible && e.Button == MouseButtons.Left)
             {
                 ShowContextMenuStrip();
             }

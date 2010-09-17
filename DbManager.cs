@@ -306,6 +306,20 @@ namespace Ketarin
                 command.ExecuteNonQuery();
             }
 
+            using (IDbCommand command = Connection.CreateCommand())
+            {
+                command.CommandText = @"CREATE TABLE IF NOT EXISTS setupinstructions  
+                                        (JobGuid            TEXT,
+                                         Position           INTEGER DEFAULT 0,
+                                         Data               TEXT);";
+                command.ExecuteNonQuery();
+            }
+            using (IDbCommand command = Connection.CreateCommand())
+            {
+                command.CommandText = @"CREATE INDEX IF NOT EXISTS SetupinstructionsJobGuid ON setupinstructions (JobGuid)";
+                command.ExecuteNonQuery();
+            }
+
             // Upgrade tables
             List<string> columns = GetColumns("jobs");
 
