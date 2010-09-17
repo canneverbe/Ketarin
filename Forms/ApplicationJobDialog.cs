@@ -152,6 +152,11 @@ namespace Ketarin.Forms
             txtTarget.SetVariableNames(new string[] { "category", "appname" }, appVarNames.ToArray());
             txtSpoofReferer.SetVariableNames(new string[] { "category", "appname" }, appVarNames.ToArray());
             txtUseVariablesForChanges.SetVariableNames(appVarNames.ToArray());
+
+            foreach (SetupInstructionListBoxPanel panel in this.instructionsListBox.Panels)
+            {
+                panel.VariableNames = txtExecuteAfter.VariableNames;
+            }
         }
 
         /// <summary>
@@ -189,6 +194,12 @@ namespace Ketarin.Forms
 
             txtWebsite.Text = m_ApplicationJob.WebsiteUrl;
             txtNotes.Text = m_ApplicationJob.UserNotes;
+
+            // Setup instructions
+            foreach (SetupInstruction instruction in m_ApplicationJob.SetupInstructions)
+            {
+                instructionsListBox.Panels.Add(new SetupInstructionListBoxPanel(instruction.Clone() as SetupInstruction));
+            }
         }
 
         /// <summary>
@@ -231,6 +242,13 @@ namespace Ketarin.Forms
             else
             {
                 m_ApplicationJob.DownloadBeta = ApplicationJob.DownloadBetaType.Default;
+            }
+
+            // Setup instructions
+            m_ApplicationJob.SetupInstructions.Clear();
+            foreach (SetupInstructionListBoxPanel panel in instructionsListBox.Panels)
+            {
+                m_ApplicationJob.SetupInstructions.Add(panel.SetupInstruction);
             }
         }
 
@@ -492,5 +510,44 @@ namespace Ketarin.Forms
             Settings.SetValue("DefaultApplication", xml);
         }
 
+        #region Instructions
+
+        private void mnuStartProcess_Click(object sender, EventArgs e)
+        {
+            StartProcessInstruction instruction = new StartProcessInstruction();
+            instruction.Application = m_ApplicationJob;
+            if (InstructionBaseDialog.ShowDialog(this, instruction, txtExecuteAfter.VariableNames))
+            {
+                SetupInstructionListBoxPanel panel = new SetupInstructionListBoxPanel(instruction);
+                panel.VariableNames = txtExecuteAfter.VariableNames;
+                instructionsListBox.Panels.Add(panel);
+            }
+        }
+
+        private void mnuCopyFile_Click(object sender, EventArgs e)
+        {
+            CopyFileInstruction instruction = new CopyFileInstruction();
+            instruction.Application = m_ApplicationJob;
+            if (InstructionBaseDialog.ShowDialog(this, instruction, txtExecuteAfter.VariableNames))
+            {
+                SetupInstructionListBoxPanel panel = new SetupInstructionListBoxPanel(instruction);
+                panel.VariableNames = txtExecuteAfter.VariableNames;
+                instructionsListBox.Panels.Add(panel);
+            }
+        }
+
+        private void mnuCustomCommand_Click(object sender, EventArgs e)
+        {
+            CustomSetupInstruction instruction = new CustomSetupInstruction();
+            instruction.Application = m_ApplicationJob;
+            if (InstructionBaseDialog.ShowDialog(this, instruction, txtExecuteAfter.VariableNames))
+            {
+                SetupInstructionListBoxPanel panel = new SetupInstructionListBoxPanel(instruction);
+                panel.VariableNames = txtExecuteAfter.VariableNames;
+                instructionsListBox.Panels.Add(panel);
+            }
+        }
+
+        #endregion
     }
 }

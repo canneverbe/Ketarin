@@ -14,6 +14,7 @@ using CDBurnerXP;
 using CDBurnerXP.IO;
 using Ketarin.Forms;
 using System.Reflection;
+using System.Collections;
 
 namespace Ketarin
 {
@@ -45,6 +46,7 @@ namespace Ketarin
         private string m_HttpReferer = string.Empty;
         private string m_VariableChangeIndicator = string.Empty;
         private string m_VariableChangeIndicatorLastContent = null;
+        private List<SetupInstruction> setupInstructions = null;
 
         public enum SourceType
         {
@@ -185,6 +187,53 @@ namespace Ketarin
             set
             {
                 m_Guid = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets the list of setup instructions that need to be executed in order to install the application.
+        /// </summary>
+        public List<SetupInstruction> SetupInstructions
+        {
+            get
+            {
+                if (this.setupInstructions == null)
+                {
+                    this.setupInstructions = new List<SetupInstruction>();
+
+                    using (IDbCommand command = DbManager.Connection.CreateCommand())
+                    {
+                        command.CommandText = "SELECT * FROM setupinstructions WHERE JobGuid = @JobGuid ORDER BY Position";
+                        command.Parameters.Add(new SQLiteParameter("@JobGuid", DbManager.FormatGuid(this.Guid)));
+
+                        using (IDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                string xmlInstructions = reader["Data"] as string;
+                                if (string.IsNullOrEmpty(xmlInstructions)) continue;
+
+                                // Needed to determine appropriate type
+                                XmlDocument doc = new XmlDocument();
+                                doc.LoadXml(xmlInstructions);
+
+                                using (StringReader xmlReader = new StringReader(xmlInstructions))
+                                {
+                                    XmlSerializer serializer = new XmlSerializer(Type.GetType("Ketarin." + doc.DocumentElement.Name));
+                                    SetupInstruction instruction = (SetupInstruction)serializer.Deserialize(xmlReader);
+                                    instruction.Application = this;
+                                    setupInstructions.Add(instruction);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                return this.setupInstructions;
+            }
+            set
+            {
+                this.setupInstructions = value;
             }
         }
 
@@ -351,7 +400,10 @@ namespace Ketarin
                     // Allow to access all public properties of the object per "property:X" variable.
                     foreach (PropertyInfo property in m_Parent.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
                     {
-                        value = UrlVariable.Replace(value, "property:" + property.Name, Convert.ToString(property.GetValue(m_Parent, null)));
+                        if (!typeof(IEnumerable).IsAssignableFrom(property.PropertyType))
+                        {
+                            value = UrlVariable.Replace(value, "property:" + property.Name, Convert.ToString(property.GetValue(m_Parent, null)));
+                        }
                     }
 
                     if (!ContainsKey("version"))
@@ -1092,6 +1144,23 @@ namespace Ketarin
                         foreach (KeyValuePair<string, UrlVariable> pair in variables)
                         {
                             pair.Value.Save(transaction, m_Guid);
+                        }
+
+                        if (this.setupInstructions != null)
+                        {
+                            using (IDbCommand command = conn.CreateCommand())
+                            {
+                                command.Transaction = transaction;
+                                command.CommandText = "DELETE FROM setupinstructions WHERE JobGuid = @JobGuid";
+                                command.Parameters.Add(new SQLiteParameter("@JobGuid", DbManager.FormatGuid(m_Guid)));
+                                command.ExecuteNonQuery();
+                            }
+
+                            int pos = 0;
+                            foreach (SetupInstruction instruction in this.setupInstructions)
+                            {
+                                instruction.Save(transaction, pos++);
+                            }
                         }
 
                         transaction.Commit();

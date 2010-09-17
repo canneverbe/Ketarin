@@ -588,6 +588,25 @@ namespace Ketarin
 
         #endregion
 
+        #region Install button
+
+        private void bInstall_Click(object sender, EventArgs e)
+        {
+            using (InstallingApplicationsDialog dialog = new InstallingApplicationsDialog())
+            {
+                List<ApplicationJob> jobs = new List<ApplicationJob>();
+                foreach (ApplicationJob job in olvJobs.SelectedObjects)
+                {
+                    jobs.Add(job);
+                }
+
+                dialog.Applications = jobs.ToArray();
+                dialog.ShowDialog(this);
+            }
+        }
+
+        #endregion
+
         /// <summary>
         /// Updates all items, using the same order as the
         /// items in the list (considers sorting).
@@ -1162,6 +1181,5 @@ namespace Ketarin
         }
 
         #endregion
-
     }
 }
