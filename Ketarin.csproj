@@ -81,25 +81,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\cdbxp-bin\trunk\CsLib\CDBurnerXP\Controls\AdvancedListBox.cs">
-      <Link>CDBurnerXP\AdvancedListBox.cs</Link>
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="..\cdbxp-bin\trunk\CsLib\CDBurnerXP\Controls\AdvancedListBox.designer.cs">
-      <Link>CDBurnerXP\AdvancedListBox.designer.cs</Link>
-      <DependentUpon>AdvancedListBox.cs</DependentUpon>
-    </Compile>
     <Compile Include="..\cdbxp-bin\trunk\CsLib\CDBurnerXP\Controls\AutoSizeLayout.cs">
       <Link>CDBurnerXP\AutoSizeLayout.cs</Link>
       <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="..\cdbxp-bin\trunk\CsLib\CDBurnerXP\Controls\ListBoxPanel.cs">
-      <Link>CDBurnerXP\ListBoxPanel.cs</Link>
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="..\cdbxp-bin\trunk\CsLib\CDBurnerXP\Controls\ListBoxPanel.designer.cs">
-      <Link>CDBurnerXP\ListBoxPanel.designer.cs</Link>
-      <DependentUpon>ListBoxPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="..\cdbxp-bin\trunk\CsLib\CDBurnerXP\Controls\PanelCollection.cs">
       <Link>CDBurnerXP\PanelCollection.cs</Link>
@@ -138,6 +122,20 @@
     </Compile>
     <Compile Include="Forms\StartProcessInstructionDialog.Designer.cs">
       <DependentUpon>StartProcessInstructionDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="M:\CsLib\CDBurnerXP\Controls\AdvancedListBox.cs">
+      <Link>CDBurnerXP\AdvancedListBox.cs</Link>
+    </Compile>
+    <Compile Include="M:\CsLib\CDBurnerXP\Controls\AdvancedListBox.designer.cs">
+      <Link>CDBurnerXP\AdvancedListBox.designer.cs</Link>
+      <DependentUpon>AdvancedListBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="M:\CsLib\CDBurnerXP\Controls\ListBoxPanel.cs">
+      <Link>CDBurnerXP\ListBoxPanel.cs</Link>
+    </Compile>
+    <Compile Include="M:\CsLib\CDBurnerXP\Controls\ListBoxPanel.designer.cs">
+      <Link>CDBurnerXP\ListBoxPanel.designer.cs</Link>
+      <DependentUpon>ListBoxPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="Scintilla\AutoComplete.cs" />
     <Compile Include="Scintilla\CallTip.cs" />
@@ -437,14 +435,6 @@
     <Compile Include="NonBinaryFileException.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="..\cdbxp-bin\trunk\CsLib\CDBurnerXP\Controls\AdvancedListBox.resx">
-      <Link>CDBurnerXP\AdvancedListBox.resx</Link>
-      <DependentUpon>AdvancedListBox.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\cdbxp-bin\trunk\CsLib\CDBurnerXP\Controls\ListBoxPanel.resx">
-      <Link>CDBurnerXP\ListBoxPanel.resx</Link>
-      <DependentUpon>ListBoxPanel.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Forms\AboutDialog.resx">
       <DependentUpon>AboutDialog.cs</DependentUpon>
     </EmbeddedResource>
@@ -634,6 +624,14 @@
     <None Include="Resources\GoToNextMessage.png" />
     <None Include="Resources\GoToPreviousMessage.png" />
     <None Include="Resources\LineColorHS.png" />
+    <EmbeddedResource Include="M:\CsLib\CDBurnerXP\Controls\AdvancedListBox.resx">
+      <Link>CDBurnerXP\AdvancedListBox.resx</Link>
+      <DependentUpon>AdvancedListBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="M:\CsLib\CDBurnerXP\Controls\ListBoxPanel.resx">
+      <Link>CDBurnerXP\ListBoxPanel.resx</Link>
+      <DependentUpon>ListBoxPanel.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Scintilla\Configuration\Builtin\cs.xml" />
     <EmbeddedResource Include="Scintilla\Configuration\Builtin\default.xml" />
     <EmbeddedResource Include="Scintilla\Configuration\Builtin\html.xml" />
