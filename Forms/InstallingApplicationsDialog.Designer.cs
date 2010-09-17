@@ -37,6 +37,7 @@
             this.lbShowHideDetails = new System.Windows.Forms.Label();
             this.imageList = new System.Windows.Forms.ImageList(this.components);
             this.olvLog = new CDBurnerXP.Controls.ObjectListView();
+            this.colTime = new CDBurnerXP.Controls.OLVColumn();
             this.colMessage = new CDBurnerXP.Controls.OLVColumn();
             this.imlListIcons = new System.Windows.Forms.ImageList(this.components);
             this.lblEvents = new System.Windows.Forms.Label();
@@ -113,6 +114,7 @@
             // 
             // olvLog
             // 
+            this.olvLog.AllColumns.Add(this.colTime);
             this.olvLog.AllColumns.Add(this.colMessage);
             this.olvLog.AlternateRowBackColor = System.Drawing.Color.Empty;
             this.olvLog.AlwaysGroupByColumn = null;
@@ -121,6 +123,7 @@
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.olvLog.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.colTime,
             this.colMessage});
             this.olvLog.FullRowSelect = true;
             this.olvLog.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
@@ -138,6 +141,13 @@
             this.olvLog.TabIndex = 1;
             this.olvLog.UseCompatibleStateImageBehavior = false;
             this.olvLog.View = System.Windows.Forms.View.Details;
+            // 
+            // colTime
+            // 
+            this.colTime.AspectName = "Time";
+            this.colTime.AspectToStringFormat = "{0:t}";
+            this.colTime.Text = "Time";
+            this.colTime.Width = 55;
             // 
             // colMessage
             // 
@@ -212,5 +222,6 @@
         private System.Windows.Forms.Label lblEvents;
         private System.Windows.Forms.Panel pnlExpanded;
         private System.Windows.Forms.ImageList imlListIcons;
+        private CDBurnerXP.Controls.OLVColumn colTime;
     }
 }

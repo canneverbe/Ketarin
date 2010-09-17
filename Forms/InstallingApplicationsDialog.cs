@@ -33,6 +33,7 @@ namespace Ketarin.Forms
         {
             public string Message { get; set; }
             public LogItemType Type { get; set; }
+            public DateTime Time { get; set; }
         }
 
         #endregion
@@ -64,7 +65,7 @@ namespace Ketarin.Forms
             pnlExpanded.Visible = this.expanded;
             this.Height -= pnlExpanded.Height;
 
-            colMessage.ImageGetter = delegate(object x)
+            colTime.ImageGetter = delegate(object x)
             {
                 return Convert.ToInt32(((LogItem)x).Type);
             };
@@ -100,7 +101,7 @@ namespace Ketarin.Forms
                 return;
             }
 
-            logItems.Add(new LogItem() { Message = text, Type = type });
+            logItems.Add(new LogItem() { Message = text, Type = type, Time = DateTime.Now });
             olvLog.SetObjects(logItems);
         }
 
