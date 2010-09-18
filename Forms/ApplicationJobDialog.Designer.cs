@@ -613,7 +613,7 @@
             this.tableLayoutCommands.RowCount = 2;
             this.tableLayoutCommands.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutCommands.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutCommands.Size = new System.Drawing.Size(366, 278);
+            this.tableLayoutCommands.Size = new System.Drawing.Size(366, 294);
             this.tableLayoutCommands.TabIndex = 4;
             // 
             // pnlCommandBefore
@@ -624,7 +624,7 @@
             this.pnlCommandBefore.Location = new System.Drawing.Point(0, 3);
             this.pnlCommandBefore.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
             this.pnlCommandBefore.Name = "pnlCommandBefore";
-            this.pnlCommandBefore.Size = new System.Drawing.Size(363, 133);
+            this.pnlCommandBefore.Size = new System.Drawing.Size(363, 141);
             this.pnlCommandBefore.TabIndex = 0;
             // 
             // lblCommandBefore
@@ -646,7 +646,7 @@
             this.txtExecuteBefore.Multiline = true;
             this.txtExecuteBefore.Name = "txtExecuteBefore";
             this.txtExecuteBefore.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtExecuteBefore.Size = new System.Drawing.Size(363, 117);
+            this.txtExecuteBefore.Size = new System.Drawing.Size(363, 125);
             this.txtExecuteBefore.TabIndex = 1;
             this.txtExecuteBefore.WordWrap = false;
             // 
@@ -655,10 +655,10 @@
             this.pnlCommandAfter.Controls.Add(this.lblExecuteCommand);
             this.pnlCommandAfter.Controls.Add(this.txtExecuteAfter);
             this.pnlCommandAfter.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlCommandAfter.Location = new System.Drawing.Point(0, 139);
+            this.pnlCommandAfter.Location = new System.Drawing.Point(0, 147);
             this.pnlCommandAfter.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
             this.pnlCommandAfter.Name = "pnlCommandAfter";
-            this.pnlCommandAfter.Size = new System.Drawing.Size(363, 139);
+            this.pnlCommandAfter.Size = new System.Drawing.Size(363, 147);
             this.pnlCommandAfter.TabIndex = 1;
             // 
             // lblExecuteCommand
@@ -680,7 +680,7 @@
             this.txtExecuteAfter.Multiline = true;
             this.txtExecuteAfter.Name = "txtExecuteAfter";
             this.txtExecuteAfter.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtExecuteAfter.Size = new System.Drawing.Size(363, 118);
+            this.txtExecuteAfter.Size = new System.Drawing.Size(363, 126);
             this.txtExecuteAfter.TabIndex = 3;
             this.txtExecuteAfter.WordWrap = false;
             // 
@@ -707,7 +707,7 @@
             this.txtNotes.Multiline = true;
             this.txtNotes.Name = "txtNotes";
             this.txtNotes.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtNotes.Size = new System.Drawing.Size(363, 226);
+            this.txtNotes.Size = new System.Drawing.Size(363, 242);
             this.txtNotes.TabIndex = 4;
             // 
             // lblNotes
@@ -754,7 +754,7 @@
             // 
             this.bAddInstruction.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.bAddInstruction.AutoSize = true;
-            this.bAddInstruction.Location = new System.Drawing.Point(6, 255);
+            this.bAddInstruction.Location = new System.Drawing.Point(6, 274);
             this.bAddInstruction.Name = "bAddInstruction";
             this.bAddInstruction.SeparateDropdownButton = false;
             this.bAddInstruction.Size = new System.Drawing.Size(105, 23);
@@ -808,7 +808,7 @@
             this.instructionsListBox.Location = new System.Drawing.Point(6, 25);
             this.instructionsListBox.Name = "instructionsListBox";
             this.instructionsListBox.SelectedPanel = null;
-            this.instructionsListBox.Size = new System.Drawing.Size(363, 224);
+            this.instructionsListBox.Size = new System.Drawing.Size(363, 243);
             this.instructionsListBox.TabIndex = 0;
             // 
             // bSaveAsDefault
