@@ -42,6 +42,15 @@ namespace Ketarin.Forms
         #region Properties
 
         /// <summary>
+        /// Gets or sets the user agent to use for requests.
+        /// </summary>
+        public string UserAgent
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
         /// Gets or sets the currently used match for a given
         /// start/end or regex.
         /// </summary>
@@ -369,7 +378,7 @@ namespace Ketarin.Forms
             Cursor = Cursors.WaitCursor;
             try
             {
-                using (WebClient client = new WebClient())
+                using (WebClient client = new WebClient(this.UserAgent))
                 {
                     string expandedUrl = null;
                     string postData = null;
