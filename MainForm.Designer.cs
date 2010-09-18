@@ -92,9 +92,6 @@
             this.tbNumByStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.tbTotalApplications = new System.Windows.Forms.ToolStripStatusLabel();
             this.bInstall = new wyDay.Controls.SplitButton();
-            this.contextMenu1 = new System.Windows.Forms.ContextMenu();
-            this.menuItem1 = new System.Windows.Forms.MenuItem();
-            this.menuItem2 = new System.Windows.Forms.MenuItem();
             this.bRun = new wyDay.Controls.SplitButton();
             this.bAddApplication = new wyDay.Controls.SplitButton();
             ((System.ComponentModel.ISupportInitialize)(this.olvJobs)).BeginInit();
@@ -422,7 +419,7 @@
             this.olvJobs.Location = new System.Drawing.Point(12, 12);
             this.olvJobs.Name = "olvJobs";
             this.olvJobs.OwnerDraw = true;
-            this.olvJobs.Size = new System.Drawing.Size(658, 231);
+            this.olvJobs.Size = new System.Drawing.Size(658, 210);
             this.olvJobs.SmallImageList = this.imlStatus;
             this.olvJobs.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.olvJobs.TabIndex = 0;
@@ -571,38 +568,22 @@
             this.bInstall.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.bInstall.AutoSize = true;
             this.bInstall.Image = global::Ketarin.Properties.Resources.Setup;
-            this.bInstall.Location = new System.Drawing.Point(290, 249);
+            this.bInstall.Location = new System.Drawing.Point(290, 228);
             this.bInstall.Name = "bInstall";
-            this.bInstall.Size = new System.Drawing.Size(91, 24);
-            this.bInstall.SplitMenu = this.contextMenu1;
+            this.bInstall.Size = new System.Drawing.Size(85, 24);
             this.bInstall.TabIndex = 6;
-            this.bInstall.Text = "I&nstall";
+            this.bInstall.Text = "I&nstall...";
+            this.bInstall.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.bInstall.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.bInstall.UseVisualStyleBackColor = true;
             this.bInstall.Click += new System.EventHandler(this.bInstall_Click);
-            // 
-            // contextMenu1
-            // 
-            this.contextMenu1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-            this.menuItem1,
-            this.menuItem2});
-            // 
-            // menuItem1
-            // 
-            this.menuItem1.Index = 0;
-            this.menuItem1.Text = "I&nstall";
-            // 
-            // menuItem2
-            // 
-            this.menuItem2.Index = 1;
-            this.menuItem2.Text = "Upd&ate and install";
             // 
             // bRun
             // 
             this.bRun.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.bRun.AutoSize = true;
             this.bRun.Image = global::Ketarin.Properties.Resources.Restart;
-            this.bRun.Location = new System.Drawing.Point(168, 249);
+            this.bRun.Location = new System.Drawing.Point(168, 228);
             this.bRun.Name = "bRun";
             this.bRun.Size = new System.Drawing.Size(116, 24);
             this.bRun.SplitMenu = this.cmuRun;
@@ -617,7 +598,7 @@
             this.bAddApplication.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.bAddApplication.AutoSize = true;
             this.bAddApplication.Image = global::Ketarin.Properties.Resources.AddSmall;
-            this.bAddApplication.Location = new System.Drawing.Point(12, 249);
+            this.bAddApplication.Location = new System.Drawing.Point(12, 228);
             this.bAddApplication.Name = "bAddApplication";
             this.bAddApplication.Size = new System.Drawing.Size(150, 24);
             this.bAddApplication.SplitMenu = this.cmuAdd;
@@ -632,11 +613,11 @@
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(682, 285);
+            this.ClientSize = new System.Drawing.Size(682, 264);
             this.Controls.Add(this.bInstall);
-            this.Controls.Add(this.statusBar);
             this.Controls.Add(this.bRun);
             this.Controls.Add(this.bAddApplication);
+            this.Controls.Add(this.statusBar);
             this.Controls.Add(this.olvJobs);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Menu = this.mnuMain;
@@ -719,9 +700,6 @@
         private System.Windows.Forms.ToolStripStatusLabel tbNumByStatus;
         private System.Windows.Forms.MenuItem cmnuProperties;
         private wyDay.Controls.SplitButton bInstall;
-        private System.Windows.Forms.ContextMenu contextMenu1;
-        private System.Windows.Forms.MenuItem menuItem1;
-        private System.Windows.Forms.MenuItem menuItem2;
     }
 }
 

@@ -186,6 +186,13 @@ namespace Ketarin.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap Setup32 {
+            get {
+                object obj = ResourceManager.GetObject("Setup32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap Symbol_Check {
             get {
                 object obj = ResourceManager.GetObject("Symbol Check", resourceCulture);

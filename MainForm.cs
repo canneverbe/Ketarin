@@ -592,16 +592,16 @@ namespace Ketarin
 
         private void bInstall_Click(object sender, EventArgs e)
         {
-            using (InstallingApplicationsDialog dialog = new InstallingApplicationsDialog())
+            using (ChooseAppsToInstallDialog dialog = new ChooseAppsToInstallDialog())
             {
-                List<ApplicationJob> jobs = new List<ApplicationJob>();
-                foreach (ApplicationJob job in olvJobs.SelectedObjects)
+                if (dialog.ShowDialog(this) == DialogResult.OK)
                 {
-                    jobs.Add(job);
+                    using (InstallingApplicationsDialog setupDialog = new InstallingApplicationsDialog())
+                    {
+                        setupDialog.Applications = dialog.SelectedApplications;
+                        setupDialog.ShowDialog(this);
+                    }
                 }
-
-                dialog.Applications = jobs.ToArray();
-                dialog.ShowDialog(this);
             }
         }
 
