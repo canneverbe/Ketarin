@@ -249,6 +249,7 @@ namespace Ketarin
                 mnuExportSelected.Enabled = true;
                 mnuExportAll.Enabled = true;
                 mnuImport.Enabled = true;
+                bInstall.Enabled = true;
                 olvJobs.Refresh();
                 // Refresh sorting (last updated column for example)
                 // If groups are enabled, sorting causes the list to scroll back
@@ -635,6 +636,7 @@ namespace Ketarin
             bRun.Text = "Cancel";
             bRun.SplitMenu = null;
             bRun.Image = null;
+            bInstall.Enabled = false;
             cmnuImportFile.Enabled = false;
             mnuExportSelected.Enabled = false;
             mnuExportAll.Enabled = false;
