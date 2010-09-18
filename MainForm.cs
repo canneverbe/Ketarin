@@ -242,7 +242,7 @@ namespace Ketarin
         {
             this.BeginInvoke((MethodInvoker)delegate
             {
-                bRun.Text = "&Update now";
+                bRun.Text = "&Update all";
                 bRun.SplitMenu = cmuRun;
                 bRun.Image = Properties.Resources.Restart;
                 cmnuImportFile.Enabled = true;
