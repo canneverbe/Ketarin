@@ -1,4 +1,5 @@
-﻿namespace Ketarin.Forms
+﻿using CDBurnerXP.Controls;
+namespace Ketarin.Forms
 {
     partial class InstallingApplicationsDialog
     {
@@ -32,7 +33,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(InstallingApplicationsDialog));
             this.bCancel = new System.Windows.Forms.Button();
             this.lblSetupStatus = new System.Windows.Forms.Label();
-            this.progressBar = new System.Windows.Forms.ProgressBar();
+            this.progressBar = new MarqueeProgressBar();
             this.bgwSetup = new System.ComponentModel.BackgroundWorker();
             this.lbShowHideDetails = new System.Windows.Forms.Label();
             this.imageList = new System.Windows.Forms.ImageList(this.components);
@@ -213,7 +214,7 @@
 
         private System.Windows.Forms.Button bCancel;
         private System.Windows.Forms.Label lblSetupStatus;
-        private System.Windows.Forms.ProgressBar progressBar;
+        private MarqueeProgressBar progressBar;
         private System.ComponentModel.BackgroundWorker bgwSetup;
         private System.Windows.Forms.Label lbShowHideDetails;
         private System.Windows.Forms.ImageList imageList;

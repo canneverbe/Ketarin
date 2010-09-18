@@ -81,8 +81,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApplicationList.cs" />
     <Compile Include="CopyFileInstruction.cs" />
     <Compile Include="CustomSetupInstruction.cs" />
+    <Compile Include="Forms\ChooseAppsToInstallDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ChooseAppsToInstallDialog.Designer.cs">
+      <DependentUpon>ChooseAppsToInstallDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\CopyFileInstructionDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -618,6 +625,7 @@
     <None Include="Icon\CloseSearchDown.png" />
     <None Include="Icon\CloseSearchHover.png" />
     <None Include="Icon\Setup.png" />
+    <None Include="Icon\Setup32.png" />
     <Content Include="ketarin.ico">
       <Generator>up</Generator>
     </Content>
@@ -626,6 +634,9 @@
     <None Include="Resources\GoToNextMessage.png" />
     <None Include="Resources\GoToPreviousMessage.png" />
     <None Include="Resources\LineColorHS.png" />
+    <EmbeddedResource Include="Forms\ChooseAppsToInstallDialog.resx">
+      <DependentUpon>ChooseAppsToInstallDialog.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="M:\CsLib\CDBurnerXP\Controls\AdvancedListBox.resx">
       <Link>CDBurnerXP\AdvancedListBox.resx</Link>
       <DependentUpon>AdvancedListBox.cs</DependentUpon>

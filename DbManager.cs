@@ -320,6 +320,22 @@ namespace Ketarin
                 command.ExecuteNonQuery();
             }
 
+            using (IDbCommand command = Connection.CreateCommand())
+            {
+                command.CommandText = @"CREATE TABLE IF NOT EXISTS setuplists  
+                                        (ListGuid           TEXT UNIQUE,
+                                         Name               TEXT);";
+                command.ExecuteNonQuery();
+            }
+            using (IDbCommand command = Connection.CreateCommand())
+            {
+                command.CommandText = @"CREATE TABLE IF NOT EXISTS setuplists_applications  
+                                        (ListGuid           TEXT,
+                                         JobGuid            TEXT,
+                                        CONSTRAINT setuplists_applications_unique UNIQUE (ListGuid, JobGuid));";
+                command.ExecuteNonQuery();
+            }
+
             // Upgrade tables
             List<string> columns = GetColumns("jobs");
 
@@ -683,6 +699,58 @@ namespace Ketarin
             }
 
             return categories.ToArray();
+        }
+
+        /// <summary>
+        /// Returns a sorted list of all setup lists.
+        /// </summary>
+        public static ApplicationList[] GetSetupLists(IEnumerable<ApplicationJob> applicationsToAttach)
+        {
+            List<ApplicationList> lists = new List<ApplicationList>();
+
+            using (IDbCommand command = Connection.CreateCommand())
+            {
+                command.CommandText = "SELECT * FROM setuplists ORDER BY Name";
+
+                using (IDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        ApplicationList appList = new ApplicationList();
+                        appList.Hydrate(reader);
+                        lists.Add(appList);
+                    }
+                }
+            }
+
+            // Attach applications to lists
+            foreach (ApplicationList list in lists)
+            {
+                using (IDbCommand command = Connection.CreateCommand())
+                {
+                    command.CommandText = "SELECT * FROM setuplists_applications WHERE ListGuid = @ListGuid";
+                    command.Parameters.Add(new SQLiteParameter("@ListGuid", DbManager.FormatGuid(list.Guid)));
+
+                    using (IDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            Guid jobGuid = new Guid(reader["JobGuid"] as string);
+                            // Find application and add to list
+                            foreach (ApplicationJob app in applicationsToAttach)
+                            {
+                                if (app.Guid == jobGuid)
+                                {
+                                    list.Applications.Add(app);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            return lists.ToArray();
         }
 
         /// <summary>
