@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using CDBurnerXP;
 using System.Web;
 using System.IO;
+using System.Reflection;
 
 namespace Ketarin
 {
@@ -74,6 +75,24 @@ namespace Ketarin
             : base()
         {
             Headers.Add("User-Agent", UserAgent);
+
+            // MS Bugfix - https://connect.microsoft.com/VisualStudio/feedback/details/386695/system-uri-incorrectly-strips-trailing-dots?wa=wsignin1.0#
+            MethodInfo getSyntax = typeof(UriParser).GetMethod("GetSyntax", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic);
+            FieldInfo flagsField = typeof(UriParser).GetField("m_Flags", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+            if (getSyntax != null && flagsField != null)
+            {
+                foreach (string scheme in new[] { "http", "https" })
+                {
+                    UriParser parser = (UriParser)getSyntax.Invoke(null, new object[] { scheme });
+                    if (parser != null)
+                    {
+                        int flagsValue = (int)flagsField.GetValue(parser);
+                        // Clear the CanonicalizeAsFilePath attribute
+                        if ((flagsValue & 0x1000000) != 0)
+                            flagsField.SetValue(parser, flagsValue & ~0x1000000);
+                    }
+                }
+            }
         }
 
         protected override WebRequest GetWebRequest(Uri address)
