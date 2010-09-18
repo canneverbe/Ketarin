@@ -665,7 +665,7 @@ namespace Ketarin
                 }
 
                 LogDialog.Log(job, "Using referer: " + (string.IsNullOrEmpty(httpRequest.Referer) ? "(none)" : httpRequest.Referer));
-                httpRequest.UserAgent = WebClient.UserAgent;
+                httpRequest.UserAgent = (string.IsNullOrEmpty(job.UserAgent) ? WebClient.UserAgent : job.UserAgent);
             }
 
             using (WebResponse response = WebClient.GetResponse(req))

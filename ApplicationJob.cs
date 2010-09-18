@@ -69,6 +69,11 @@ namespace Ketarin
         public string WebsiteUrl { get; set; }
 
         /// <summary>
+        /// Gets or sets a custom user agent to use for downloads.
+        /// </summary>
+        public string UserAgent { get; set; }
+
+        /// <summary>
         /// Gets or sets the custom notes for an application.
         /// </summary>
         public string UserNotes { get; set; }
@@ -1085,7 +1090,8 @@ namespace Ketarin
                                                    LastFileSize = @LastFileSize,
                                                    IgnoreFileInformation = @IgnoreFileInformation,
                                                    UserNotes = @UserNotes,
-                                                   WebsiteUrl = @WebsiteUrl
+                                                   WebsiteUrl = @WebsiteUrl,
+                                                   UserAgent = @UserAgent
                                              WHERE JobGuid = @JobGuid";
 
                             command.Parameters.Add(new SQLiteParameter("@ApplicationName", Name));
@@ -1115,6 +1121,7 @@ namespace Ketarin
                             command.Parameters.Add(new SQLiteParameter("@IgnoreFileInformation", IgnoreFileInformation));
                             command.Parameters.Add(new SQLiteParameter("@UserNotes", UserNotes));
                             command.Parameters.Add(new SQLiteParameter("@WebsiteUrl", WebsiteUrl));
+                            command.Parameters.Add(new SQLiteParameter("@UserAgent", UserAgent));
 
                             if (DownloadDate.HasValue)
                             {
@@ -1197,6 +1204,7 @@ namespace Ketarin
             IgnoreFileInformation = Convert.ToBoolean(reader["IgnoreFileInformation"]);
             UserNotes = reader["UserNotes"] as string;
             WebsiteUrl = reader["WebsiteUrl"] as string;
+            UserAgent = reader["UserAgent"] as string;
 
             if (reader["DownloadBeta"] != DBNull.Value)
             {

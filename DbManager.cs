@@ -360,6 +360,7 @@ namespace Ketarin
             addColumns.Add("IgnoreFileInformation", "ALTER TABLE jobs ADD IgnoreFileInformation INTEGER DEFAULT 0");
             addColumns.Add("UserNotes", "ALTER TABLE jobs ADD UserNotes TEXT");
             addColumns.Add("WebsiteUrl", "ALTER TABLE jobs ADD WebsiteUrl TEXT");
+            addColumns.Add("UserAgent", "ALTER TABLE jobs ADD UserAgent TEXT");
 
             ExecuteUpgradeQueries(columns, addColumns);
 

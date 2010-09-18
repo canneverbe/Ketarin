@@ -33,6 +33,11 @@
             this.lblApplicationName = new System.Windows.Forms.Label();
             this.txtApplicationName = new System.Windows.Forms.TextBox();
             this.pnlDownloadSource = new System.Windows.Forms.Panel();
+            this.pnlBeta = new System.Windows.Forms.Panel();
+            this.rbBetaAvoid = new System.Windows.Forms.RadioButton();
+            this.rbAlwaysDownload = new System.Windows.Forms.RadioButton();
+            this.lblBetaVersions = new System.Windows.Forms.Label();
+            this.rbBetaDefault = new System.Windows.Forms.RadioButton();
             this.bVariables = new System.Windows.Forms.Button();
             this.txtFileHippoId = new System.Windows.Forms.TextBox();
             this.rbFileHippo = new System.Windows.Forms.RadioButton();
@@ -52,13 +57,14 @@
             this.chkShareOnline = new System.Windows.Forms.CheckBox();
             this.lblSpoofReferer = new System.Windows.Forms.Label();
             this.txtSpoofReferer = new Ketarin.Forms.VariableTextBox();
-            this.rbBetaDefault = new System.Windows.Forms.RadioButton();
-            this.lblBetaVersions = new System.Windows.Forms.Label();
-            this.rbAlwaysDownload = new System.Windows.Forms.RadioButton();
-            this.rbBetaAvoid = new System.Windows.Forms.RadioButton();
             this.tcApplication = new System.Windows.Forms.TabControl();
             this.tpApplication = new System.Windows.Forms.TabPage();
             this.tpSettings = new System.Windows.Forms.TabPage();
+            this.txtUserAgent = new Ketarin.Forms.VariableTextBox();
+            this.lblUserAgent = new System.Windows.Forms.Label();
+            this.sepMiscellaneous = new CDBurnerXP.Controls.Separator();
+            this.sepUpdateDetection = new CDBurnerXP.Controls.Separator();
+            this.sepDownloads = new CDBurnerXP.Controls.Separator();
             this.chkIgnoreFileInformation = new System.Windows.Forms.CheckBox();
             this.chkCheckForUpdatesOnly = new System.Windows.Forms.CheckBox();
             this.chkDownloadExclusively = new System.Windows.Forms.CheckBox();
@@ -87,6 +93,7 @@
             this.instructionsListBox = new CDBurnerXP.Controls.AdvancedListBox();
             this.bSaveAsDefault = new System.Windows.Forms.Button();
             this.pnlDownloadSource.SuspendLayout();
+            this.pnlBeta.SuspendLayout();
             this.pnlTarget.SuspendLayout();
             this.tcApplication.SuspendLayout();
             this.tpApplication.SuspendLayout();
@@ -103,7 +110,7 @@
             // 
             this.bCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.bCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.bCancel.Location = new System.Drawing.Point(320, 292);
+            this.bCancel.Location = new System.Drawing.Point(320, 356);
             this.bCancel.Name = "bCancel";
             this.bCancel.Size = new System.Drawing.Size(75, 23);
             this.bCancel.TabIndex = 100;
@@ -114,7 +121,7 @@
             // 
             this.bOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.bOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.bOK.Location = new System.Drawing.Point(239, 292);
+            this.bOK.Location = new System.Drawing.Point(239, 356);
             this.bOK.Name = "bOK";
             this.bOK.Size = new System.Drawing.Size(75, 23);
             this.bOK.TabIndex = 99;
@@ -145,6 +152,7 @@
             // 
             this.pnlDownloadSource.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
+            this.pnlDownloadSource.Controls.Add(this.pnlBeta);
             this.pnlDownloadSource.Controls.Add(this.bVariables);
             this.pnlDownloadSource.Controls.Add(this.txtFileHippoId);
             this.pnlDownloadSource.Controls.Add(this.rbFileHippo);
@@ -152,8 +160,61 @@
             this.pnlDownloadSource.Controls.Add(this.rbFixedUrl);
             this.pnlDownloadSource.Location = new System.Drawing.Point(4, 84);
             this.pnlDownloadSource.Name = "pnlDownloadSource";
-            this.pnlDownloadSource.Size = new System.Drawing.Size(365, 54);
+            this.pnlDownloadSource.Size = new System.Drawing.Size(365, 80);
             this.pnlDownloadSource.TabIndex = 3;
+            // 
+            // pnlBeta
+            // 
+            this.pnlBeta.Controls.Add(this.rbBetaAvoid);
+            this.pnlBeta.Controls.Add(this.rbAlwaysDownload);
+            this.pnlBeta.Controls.Add(this.lblBetaVersions);
+            this.pnlBeta.Controls.Add(this.rbBetaDefault);
+            this.pnlBeta.Location = new System.Drawing.Point(92, 55);
+            this.pnlBeta.Margin = new System.Windows.Forms.Padding(0);
+            this.pnlBeta.Name = "pnlBeta";
+            this.pnlBeta.Size = new System.Drawing.Size(281, 18);
+            this.pnlBeta.TabIndex = 16;
+            // 
+            // rbBetaAvoid
+            // 
+            this.rbBetaAvoid.AutoSize = true;
+            this.rbBetaAvoid.Location = new System.Drawing.Point(145, 0);
+            this.rbBetaAvoid.Name = "rbBetaAvoid";
+            this.rbBetaAvoid.Size = new System.Drawing.Size(52, 17);
+            this.rbBetaAvoid.TabIndex = 27;
+            this.rbBetaAvoid.Text = "A&void";
+            this.rbBetaAvoid.UseVisualStyleBackColor = true;
+            // 
+            // rbAlwaysDownload
+            // 
+            this.rbAlwaysDownload.AutoSize = true;
+            this.rbAlwaysDownload.Location = new System.Drawing.Point(203, 0);
+            this.rbAlwaysDownload.Name = "rbAlwaysDownload";
+            this.rbAlwaysDownload.Size = new System.Drawing.Size(73, 17);
+            this.rbAlwaysDownload.TabIndex = 28;
+            this.rbAlwaysDownload.Text = "Do&wnload";
+            this.rbAlwaysDownload.UseVisualStyleBackColor = true;
+            // 
+            // lblBetaVersions
+            // 
+            this.lblBetaVersions.AutoSize = true;
+            this.lblBetaVersions.Location = new System.Drawing.Point(0, 2);
+            this.lblBetaVersions.Name = "lblBetaVersions";
+            this.lblBetaVersions.Size = new System.Drawing.Size(74, 13);
+            this.lblBetaVersions.TabIndex = 25;
+            this.lblBetaVersions.Text = "&Beta versions:";
+            // 
+            // rbBetaDefault
+            // 
+            this.rbBetaDefault.AutoSize = true;
+            this.rbBetaDefault.Checked = true;
+            this.rbBetaDefault.Location = new System.Drawing.Point(77, 0);
+            this.rbBetaDefault.Name = "rbBetaDefault";
+            this.rbBetaDefault.Size = new System.Drawing.Size(65, 17);
+            this.rbBetaDefault.TabIndex = 26;
+            this.rbBetaDefault.TabStop = true;
+            this.rbBetaDefault.Text = "(&Default)";
+            this.rbBetaDefault.UseVisualStyleBackColor = true;
             // 
             // bVariables
             // 
@@ -170,7 +231,7 @@
             // 
             this.txtFileHippoId.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtFileHippoId.Location = new System.Drawing.Point(95, 28);
+            this.txtFileHippoId.Location = new System.Drawing.Point(95, 31);
             this.txtFileHippoId.Name = "txtFileHippoId";
             this.txtFileHippoId.Size = new System.Drawing.Size(270, 20);
             this.txtFileHippoId.TabIndex = 15;
@@ -180,7 +241,7 @@
             // rbFileHippo
             // 
             this.rbFileHippo.AutoSize = true;
-            this.rbFileHippo.Location = new System.Drawing.Point(3, 29);
+            this.rbFileHippo.Location = new System.Drawing.Point(3, 32);
             this.rbFileHippo.Name = "rbFileHippo";
             this.rbFileHippo.Size = new System.Drawing.Size(86, 17);
             this.rbFileHippo.TabIndex = 14;
@@ -219,7 +280,7 @@
             this.pnlTarget.Controls.Add(this.txtTarget);
             this.pnlTarget.Controls.Add(this.rbFolder);
             this.pnlTarget.Controls.Add(this.rbFileName);
-            this.pnlTarget.Location = new System.Drawing.Point(3, 164);
+            this.pnlTarget.Location = new System.Drawing.Point(3, 186);
             this.pnlTarget.Name = "pnlTarget";
             this.pnlTarget.Size = new System.Drawing.Size(365, 53);
             this.pnlTarget.TabIndex = 9;
@@ -275,10 +336,10 @@
             this.chkEnabled.AutoSize = true;
             this.chkEnabled.Checked = true;
             this.chkEnabled.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkEnabled.Location = new System.Drawing.Point(6, 123);
+            this.chkEnabled.Location = new System.Drawing.Point(9, 229);
             this.chkEnabled.Name = "chkEnabled";
             this.chkEnabled.Size = new System.Drawing.Size(65, 17);
-            this.chkEnabled.TabIndex = 5;
+            this.chkEnabled.TabIndex = 12;
             this.chkEnabled.Text = "&Enabled";
             this.chkEnabled.UseVisualStyleBackColor = true;
             // 
@@ -287,10 +348,10 @@
             this.chkDeletePrevious.AutoSize = true;
             this.chkDeletePrevious.Checked = true;
             this.chkDeletePrevious.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkDeletePrevious.Location = new System.Drawing.Point(6, 8);
+            this.chkDeletePrevious.Location = new System.Drawing.Point(9, 275);
             this.chkDeletePrevious.Name = "chkDeletePrevious";
             this.chkDeletePrevious.Size = new System.Drawing.Size(218, 17);
-            this.chkDeletePrevious.TabIndex = 0;
+            this.chkDeletePrevious.TabIndex = 14;
             this.chkDeletePrevious.Text = "Always &delete previously downloaded file";
             this.chkDeletePrevious.UseVisualStyleBackColor = true;
             // 
@@ -320,7 +381,7 @@
             this.sepTarget.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.sepTarget.ForeColor = System.Drawing.SystemColors.ActiveCaption;
-            this.sepTarget.Location = new System.Drawing.Point(3, 141);
+            this.sepTarget.Location = new System.Drawing.Point(3, 163);
             this.sepTarget.Name = "sepTarget";
             this.sepTarget.Size = new System.Drawing.Size(366, 23);
             this.sepTarget.TabIndex = 20;
@@ -342,71 +403,30 @@
             // chkShareOnline
             // 
             this.chkShareOnline.AutoSize = true;
-            this.chkShareOnline.Location = new System.Drawing.Point(6, 31);
+            this.chkShareOnline.Location = new System.Drawing.Point(9, 252);
             this.chkShareOnline.Name = "chkShareOnline";
             this.chkShareOnline.Size = new System.Drawing.Size(212, 17);
-            this.chkShareOnline.TabIndex = 1;
+            this.chkShareOnline.TabIndex = 13;
             this.chkShareOnline.Text = "S&hare this application online with others";
             this.chkShareOnline.UseVisualStyleBackColor = true;
             // 
             // lblSpoofReferer
             // 
             this.lblSpoofReferer.AutoSize = true;
-            this.lblSpoofReferer.Location = new System.Drawing.Point(3, 185);
+            this.lblSpoofReferer.Location = new System.Drawing.Point(6, 78);
             this.lblSpoofReferer.Name = "lblSpoofReferer";
             this.lblSpoofReferer.Size = new System.Drawing.Size(103, 13);
-            this.lblSpoofReferer.TabIndex = 10;
+            this.lblSpoofReferer.TabIndex = 3;
             this.lblSpoofReferer.Text = "Sp&oof HTTP referer:";
             // 
             // txtSpoofReferer
             // 
             this.txtSpoofReferer.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtSpoofReferer.Location = new System.Drawing.Point(112, 182);
+            this.txtSpoofReferer.Location = new System.Drawing.Point(115, 75);
             this.txtSpoofReferer.Name = "txtSpoofReferer";
-            this.txtSpoofReferer.Size = new System.Drawing.Size(257, 20);
-            this.txtSpoofReferer.TabIndex = 11;
-            // 
-            // rbBetaDefault
-            // 
-            this.rbBetaDefault.AutoSize = true;
-            this.rbBetaDefault.Checked = true;
-            this.rbBetaDefault.Location = new System.Drawing.Point(83, 149);
-            this.rbBetaDefault.Name = "rbBetaDefault";
-            this.rbBetaDefault.Size = new System.Drawing.Size(79, 17);
-            this.rbBetaDefault.TabIndex = 7;
-            this.rbBetaDefault.TabStop = true;
-            this.rbBetaDefault.Text = "Use &default";
-            this.rbBetaDefault.UseVisualStyleBackColor = true;
-            // 
-            // lblBetaVersions
-            // 
-            this.lblBetaVersions.AutoSize = true;
-            this.lblBetaVersions.Location = new System.Drawing.Point(3, 151);
-            this.lblBetaVersions.Name = "lblBetaVersions";
-            this.lblBetaVersions.Size = new System.Drawing.Size(74, 13);
-            this.lblBetaVersions.TabIndex = 6;
-            this.lblBetaVersions.Text = "&Beta versions:";
-            // 
-            // rbAlwaysDownload
-            // 
-            this.rbAlwaysDownload.AutoSize = true;
-            this.rbAlwaysDownload.Location = new System.Drawing.Point(226, 149);
-            this.rbAlwaysDownload.Name = "rbAlwaysDownload";
-            this.rbAlwaysDownload.Size = new System.Drawing.Size(108, 17);
-            this.rbAlwaysDownload.TabIndex = 9;
-            this.rbAlwaysDownload.Text = "Download al&ways";
-            this.rbAlwaysDownload.UseVisualStyleBackColor = true;
-            // 
-            // rbBetaAvoid
-            // 
-            this.rbBetaAvoid.AutoSize = true;
-            this.rbBetaAvoid.Location = new System.Drawing.Point(168, 149);
-            this.rbBetaAvoid.Name = "rbBetaAvoid";
-            this.rbBetaAvoid.Size = new System.Drawing.Size(52, 17);
-            this.rbBetaAvoid.TabIndex = 8;
-            this.rbBetaAvoid.Text = "A&void";
-            this.rbBetaAvoid.UseVisualStyleBackColor = true;
+            this.txtSpoofReferer.Size = new System.Drawing.Size(253, 20);
+            this.txtSpoofReferer.TabIndex = 4;
             // 
             // tcApplication
             // 
@@ -421,7 +441,7 @@
             this.tcApplication.Location = new System.Drawing.Point(12, 12);
             this.tcApplication.Name = "tcApplication";
             this.tcApplication.SelectedIndex = 0;
-            this.tcApplication.Size = new System.Drawing.Size(383, 265);
+            this.tcApplication.Size = new System.Drawing.Size(383, 329);
             this.tcApplication.TabIndex = 0;
             // 
             // tpApplication
@@ -437,62 +457,117 @@
             this.tpApplication.Location = new System.Drawing.Point(4, 22);
             this.tpApplication.Name = "tpApplication";
             this.tpApplication.Padding = new System.Windows.Forms.Padding(3);
-            this.tpApplication.Size = new System.Drawing.Size(375, 239);
+            this.tpApplication.Size = new System.Drawing.Size(375, 303);
             this.tpApplication.TabIndex = 0;
             this.tpApplication.Text = "Application";
             this.tpApplication.UseVisualStyleBackColor = true;
             // 
             // tpSettings
             // 
+            this.tpSettings.Controls.Add(this.txtUserAgent);
+            this.tpSettings.Controls.Add(this.lblUserAgent);
+            this.tpSettings.Controls.Add(this.sepMiscellaneous);
+            this.tpSettings.Controls.Add(this.sepUpdateDetection);
+            this.tpSettings.Controls.Add(this.sepDownloads);
             this.tpSettings.Controls.Add(this.chkIgnoreFileInformation);
             this.tpSettings.Controls.Add(this.chkCheckForUpdatesOnly);
             this.tpSettings.Controls.Add(this.chkDownloadExclusively);
             this.tpSettings.Controls.Add(this.txtUseVariablesForChanges);
             this.tpSettings.Controls.Add(this.lblUseVariableForChanges);
-            this.tpSettings.Controls.Add(this.rbBetaAvoid);
             this.tpSettings.Controls.Add(this.chkEnabled);
-            this.tpSettings.Controls.Add(this.rbAlwaysDownload);
             this.tpSettings.Controls.Add(this.chkDeletePrevious);
-            this.tpSettings.Controls.Add(this.lblBetaVersions);
-            this.tpSettings.Controls.Add(this.rbBetaDefault);
             this.tpSettings.Controls.Add(this.txtSpoofReferer);
             this.tpSettings.Controls.Add(this.chkShareOnline);
             this.tpSettings.Controls.Add(this.lblSpoofReferer);
             this.tpSettings.Location = new System.Drawing.Point(4, 22);
             this.tpSettings.Name = "tpSettings";
             this.tpSettings.Padding = new System.Windows.Forms.Padding(3);
-            this.tpSettings.Size = new System.Drawing.Size(375, 239);
+            this.tpSettings.Size = new System.Drawing.Size(375, 303);
             this.tpSettings.TabIndex = 1;
             this.tpSettings.Text = "Advanced settings";
             this.tpSettings.UseVisualStyleBackColor = true;
             // 
+            // txtUserAgent
+            // 
+            this.txtUserAgent.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtUserAgent.Location = new System.Drawing.Point(115, 101);
+            this.txtUserAgent.Name = "txtUserAgent";
+            this.txtUserAgent.Size = new System.Drawing.Size(253, 20);
+            this.txtUserAgent.TabIndex = 6;
+            // 
+            // lblUserAgent
+            // 
+            this.lblUserAgent.AutoSize = true;
+            this.lblUserAgent.Location = new System.Drawing.Point(6, 104);
+            this.lblUserAgent.Name = "lblUserAgent";
+            this.lblUserAgent.Size = new System.Drawing.Size(62, 13);
+            this.lblUserAgent.TabIndex = 5;
+            this.lblUserAgent.Text = "User age&nt:";
+            // 
+            // sepMiscellaneous
+            // 
+            this.sepMiscellaneous.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.sepMiscellaneous.ForeColor = System.Drawing.SystemColors.ActiveCaption;
+            this.sepMiscellaneous.Location = new System.Drawing.Point(6, 203);
+            this.sepMiscellaneous.Name = "sepMiscellaneous";
+            this.sepMiscellaneous.Size = new System.Drawing.Size(363, 23);
+            this.sepMiscellaneous.TabIndex = 11;
+            this.sepMiscellaneous.Text = "Miscellaneous";
+            this.sepMiscellaneous.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // sepUpdateDetection
+            // 
+            this.sepUpdateDetection.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.sepUpdateDetection.ForeColor = System.Drawing.SystemColors.ActiveCaption;
+            this.sepUpdateDetection.Location = new System.Drawing.Point(6, 124);
+            this.sepUpdateDetection.Name = "sepUpdateDetection";
+            this.sepUpdateDetection.Size = new System.Drawing.Size(363, 23);
+            this.sepUpdateDetection.TabIndex = 7;
+            this.sepUpdateDetection.Text = "Update detection";
+            this.sepUpdateDetection.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // sepDownloads
+            // 
+            this.sepDownloads.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.sepDownloads.ForeColor = System.Drawing.SystemColors.ActiveCaption;
+            this.sepDownloads.Location = new System.Drawing.Point(6, 3);
+            this.sepDownloads.Name = "sepDownloads";
+            this.sepDownloads.Size = new System.Drawing.Size(363, 23);
+            this.sepDownloads.TabIndex = 0;
+            this.sepDownloads.Text = "&Downloading";
+            this.sepDownloads.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
             // chkIgnoreFileInformation
             // 
             this.chkIgnoreFileInformation.AutoSize = true;
-            this.chkIgnoreFileInformation.Location = new System.Drawing.Point(6, 100);
+            this.chkIgnoreFileInformation.Location = new System.Drawing.Point(9, 150);
             this.chkIgnoreFileInformation.Name = "chkIgnoreFileInformation";
             this.chkIgnoreFileInformation.Size = new System.Drawing.Size(297, 17);
-            this.chkIgnoreFileInformation.TabIndex = 4;
+            this.chkIgnoreFileInformation.TabIndex = 8;
             this.chkIgnoreFileInformation.Text = "Ignore file infor&mation (do not re-download if file is missing)";
             this.chkIgnoreFileInformation.UseVisualStyleBackColor = true;
             // 
             // chkCheckForUpdatesOnly
             // 
             this.chkCheckForUpdatesOnly.AutoSize = true;
-            this.chkCheckForUpdatesOnly.Location = new System.Drawing.Point(6, 77);
+            this.chkCheckForUpdatesOnly.Location = new System.Drawing.Point(9, 52);
             this.chkCheckForUpdatesOnly.Name = "chkCheckForUpdatesOnly";
             this.chkCheckForUpdatesOnly.Size = new System.Drawing.Size(221, 17);
-            this.chkCheckForUpdatesOnly.TabIndex = 3;
+            this.chkCheckForUpdatesOnly.TabIndex = 2;
             this.chkCheckForUpdatesOnly.Text = "Do not download, &check for updates only";
             this.chkCheckForUpdatesOnly.UseVisualStyleBackColor = true;
             // 
             // chkDownloadExclusively
             // 
             this.chkDownloadExclusively.AutoSize = true;
-            this.chkDownloadExclusively.Location = new System.Drawing.Point(6, 54);
+            this.chkDownloadExclusively.Location = new System.Drawing.Point(9, 29);
             this.chkDownloadExclusively.Name = "chkDownloadExclusively";
             this.chkDownloadExclusively.Size = new System.Drawing.Size(359, 17);
-            this.chkDownloadExclusively.TabIndex = 2;
+            this.chkDownloadExclusively.TabIndex = 1;
             this.chkDownloadExclusively.Text = "Do not download this application &simultaneously with other applications";
             this.chkDownloadExclusively.UseVisualStyleBackColor = true;
             // 
@@ -500,18 +575,18 @@
             // 
             this.txtUseVariablesForChanges.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtUseVariablesForChanges.Location = new System.Drawing.Point(256, 213);
+            this.txtUseVariablesForChanges.Location = new System.Drawing.Point(259, 173);
             this.txtUseVariablesForChanges.Name = "txtUseVariablesForChanges";
-            this.txtUseVariablesForChanges.Size = new System.Drawing.Size(113, 20);
-            this.txtUseVariablesForChanges.TabIndex = 13;
+            this.txtUseVariablesForChanges.Size = new System.Drawing.Size(109, 20);
+            this.txtUseVariablesForChanges.TabIndex = 10;
             // 
             // lblUseVariableForChanges
             // 
             this.lblUseVariableForChanges.AutoSize = true;
-            this.lblUseVariableForChanges.Location = new System.Drawing.Point(3, 216);
+            this.lblUseVariableForChanges.Location = new System.Drawing.Point(6, 176);
             this.lblUseVariableForChanges.Name = "lblUseVariableForChanges";
             this.lblUseVariableForChanges.Size = new System.Drawing.Size(247, 13);
-            this.lblUseVariableForChanges.TabIndex = 12;
+            this.lblUseVariableForChanges.TabIndex = 9;
             this.lblUseVariableForChanges.Text = "&Use the following variable as indicator for changes:";
             // 
             // tpCommands
@@ -519,7 +594,7 @@
             this.tpCommands.Controls.Add(this.tableLayoutCommands);
             this.tpCommands.Location = new System.Drawing.Point(4, 22);
             this.tpCommands.Name = "tpCommands";
-            this.tpCommands.Size = new System.Drawing.Size(375, 239);
+            this.tpCommands.Size = new System.Drawing.Size(375, 303);
             this.tpCommands.TabIndex = 2;
             this.tpCommands.Text = "Commands";
             this.tpCommands.UseVisualStyleBackColor = true;
@@ -538,7 +613,7 @@
             this.tableLayoutCommands.RowCount = 2;
             this.tableLayoutCommands.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutCommands.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutCommands.Size = new System.Drawing.Size(366, 233);
+            this.tableLayoutCommands.Size = new System.Drawing.Size(366, 278);
             this.tableLayoutCommands.TabIndex = 4;
             // 
             // pnlCommandBefore
@@ -549,7 +624,7 @@
             this.pnlCommandBefore.Location = new System.Drawing.Point(0, 3);
             this.pnlCommandBefore.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
             this.pnlCommandBefore.Name = "pnlCommandBefore";
-            this.pnlCommandBefore.Size = new System.Drawing.Size(363, 110);
+            this.pnlCommandBefore.Size = new System.Drawing.Size(363, 133);
             this.pnlCommandBefore.TabIndex = 0;
             // 
             // lblCommandBefore
@@ -571,7 +646,7 @@
             this.txtExecuteBefore.Multiline = true;
             this.txtExecuteBefore.Name = "txtExecuteBefore";
             this.txtExecuteBefore.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtExecuteBefore.Size = new System.Drawing.Size(363, 94);
+            this.txtExecuteBefore.Size = new System.Drawing.Size(363, 117);
             this.txtExecuteBefore.TabIndex = 1;
             this.txtExecuteBefore.WordWrap = false;
             // 
@@ -580,10 +655,10 @@
             this.pnlCommandAfter.Controls.Add(this.lblExecuteCommand);
             this.pnlCommandAfter.Controls.Add(this.txtExecuteAfter);
             this.pnlCommandAfter.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlCommandAfter.Location = new System.Drawing.Point(0, 116);
+            this.pnlCommandAfter.Location = new System.Drawing.Point(0, 139);
             this.pnlCommandAfter.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
             this.pnlCommandAfter.Name = "pnlCommandAfter";
-            this.pnlCommandAfter.Size = new System.Drawing.Size(363, 117);
+            this.pnlCommandAfter.Size = new System.Drawing.Size(363, 139);
             this.pnlCommandAfter.TabIndex = 1;
             // 
             // lblExecuteCommand
@@ -605,7 +680,7 @@
             this.txtExecuteAfter.Multiline = true;
             this.txtExecuteAfter.Name = "txtExecuteAfter";
             this.txtExecuteAfter.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtExecuteAfter.Size = new System.Drawing.Size(363, 96);
+            this.txtExecuteAfter.Size = new System.Drawing.Size(363, 118);
             this.txtExecuteAfter.TabIndex = 3;
             this.txtExecuteAfter.WordWrap = false;
             // 
@@ -617,7 +692,7 @@
             this.tpInformation.Controls.Add(this.lblWebsite);
             this.tpInformation.Location = new System.Drawing.Point(4, 22);
             this.tpInformation.Name = "tpInformation";
-            this.tpInformation.Size = new System.Drawing.Size(375, 239);
+            this.tpInformation.Size = new System.Drawing.Size(375, 303);
             this.tpInformation.TabIndex = 3;
             this.tpInformation.Text = "Information";
             this.tpInformation.UseVisualStyleBackColor = true;
@@ -632,7 +707,7 @@
             this.txtNotes.Multiline = true;
             this.txtNotes.Name = "txtNotes";
             this.txtNotes.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtNotes.Size = new System.Drawing.Size(363, 178);
+            this.txtNotes.Size = new System.Drawing.Size(363, 226);
             this.txtNotes.TabIndex = 4;
             // 
             // lblNotes
@@ -670,7 +745,7 @@
             this.tpSetup.Location = new System.Drawing.Point(4, 22);
             this.tpSetup.Name = "tpSetup";
             this.tpSetup.Padding = new System.Windows.Forms.Padding(3);
-            this.tpSetup.Size = new System.Drawing.Size(375, 239);
+            this.tpSetup.Size = new System.Drawing.Size(375, 303);
             this.tpSetup.TabIndex = 4;
             this.tpSetup.Text = "Setup";
             this.tpSetup.UseVisualStyleBackColor = true;
@@ -679,7 +754,7 @@
             // 
             this.bAddInstruction.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.bAddInstruction.AutoSize = true;
-            this.bAddInstruction.Location = new System.Drawing.Point(6, 210);
+            this.bAddInstruction.Location = new System.Drawing.Point(6, 255);
             this.bAddInstruction.Name = "bAddInstruction";
             this.bAddInstruction.SeparateDropdownButton = false;
             this.bAddInstruction.Size = new System.Drawing.Size(105, 23);
@@ -733,13 +808,13 @@
             this.instructionsListBox.Location = new System.Drawing.Point(6, 25);
             this.instructionsListBox.Name = "instructionsListBox";
             this.instructionsListBox.SelectedPanel = null;
-            this.instructionsListBox.Size = new System.Drawing.Size(363, 179);
+            this.instructionsListBox.Size = new System.Drawing.Size(363, 224);
             this.instructionsListBox.TabIndex = 0;
             // 
             // bSaveAsDefault
             // 
             this.bSaveAsDefault.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bSaveAsDefault.Location = new System.Drawing.Point(12, 292);
+            this.bSaveAsDefault.Location = new System.Drawing.Point(12, 356);
             this.bSaveAsDefault.Name = "bSaveAsDefault";
             this.bSaveAsDefault.Size = new System.Drawing.Size(99, 23);
             this.bSaveAsDefault.TabIndex = 98;
@@ -751,14 +826,14 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(407, 327);
+            this.ClientSize = new System.Drawing.Size(407, 391);
             this.Controls.Add(this.bSaveAsDefault);
             this.Controls.Add(this.tcApplication);
             this.Controls.Add(this.bCancel);
             this.Controls.Add(this.bOK);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(423, 365);
+            this.MinimumSize = new System.Drawing.Size(423, 429);
             this.Name = "ApplicationJobDialog";
             this.SavePosition = true;
             this.ShowIcon = false;
@@ -767,6 +842,8 @@
             this.Text = "New Application";
             this.pnlDownloadSource.ResumeLayout(false);
             this.pnlDownloadSource.PerformLayout();
+            this.pnlBeta.ResumeLayout(false);
+            this.pnlBeta.PerformLayout();
             this.pnlTarget.ResumeLayout(false);
             this.pnlTarget.PerformLayout();
             this.tcApplication.ResumeLayout(false);
@@ -814,10 +891,6 @@
         private System.Windows.Forms.CheckBox chkShareOnline;
         private System.Windows.Forms.Label lblSpoofReferer;
         private VariableTextBox txtSpoofReferer;
-        private System.Windows.Forms.RadioButton rbBetaDefault;
-        private System.Windows.Forms.Label lblBetaVersions;
-        private System.Windows.Forms.RadioButton rbAlwaysDownload;
-        private System.Windows.Forms.RadioButton rbBetaAvoid;
         private System.Windows.Forms.TabControl tcApplication;
         private System.Windows.Forms.TabPage tpApplication;
         private System.Windows.Forms.TabPage tpSettings;
@@ -848,5 +921,15 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutCommands;
         private System.Windows.Forms.Panel pnlCommandBefore;
         private System.Windows.Forms.Panel pnlCommandAfter;
+        private CDBurnerXP.Controls.Separator sepMiscellaneous;
+        private CDBurnerXP.Controls.Separator sepUpdateDetection;
+        private CDBurnerXP.Controls.Separator sepDownloads;
+        private System.Windows.Forms.Panel pnlBeta;
+        private System.Windows.Forms.RadioButton rbBetaAvoid;
+        private System.Windows.Forms.RadioButton rbAlwaysDownload;
+        private System.Windows.Forms.Label lblBetaVersions;
+        private System.Windows.Forms.RadioButton rbBetaDefault;
+        private VariableTextBox txtUserAgent;
+        private System.Windows.Forms.Label lblUserAgent;
     }
 }

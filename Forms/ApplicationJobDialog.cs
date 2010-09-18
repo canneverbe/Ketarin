@@ -62,6 +62,7 @@ namespace Ketarin.Forms
                 txtFixedUrl.ReadOnly = value;
                 txtTarget.ReadOnly = value;
                 txtSpoofReferer.ReadOnly = value;
+                txtUserAgent.ReadOnly = value;
                 txtFileHippoId.ReadOnly = value;
                 txtUseVariablesForChanges.ReadOnly = value;
                 cboCategory.Enabled = enable;
@@ -167,6 +168,7 @@ namespace Ketarin.Forms
             txtApplicationName.Text = m_ApplicationJob.Name;
             txtFixedUrl.Text = m_ApplicationJob.FixedDownloadUrl;
             txtTarget.Text = m_ApplicationJob.TargetPath;
+            txtUserAgent.Text = m_ApplicationJob.UserAgent;
             txtFileHippoId.Text = m_ApplicationJob.FileHippoId;
             rbFileHippo.Checked = (m_ApplicationJob.DownloadSourceType == ApplicationJob.SourceType.FileHippo);
             rbFixedUrl.Checked = (m_ApplicationJob.DownloadSourceType == ApplicationJob.SourceType.FixedUrl);
@@ -224,6 +226,7 @@ namespace Ketarin.Forms
             m_ApplicationJob.ExclusiveDownload = chkDownloadExclusively.Checked;
             m_ApplicationJob.ShareApplication = chkShareOnline.Checked;
             m_ApplicationJob.HttpReferer = txtSpoofReferer.Text;
+            m_ApplicationJob.UserAgent = txtUserAgent.Text;
             m_ApplicationJob.VariableChangeIndicator = txtUseVariablesForChanges.Text;
             m_ApplicationJob.CheckForUpdatesOnly = chkCheckForUpdatesOnly.Checked;
             m_ApplicationJob.IgnoreFileInformation = chkIgnoreFileInformation.Checked;
@@ -486,6 +489,7 @@ namespace Ketarin.Forms
             using (EditVariablesDialog dialog = new EditVariablesDialog(m_ApplicationJob))
             {
                 dialog.ReadOnly = ReadOnly;
+                dialog.UserAgent = txtUserAgent.Text;
                 if (dialog.ShowDialog(this) == DialogResult.OK) {
                     RefreshVariables();
                 }

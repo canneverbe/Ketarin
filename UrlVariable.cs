@@ -805,7 +805,8 @@ namespace Ketarin
 
             string page = string.Empty;
             // Get the content we need to put in
-            using (WebClient client = new WebClient())
+            string userAgent = (this.Parent == null) ? null : this.Parent.Parent.UserAgent;
+            using (WebClient client = new WebClient(userAgent))
             {
                 try
                 {

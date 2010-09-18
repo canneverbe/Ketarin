@@ -72,9 +72,14 @@ namespace Ketarin
         #endregion
 
         public WebClient()
+            : this(null)
+        {
+        }
+
+        public WebClient(string userAgent)
             : base()
         {
-            Headers.Add("User-Agent", UserAgent);
+            Headers.Add("User-Agent", userAgent ?? WebClient.UserAgent);
 
             // MS Bugfix - https://connect.microsoft.com/VisualStudio/feedback/details/386695/system-uri-incorrectly-strips-trailing-dots?wa=wsignin1.0#
             MethodInfo getSyntax = typeof(UriParser).GetMethod("GetSyntax", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic);
