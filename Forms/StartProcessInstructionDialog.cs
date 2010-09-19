@@ -88,7 +88,7 @@ namespace Ketarin.Forms
             // At least, a file name needs to be given
             if (string.IsNullOrEmpty(txtProgram.Text))
             {
-                MessageBox.Show(this, "You did not specify an application to start.\r\n\r\nSpecify an application in order to add the setup instruction.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.None);
+                MessageBox.Show(this, "You did not specify an application to start.\r\n\r\nSpecify an application in order to add the setup instruction.", System.Windows.Forms.Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.None);
                 DialogResult = DialogResult.None;
                 return;
             }

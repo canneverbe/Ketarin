@@ -74,6 +74,7 @@ namespace wyDay.Controls
                 if (m_SplitMenu != null)
                 {
                     m_SplitMenu.Popup -= new EventHandler(SplitMenu_Popup);
+                    m_SplitMenu.Collapse -= new EventHandler(value_Collapse);
                 }
 
                 //add the event handlers for the new SplitMenu
@@ -81,6 +82,7 @@ namespace wyDay.Controls
                 {
                     ShowSplit = true;
                     value.Popup += new EventHandler(SplitMenu_Popup);
+                    value.Collapse += new EventHandler(value_Collapse);
                 }
                 else
                     ShowSplit = false;
@@ -818,10 +820,14 @@ namespace wyDay.Controls
             }
         }
 
-
         void SplitMenu_Popup(object sender, EventArgs e)
         {
             isSplitMenuVisible = true;
+        }
+
+        void value_Collapse(object sender, EventArgs e)
+        {
+            isSplitMenuVisible = false;
         }
 
         protected override void WndProc(ref Message m)

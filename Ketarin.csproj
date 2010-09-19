@@ -90,6 +90,12 @@
     <Compile Include="Forms\ChooseAppsToInstallDialog.Designer.cs">
       <DependentUpon>ChooseAppsToInstallDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\CommandControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\CommandControl.Designer.cs">
+      <DependentUpon>CommandControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\CopyFileInstructionDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -107,6 +113,12 @@
     </Compile>
     <Compile Include="Forms\InstallingApplicationsDialog.Designer.cs">
       <DependentUpon>InstallingApplicationsDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\NewSnippetDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\NewSnippetDialog.Designer.cs">
+      <DependentUpon>NewSnippetDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\SetupInstructionListBoxPanel.cs">
       <SubType>UserControl</SubType>
@@ -240,6 +252,7 @@
     <Compile Include="Scintilla\Whitespace.cs" />
     <Compile Include="Scintilla\WhitespaceStringConverter.cs" />
     <Compile Include="Scintilla\XpmAdapter.cs" />
+    <Compile Include="ScriptType.cs" />
     <Compile Include="SetupInstruction.cs" />
     <Compile Include="m:\CsLib\CDBurnerXP\IO\Debug.cs">
       <Link>CDBurnerXP\Debug.cs</Link>
@@ -549,6 +562,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="SerializableDictionary.cs" />
+    <Compile Include="Snippet.cs" />
     <Compile Include="SplitButton.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -556,6 +570,7 @@
     <Compile Include="TargetPathInvalidException.cs" />
     <Compile Include="Updater.cs" />
     <Compile Include="UrlVariable.cs" />
+    <Compile Include="UserCSScript.cs" />
     <Compile Include="WebClient.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -636,6 +651,12 @@
     <None Include="Resources\LineColorHS.png" />
     <EmbeddedResource Include="Forms\ChooseAppsToInstallDialog.resx">
       <DependentUpon>ChooseAppsToInstallDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\CommandControl.resx">
+      <DependentUpon>CommandControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\NewSnippetDialog.resx">
+      <DependentUpon>NewSnippetDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="M:\CsLib\CDBurnerXP\Controls\AdvancedListBox.resx">
       <Link>CDBurnerXP\AdvancedListBox.resx</Link>

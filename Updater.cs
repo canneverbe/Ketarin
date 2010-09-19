@@ -891,27 +891,27 @@ namespace Ketarin
         /// Executes a given command for the given application (also resolves variables).
         /// </summary>
         /// <returns>Exit code of the command, if not run in background</returns>
-        private static int ExecuteCommand(ApplicationJob job, string baseCommand)
+        public static int ExecuteCommand(ApplicationJob job, string commandText)
         {
             // Ignore empty commands
-            if (string.IsNullOrEmpty(baseCommand)) return 0;
+            if (string.IsNullOrEmpty(commandText)) return 0;
 
-            baseCommand = baseCommand.Replace("\r\n", "\n");
+            commandText = commandText.Replace("\r\n", "\n");
 
             // Job specific data
             if (job != null)
             {
-                baseCommand = job.Variables.ReplaceAllInString(baseCommand);
+                commandText = job.Variables.ReplaceAllInString(commandText);
             }
             else
             {
-                baseCommand = UrlVariable.GlobalVariables.ReplaceAllInString(baseCommand);
+                commandText = UrlVariable.GlobalVariables.ReplaceAllInString(commandText);
             }
 
             // Replace variable: root
             try
             {
-                baseCommand = UrlVariable.Replace(baseCommand, "root", Path.GetPathRoot(Application.StartupPath));
+                commandText = UrlVariable.Replace(commandText, "root", Path.GetPathRoot(Application.StartupPath));
             }
             catch (ArgumentException) { }
 
@@ -923,8 +923,8 @@ namespace Ketarin
             cmdExe.RedirectStandardOutput = true;
             cmdExe.RedirectStandardError = true;
 
-            bool executeBackground = baseCommand.EndsWith("&");
-            baseCommand = baseCommand.TrimEnd('&');
+            bool executeBackground = commandText.EndsWith("&");
+            commandText = commandText.TrimEnd('&');
 
             using (Process proc = Process.Start(cmdExe))
             {
@@ -935,14 +935,19 @@ namespace Ketarin
                     {
                         if (!string.IsNullOrEmpty(outLine.Data)) commandResult.AppendLine(outLine.Data);
                     });
+                proc.ErrorDataReceived += new DataReceivedEventHandler(delegate(object sendingProcess, DataReceivedEventArgs outLine)
+                {
+                    if (!string.IsNullOrEmpty(outLine.Data)) commandResult.AppendLine(outLine.Data);
+                });
 
                 // Start the asynchronous read of the command output stream.
                 proc.BeginOutputReadLine();
+                proc.BeginErrorReadLine();
 
                 // Input commands
                 using (proc.StandardInput)
                 {
-                    string[] commands = baseCommand.Split('\n');
+                    string[] commands = commandText.Split('\n');
                     foreach (string command in commands)
                     {
                         if (!string.IsNullOrEmpty(command))

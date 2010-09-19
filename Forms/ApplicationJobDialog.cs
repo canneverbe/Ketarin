@@ -521,7 +521,7 @@ namespace Ketarin.Forms
         {
             StartProcessInstruction instruction = new StartProcessInstruction();
             instruction.Application = m_ApplicationJob;
-            if (InstructionBaseDialog.ShowDialog(this, instruction, txtExecuteAfter.VariableNames))
+            if (InstructionBaseDialog.ShowDialog(this, instruction, txtExecuteAfter.VariableNames, m_ApplicationJob))
             {
                 SetupInstructionListBoxPanel panel = new SetupInstructionListBoxPanel(instruction);
                 panel.VariableNames = txtExecuteAfter.VariableNames;
@@ -533,7 +533,7 @@ namespace Ketarin.Forms
         {
             CopyFileInstruction instruction = new CopyFileInstruction();
             instruction.Application = m_ApplicationJob;
-            if (InstructionBaseDialog.ShowDialog(this, instruction, txtExecuteAfter.VariableNames))
+            if (InstructionBaseDialog.ShowDialog(this, instruction, txtExecuteAfter.VariableNames, m_ApplicationJob))
             {
                 SetupInstructionListBoxPanel panel = new SetupInstructionListBoxPanel(instruction);
                 panel.VariableNames = txtExecuteAfter.VariableNames;
@@ -545,7 +545,7 @@ namespace Ketarin.Forms
         {
             CustomSetupInstruction instruction = new CustomSetupInstruction();
             instruction.Application = m_ApplicationJob;
-            if (InstructionBaseDialog.ShowDialog(this, instruction, txtExecuteAfter.VariableNames))
+            if (InstructionBaseDialog.ShowDialog(this, instruction, txtExecuteAfter.VariableNames, m_ApplicationJob))
             {
                 SetupInstructionListBoxPanel panel = new SetupInstructionListBoxPanel(instruction);
                 panel.VariableNames = txtExecuteAfter.VariableNames;

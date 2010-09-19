@@ -73,11 +73,11 @@
             this.tpCommands = new System.Windows.Forms.TabPage();
             this.tableLayoutCommands = new System.Windows.Forms.TableLayoutPanel();
             this.pnlCommandBefore = new System.Windows.Forms.Panel();
+            this.txtExecuteBefore = new Ketarin.Forms.CommandControl();
             this.lblCommandBefore = new System.Windows.Forms.Label();
-            this.txtExecuteBefore = new Ketarin.Forms.VariableTextBox();
             this.pnlCommandAfter = new System.Windows.Forms.Panel();
+            this.txtExecuteAfter = new Ketarin.Forms.CommandControl();
             this.lblExecuteCommand = new System.Windows.Forms.Label();
-            this.txtExecuteAfter = new Ketarin.Forms.VariableTextBox();
             this.tpInformation = new System.Windows.Forms.TabPage();
             this.txtNotes = new System.Windows.Forms.TextBox();
             this.lblNotes = new System.Windows.Forms.Label();
@@ -577,7 +577,7 @@
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.txtUseVariablesForChanges.Location = new System.Drawing.Point(259, 173);
             this.txtUseVariablesForChanges.Name = "txtUseVariablesForChanges";
-            this.txtUseVariablesForChanges.Size = new System.Drawing.Size(109, 20);
+            this.txtUseVariablesForChanges.Size = new System.Drawing.Size(109, 21);
             this.txtUseVariablesForChanges.TabIndex = 10;
             // 
             // lblUseVariableForChanges
@@ -618,14 +618,30 @@
             // 
             // pnlCommandBefore
             // 
-            this.pnlCommandBefore.Controls.Add(this.lblCommandBefore);
             this.pnlCommandBefore.Controls.Add(this.txtExecuteBefore);
+            this.pnlCommandBefore.Controls.Add(this.lblCommandBefore);
             this.pnlCommandBefore.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlCommandBefore.Location = new System.Drawing.Point(0, 3);
             this.pnlCommandBefore.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
             this.pnlCommandBefore.Name = "pnlCommandBefore";
             this.pnlCommandBefore.Size = new System.Drawing.Size(363, 141);
             this.pnlCommandBefore.TabIndex = 0;
+            // 
+            // txtExecuteBefore
+            // 
+            this.txtExecuteBefore.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtExecuteBefore.Application = null;
+            this.txtExecuteBefore.CommandText = "";
+            this.txtExecuteBefore.CommandType = Ketarin.ScriptType.Batch;
+            this.txtExecuteBefore.Location = new System.Drawing.Point(0, 16);
+            this.txtExecuteBefore.Margin = new System.Windows.Forms.Padding(0);
+            this.txtExecuteBefore.Name = "txtExecuteBefore";
+            this.txtExecuteBefore.ReadOnly = false;
+            this.txtExecuteBefore.Size = new System.Drawing.Size(363, 122);
+            this.txtExecuteBefore.TabIndex = 1;
+            this.txtExecuteBefore.VariableNames = new string[0];
             // 
             // lblCommandBefore
             // 
@@ -636,30 +652,29 @@
             this.lblCommandBefore.TabIndex = 0;
             this.lblCommandBefore.Text = "Execute the following command &before downloading:";
             // 
-            // txtExecuteBefore
-            // 
-            this.txtExecuteBefore.AcceptsReturn = true;
-            this.txtExecuteBefore.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtExecuteBefore.Location = new System.Drawing.Point(0, 16);
-            this.txtExecuteBefore.Multiline = true;
-            this.txtExecuteBefore.Name = "txtExecuteBefore";
-            this.txtExecuteBefore.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtExecuteBefore.Size = new System.Drawing.Size(363, 125);
-            this.txtExecuteBefore.TabIndex = 1;
-            this.txtExecuteBefore.WordWrap = false;
-            // 
             // pnlCommandAfter
             // 
-            this.pnlCommandAfter.Controls.Add(this.lblExecuteCommand);
             this.pnlCommandAfter.Controls.Add(this.txtExecuteAfter);
+            this.pnlCommandAfter.Controls.Add(this.lblExecuteCommand);
             this.pnlCommandAfter.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlCommandAfter.Location = new System.Drawing.Point(0, 147);
             this.pnlCommandAfter.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
             this.pnlCommandAfter.Name = "pnlCommandAfter";
             this.pnlCommandAfter.Size = new System.Drawing.Size(363, 147);
             this.pnlCommandAfter.TabIndex = 1;
+            // 
+            // txtExecuteAfter
+            // 
+            this.txtExecuteAfter.Application = null;
+            this.txtExecuteAfter.CommandText = "";
+            this.txtExecuteAfter.CommandType = Ketarin.ScriptType.Batch;
+            this.txtExecuteAfter.Location = new System.Drawing.Point(0, 21);
+            this.txtExecuteAfter.Margin = new System.Windows.Forms.Padding(0);
+            this.txtExecuteAfter.Name = "txtExecuteAfter";
+            this.txtExecuteAfter.ReadOnly = false;
+            this.txtExecuteAfter.Size = new System.Drawing.Size(363, 126);
+            this.txtExecuteAfter.TabIndex = 3;
+            this.txtExecuteAfter.VariableNames = new string[0];
             // 
             // lblExecuteCommand
             // 
@@ -669,20 +684,6 @@
             this.lblExecuteCommand.Size = new System.Drawing.Size(247, 13);
             this.lblExecuteCommand.TabIndex = 2;
             this.lblExecuteCommand.Text = "Execute the following command &after downloading:";
-            // 
-            // txtExecuteAfter
-            // 
-            this.txtExecuteAfter.AcceptsReturn = true;
-            this.txtExecuteAfter.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtExecuteAfter.Location = new System.Drawing.Point(0, 21);
-            this.txtExecuteAfter.Multiline = true;
-            this.txtExecuteAfter.Name = "txtExecuteAfter";
-            this.txtExecuteAfter.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtExecuteAfter.Size = new System.Drawing.Size(363, 126);
-            this.txtExecuteAfter.TabIndex = 3;
-            this.txtExecuteAfter.WordWrap = false;
             // 
             // tpInformation
             // 
@@ -897,9 +898,7 @@
         private System.Windows.Forms.Label lblUseVariableForChanges;
         private System.Windows.Forms.ComboBox txtUseVariablesForChanges;
         private System.Windows.Forms.TabPage tpCommands;
-        private VariableTextBox txtExecuteBefore;
         private System.Windows.Forms.Label lblCommandBefore;
-        private VariableTextBox txtExecuteAfter;
         private System.Windows.Forms.Label lblExecuteCommand;
         private System.Windows.Forms.CheckBox chkDownloadExclusively;
         private System.Windows.Forms.Button bSaveAsDefault;
@@ -931,5 +930,7 @@
         private System.Windows.Forms.RadioButton rbBetaDefault;
         private VariableTextBox txtUserAgent;
         private System.Windows.Forms.Label lblUserAgent;
+        private CommandControl txtExecuteBefore;
+        private CommandControl txtExecuteAfter;
     }
 }
