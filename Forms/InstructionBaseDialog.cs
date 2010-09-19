@@ -16,6 +16,15 @@ namespace Ketarin.Forms
         #region Properties
 
         /// <summary>
+        /// Gets or sets the currently edited application.
+        /// </summary>
+        public ApplicationJob Application
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
         /// Gets or sets the variable names to show
         /// within the context menu.
         /// </summary>
@@ -59,7 +68,7 @@ namespace Ketarin.Forms
         /// </summary>
         /// <param name="currentVariables">Currently used variables (for use in textboxes)</param>
         /// <returns>true, if the user did not cancel</returns>
-        public static bool ShowDialog(IWin32Window parent, SetupInstruction instruction, string[] currentVariables)
+        public static bool ShowDialog(IWin32Window parent, SetupInstruction instruction, string[] currentVariables, ApplicationJob application)
         {
             InstructionBaseDialog dialog = null;
 
@@ -78,6 +87,7 @@ namespace Ketarin.Forms
 
             if (dialog != null)
             {
+                dialog.Application = application;
                 dialog.SetupInstruction = instruction;
                 dialog.VariableNames = currentVariables;
                 if (dialog.ShowDialog(parent) == DialogResult.OK)

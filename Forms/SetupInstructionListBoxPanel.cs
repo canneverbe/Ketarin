@@ -156,7 +156,7 @@ namespace Ketarin.Forms
 
         private void EditInstruction()
         {
-            if (InstructionBaseDialog.ShowDialog(this, this.instruction, this.VariableNames))
+            if (InstructionBaseDialog.ShowDialog(this, this.instruction, this.VariableNames, this.instruction.Application))
             {
                 UpdateFromInstruction(instruction);
             }

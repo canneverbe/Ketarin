@@ -335,6 +335,16 @@ namespace Ketarin
                                         CONSTRAINT setuplists_applications_unique UNIQUE (ListGuid, JobGuid));";
                 command.ExecuteNonQuery();
             }
+            using (IDbCommand command = Connection.CreateCommand())
+            {
+                command.CommandText = @"CREATE TABLE IF NOT EXISTS snippets
+                                        (SnippetGuid         TEXT,
+                                         Name               TEXT,
+                                         Type               TEXT,
+                                         Text               TEXT,
+                                        CONSTRAINT snippets_unique UNIQUE (SnippetGuid));";
+                command.ExecuteNonQuery();
+            }
 
             // Upgrade tables
             List<string> columns = GetColumns("jobs");
@@ -700,6 +710,31 @@ namespace Ketarin
             }
 
             return categories.ToArray();
+        }
+
+        /// <summary>
+        /// Returns a list of all code snippets.
+        /// </summary>
+        public static Snippet[] GetSnippets()
+        {
+            List<Snippet> snippets = new List<Snippet>();
+
+            using (IDbCommand command = Connection.CreateCommand())
+            {
+                command.CommandText = "SELECT * FROM snippets ORDER BY Name";
+
+                using (IDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        Snippet appList = new Snippet();
+                        appList.Hydrate(reader);
+                        snippets.Add(appList);
+                    }
+                }
+            }
+
+            return snippets.ToArray();
         }
 
         /// <summary>

@@ -3407,6 +3407,22 @@ namespace ScintillaNet
             _ns.SendMessageDirect(Constants.SCI_LINESCROLL, 0, lineNum - firstLine);
         }
 
+        /// <summary>
+        /// Invokes the Select All command.
+        /// </summary>
+        public void SelectAll()
+        {
+            _ns.SendMessageDirect(Constants.SCI_SELECTALL);
+        }
+
+        /// <summary>
+        /// Invokes the Clear command.
+        /// </summary>
+        public void Clear()
+        {
+            _ns.ClearAll();
+        }
+
         #endregion
     }
 }

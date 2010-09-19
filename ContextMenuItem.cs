@@ -137,7 +137,7 @@ namespace Ketarin.Forms
         /// <param name="hmenu">Handle of a Win32 context menu</param>
         internal void InsertMenuItem(IntPtr hmenu)
         {
-            if (string.IsNullOrEmpty(Text))
+            if (string.IsNullOrEmpty(Text) || Text == "-")
             {
                 // Separator
                 User32.InsertMenu(hmenu, Position, (uint)(User32.MenuFlags.MF_BYPOSITION | User32.MenuFlags.MF_SEPARATOR), new IntPtr(User32.WM_USER + Id), null);

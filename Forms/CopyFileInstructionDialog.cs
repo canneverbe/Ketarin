@@ -73,14 +73,14 @@ namespace Ketarin.Forms
             // Both information must be given
             if (string.IsNullOrEmpty(txtSource.Text))
             {
-                MessageBox.Show(this, "You did not specify a source file to copy.\r\n\r\nSpecify a source file in order to add the setup instruction.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.None);
+                MessageBox.Show(this, "You did not specify a source file to copy.\r\n\r\nSpecify a source file in order to add the setup instruction.", System.Windows.Forms.Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.None);
                 DialogResult = DialogResult.None;
                 return;
             }
 
             if (string.IsNullOrEmpty(txtTarget.Text))
             {
-                MessageBox.Show(this, "You did not specify a target location for the file to copy.\r\n\r\nSpecify a target location in order to add the setup instruction.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.None);
+                MessageBox.Show(this, "You did not specify a target location for the file to copy.\r\n\r\nSpecify a target location in order to add the setup instruction.", System.Windows.Forms.Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.None);
                 DialogResult = DialogResult.None;
                 return;
             }
