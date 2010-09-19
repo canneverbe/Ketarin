@@ -996,6 +996,7 @@ namespace Ketarin
                 olvJobs.Bounds = new Rectangle(olvJobs.Left, olvJobs.Top, olvJobs.Width, olvJobs.Height + statusBar.Height);
                 bRun.Top = olvJobs.Bottom + 7;
                 bAddApplication.Top = olvJobs.Bottom + 7;
+                bInstall.Top = olvJobs.Bottom + 7;
             }
             else
             {
@@ -1005,6 +1006,7 @@ namespace Ketarin
                 olvJobs.Bounds = new Rectangle(olvJobs.Left, olvJobs.Top, olvJobs.Width, olvJobs.Height - statusBar.Height);
                 bRun.Top = olvJobs.Bottom + 7;
                 bAddApplication.Top = olvJobs.Bottom + 7;
+                bInstall.Top = olvJobs.Bottom + 7;
             }
         }
 

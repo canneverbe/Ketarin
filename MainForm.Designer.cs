@@ -534,10 +534,10 @@
             this.tbSelectedApplications,
             this.tbNumByStatus,
             this.tbTotalApplications});
-            this.statusBar.Location = new System.Drawing.Point(0, 282);
+            this.statusBar.Location = new System.Drawing.Point(0, 240);
             this.statusBar.Name = "statusBar";
             this.statusBar.Size = new System.Drawing.Size(682, 24);
-            this.statusBar.TabIndex = 5;
+            this.statusBar.TabIndex = 6;
             this.statusBar.Text = "statusBar";
             this.statusBar.Visible = false;
             // 
@@ -571,9 +571,8 @@
             this.bInstall.Location = new System.Drawing.Point(290, 228);
             this.bInstall.Name = "bInstall";
             this.bInstall.Size = new System.Drawing.Size(85, 24);
-            this.bInstall.TabIndex = 6;
+            this.bInstall.TabIndex = 5;
             this.bInstall.Text = "I&nstall...";
-            this.bInstall.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.bInstall.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.bInstall.UseVisualStyleBackColor = true;
             this.bInstall.Click += new System.EventHandler(this.bInstall_Click);
