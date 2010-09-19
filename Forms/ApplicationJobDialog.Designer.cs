@@ -68,7 +68,7 @@
             this.chkIgnoreFileInformation = new System.Windows.Forms.CheckBox();
             this.chkCheckForUpdatesOnly = new System.Windows.Forms.CheckBox();
             this.chkDownloadExclusively = new System.Windows.Forms.CheckBox();
-            this.txtUseVariablesForChanges = new Ketarin.Forms.VariableTextBox();
+            this.txtUseVariablesForChanges = new System.Windows.Forms.ComboBox();
             this.lblUseVariableForChanges = new System.Windows.Forms.Label();
             this.tpCommands = new System.Windows.Forms.TabPage();
             this.tableLayoutCommands = new System.Windows.Forms.TableLayoutPanel();
@@ -895,7 +895,7 @@
         private System.Windows.Forms.TabPage tpApplication;
         private System.Windows.Forms.TabPage tpSettings;
         private System.Windows.Forms.Label lblUseVariableForChanges;
-        private VariableTextBox txtUseVariablesForChanges;
+        private System.Windows.Forms.ComboBox txtUseVariablesForChanges;
         private System.Windows.Forms.TabPage tpCommands;
         private VariableTextBox txtExecuteBefore;
         private System.Windows.Forms.Label lblCommandBefore;

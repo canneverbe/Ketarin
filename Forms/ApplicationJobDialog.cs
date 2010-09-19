@@ -64,7 +64,7 @@ namespace Ketarin.Forms
                 txtSpoofReferer.ReadOnly = value;
                 txtUserAgent.ReadOnly = value;
                 txtFileHippoId.ReadOnly = value;
-                txtUseVariablesForChanges.ReadOnly = value;
+                txtUseVariablesForChanges.Enabled = value;
                 cboCategory.Enabled = enable;
                 chkDownloadExclusively.Enabled = enable;
                 chkDeletePrevious.Enabled = enable;
@@ -152,7 +152,8 @@ namespace Ketarin.Forms
             txtFixedUrl.SetVariableNames(new string[] { "category", "appname" }, appVarNames.ToArray());
             txtTarget.SetVariableNames(new string[] { "category", "appname" }, appVarNames.ToArray());
             txtSpoofReferer.SetVariableNames(new string[] { "category", "appname" }, appVarNames.ToArray());
-            txtUseVariablesForChanges.SetVariableNames(appVarNames.ToArray());
+            txtUseVariablesForChanges.Items.Clear();
+            txtUseVariablesForChanges.Items.AddRange(appVarNames.ToArray());
 
             foreach (SetupInstructionListBoxPanel panel in this.instructionsListBox.Panels)
             {
