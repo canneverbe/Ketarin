@@ -714,6 +714,15 @@ namespace Ketarin
             }
         }
 
+        private void cmnuInstall_Click(object sender, EventArgs e)
+        {
+            using (InstallingApplicationsDialog setupDialog = new InstallingApplicationsDialog())
+            {
+                setupDialog.Applications = olvJobs.SelectedApplications;
+                setupDialog.ShowDialog(this);
+            }
+        }
+
         private void cmuUpdate_Click(object sender, EventArgs e)
         {
             if (olvJobs.SelectedObjects.Count == 0)
@@ -722,12 +731,7 @@ namespace Ketarin
             }
             else
             {
-                List<ApplicationJob> jobs = new List<ApplicationJob>();
-                foreach (ApplicationJob job in olvJobs.SelectedObjects)
-                {
-                    jobs.Add(job);
-                }
-                RunJobs(jobs.ToArray(), false, false);
+                RunJobs(olvJobs.SelectedApplications, false, false);
             }
         }
 
@@ -761,6 +765,7 @@ namespace Ketarin
             cmnuRename.Enabled = cmnuOpenFile.Enabled;
             cmnuCopy.Enabled = (olvJobs.SelectedObjects.Count != 0);
             cmnuPaste.Enabled = SafeClipboard.IsDataPresent(DataFormats.Text);
+            cmnuInstall.Enabled = (!m_Updater.IsBusy);
         }
 
         private void cmnuRename_Click(object sender, EventArgs e)
@@ -792,19 +797,14 @@ namespace Ketarin
 
         private void cmnuCheckForUpdate_Click(object sender, EventArgs e)
         {
-            List<ApplicationJob> jobs = new List<ApplicationJob>();
-            foreach (ApplicationJob job in olvJobs.SelectedObjects)
-            {
-                jobs.Add(job);
-            }
-
-            if (jobs.Count == 0)
+            ApplicationJob[] jobs = olvJobs.SelectedApplications;
+            if (jobs.Length == 0)
             {
                 RunJobs(true, false);
             }
             else
             {
-                RunJobs(jobs.ToArray(), true, false);
+                RunJobs(jobs, true, false);
             }
         }
 

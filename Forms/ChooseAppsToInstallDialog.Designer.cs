@@ -41,15 +41,15 @@
             this.lblAppsInCurrentList = new System.Windows.Forms.Label();
             this.bNewList = new System.Windows.Forms.Button();
             this.bRemoveList = new System.Windows.Forms.Button();
-            this.splitButton1 = new wyDay.Controls.SplitButton();
+            this.bSelectApp = new wyDay.Controls.SplitButton();
             this.selectionMenu = new System.Windows.Forms.ContextMenu();
-            this.menuItem1 = new System.Windows.Forms.MenuItem();
-            this.menuItem2 = new System.Windows.Forms.MenuItem();
-            this.menuItem3 = new System.Windows.Forms.MenuItem();
-            this.menuItem4 = new System.Windows.Forms.MenuItem();
-            this.menuItem5 = new System.Windows.Forms.MenuItem();
+            this.mnuSelectAll = new System.Windows.Forms.MenuItem();
+            this.mnuSelectNone = new System.Windows.Forms.MenuItem();
+            this.mnuInvertSelection = new System.Windows.Forms.MenuItem();
+            this.sepNewList = new System.Windows.Forms.MenuItem();
+            this.mnuSaveAsNewList = new System.Windows.Forms.MenuItem();
             this.bAddApp = new System.Windows.Forms.Button();
-            this.button5 = new System.Windows.Forms.Button();
+            this.bRemoveApp = new System.Windows.Forms.Button();
             this.tableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel1 = new System.Windows.Forms.Panel();
@@ -169,6 +169,7 @@
             this.olvApps.View = System.Windows.Forms.View.Details;
             this.olvApps.VirtualMode = true;
             this.olvApps.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.olvApps_ItemDrag);
+            this.olvApps.SelectedIndexChanged += new System.EventHandler(this.olvApps_SelectedIndexChanged);
             // 
             // colAppsName
             // 
@@ -218,51 +219,56 @@
             this.bRemoveList.UseVisualStyleBackColor = true;
             this.bRemoveList.Click += new System.EventHandler(this.bRemoveList_Click);
             // 
-            // splitButton1
+            // bSelectApp
             // 
-            this.splitButton1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.splitButton1.AutoSize = true;
-            this.splitButton1.Location = new System.Drawing.Point(138, 302);
-            this.splitButton1.Name = "splitButton1";
-            this.splitButton1.Size = new System.Drawing.Size(80, 23);
-            this.splitButton1.SplitMenu = this.selectionMenu;
-            this.splitButton1.TabIndex = 4;
-            this.splitButton1.Text = "Sele&ction";
-            this.splitButton1.UseVisualStyleBackColor = true;
+            this.bSelectApp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.bSelectApp.AutoSize = true;
+            this.bSelectApp.Location = new System.Drawing.Point(138, 302);
+            this.bSelectApp.Name = "bSelectApp";
+            this.bSelectApp.SeparateDropdownButton = false;
+            this.bSelectApp.Size = new System.Drawing.Size(80, 23);
+            this.bSelectApp.SplitMenu = this.selectionMenu;
+            this.bSelectApp.TabIndex = 4;
+            this.bSelectApp.Text = "Sele&ction";
+            this.bSelectApp.UseVisualStyleBackColor = true;
             // 
             // selectionMenu
             // 
             this.selectionMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-            this.menuItem1,
-            this.menuItem2,
-            this.menuItem3,
-            this.menuItem4,
-            this.menuItem5});
+            this.mnuSelectAll,
+            this.mnuSelectNone,
+            this.mnuInvertSelection,
+            this.sepNewList,
+            this.mnuSaveAsNewList});
             // 
-            // menuItem1
+            // mnuSelectAll
             // 
-            this.menuItem1.Index = 0;
-            this.menuItem1.Text = "Select &all";
+            this.mnuSelectAll.Index = 0;
+            this.mnuSelectAll.Text = "Select &all";
+            this.mnuSelectAll.Click += new System.EventHandler(this.mnuSelectAll_Click);
             // 
-            // menuItem2
+            // mnuSelectNone
             // 
-            this.menuItem2.Index = 1;
-            this.menuItem2.Text = "Select n&one";
+            this.mnuSelectNone.Index = 1;
+            this.mnuSelectNone.Text = "Select &none";
+            this.mnuSelectNone.Click += new System.EventHandler(this.mnuSelectNone_Click);
             // 
-            // menuItem3
+            // mnuInvertSelection
             // 
-            this.menuItem3.Index = 2;
-            this.menuItem3.Text = "In&vert selection";
+            this.mnuInvertSelection.Index = 2;
+            this.mnuInvertSelection.Text = "In&vert selection";
+            this.mnuInvertSelection.Click += new System.EventHandler(this.mnuInvertSelection_Click);
             // 
-            // menuItem4
+            // sepNewList
             // 
-            this.menuItem4.Index = 3;
-            this.menuItem4.Text = "-";
+            this.sepNewList.Index = 3;
+            this.sepNewList.Text = "-";
             // 
-            // menuItem5
+            // mnuSaveAsNewList
             // 
-            this.menuItem5.Index = 4;
-            this.menuItem5.Text = "Save as &new list...";
+            this.mnuSaveAsNewList.Index = 4;
+            this.mnuSaveAsNewList.Text = "&Save as new list...";
+            this.mnuSaveAsNewList.Click += new System.EventHandler(this.mnuSaveAsNewList_Click);
             // 
             // bAddApp
             // 
@@ -275,15 +281,17 @@
             this.bAddApp.UseVisualStyleBackColor = true;
             this.bAddApp.Click += new System.EventHandler(this.bAddApp_Click);
             // 
-            // button5
+            // bRemoveApp
             // 
-            this.button5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button5.Location = new System.Drawing.Point(69, 302);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(63, 23);
-            this.button5.TabIndex = 3;
-            this.button5.Text = "Re&move";
-            this.button5.UseVisualStyleBackColor = true;
+            this.bRemoveApp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.bRemoveApp.Enabled = false;
+            this.bRemoveApp.Location = new System.Drawing.Point(69, 302);
+            this.bRemoveApp.Name = "bRemoveApp";
+            this.bRemoveApp.Size = new System.Drawing.Size(63, 23);
+            this.bRemoveApp.TabIndex = 3;
+            this.bRemoveApp.Text = "Re&move";
+            this.bRemoveApp.UseVisualStyleBackColor = true;
+            this.bRemoveApp.Click += new System.EventHandler(this.bRemoveApp_Click);
             // 
             // tableLayoutPanel
             // 
@@ -306,8 +314,8 @@
             // 
             this.panel2.Controls.Add(this.lblAppsInCurrentList);
             this.panel2.Controls.Add(this.olvApps);
-            this.panel2.Controls.Add(this.splitButton1);
-            this.panel2.Controls.Add(this.button5);
+            this.panel2.Controls.Add(this.bSelectApp);
+            this.panel2.Controls.Add(this.bRemoveApp);
             this.panel2.Controls.Add(this.bAddApp);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel2.Location = new System.Drawing.Point(292, 0);
@@ -369,16 +377,16 @@
         private CDBurnerXP.Controls.OLVColumn colListName;
         private CDBurnerXP.Controls.OLVColumn colListAppNames;
         private System.Windows.Forms.ImageList imlLists;
-        private wyDay.Controls.SplitButton splitButton1;
+        private wyDay.Controls.SplitButton bSelectApp;
         private System.Windows.Forms.Button bAddApp;
-        private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.Button bRemoveApp;
         private System.Windows.Forms.ContextMenu selectionMenu;
         private CDBurnerXP.Controls.OLVColumn colAppsName;
-        private System.Windows.Forms.MenuItem menuItem1;
-        private System.Windows.Forms.MenuItem menuItem2;
-        private System.Windows.Forms.MenuItem menuItem3;
-        private System.Windows.Forms.MenuItem menuItem4;
-        private System.Windows.Forms.MenuItem menuItem5;
+        private System.Windows.Forms.MenuItem mnuSelectAll;
+        private System.Windows.Forms.MenuItem mnuSelectNone;
+        private System.Windows.Forms.MenuItem mnuInvertSelection;
+        private System.Windows.Forms.MenuItem sepNewList;
+        private System.Windows.Forms.MenuItem mnuSaveAsNewList;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Panel panel1;

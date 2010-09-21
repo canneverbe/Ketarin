@@ -847,6 +847,11 @@ namespace Ketarin
                         return Replace(value, match.Groups[1].Value);
                     }
                 }
+                else
+                {
+                    // No regex match should yield an empty result
+                    return Replace(value, string.Empty);
+                }
             }
 
             // Use whole page if either start or end is missing

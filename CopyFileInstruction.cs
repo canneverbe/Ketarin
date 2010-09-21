@@ -8,6 +8,7 @@ namespace Ketarin
     /// <summary>
     /// Copies a file to a specified location.
     /// </summary>
+    [Serializable()]
     public class CopyFileInstruction : SetupInstruction
     {
         /// <summary>

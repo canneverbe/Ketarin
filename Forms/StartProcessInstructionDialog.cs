@@ -102,7 +102,10 @@ namespace Ketarin.Forms
             this.instruction.Parameters = txtParameters.Text;
             foreach (VariableInfo var in this.variables)
             {
-                this.instruction.EnvironmentVariables[var.Name] = var.Value;
+                if (!string.IsNullOrEmpty(var.Value))
+                {
+                    this.instruction.EnvironmentVariables[var.Name] = var.Value;
+                }
             }
         }
     }

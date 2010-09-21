@@ -402,7 +402,8 @@ namespace Ketarin
                 }
 
                 string postUpdateCommand = Settings.GetValue("PostUpdateCommand", "") as string;
-                ExecuteCommand(null, postUpdateCommand);
+                ScriptType postUpdateCommandType = Command.ConvertToScriptType(Settings.GetValue("PostUpdateCommandType", ScriptType.Batch.ToString()) as string);
+                new Command(postUpdateCommand, postUpdateCommandType).Execute(null);
 
                 LogDialog.Log("Update finished");
             }
@@ -727,12 +728,13 @@ namespace Ketarin
                 }
 
                 string defaultPreCommand = Settings.GetValue("PreUpdateCommand", "") as string;
-                if (ExecuteCommand(job, defaultPreCommand) == 1)
+                ScriptType defaultPreCommandType = Command.ConvertToScriptType(Settings.GetValue("PreUpdateCommandType", ScriptType.Batch.ToString()) as string);
+                if (new Command(defaultPreCommand, defaultPreCommandType).Execute(job) == 1)
                 {
                     LogDialog.Log(job, "Default pre-update command returned '1', download skipped");
                     throw new CommandErrorException();
                 }
-                if (ExecuteCommand(job, job.ExecutePreCommand) == 1)
+                if (new Command(job.ExecutePreCommand, job.ExecutePreCommandType).Execute(job) == 1)
                 {
                     LogDialog.Log(job, "Pre-update command returned '1', download skipped");
                     throw new CommandErrorException();
@@ -829,12 +831,13 @@ namespace Ketarin
 
             // Execute a default command?
             string defaultCommand = Settings.GetValue("DefaultCommand") as string;
-            ExecuteCommand(job, defaultCommand);
+            ScriptType defaultCommandType = Command.ConvertToScriptType(Settings.GetValue("DefaultCommandType") as string);
+            new Command(defaultCommand, defaultCommandType).Execute(job);
 
             // Do we need to execute a command after downloading?
             if (!string.IsNullOrEmpty(job.ExecuteCommand))
             {
-                ExecuteCommand(job, job.ExecuteCommand);
+                new Command(job.ExecuteCommand, job.ExecuteCommandType).Execute(job);
             }
 
             return Status.UpdateSuccessful;
@@ -885,93 +888,6 @@ namespace Ketarin
             }
 
             return -1;
-        }
-
-        /// <summary>
-        /// Executes a given command for the given application (also resolves variables).
-        /// </summary>
-        /// <returns>Exit code of the command, if not run in background</returns>
-        public static int ExecuteCommand(ApplicationJob job, string commandText)
-        {
-            // Ignore empty commands
-            if (string.IsNullOrEmpty(commandText)) return 0;
-
-            commandText = commandText.Replace("\r\n", "\n");
-
-            // Job specific data
-            if (job != null)
-            {
-                commandText = job.Variables.ReplaceAllInString(commandText);
-            }
-            else
-            {
-                commandText = UrlVariable.GlobalVariables.ReplaceAllInString(commandText);
-            }
-
-            // Replace variable: root
-            try
-            {
-                commandText = UrlVariable.Replace(commandText, "root", Path.GetPathRoot(Application.StartupPath));
-            }
-            catch (ArgumentException) { }
-
-            // Feed cmd.exe with our commands
-            ProcessStartInfo cmdExe = new ProcessStartInfo("cmd.exe");
-            cmdExe.RedirectStandardInput = true;
-            cmdExe.UseShellExecute = false;
-            cmdExe.CreateNoWindow = true;
-            cmdExe.RedirectStandardOutput = true;
-            cmdExe.RedirectStandardError = true;
-
-            bool executeBackground = commandText.EndsWith("&");
-            commandText = commandText.TrimEnd('&');
-
-            using (Process proc = Process.Start(cmdExe))
-            {
-                StringBuilder commandResult = new StringBuilder();
-
-                // Set the event handler to asynchronously read the command output.
-                proc.OutputDataReceived += new DataReceivedEventHandler(delegate(object sendingProcess, DataReceivedEventArgs outLine)
-                    {
-                        if (!string.IsNullOrEmpty(outLine.Data)) commandResult.AppendLine(outLine.Data);
-                    });
-                proc.ErrorDataReceived += new DataReceivedEventHandler(delegate(object sendingProcess, DataReceivedEventArgs outLine)
-                {
-                    if (!string.IsNullOrEmpty(outLine.Data)) commandResult.AppendLine(outLine.Data);
-                });
-
-                // Start the asynchronous read of the command output stream.
-                proc.BeginOutputReadLine();
-                proc.BeginErrorReadLine();
-
-                // Input commands
-                using (proc.StandardInput)
-                {
-                    string[] commands = commandText.Split('\n');
-                    foreach (string command in commands)
-                    {
-                        if (!string.IsNullOrEmpty(command))
-                        {
-                            LogDialog.Log(job, "Executing command: " + command);
-                        }
-                        proc.StandardInput.WriteLine(command);
-                    }
-                }
-
-                // Read output
-                if (!executeBackground)
-                {
-                    proc.WaitForExit();
-                    string commandResultString = commandResult.ToString();
-                    if (!string.IsNullOrEmpty(commandResultString))
-                    {
-                        LogDialog.Log(job, "Command result: " + commandResultString);
-                    }
-                    return proc.ExitCode;
-                }
-            }
-
-            return 0;
         }
 
         /// <summary>

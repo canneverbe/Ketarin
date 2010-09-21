@@ -15,6 +15,8 @@ namespace Ketarin.Forms
 {
     public partial class SettingsDialog : Form
     {
+        private int currentSelectedCommandEvent = -1;
+
         #region Properties
 
         /// <summary>
@@ -72,6 +74,8 @@ namespace Ketarin.Forms
             base.OnLoad(e);
 
             LoadSettings();
+
+            cboCommandEvent.SelectedIndex = 0;
         }
 
         /// <summary>
@@ -79,10 +83,6 @@ namespace Ketarin.Forms
         /// </summary>
         private void LoadSettings()
         {
-            txtPostUpdateCommand.Text = Settings.GetValue("DefaultCommand", "") as string;
-            txtPostUpdateAllCommand.Text = Settings.GetValue("PostUpdateCommand", "") as string;
-            txtPreUpdateCommand.Text = Settings.GetValue("PreUpdateCommand", "") as string;
-
             chkUpdateAtStartup.Checked = (bool)Settings.GetValue("UpdateAtStartup", false);
             chkBackups.Checked = (bool)Settings.GetValue("CreateDatabaseBackups", true);
             txtCustomColumn.Text = Settings.GetValue("CustomColumn", "") as string;
@@ -105,9 +105,7 @@ namespace Ketarin.Forms
 
         private void bOK_Click(object sender, EventArgs e)
         {
-            Settings.SetValue("DefaultCommand", txtPostUpdateCommand.Text);
-            Settings.SetValue("PostUpdateCommand", txtPostUpdateAllCommand.Text);
-            Settings.SetValue("PreUpdateCommand", txtPreUpdateCommand.Text);
+            SaveCurrentCommand();
 
             Settings.SetValue("UpdateAtStartup", chkUpdateAtStartup.Checked);
             Settings.SetValue("CustomColumn", txtCustomColumn.Text);
@@ -270,6 +268,61 @@ namespace Ketarin.Forms
                 
                 UrlVariable.GlobalVariables.Remove(current.Name);
             }
+        }
+
+        #endregion
+
+        #region Commands
+
+        /// <summary>
+        /// Saves the command that is currently being edited to the database.
+        /// </summary>
+        private void SaveCurrentCommand()
+        {
+            switch (this.currentSelectedCommandEvent)
+            {
+                case 0:
+                    Settings.SetValue("PreUpdateCommand", commandControl.Text);
+                    Settings.SetValue("PreUpdateCommandType", commandControl.CommandType.ToString());
+                    break;
+
+                case 1:
+                    Settings.SetValue("DefaultCommand", commandControl.Text);
+                    Settings.SetValue("DefaultCommandType", commandControl.CommandType.ToString());
+                    break;
+
+                case 2:
+                    Settings.SetValue("PostUpdateCommand", commandControl.Text);
+                    Settings.SetValue("PostUpdateCommandType", commandControl.CommandType.ToString());
+                    break;
+            }            
+        }
+
+        private void cboCommandEvent_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // Save current command
+            SaveCurrentCommand();
+
+            // Load other command
+            switch (cboCommandEvent.SelectedIndex)
+            {
+                case 0:                    
+                    commandControl.Text = Settings.GetValue("PreUpdateCommand", "") as string;
+                    commandControl.CommandType = Command.ConvertToScriptType(Settings.GetValue("PreUpdateCommandType", ScriptType.Batch.ToString()) as string);
+                    break;
+
+                case 1:
+                    commandControl.Text = Settings.GetValue("DefaultCommand", "") as string;
+                    commandControl.CommandType = Command.ConvertToScriptType(Settings.GetValue("DefaultCommandType", ScriptType.Batch.ToString()) as string);
+                    break;
+
+                case 2:
+                    commandControl.Text = Settings.GetValue("PostUpdateCommand", "") as string;
+                    commandControl.CommandType = Command.ConvertToScriptType(Settings.GetValue("PostUpdateCommandType", ScriptType.Batch.ToString()) as string);
+                    break;
+            }
+
+            this.currentSelectedCommandEvent = cboCommandEvent.SelectedIndex;
         }
 
         #endregion

@@ -37,8 +37,6 @@ namespace Ketarin
         private string m_PreviousLocation = string.Empty;
         private SourceType m_SourceType = SourceType.FixedUrl;
         private UrlVariableCollection m_Variables = null;
-        private string m_ExecutePostCommand = string.Empty;
-        private string m_ExecutePreCommand = string.Empty;
         private string m_Category = string.Empty;
         private Guid m_Guid = Guid.Empty;
         private bool m_CanBeShared = true;
@@ -472,8 +470,8 @@ namespace Ketarin
         [XmlElement("ExecuteCommand")]
         public string ExecuteCommand
         {
-            get { return m_ExecutePostCommand; }
-            set { m_ExecutePostCommand = value; }
+            get;
+            set;
         }
 
         /// <summary>
@@ -483,8 +481,28 @@ namespace Ketarin
         [XmlElement("ExecutePreCommand")]
         public string ExecutePreCommand
         {
-            get { return m_ExecutePreCommand; }
-            set { m_ExecutePreCommand = value; }
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Gets or sets the type of the post download command.
+        /// </summary>
+        [XmlElement("ExecuteCommandType")]
+        public ScriptType ExecuteCommandType
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Gets or sets the type of the pre download command.
+        /// </summary>
+        [XmlElement("ExecutePreCommandType")]
+        public ScriptType ExecutePreCommandType
+        {
+            get;
+            set;
         }
 
         [XmlElement("Category")]
@@ -614,6 +632,8 @@ namespace Ketarin
         public ApplicationJob()
         {
             m_Variables = new ApplicationJob.UrlVariableCollection(this);
+            ExecuteCommandType = ScriptType.Batch;
+            ExecutePreCommandType = ScriptType.Batch;
         }
 
         /// <summary>
@@ -1091,7 +1111,9 @@ namespace Ketarin
                                                    IgnoreFileInformation = @IgnoreFileInformation,
                                                    UserNotes = @UserNotes,
                                                    WebsiteUrl = @WebsiteUrl,
-                                                   UserAgent = @UserAgent
+                                                   UserAgent = @UserAgent,
+                                                   ExecuteCommandType = @ExecuteCommandType,
+                                                   ExecutePreCommandType = @ExecutePreCommandType
                                              WHERE JobGuid = @JobGuid";
 
                             command.Parameters.Add(new SQLiteParameter("@ApplicationName", Name));
@@ -1103,7 +1125,7 @@ namespace Ketarin
                             command.Parameters.Add(new SQLiteParameter("@DeletePreviousFile", m_DeletePreviousFile));
                             command.Parameters.Add(new SQLiteParameter("@PreviousLocation", m_PreviousLocation));
                             command.Parameters.Add(new SQLiteParameter("@SourceType", m_SourceType));
-                            command.Parameters.Add(new SQLiteParameter("@ExecuteCommand", m_ExecutePostCommand));
+                            command.Parameters.Add(new SQLiteParameter("@ExecuteCommand", ExecuteCommand));
                             command.Parameters.Add(new SQLiteParameter("@ExecutePreCommand", ExecutePreCommand));
                             command.Parameters.Add(new SQLiteParameter("@Category", m_Category));
                             command.Parameters.Add(new SQLiteParameter("@CanBeShared", m_CanBeShared));
@@ -1122,6 +1144,8 @@ namespace Ketarin
                             command.Parameters.Add(new SQLiteParameter("@UserNotes", UserNotes));
                             command.Parameters.Add(new SQLiteParameter("@WebsiteUrl", WebsiteUrl));
                             command.Parameters.Add(new SQLiteParameter("@UserAgent", UserAgent));
+                            command.Parameters.Add(new SQLiteParameter("@ExecuteCommandType", ExecuteCommandType));
+                            command.Parameters.Add(new SQLiteParameter("@ExecutePreCommandType", ExecutePreCommandType));
 
                             if (DownloadDate.HasValue)
                             {
@@ -1166,6 +1190,7 @@ namespace Ketarin
                             int pos = 0;
                             foreach (SetupInstruction instruction in this.setupInstructions)
                             {
+                                instruction.Application = this;
                                 instruction.Save(transaction, pos++);
                             }
                         }
@@ -1187,8 +1212,8 @@ namespace Ketarin
             m_DeletePreviousFile = Convert.ToBoolean(reader["DeletePreviousFile"]);
             m_PreviousLocation = reader["PreviousLocation"] as string;
             m_SourceType = (SourceType)Convert.ToByte(reader["SourceType"]);
-            m_ExecutePostCommand = reader["ExecuteCommand"] as string;
-            m_ExecutePreCommand = reader["ExecutePreCommand"] as string;
+            ExecuteCommand = reader["ExecuteCommand"] as string;
+            ExecutePreCommand = reader["ExecutePreCommand"] as string;
             m_Category = reader["Category"] as string;
             m_CanBeShared = Convert.ToBoolean(reader["CanBeShared"]);
             m_ShareApplication = Convert.ToBoolean(reader["ShareApplication"]);
@@ -1205,6 +1230,18 @@ namespace Ketarin
             UserNotes = reader["UserNotes"] as string;
             WebsiteUrl = reader["WebsiteUrl"] as string;
             UserAgent = reader["UserAgent"] as string;
+            
+            string executeCommandType = reader["ExecuteCommandType"] as string;
+            if (executeCommandType != null)
+            {
+                ExecuteCommandType = Command.ConvertToScriptType(executeCommandType);
+            }
+
+            string executePreCommandType = reader["ExecutePreCommandType"] as string;
+            if (executePreCommandType != null)
+            {
+                ExecutePreCommandType = Command.ConvertToScriptType(executePreCommandType);
+            }
 
             if (reader["DownloadBeta"] != DBNull.Value)
             {

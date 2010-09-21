@@ -94,6 +94,7 @@
             this.bInstall = new wyDay.Controls.SplitButton();
             this.bRun = new wyDay.Controls.SplitButton();
             this.bAddApplication = new wyDay.Controls.SplitButton();
+            this.cmnuInstall = new System.Windows.Forms.MenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.olvJobs)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.m_VistaMenu)).BeginInit();
             this.statusBar.SuspendLayout();
@@ -111,6 +112,7 @@
             this.cmnuUpdate,
             this.cmnuCheckForUpdate,
             this.cmnuForceDownload,
+            this.cmnuInstall,
             this.cmnuSepUpdates,
             this.cmnuOpenFile,
             this.cmnuOpenFolder,
@@ -149,26 +151,26 @@
             // 
             // cmnuSepUpdates
             // 
-            this.cmnuSepUpdates.Index = 3;
+            this.cmnuSepUpdates.Index = 4;
             this.cmnuSepUpdates.Text = "-";
             // 
             // cmnuOpenFile
             // 
             this.cmnuOpenFile.Enabled = false;
-            this.cmnuOpenFile.Index = 4;
+            this.cmnuOpenFile.Index = 5;
             this.cmnuOpenFile.Text = "&Open file";
             this.cmnuOpenFile.Click += new System.EventHandler(this.cmnuOpenFile_Click);
             // 
             // cmnuOpenFolder
             // 
-            this.cmnuOpenFolder.Index = 5;
+            this.cmnuOpenFolder.Index = 6;
             this.cmnuOpenFolder.Text = "Ope&n folder";
             this.cmnuOpenFolder.Click += new System.EventHandler(this.cmnuOpenFolder_Click);
             // 
             // cmnuProperties
             // 
             this.cmnuProperties.Enabled = false;
-            this.cmnuProperties.Index = 6;
+            this.cmnuProperties.Index = 7;
             this.cmnuProperties.Shortcut = System.Windows.Forms.Shortcut.F9;
             this.cmnuProperties.Text = "File propertie&s";
             this.cmnuProperties.Click += new System.EventHandler(this.cmnuProperties_Click);
@@ -176,56 +178,56 @@
             // cmnuRename
             // 
             this.cmnuRename.Enabled = false;
-            this.cmnuRename.Index = 7;
+            this.cmnuRename.Index = 8;
             this.cmnuRename.Shortcut = System.Windows.Forms.Shortcut.F2;
             this.cmnuRename.Text = "&Rename file";
             this.cmnuRename.Click += new System.EventHandler(this.cmnuRename_Click);
             // 
             // menuItem4
             // 
-            this.menuItem4.Index = 8;
+            this.menuItem4.Index = 9;
             this.menuItem4.Text = "-";
             // 
             // cmnuEdit
             // 
             this.cmnuEdit.DefaultItem = true;
             this.cmnuEdit.Enabled = false;
-            this.cmnuEdit.Index = 9;
+            this.cmnuEdit.Index = 10;
             this.cmnuEdit.Text = "&Edit";
             this.cmnuEdit.Click += new System.EventHandler(this.cmnuEdit_Click);
             // 
             // cmnuDelete
             // 
             this.cmnuDelete.Enabled = false;
-            this.cmnuDelete.Index = 10;
+            this.cmnuDelete.Index = 11;
             this.cmnuDelete.Shortcut = System.Windows.Forms.Shortcut.Del;
             this.cmnuDelete.Text = "&Delete";
             this.cmnuDelete.Click += new System.EventHandler(this.cmnuDelete_Click);
             // 
             // cmnuCopy
             // 
-            this.cmnuCopy.Index = 11;
+            this.cmnuCopy.Index = 12;
             this.cmnuCopy.Shortcut = System.Windows.Forms.Shortcut.CtrlC;
             this.cmnuCopy.Text = "&Copy";
             this.cmnuCopy.Click += new System.EventHandler(this.cmnuCopy_Click);
             // 
             // cmnuPaste
             // 
-            this.cmnuPaste.Index = 12;
+            this.cmnuPaste.Index = 13;
             this.cmnuPaste.Shortcut = System.Windows.Forms.Shortcut.CtrlV;
             this.cmnuPaste.Text = "&Paste";
             this.cmnuPaste.Click += new System.EventHandler(this.cmnuPaste_Click);
             // 
             // mnuSelectAll
             // 
-            this.mnuSelectAll.Index = 13;
+            this.mnuSelectAll.Index = 14;
             this.mnuSelectAll.Shortcut = System.Windows.Forms.Shortcut.CtrlA;
             this.mnuSelectAll.Text = "Select &all";
             this.mnuSelectAll.Click += new System.EventHandler(this.mnuSelectAll_Click);
             // 
             // mnuInvert
             // 
-            this.mnuInvert.Index = 14;
+            this.mnuInvert.Index = 15;
             this.mnuInvert.Shortcut = System.Windows.Forms.Shortcut.CtrlI;
             this.mnuInvert.Text = "In&vert selection";
             this.mnuInvert.Click += new System.EventHandler(this.mnuInvert_Click);
@@ -607,6 +609,12 @@
             this.bAddApplication.UseVisualStyleBackColor = true;
             this.bAddApplication.Click += new System.EventHandler(this.sbAddApplication_Click);
             // 
+            // cmnuInstall
+            // 
+            this.cmnuInstall.Index = 3;
+            this.cmnuInstall.Text = "&Install";
+            this.cmnuInstall.Click += new System.EventHandler(this.cmnuInstall_Click);
+            // 
             // MainForm
             // 
             this.AllowDrop = true;
@@ -699,6 +707,7 @@
         private System.Windows.Forms.ToolStripStatusLabel tbNumByStatus;
         private System.Windows.Forms.MenuItem cmnuProperties;
         private wyDay.Controls.SplitButton bInstall;
+        private System.Windows.Forms.MenuItem cmnuInstall;
     }
 }
 

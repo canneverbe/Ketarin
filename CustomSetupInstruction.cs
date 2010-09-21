@@ -9,6 +9,7 @@ namespace Ketarin
     /// <summary>
     /// Represents a custom setup instruction (C#) code.
     /// </summary>
+    [Serializable()]
     public class CustomSetupInstruction : SetupInstruction
     {
         #region Properties
@@ -40,15 +41,7 @@ namespace Ketarin
 
         public override void Execute()
         {
-            if (Type == ScriptType.CS)
-            {
-                UserCSScript script = new UserCSScript(Code);
-                script.Execute(this.Application);
-            }
-            else
-            {
-                Updater.ExecuteCommand(this.Application, Code);
-            }
+            new Command(this.Code, this.Type).Execute(this.Application);
         }
 
         public override string ToString()

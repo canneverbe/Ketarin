@@ -242,7 +242,7 @@
             this.txtCode.Styles.LastPredefined.FontName = "Verdana";
             this.txtCode.Styles.LineNumber.FontName = "Verdana";
             this.txtCode.Styles.Max.FontName = "Verdana";
-            this.txtCode.TabIndex = 1;
+            this.txtCode.TabIndex = 0;
             // 
             // bCommand
             // 
@@ -253,7 +253,7 @@
             this.bCommand.SeparateDropdownButton = false;
             this.bCommand.Size = new System.Drawing.Size(82, 23);
             this.bCommand.SplitMenu = this.cmnuCommand;
-            this.bCommand.TabIndex = 0;
+            this.bCommand.TabIndex = 1;
             this.bCommand.Text = "&Command";
             this.bCommand.UseVisualStyleBackColor = true;
             // 
