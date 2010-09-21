@@ -55,7 +55,7 @@ namespace Ketarin
         internal void Hydrate(IDataReader reader)
         {
             this.Name = reader["Name"] as string;
-            this.Type = (ScriptType)Enum.Parse(typeof(ScriptType), reader["Type"] as string);
+            this.Type = Command.ConvertToScriptType(reader["Type"] as string);
             this.Text = reader["Text"] as string;
             this.Guid = new Guid(reader["SnippetGuid"] as string);
         }

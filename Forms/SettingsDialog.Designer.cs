@@ -66,12 +66,9 @@
             this.tpConnection = new System.Windows.Forms.TabPage();
             this.sepProxy = new CDBurnerXP.Controls.Separator();
             this.tpCommands = new System.Windows.Forms.TabPage();
-            this.txtPreUpdateCommand = new Ketarin.Forms.TextBox();
-            this.lblPreUpdateCommand = new System.Windows.Forms.Label();
-            this.lblPostUpdateAllCommand = new System.Windows.Forms.Label();
-            this.lblPostUpdateCommand = new System.Windows.Forms.Label();
-            this.txtPostUpdateAllCommand = new Ketarin.Forms.TextBox();
-            this.txtPostUpdateCommand = new Ketarin.Forms.TextBox();
+            this.commandControl = new Ketarin.Forms.CommandControl();
+            this.lblCommandEvent = new System.Windows.Forms.Label();
+            this.cboCommandEvent = new System.Windows.Forms.ComboBox();
             this.bExport = new System.Windows.Forms.Button();
             this.bImport = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.nConnectionTimeout)).BeginInit();
@@ -534,12 +531,9 @@
             // 
             // tpCommands
             // 
-            this.tpCommands.Controls.Add(this.txtPreUpdateCommand);
-            this.tpCommands.Controls.Add(this.lblPreUpdateCommand);
-            this.tpCommands.Controls.Add(this.lblPostUpdateAllCommand);
-            this.tpCommands.Controls.Add(this.lblPostUpdateCommand);
-            this.tpCommands.Controls.Add(this.txtPostUpdateAllCommand);
-            this.tpCommands.Controls.Add(this.txtPostUpdateCommand);
+            this.tpCommands.Controls.Add(this.commandControl);
+            this.tpCommands.Controls.Add(this.lblCommandEvent);
+            this.tpCommands.Controls.Add(this.cboCommandEvent);
             this.tpCommands.Location = new System.Drawing.Point(4, 22);
             this.tpCommands.Name = "tpCommands";
             this.tpCommands.Padding = new System.Windows.Forms.Padding(3);
@@ -548,71 +542,42 @@
             this.tpCommands.Text = "Commands";
             this.tpCommands.UseVisualStyleBackColor = true;
             // 
-            // txtPreUpdateCommand
+            // commandControl
             // 
-            this.txtPreUpdateCommand.AcceptsReturn = true;
-            this.txtPreUpdateCommand.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.commandControl.Application = null;
+            this.commandControl.CommandType = Ketarin.ScriptType.Batch;
+            this.commandControl.Location = new System.Drawing.Point(6, 36);
+            this.commandControl.Margin = new System.Windows.Forms.Padding(0);
+            this.commandControl.Name = "commandControl";
+            this.commandControl.ReadOnly = false;
+            this.commandControl.Size = new System.Drawing.Size(382, 257);
+            this.commandControl.TabIndex = 2;
+            this.commandControl.VariableNames = new string[0];
+            // 
+            // lblCommandEvent
+            // 
+            this.lblCommandEvent.AutoSize = true;
+            this.lblCommandEvent.Location = new System.Drawing.Point(3, 12);
+            this.lblCommandEvent.Name = "lblCommandEvent";
+            this.lblCommandEvent.Size = new System.Drawing.Size(122, 13);
+            this.lblCommandEvent.TabIndex = 0;
+            this.lblCommandEvent.Text = "Edit &command for event:";
+            // 
+            // cboCommandEvent
+            // 
+            this.cboCommandEvent.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtPreUpdateCommand.Location = new System.Drawing.Point(6, 25);
-            this.txtPreUpdateCommand.Multiline = true;
-            this.txtPreUpdateCommand.Name = "txtPreUpdateCommand";
-            this.txtPreUpdateCommand.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtPreUpdateCommand.Size = new System.Drawing.Size(382, 65);
-            this.txtPreUpdateCommand.TabIndex = 1;
-            this.txtPreUpdateCommand.WordWrap = false;
-            // 
-            // lblPreUpdateCommand
-            // 
-            this.lblPreUpdateCommand.AutoSize = true;
-            this.lblPreUpdateCommand.Location = new System.Drawing.Point(3, 9);
-            this.lblPreUpdateCommand.Name = "lblPreUpdateCommand";
-            this.lblPreUpdateCommand.Size = new System.Drawing.Size(292, 13);
-            this.lblPreUpdateCommand.TabIndex = 0;
-            this.lblPreUpdateCommand.Text = "Default command to execute &before updating an application:";
-            // 
-            // lblPostUpdateAllCommand
-            // 
-            this.lblPostUpdateAllCommand.AutoSize = true;
-            this.lblPostUpdateAllCommand.Location = new System.Drawing.Point(3, 200);
-            this.lblPostUpdateAllCommand.Name = "lblPostUpdateAllCommand";
-            this.lblPostUpdateAllCommand.Size = new System.Drawing.Size(250, 13);
-            this.lblPostUpdateAllCommand.TabIndex = 4;
-            this.lblPostUpdateAllCommand.Text = "&Command to execute after updating all applications:";
-            // 
-            // lblPostUpdateCommand
-            // 
-            this.lblPostUpdateCommand.AutoSize = true;
-            this.lblPostUpdateCommand.Location = new System.Drawing.Point(3, 105);
-            this.lblPostUpdateCommand.Name = "lblPostUpdateCommand";
-            this.lblPostUpdateCommand.Size = new System.Drawing.Size(283, 13);
-            this.lblPostUpdateCommand.TabIndex = 2;
-            this.lblPostUpdateCommand.Text = "&Default command to execute after updating an application:";
-            // 
-            // txtPostUpdateAllCommand
-            // 
-            this.txtPostUpdateAllCommand.AcceptsReturn = true;
-            this.txtPostUpdateAllCommand.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtPostUpdateAllCommand.Location = new System.Drawing.Point(6, 216);
-            this.txtPostUpdateAllCommand.Multiline = true;
-            this.txtPostUpdateAllCommand.Name = "txtPostUpdateAllCommand";
-            this.txtPostUpdateAllCommand.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtPostUpdateAllCommand.Size = new System.Drawing.Size(382, 65);
-            this.txtPostUpdateAllCommand.TabIndex = 5;
-            this.txtPostUpdateAllCommand.WordWrap = false;
-            // 
-            // txtPostUpdateCommand
-            // 
-            this.txtPostUpdateCommand.AcceptsReturn = true;
-            this.txtPostUpdateCommand.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtPostUpdateCommand.Location = new System.Drawing.Point(6, 121);
-            this.txtPostUpdateCommand.Multiline = true;
-            this.txtPostUpdateCommand.Name = "txtPostUpdateCommand";
-            this.txtPostUpdateCommand.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtPostUpdateCommand.Size = new System.Drawing.Size(382, 65);
-            this.txtPostUpdateCommand.TabIndex = 3;
-            this.txtPostUpdateCommand.WordWrap = false;
+            this.cboCommandEvent.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboCommandEvent.FormattingEnabled = true;
+            this.cboCommandEvent.Items.AddRange(new object[] {
+            "Before updating an application",
+            "After updating an application",
+            "After updating all applications"});
+            this.cboCommandEvent.Location = new System.Drawing.Point(131, 9);
+            this.cboCommandEvent.Name = "cboCommandEvent";
+            this.cboCommandEvent.Size = new System.Drawing.Size(257, 21);
+            this.cboCommandEvent.TabIndex = 1;
+            this.cboCommandEvent.SelectedIndexChanged += new System.EventHandler(this.cboCommandEvent_SelectedIndexChanged);
             // 
             // bExport
             // 
@@ -705,17 +670,14 @@
         private System.Windows.Forms.CheckBox chkUpdateOnlineDatabase;
         private System.Windows.Forms.CheckBox chkMinToTray;
         private System.Windows.Forms.TabPage tpCommands;
-        private TextBox txtPostUpdateAllCommand;
-        private System.Windows.Forms.Label lblPostUpdateAllCommand;
-        private TextBox txtPostUpdateCommand;
-        private System.Windows.Forms.Label lblPostUpdateCommand;
-        private TextBox txtPreUpdateCommand;
-        private System.Windows.Forms.Label lblPreUpdateCommand;
         private System.Windows.Forms.Button bExport;
         private System.Windows.Forms.Button bImport;
         private System.Windows.Forms.CheckBox chkBackups;
         private System.Windows.Forms.Label lblCustomColumn2;
         private System.Windows.Forms.TextBox txtCustomColumn2;
         private System.Windows.Forms.CheckBox chkOpenWebsite;
+        private System.Windows.Forms.Label lblCommandEvent;
+        private System.Windows.Forms.ComboBox cboCommandEvent;
+        private CommandControl commandControl;
     }
 }

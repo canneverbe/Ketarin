@@ -36,6 +36,22 @@ namespace Ketarin
             }
         }
 
+        /// <summary>
+        /// Gets the currently selected applications.
+        /// </summary>
+        public ApplicationJob[] SelectedApplications
+        {
+            get
+            {
+                List<ApplicationJob> jobs = new List<ApplicationJob>();
+                foreach (ApplicationJob job in SelectedObjects)
+                {
+                    jobs.Add(job);
+                }
+                return jobs.ToArray();
+            }
+        }
+
         #endregion
 
         #region ProgressRenderer

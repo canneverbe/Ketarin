@@ -111,6 +111,25 @@ namespace Ketarin.Forms
             olvLists.SelectedIndex = 0;
         }
 
+        private void EnableDisableButtons()
+        {
+            ApplicationList currentList = olvLists.SelectedObject as ApplicationList;
+            bRemoveApp.Enabled = (currentList != null && !currentList.IsPredefined && olvApps.SelectedObjects.Count > 0);
+            bAddApp.Enabled = (currentList != null && !currentList.IsPredefined);
+            bSelectApp.Enabled = (currentList != null);
+
+            // Allow remove if there is a non-predefined list
+            bRemoveList.Enabled = false;
+            foreach (ApplicationList list in olvLists.SelectedObjects)
+            {
+                if (!list.IsPredefined)
+                {
+                    bRemoveList.Enabled = true;
+                    break;
+                }
+            }
+        }
+
         private void AddAppList(ApplicationList appList)
         {
             imlLists.Images.Add(appList.GetIcon());
@@ -147,16 +166,7 @@ namespace Ketarin.Forms
 
         private void olvLists_SelectedIndexChanged(object sender, EventArgs e)
         {
-            // Allow remove if there is a non-predefined list
-            bRemoveList.Enabled = false;
-            foreach (ApplicationList list in olvLists.SelectedObjects)
-            {
-                if (!list.IsPredefined)
-                {
-                    bRemoveList.Enabled = true;
-                    break;
-                }
-            }
+            EnableDisableButtons();
 
             if (olvLists.SelectedObjects.Count == 0)
             {
@@ -278,7 +288,54 @@ namespace Ketarin.Forms
             }
         }
 
+        private void olvApps_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            EnableDisableButtons();
+        }
+
+        private void bRemoveApp_Click(object sender, EventArgs e)
+        {
+            ApplicationList currentList = olvLists.SelectedObject as ApplicationList;
+            if (currentList != null)
+            {
+                foreach (ApplicationJob app in olvApps.SelectedObjects)
+                {
+                    currentList.Applications.Remove(app);
+                    olvApps.RemoveObject(app);
+                }
+            }
+        }
+
         #endregion
 
+        #region Selection button
+
+        private void mnuSelectAll_Click(object sender, EventArgs e)
+        {
+            olvApps.CheckedObjects = olvApps.Objects;
+        }
+
+        private void mnuSelectNone_Click(object sender, EventArgs e)
+        {
+            olvApps.CheckedObjects = null;
+        }
+
+        private void mnuInvertSelection_Click(object sender, EventArgs e)
+        {
+            List<object> allObjects = new List<object>();
+            allObjects.AddRange(olvApps.Objects.ToArray());
+            foreach (object o in olvApps.CheckedObjects)
+            {
+                allObjects.Remove(o);
+            }
+            olvApps.CheckedObjects = allObjects;
+        }
+
+        private void mnuSaveAsNewList_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        #endregion
     }
 }

@@ -154,11 +154,11 @@ namespace Ketarin.Forms
             {
                 if (PathEx.TryGetFileSize(job.PreviousLocation) > 0)
                 {
-                    LogInfo(job.Name + ": Updated failed, installing previously available version", LogItemType.Info);
+                    LogInfo(job.Name + ": Update failed, installing previously available version", LogItemType.Warning);
                 }
                 else
                 {
-                    LogInfo(job.Name + ": Updated failed", LogItemType.Error);
+                    LogInfo(job.Name + ": Update failed", LogItemType.Error);
                     return;
                 }
             }

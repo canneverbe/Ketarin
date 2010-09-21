@@ -198,6 +198,9 @@ namespace Ketarin.Forms
             txtWebsite.Text = m_ApplicationJob.WebsiteUrl;
             txtNotes.Text = m_ApplicationJob.UserNotes;
 
+            txtExecuteAfter.CommandType = m_ApplicationJob.ExecuteCommandType;
+            txtExecuteBefore.CommandType = m_ApplicationJob.ExecutePreCommandType;
+
             // Setup instructions
             foreach (SetupInstruction instruction in m_ApplicationJob.SetupInstructions)
             {
@@ -234,6 +237,8 @@ namespace Ketarin.Forms
 
             m_ApplicationJob.WebsiteUrl = txtWebsite.Text;
             m_ApplicationJob.UserNotes = txtNotes.Text;
+            m_ApplicationJob.ExecuteCommandType = txtExecuteAfter.CommandType;
+            m_ApplicationJob.ExecutePreCommandType = txtExecuteBefore.CommandType;
 
             if (rbAlwaysDownload.Checked)
             {

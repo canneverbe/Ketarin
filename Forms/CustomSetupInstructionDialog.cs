@@ -28,7 +28,7 @@ namespace Ketarin.Forms
                 {
                     this.instruction = instruction;
                     commandControl.CommandType = this.instruction.Type;
-                    commandControl.CommandText = this.instruction.Code;
+                    commandControl.Text = this.instruction.Code;
                 }
             }
             get
@@ -59,7 +59,7 @@ namespace Ketarin.Forms
                 this.instruction = new CustomSetupInstruction();
             }
 
-            this.instruction.Code = commandControl.CommandText;
+            this.instruction.Code = commandControl.Text;
             this.instruction.Type = commandControl.CommandType;
         }
     }

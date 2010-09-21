@@ -5,9 +5,11 @@ using System.Data;
 using System.Xml.Serialization;
 using System.Xml;
 using System.Data.SQLite;
+using System.Runtime.Serialization;
 
 namespace Ketarin
 {
+    [Serializable(), XmlInclude(typeof(CustomSetupInstruction)), XmlInclude(typeof(StartProcessInstruction)), XmlInclude(typeof(CopyFileInstruction))]
     public class SetupInstruction : ICloneable
     {
         /// <summary>

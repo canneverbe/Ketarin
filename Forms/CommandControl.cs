@@ -38,6 +38,22 @@ namespace Ketarin.Forms
         private string[] variableNames = new string[0];
 
         #region Properties
+        
+        /// <summary>
+        /// Gets or sets the command text.
+        /// </summary>
+        [DefaultValue("")]
+        public override string Text
+        {
+            get
+            {
+                return txtCode.Text;
+            }
+            set
+            {
+                txtCode.Text = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets if a border should be displayed around the text control.
@@ -143,6 +159,7 @@ namespace Ketarin.Forms
         /// <summary>
         /// Gets or sets the type of command.
         /// </summary>
+        [DefaultValue(ScriptType.Batch)]
         public ScriptType CommandType
         {
             get
@@ -178,21 +195,6 @@ namespace Ketarin.Forms
                         break;
                 }
                 LoadSnippets();
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the command text.
-        /// </summary>
-        public string CommandText
-        {
-            get
-            {
-                return txtCode.Text;
-            }
-            set
-            {
-                txtCode.Text = value;
             }
         }
 
@@ -386,18 +388,7 @@ namespace Ketarin.Forms
         {
             try
             {
-                switch (CommandType)
-                {
-                    case ScriptType.CS:
-                        UserCSScript script = new UserCSScript(this.CommandText);
-                        script.Execute(this.Application);
-                        break;
-
-                    default:
-                        Updater.ExecuteCommand(this.Application, this.CommandText);
-                        break;
-
-                }
+                new Command(Text, CommandType).Execute(this.Application);
 
                 MessageBox.Show(this, "Script executed successfully.", System.Windows.Forms.Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
             }

@@ -46,7 +46,6 @@
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.commandControl.Application = null;
-            this.commandControl.CommandText = "";
             this.commandControl.CommandType = Ketarin.ScriptType.Batch;
             this.commandControl.IndentButton = 12;
             this.commandControl.Location = new System.Drawing.Point(0, 0);
