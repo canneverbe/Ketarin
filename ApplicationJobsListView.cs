@@ -7,6 +7,7 @@ using CDBurnerXP.Controls;
 using CDBurnerXP.IO;
 using System.Windows.Forms.VisualStyles;
 using Ketarin.Forms;
+using System.ComponentModel;
 
 namespace Ketarin
 {
@@ -39,6 +40,7 @@ namespace Ketarin
         /// <summary>
         /// Gets the currently selected applications.
         /// </summary>
+        [Browsable(false)]
         public ApplicationJob[] SelectedApplications
         {
             get
@@ -288,8 +290,12 @@ namespace Ketarin
                     return true;
 
                 case Keys.Escape:
-                    HideSearch();
-                    return true;
+                    if (this.searchPanel.Visible)
+                    {
+                        HideSearch();
+                        return true;
+                    }
+                    break;
 
                 // Open specific variable in browser
                 case Keys.Control | Keys.D1: openVariable = 1; break;
