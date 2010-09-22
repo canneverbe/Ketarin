@@ -680,7 +680,7 @@ namespace Ketarin.Forms
                 return;
             }
 
-            txtRegularExpression.BackColor = Color.White;
+            txtRegularExpression.BackColor = SystemColors.Window;
 
             RefreshRtfFormatting();            
         }

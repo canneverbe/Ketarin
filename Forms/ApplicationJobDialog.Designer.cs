@@ -633,7 +633,6 @@
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.txtExecuteBefore.Application = null;
-            this.txtExecuteBefore.CommandType = Ketarin.ScriptType.Batch;
             this.txtExecuteBefore.Location = new System.Drawing.Point(0, 16);
             this.txtExecuteBefore.Margin = new System.Windows.Forms.Padding(0);
             this.txtExecuteBefore.Name = "txtExecuteBefore";
@@ -664,8 +663,10 @@
             // 
             // txtExecuteAfter
             // 
+            this.txtExecuteAfter.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.txtExecuteAfter.Application = null;
-            this.txtExecuteAfter.CommandType = Ketarin.ScriptType.Batch;
             this.txtExecuteAfter.Location = new System.Drawing.Point(0, 21);
             this.txtExecuteAfter.Margin = new System.Windows.Forms.Padding(0);
             this.txtExecuteAfter.Name = "txtExecuteAfter";

@@ -578,12 +578,7 @@ namespace Ketarin
             }
             else
             {
-                List<ApplicationJob> jobs = new List<ApplicationJob>();
-                foreach (ApplicationJob job in olvJobs.SelectedObjects)
-                {
-                    jobs.Add(job);
-                }
-                RunJobs(jobs.ToArray(), false, true);
+                RunJobs(olvJobs.SelectedApplications, false, true);
             }
         }
 
