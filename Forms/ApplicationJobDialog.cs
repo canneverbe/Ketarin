@@ -128,6 +128,9 @@ namespace Ketarin.Forms
         {
             if (m_ApplicationJob == null) return;
 
+            this.txtExecuteAfter.Application = m_ApplicationJob;
+            this.txtExecuteBefore.Application = m_ApplicationJob;
+
             // Adjust context menus
             List<string> appVarNames = new List<string>();
             foreach (UrlVariable var in m_ApplicationJob.Variables.Values)
