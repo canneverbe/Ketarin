@@ -52,7 +52,7 @@
             this.lblFind = new System.Windows.Forms.Label();
             this.txtFind = new System.Windows.Forms.TextBox();
             this.lblDesc = new System.Windows.Forms.Label();
-            this.txtRegularExpression = new System.Windows.Forms.TextBox();
+            this.txtRegularExpression = new Ketarin.HintTextBox();
             this.lblRegex = new System.Windows.Forms.Label();
             this.rbContentUrlStartEnd = new System.Windows.Forms.RadioButton();
             this.rbContentUrlRegex = new System.Windows.Forms.RadioButton();
@@ -304,6 +304,7 @@
             this.txtRegularExpression.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.txtRegularExpression.Enabled = false;
+            this.txtRegularExpression.HintTextAlign = System.Windows.Forms.VisualStyles.HorizontalAlign.Right;
             this.txtRegularExpression.Location = new System.Drawing.Point(247, 156);
             this.txtRegularExpression.Name = "txtRegularExpression";
             this.txtRegularExpression.Size = new System.Drawing.Size(292, 20);
@@ -439,7 +440,7 @@
         private System.Windows.Forms.Label lblFind;
         private System.Windows.Forms.TextBox txtFind;
         private System.Windows.Forms.Label lblDesc;
-        private System.Windows.Forms.TextBox txtRegularExpression;
+        private HintTextBox txtRegularExpression;
         private System.Windows.Forms.Label lblRegex;
         private System.Windows.Forms.RadioButton rbContentUrlStartEnd;
         private System.Windows.Forms.RadioButton rbContentUrlRegex;

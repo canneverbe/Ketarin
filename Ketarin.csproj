@@ -121,6 +121,15 @@
     <Compile Include="Forms\NewSnippetDialog.Designer.cs">
       <DependentUpon>NewSnippetDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\PaintableTextBoxBase.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Forms\SelectApplicationDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SelectApplicationDialog.Designer.cs">
+      <DependentUpon>SelectApplicationDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\SetupInstructionListBoxPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -135,6 +144,9 @@
     </Compile>
     <Compile Include="Forms\StartProcessInstructionDialog.Designer.cs">
       <DependentUpon>StartProcessInstructionDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\HintTextBox.cs">
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="M:\CsLib\CDBurnerXP\Controls\AdvancedListBox.cs">
       <Link>CDBurnerXP\AdvancedListBox.cs</Link>
@@ -658,6 +670,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\NewSnippetDialog.resx">
       <DependentUpon>NewSnippetDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SelectApplicationDialog.resx">
+      <DependentUpon>SelectApplicationDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="M:\CsLib\CDBurnerXP\Controls\AdvancedListBox.resx">
       <Link>CDBurnerXP\AdvancedListBox.resx</Link>

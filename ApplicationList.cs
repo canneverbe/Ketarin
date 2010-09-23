@@ -6,6 +6,7 @@ using System.Drawing;
 using Microsoft.Win32;
 using CDBurnerXP.IO;
 using System.Data.SQLite;
+using System.ComponentModel;
 
 namespace Ketarin
 {
@@ -14,8 +15,47 @@ namespace Ketarin
     /// </summary>
     public class ApplicationList
     {
+        #region ApplicationBindingList
+
+        /// <summary>
+        /// Keeps the list in a consitent state (no duplicate applications per list allowed).
+        /// </summary>
+        public class ApplicationBindingList : BindingList<ApplicationJob>
+        {
+            protected override void InsertItem(int index, ApplicationJob item)
+            {
+                // Do not allow duplicate apps in a list
+                foreach (ApplicationJob app in this)
+                {
+                    if (app == item) return;
+                }
+
+                base.InsertItem(index, item);
+            }
+
+            internal void AddRange(ApplicationJob[] applicationJobs)
+            {
+                foreach (ApplicationJob job in applicationJobs)
+                {
+                    this.Add(job);
+                }
+            }
+
+            internal ApplicationJob[] ToArray()
+            {
+                ApplicationJob[] jobs = new ApplicationJob[this.Count];
+                for (int i = 0; i < this.Count; i++)
+                {
+                    jobs[i] = this[i];
+                }
+                return jobs;
+            }
+        }
+
+        #endregion
+
         private bool isPredefined = false;
-        private List<ApplicationJob> applications = new List<ApplicationJob>();
+        private ApplicationBindingList applications = new ApplicationBindingList();
 
         /// <summary>
         /// Gets or sets the GUID of the list.
@@ -37,7 +77,7 @@ namespace Ketarin
         /// <summary>
         /// Gets the list of applications that are on this list.
         /// </summary>
-        public List<ApplicationJob> Applications
+        public ApplicationBindingList Applications
         {
             get
             {

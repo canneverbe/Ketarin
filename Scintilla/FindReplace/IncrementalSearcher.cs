@@ -11,6 +11,8 @@ namespace ScintillaNet
 	public partial class IncrementalSearcher : UserControl
 	{
 		private Scintilla _scintilla;
+        private Dictionary<string, Range> searchCache = new Dictionary<string, Range>();
+
 		public Scintilla Scintilla
 		{
 			get
@@ -44,10 +46,15 @@ namespace ScintillaNet
 
 			moveFormAwayFromSelection();
 
-			if (Visible)
-				txtFind.Focus();
-			else
-				Scintilla.Focus();
+            if (Visible)
+            {
+                txtFind.Focus();
+                this.searchCache.Clear();
+            }
+            else
+            {
+                Scintilla.Focus();
+            }
 		}
 
 		protected override void OnCreateControl()
@@ -64,15 +71,30 @@ namespace ScintillaNet
 			if (txtFind.Text == string.Empty)
 				return;
 
+            // Has a match already been located before?
+            // Backspace (reducing the search subject) should
+            // return to the previously found occurance.
+            if (this.searchCache.ContainsKey(txtFind.Text))
+            {
+                this.searchCache[txtFind.Text].Select();
+                moveFormAwayFromSelection();
+                return;
+            }
+
 			int pos = Math.Min(Scintilla.Caret.Position, Scintilla.Caret.Anchor);
 			Range r = Scintilla.FindReplace.Find(pos, Scintilla.TextLength, txtFind.Text, Scintilla.FindReplace.Window.GetSearchFlags());
 			if (r == null)
 				r = Scintilla.FindReplace.Find(0, pos, txtFind.Text, Scintilla.FindReplace.Window.GetSearchFlags());
 
-			if (r != null)
-				r.Select();
-			else
-				txtFind.BackColor = Color.Tomato;
+            if (r != null)
+            {
+                this.searchCache[txtFind.Text] = r;
+                r.Select();
+            }
+            else
+            {
+                txtFind.BackColor = Color.Tomato;
+            }
 
 			moveFormAwayFromSelection();
 		}
@@ -129,6 +151,22 @@ namespace ScintillaNet
 					break;
 			}
 		}
+
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            switch (keyData)
+            {
+                case Keys.Control | Keys.R:
+                    btnPrevious.PerformClick();
+                    return true;
+
+                case Keys.Control | Keys.I:
+                    btnNext.PerformClick();
+                    return true;
+            }
+
+            return base.ProcessCmdKey(ref msg, keyData);
+        }
 
 		private void btnHighlightAll_Click(object sender, EventArgs e)
 		{

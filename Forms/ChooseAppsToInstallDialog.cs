@@ -21,6 +21,7 @@ namespace Ketarin.Forms
         private List<ApplicationList> lists = new List<ApplicationList>();
         private Dictionary<ApplicationJob, bool> checkedApps = new Dictionary<ApplicationJob, bool>();
         private List<ApplicationJob> selectedApplications = new List<ApplicationJob>();
+        private ApplicationList lastDeletedList = null;
 
         #region Properties
 
@@ -73,7 +74,7 @@ namespace Ketarin.Forms
             // Item for all apps
             ApplicationList allApps = new ApplicationList("All applications", true);
             allApps.Applications.AddRange(DbManager.GetJobs());
-            AddAppList(allApps);
+            AddAppToList(allApps);
 
             // By default, all apps should be selected
             foreach (ApplicationJob job in allApps.Applications)
@@ -104,7 +105,7 @@ namespace Ketarin.Forms
             // Now add custom lists
             foreach (ApplicationList list in DbManager.GetSetupLists(allApps.Applications))
             {
-                AddAppList(list);
+                AddAppToList(list);
             }
             
             olvLists.SetObjects(lists);
@@ -130,18 +131,33 @@ namespace Ketarin.Forms
             }
         }
 
-        private void AddAppList(ApplicationList appList)
+        /// <summary>
+        /// Adds an application list to the list.
+        /// Takes care of adding a new icon.
+        /// </summary>
+        private void AddAppToList(ApplicationList appList)
         {
             imlLists.Images.Add(appList.GetIcon());
             lists.Add(appList);
         }
 
-        #region Events
-
-        private void bNewList_Click(object sender, EventArgs e)
+        /// <summary>
+        /// Updates the icon of an application list.
+        /// </summary>
+        private void UpdateAppList(ApplicationList list)
         {
-            ApplicationList newList = new ApplicationList("New list", false);
-            AddAppList(newList);
+            imlLists.Images[this.lists.IndexOf(list)] = list.GetIcon();
+            olvLists.RefreshObject(list);
+        }
+
+        /// <summary>
+        /// Integrates a new application list into the GUI and
+        /// saves it to the database.
+        /// </summary>
+        /// <param name="newList"></param>
+        private void CreateNewAppList(ApplicationList newList, bool edit)
+        {
+            AddAppToList(newList);
             newList.Save();
             olvLists.AddObject(newList);
             olvLists.SelectedObject = newList;
@@ -150,8 +166,16 @@ namespace Ketarin.Forms
             if (selectedItem != null)
             {
                 selectedItem.EnsureVisible();
-                olvLists.EditSubItem(selectedItem, 0);
+                if (edit) olvLists.EditSubItem(selectedItem, 0);
             }
+        }
+
+        #region Events
+
+        private void bNewList_Click(object sender, EventArgs e)
+        {
+            ApplicationList newList = new ApplicationList("New list", false);
+            CreateNewAppList(newList, true);
         }
 
         private void olvLists_CellEditStarting(object sender, ObjectListView.CellEditEventArgs e)
@@ -161,6 +185,14 @@ namespace Ketarin.Forms
             if (selectedList != null && selectedList.IsPredefined)
             {
                 e.Cancel = true;
+            }
+            else
+            {
+                System.Windows.Forms.TextBox txt = e.Control as System.Windows.Forms.TextBox;
+                if (txt != null)
+                {
+                    txt.AutoCompleteMode = AutoCompleteMode.None;
+                }
             }
         }
 
@@ -207,6 +239,10 @@ namespace Ketarin.Forms
         {
             foreach (ApplicationList list in olvLists.SelectedObjects)
             {
+                this.lastDeletedList = list;
+                lblUndoDelete.Text = string.Format("List \"{0}\" deleted. Undo", list.Name);
+                lblUndoDelete.LinkArea = new LinkArea(lblUndoDelete.Text.Length - 4, 4);
+                lblUndoDelete.Visible = true;
                 list.Delete();
                 olvLists.RemoveObject(list);
             }
@@ -222,7 +258,21 @@ namespace Ketarin.Forms
 
         private void bAddApp_Click(object sender, EventArgs e)
         {
-
+            using (SelectApplicationDialog dialog = new SelectApplicationDialog())
+            {
+                dialog.Applications = this.lists[0].Applications.ToArray();
+                if (dialog.ShowDialog(this) == DialogResult.OK)
+                {
+                    ApplicationList list = olvLists.SelectedObject as ApplicationList;
+                    foreach (ApplicationJob app in dialog.SelectedApplications)
+                    {
+                        list.Applications.Add(app);
+                    }
+                    list.Save();
+                    UpdateAppList(list);
+                    olvApps.SetObjects(list.Applications);
+                }
+            }
         }
 
         private void bOK_Click(object sender, EventArgs e)
@@ -231,6 +281,13 @@ namespace Ketarin.Forms
             foreach (ApplicationJob job in olvApps.CheckedObjects)
             {
                 selectedApplications.Add(job);
+            }
+
+            // No applications selected -> not OK
+            if (selectedApplications.Count == 0)
+            {
+                MessageBox.Show(this, "You did not select any applications to install.\r\n\r\nPlease select at least one application in order to proceed.", System.Windows.Forms.Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.None);
+                DialogResult = DialogResult.None;
             }
         }
 
@@ -252,8 +309,7 @@ namespace Ketarin.Forms
                     ApplicationList list = targetItem.RowObject as ApplicationList;
                     list.Applications.Add(job);
                     list.Save();
-                    imlLists.Images[this.lists.IndexOf(list)] = list.GetIcon();
-                    olvLists.RefreshObject(list);
+                    UpdateAppList(list);
                 }
             }
         }
@@ -293,6 +349,14 @@ namespace Ketarin.Forms
             EnableDisableButtons();
         }
 
+        private void olvApps_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyData == Keys.Delete)
+            {
+                bRemoveApp.PerformClick();
+            }
+        }
+
         private void bRemoveApp_Click(object sender, EventArgs e)
         {
             ApplicationList currentList = olvLists.SelectedObject as ApplicationList;
@@ -302,7 +366,19 @@ namespace Ketarin.Forms
                 {
                     currentList.Applications.Remove(app);
                     olvApps.RemoveObject(app);
+                    currentList.Save();
+                    UpdateAppList(currentList);
                 }
+            }
+        }
+
+        private void lblUndoDelete_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            if (this.lastDeletedList != null)
+            {
+                CreateNewAppList(this.lastDeletedList, false);
+                this.lastDeletedList = null;
+                lblUndoDelete.Visible = false;
             }
         }
 
@@ -333,7 +409,12 @@ namespace Ketarin.Forms
 
         private void mnuSaveAsNewList_Click(object sender, EventArgs e)
         {
-
+            ApplicationList newList = new ApplicationList("New list", false);
+            foreach (ApplicationJob app in olvApps.CheckedObjects)
+            {
+                newList.Applications.Add(app);
+            }
+            CreateNewAppList(newList, true);
         }
 
         #endregion
