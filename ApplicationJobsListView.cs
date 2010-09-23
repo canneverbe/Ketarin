@@ -29,6 +29,7 @@ namespace Ketarin
         /// <summary>
         /// Gets whether or not the default filter (that is, none) is active.
         /// </summary>
+        [Browsable(false)]
         public bool IsDefaultFilter
         {
             get

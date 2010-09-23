@@ -51,13 +51,14 @@
             this.bAddApp = new System.Windows.Forms.Button();
             this.bRemoveApp = new System.Windows.Forms.Button();
             this.tableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
-            this.panel2 = new System.Windows.Forms.Panel();
-            this.panel1 = new System.Windows.Forms.Panel();
+            this.pnlApps = new System.Windows.Forms.Panel();
+            this.pnlAppLists = new System.Windows.Forms.Panel();
+            this.lblUndoDelete = new System.Windows.Forms.LinkLabel();
             ((System.ComponentModel.ISupportInitialize)(this.olvLists)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.olvApps)).BeginInit();
             this.tableLayoutPanel.SuspendLayout();
-            this.panel2.SuspendLayout();
-            this.panel1.SuspendLayout();
+            this.pnlApps.SuspendLayout();
+            this.pnlAppLists.SuspendLayout();
             this.SuspendLayout();
             // 
             // bCancel
@@ -168,6 +169,7 @@
             this.olvApps.UseCompatibleStateImageBehavior = false;
             this.olvApps.View = System.Windows.Forms.View.Details;
             this.olvApps.VirtualMode = true;
+            this.olvApps.KeyDown += new System.Windows.Forms.KeyEventHandler(this.olvApps_KeyDown);
             this.olvApps.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.olvApps_ItemDrag);
             this.olvApps.SelectedIndexChanged += new System.EventHandler(this.olvApps_SelectedIndexChanged);
             // 
@@ -267,7 +269,7 @@
             // mnuSaveAsNewList
             // 
             this.mnuSaveAsNewList.Index = 4;
-            this.mnuSaveAsNewList.Text = "&Save as new list...";
+            this.mnuSaveAsNewList.Text = "&Save as new list";
             this.mnuSaveAsNewList.Click += new System.EventHandler(this.mnuSaveAsNewList_Click);
             // 
             // bAddApp
@@ -301,8 +303,8 @@
             this.tableLayoutPanel.ColumnCount = 2;
             this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel.Controls.Add(this.panel2, 1, 0);
-            this.tableLayoutPanel.Controls.Add(this.panel1, 0, 0);
+            this.tableLayoutPanel.Controls.Add(this.pnlApps, 1, 0);
+            this.tableLayoutPanel.Controls.Add(this.pnlAppLists, 0, 0);
             this.tableLayoutPanel.Location = new System.Drawing.Point(12, 12);
             this.tableLayoutPanel.Name = "tableLayoutPanel";
             this.tableLayoutPanel.RowCount = 1;
@@ -310,32 +312,48 @@
             this.tableLayoutPanel.Size = new System.Drawing.Size(578, 325);
             this.tableLayoutPanel.TabIndex = 0;
             // 
-            // panel2
+            // pnlApps
             // 
-            this.panel2.Controls.Add(this.lblAppsInCurrentList);
-            this.panel2.Controls.Add(this.olvApps);
-            this.panel2.Controls.Add(this.bSelectApp);
-            this.panel2.Controls.Add(this.bRemoveApp);
-            this.panel2.Controls.Add(this.bAddApp);
-            this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel2.Location = new System.Drawing.Point(292, 0);
-            this.panel2.Margin = new System.Windows.Forms.Padding(3, 0, 0, 0);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(286, 325);
-            this.panel2.TabIndex = 0;
+            this.pnlApps.Controls.Add(this.lblAppsInCurrentList);
+            this.pnlApps.Controls.Add(this.olvApps);
+            this.pnlApps.Controls.Add(this.bSelectApp);
+            this.pnlApps.Controls.Add(this.bRemoveApp);
+            this.pnlApps.Controls.Add(this.bAddApp);
+            this.pnlApps.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlApps.Location = new System.Drawing.Point(292, 0);
+            this.pnlApps.Margin = new System.Windows.Forms.Padding(3, 0, 0, 0);
+            this.pnlApps.Name = "pnlApps";
+            this.pnlApps.Size = new System.Drawing.Size(286, 325);
+            this.pnlApps.TabIndex = 0;
             // 
-            // panel1
+            // pnlAppLists
             // 
-            this.panel1.Controls.Add(this.lblAppLists);
-            this.panel1.Controls.Add(this.olvLists);
-            this.panel1.Controls.Add(this.bNewList);
-            this.panel1.Controls.Add(this.bRemoveList);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel1.Location = new System.Drawing.Point(0, 0);
-            this.panel1.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(286, 325);
-            this.panel1.TabIndex = 0;
+            this.pnlAppLists.Controls.Add(this.lblUndoDelete);
+            this.pnlAppLists.Controls.Add(this.lblAppLists);
+            this.pnlAppLists.Controls.Add(this.olvLists);
+            this.pnlAppLists.Controls.Add(this.bNewList);
+            this.pnlAppLists.Controls.Add(this.bRemoveList);
+            this.pnlAppLists.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlAppLists.Location = new System.Drawing.Point(0, 0);
+            this.pnlAppLists.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
+            this.pnlAppLists.Name = "pnlAppLists";
+            this.pnlAppLists.Size = new System.Drawing.Size(286, 325);
+            this.pnlAppLists.TabIndex = 0;
+            // 
+            // lblUndoDelete
+            // 
+            this.lblUndoDelete.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblUndoDelete.BackColor = System.Drawing.SystemColors.Info;
+            this.lblUndoDelete.Location = new System.Drawing.Point(1, 277);
+            this.lblUndoDelete.Name = "lblUndoDelete";
+            this.lblUndoDelete.Size = new System.Drawing.Size(284, 18);
+            this.lblUndoDelete.TabIndex = 4;
+            this.lblUndoDelete.TabStop = true;
+            this.lblUndoDelete.Text = "List deleted. Undo";
+            this.lblUndoDelete.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblUndoDelete.Visible = false;
+            this.lblUndoDelete.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lblUndoDelete_LinkClicked);
             // 
             // ChooseAppsToInstallDialog
             // 
@@ -356,10 +374,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.olvLists)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.olvApps)).EndInit();
             this.tableLayoutPanel.ResumeLayout(false);
-            this.panel2.ResumeLayout(false);
-            this.panel2.PerformLayout();
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
+            this.pnlApps.ResumeLayout(false);
+            this.pnlApps.PerformLayout();
+            this.pnlAppLists.ResumeLayout(false);
+            this.pnlAppLists.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -388,7 +406,8 @@
         private System.Windows.Forms.MenuItem sepNewList;
         private System.Windows.Forms.MenuItem mnuSaveAsNewList;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel;
-        private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Panel pnlApps;
+        private System.Windows.Forms.Panel pnlAppLists;
+        private System.Windows.Forms.LinkLabel lblUndoDelete;
     }
 }

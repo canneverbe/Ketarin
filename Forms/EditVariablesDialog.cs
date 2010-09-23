@@ -10,6 +10,7 @@ using System.Text.RegularExpressions;
 using CDBurnerXP.Forms;
 using CDBurnerXP.IO;
 using Microsoft.Win32;
+using System.Threading;
 
 namespace Ketarin.Forms
 {
@@ -36,6 +37,7 @@ namespace Ketarin.Forms
         private string m_MatchSelection = null;
         private int m_MatchPosition = -1;
         private BrowserPreviewDialog m_Preview = null;
+        private Thread regexThread;
 
         private delegate UrlVariable VariableResultDelegate();
 
@@ -532,6 +534,15 @@ namespace Ketarin.Forms
         /// </summary>
         private void RefreshRtfFormatting()
         {
+            RefreshRtfFormatting(null);
+        }
+        
+        /// <summary>
+        /// Highlights the currently matched content (based 
+        /// on regex or start/end) within the richtextbox.
+        /// </summary>
+        private void RefreshRtfFormatting(Match match)
+        {
             if (string.IsNullOrEmpty(rtfContent.Text) || CurrentVariable.VariableType == UrlVariable.Type.Textual) return;
 
             using (new ControlRedrawLock(this))
@@ -550,13 +561,8 @@ namespace Ketarin.Forms
                 rtfContent.SelectionBackColor = SystemColors.Window;
                 rtfContent.SelectionLength = 0;
 
-                if (CurrentVariable.VariableType == UrlVariable.Type.RegularExpression)
+                if (match != null)
                 {
-                    Regex regex = CurrentVariable.CreateRegex();
-                    if (regex == null) return;
-
-                    Match match = regex.Match(rtfContent.Text);
-
                     m_MatchPosition = match.Index;
                     rtfContent.SelectionStart = match.Index;
                     rtfContent.SelectionLength = match.Length;
@@ -682,7 +688,35 @@ namespace Ketarin.Forms
 
             txtRegularExpression.BackColor = SystemColors.Window;
 
-            RefreshRtfFormatting();            
+            txtRegularExpression.HintText = "Evaluating...";
+
+            // Cancel current evaluation and start new
+            if (regexThread != null)
+            {
+                regexThread.Abort();
+                regexThread = null;
+            }
+            regexThread = new Thread(new ParameterizedThreadStart(EvaluateRegex));
+            regexThread.Start(rtfContent.Text);
+        }
+
+        private void EvaluateRegex(object text)
+        {
+            try
+            {
+                Regex regex = CurrentVariable.CreateRegex();
+                if (regex == null) return;
+
+                Match match = regex.Match(text as string);
+
+                this.BeginInvoke((MethodInvoker)delegate()
+                {
+                    txtRegularExpression.HintText = string.Empty;
+                    RefreshRtfFormatting(match);
+                });
+            }
+            catch (ThreadAbortException) { /* Thread aborted, no error */ }
+            catch (InvalidOperationException) { /* Ignore error if form is closed */ }
         }
 
         private void chkRightToLeft_CheckedChanged(object sender, EventArgs e)
