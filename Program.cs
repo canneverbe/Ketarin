@@ -123,6 +123,18 @@ namespace Ketarin
                     Console.WriteLine("Could export to the specified location: " + ex.Message);
                 }
             }
+            else if (arguments["install"] != null)
+            {
+                // Install all applications in the given XML
+                string path = arguments["install"] as string;
+                ApplicationJob[] appsToInstall = ApplicationJob.ImportFromXml(path);
+
+                InstallingApplicationsDialog dialog = new InstallingApplicationsDialog();
+                dialog.Applications = appsToInstall;
+                dialog.ShowIcon = true;
+                dialog.ShowInTaskbar = true;
+                Application.Run(dialog);
+            }
             // ...or launch the GUI.
             else
             {
