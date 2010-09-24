@@ -131,7 +131,7 @@ namespace Ketarin.Forms
                 return;
             }
 
-            if (e.Cancel) return;
+            if (bgwSetup.CancellationPending) return;
 
             UpdateStatus(string.Format("Updating application {0} of {1}: {2}", count, this.Applications.Length, job.Name));
 
@@ -141,7 +141,7 @@ namespace Ketarin.Forms
             // Wait until finished
             while (updater.IsBusy)
             {
-                if (e.Cancel)
+                if (bgwSetup.CancellationPending)
                 {
                     updater.Cancel();
                     return;
@@ -167,7 +167,7 @@ namespace Ketarin.Forms
 
             foreach (SetupInstruction instruction in job.SetupInstructions)
             {
-                if (e.Cancel) return;
+                if (bgwSetup.CancellationPending) return;
 
                 instruction.Execute();
             }
@@ -196,6 +196,10 @@ namespace Ketarin.Forms
                 bCancel.Enabled = false;
                 // Do not close yet!
                 DialogResult = DialogResult.None;
+            }
+            else
+            {
+                this.Close();
             }
         }
 

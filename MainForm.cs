@@ -920,6 +920,7 @@ namespace Ketarin
                         selectedJob.Enabled = false;
                         selectedJob.Save();
                         olvJobs.RefreshObject(selectedJob);
+                        UpdateNumByStatus();
                     }
                     break;
 
@@ -929,6 +930,7 @@ namespace Ketarin
                         selectedJob.Enabled = true;
                         selectedJob.Save();
                         olvJobs.RefreshObject(selectedJob);
+                        UpdateNumByStatus();
                     }
                     break;
             }
@@ -945,6 +947,7 @@ namespace Ketarin
                 {
                     dialog.ApplicationJob.Save();
                     olvJobs.RefreshObject(job);
+                    UpdateNumByStatus();
                 }
             }
         }
@@ -1110,21 +1113,35 @@ namespace Ketarin
             int idle = 0;
             int failed = 0;
             int finished = 0;
+            int updated = 0;
+            int disabled = 0;
             
             foreach (ApplicationJob job in m_Jobs)
             {
+                if (!job.Enabled)
+                {
+                    disabled++;
+                }
+
                 switch (m_Updater.GetStatus(job))
                 {
                     case Updater.Status.Idle: idle++; break;
                     case Updater.Status.Failure: failed++; break;
                     case Updater.Status.NoUpdate:
+                        finished++;
+                        break;
                     case Updater.Status.UpdateAvailable:
+                        updated++;
+                        finished++;
+                        break;
                     case Updater.Status.UpdateSuccessful:
-                        finished++; break;
+                        updated++;
+                        finished++;
+                        break;
                 }
             }
 
-            tbNumByStatus.Text = string.Format("By status: {0} Idle, {1} Finished, {2} Failed", idle, finished, failed);
+            tbNumByStatus.Text = string.Format("By status: {0} Idle, {1} Updates, {2} Finished, {3} Failed ({4} Disabled)", idle, updated, finished, failed, disabled);
         }
 
         private void mnuLog_Click(object sender, EventArgs e)
