@@ -252,6 +252,7 @@ namespace Ketarin.Forms
                 }
 
                 SetRtfContent();
+                UpdateRegexMatches();
             }
             finally
             {
@@ -661,6 +662,11 @@ namespace Ketarin.Forms
         }
 
         private void txtRegularExpression_TextChanged(object sender, EventArgs e)
+        {
+            UpdateRegexMatches();
+        }
+
+        private void UpdateRegexMatches()
         {
             // "Disable" regex if empty
             if (string.IsNullOrEmpty(txtRegularExpression.Text))

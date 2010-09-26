@@ -64,7 +64,7 @@ namespace Ketarin.Forms
                 txtSpoofReferer.ReadOnly = value;
                 txtUserAgent.ReadOnly = value;
                 txtFileHippoId.ReadOnly = value;
-                txtUseVariablesForChanges.Enabled = value;
+                txtUseVariablesForChanges.Enabled = enable;
                 cboCategory.Enabled = enable;
                 chkDownloadExclusively.Enabled = enable;
                 chkDeletePrevious.Enabled = enable;
@@ -76,8 +76,11 @@ namespace Ketarin.Forms
                 rbBetaAvoid.Enabled = enable;
                 rbBetaDefault.Enabled = enable;
                 bBrowseFile.Enabled = enable;
+                bAddInstruction.Enabled = enable;
+                instructionsListBox.Enabled = enable;
                 bOK.Enabled = enable;
                 bOK.Visible = enable;
+                bCancel.Text = value ? "Close" : "Cancel";
             }
         }
 

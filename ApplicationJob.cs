@@ -62,6 +62,12 @@ namespace Ketarin
         #region Properties
 
         /// <summary>
+        /// Gets or sets the template from which the application has been created.
+        /// </summary>
+        [XmlElement("SourceTemplate")]
+        public string SourceTemplate { get; set; }
+
+        /// <summary>
         /// Gets or sets the website of the application.
         /// </summary>
         public string WebsiteUrl { get; set; }
@@ -678,25 +684,72 @@ namespace Ketarin
                 ApplicationJob job = LoadOneFromXml(xml);
                 if (job.Guid == Guid)
                 {
-                    // The right job is found, update now
-                    // Basically, we are only interested in properties
-                    // that change if a different method needs to be used
-                    // in order to download the file (changed website for example).
-                    DownloadDate = DateTime.Now;
-                    DownloadSourceType = job.DownloadSourceType;
-                    FileHippoId = job.FileHippoId;
-                    FixedDownloadUrl = job.FixedDownloadUrl;
-                    HttpReferer = job.HttpReferer;
-                    Name = job.Name;
-                    Variables = job.Variables;
-
-                    Save();
+                    UpdateTemplatePropertiesFromApp(job); 
                     return true;
                 }
             }
 
             return false;
         }
+
+        /// <summary>
+        /// Transfers all download relevant properties of an application
+        /// to the current application and saves it.
+        /// </summary>
+        private void UpdateTemplatePropertiesFromApp(ApplicationJob job)
+        {
+            // The right job is found, update now
+            // Basically, we are only interested in properties
+            // that change if a different method needs to be used
+            // in order to download the file (changed website for example).
+            DownloadDate = DateTime.Now;
+            DownloadSourceType = job.DownloadSourceType;
+            FileHippoId = job.FileHippoId;
+            FixedDownloadUrl = job.FixedDownloadUrl;
+            HttpReferer = job.HttpReferer;
+            UserAgent = job.UserAgent;
+            Name = job.Name;
+            VariableChangeIndicator = job.VariableChangeIndicator;
+            Variables = job.Variables;
+            SetupInstructions = job.SetupInstructions;
+
+            Save();
+        }
+
+        /// <summary>
+        /// Updates the application based on a new version of its template.
+        /// </summary>
+        private void UpdateFromTemplate(string xml)
+        {
+            if (string.IsNullOrEmpty(SourceTemplate)) return;
+
+            Dictionary<string, string> previousValues = new Dictionary<string, string>();
+
+            // Extract previously used values
+            XmlDocument sourceTemplateXml = new XmlDocument();
+            sourceTemplateXml.LoadXml(SourceTemplate);
+
+            XmlNodeList placeholdersList = sourceTemplateXml.GetElementsByTagName("placeholder");
+            foreach (XmlElement element in placeholdersList)
+            {
+                previousValues[element.GetAttribute("name")] = element.GetAttribute("value");
+            }
+
+            XmlDocument newTemplate = new XmlDocument();
+            newTemplate.LoadXml(xml);
+
+            SetPlaceholders(newTemplate, previousValues);
+
+            // Any placeholders left? Template cannot be applied
+            placeholdersList = sourceTemplateXml.GetElementsByTagName("placeholder");
+            if (placeholdersList.Count > 0)
+            {
+                throw new ApplicationException("The new template does not use the same placeholders.\r\n\r\nThe application cannot be updated.");
+            }
+
+            ApplicationJob newAppDefinition = LoadOneFromXml(newTemplate.OuterXml);
+            UpdateTemplatePropertiesFromApp(newAppDefinition);
+        }        
 
         /// <summary>
         /// Imports one (incomplete) ApplicationJob from a HTTP WebRequest.
@@ -771,23 +824,23 @@ namespace Ketarin
         /// <summary>
         /// Imports one or more ApplicationJobs from an XML file.
         /// </summary>
-        /// <returns>The last imported ApplicationJob</returns>
+        /// <returns>List of imported ApplicationJobs</returns>
         public static ApplicationJob[] ImportFromXml(string fileName)
         {
-            return ImportFromXmlString(File.ReadAllText(fileName));
+            return ImportFromXmlString(File.ReadAllText(fileName), true);
         }
 
         /// <summary>
         /// Imports one or more ApplicationJobs from a piece of XML.
         /// </summary>
-        /// <returns>The last imported ApplicationJob</returns>
-        public static ApplicationJob[] ImportFromXmlString(string xml)
+        /// <returns>List of imported ApplicationJobs</returns>
+        public static ApplicationJob[] ImportFromXmlString(string xml, bool save)
         {
             using (StringReader textReader = new StringReader(xml))
             {
                 using (XmlReader reader = XmlReader.Create(textReader))
                 {
-                    return ImportFromXml(reader, true);
+                    return ImportFromXml(reader, save);
                 }
             }
         }
@@ -928,32 +981,71 @@ namespace Ketarin
         /// Imports an application job from an XML file. If the XML
         /// contains any place holders, a dialog will be shown and ask
         /// the user for additional information.
+        /// Also checks for possible template updates.
         /// </summary>
         /// <param name="owner">Handle of the parent window</param>
         /// <param name="filename">File name of the XML file</param>
-        public static ApplicationJob ImportFromTemplateOrXml(IWin32Window owner, string filename)
+        public static ApplicationJob ImportFromTemplateOrXml(IWin32Window owner, string filename, ApplicationJob[] appsToCheckForUpdates)
         {
-            return ImportFromTemplateOrXml(owner, File.ReadAllText(filename), true);
+            return ImportFromTemplateOrXml(owner, File.ReadAllText(filename), appsToCheckForUpdates, true);
         }
 
-        public static ApplicationJob ImportFromTemplateOrXml(IWin32Window owner, string xml, bool isString)
+        public static ApplicationJob ImportFromTemplateOrXml(IWin32Window owner, string xml, ApplicationJob[] appsToCheckForUpdates, bool isString)
         {
             XmlDocument doc = new XmlDocument();
             doc.LoadXml(xml);
 
-            XmlNodeList placeholdersList = doc.GetElementsByTagName("placeholder");
-            
-            // Prevent changing collection!
-            XmlNode[] placeholders = new XmlNode[placeholdersList.Count];
-            for (int i = 0; i < placeholders.Length; i++)
+            Guid templateGuid = Guid.Empty;
+
+            // Determine GUID of current template
+            XmlNodeList appElements = doc.GetElementsByTagName("ApplicationJob");
+            foreach (XmlElement appElement in appElements)
             {
-                placeholders[i] = placeholdersList[i];
+                templateGuid = new Guid(appElement.GetAttribute("Guid"));
+                break;
             }
+
+            List<ApplicationJob> appsToUpdate = new List<ApplicationJob>();
+
+            // Check if any applications have been created from this template
+            foreach (ApplicationJob app in appsToCheckForUpdates)
+            {
+                if (!string.IsNullOrEmpty(app.SourceTemplate))
+                {
+                    XmlDocument templateDoc = new XmlDocument();
+                    templateDoc.LoadXml(app.SourceTemplate);
+                    XmlNodeList sourceTemplateAppElements = templateDoc.GetElementsByTagName("ApplicationJob");
+                    foreach (XmlElement sourceTemplateAppElement in sourceTemplateAppElements)
+                    {
+                        Guid sourceTemplateGuid = new Guid(sourceTemplateAppElement.GetAttribute("Guid"));
+                        if (sourceTemplateGuid == templateGuid)
+                        {
+                            appsToUpdate.Add(app);
+                            break;
+                        }
+                    }
+                }
+            }
+
+            if (appsToUpdate.Count > 0)
+            {
+                string msg = string.Format("{0} applications have been created from this template.\r\n\r\nDo you want to update these applications based on the new template?", appsToUpdate.Count);
+                if (MessageBox.Show(owner, msg, Application.ProductName, MessageBoxButtons.YesNo, MessageBoxIcon.None) == DialogResult.Yes)
+                {
+                    foreach (ApplicationJob app in appsToUpdate)
+                    {
+                        app.UpdateFromTemplate(xml);
+                    }
+                    return null;
+                }
+            }
+
+            XmlNodeList placeholdersList = doc.GetElementsByTagName("placeholder");
 
             // First, grather all values. A placeholder might occur twice.
             Dictionary<string, string> values = new Dictionary<string, string>();
 
-            foreach (XmlElement element in placeholders)
+            foreach (XmlElement element in placeholdersList)
             {
                 string name = element.GetAttribute("name");
 
@@ -968,6 +1060,53 @@ namespace Ketarin
 
                     values.Add(name, dialog.Value);
                 }
+            }
+
+            SetPlaceholders(doc, values);
+
+            ApplicationJob[] jobs = ImportFromXmlString(doc.OuterXml, false);
+            if (jobs.Length > 0)
+            {
+                // Attach used values to placeholders
+                if (values.Count > 0)
+                {
+                    XmlDocument templateXml = new XmlDocument();
+                    templateXml.PreserveWhitespace = true;
+                    templateXml.LoadXml(xml);
+
+                    foreach (XmlElement placeholder in templateXml.GetElementsByTagName("placeholder"))
+                    {
+                        placeholder.SetAttribute("value", values[placeholder.GetAttribute("name")]);
+                    }
+
+                    jobs[0].SourceTemplate = templateXml.OuterXml;
+                    // Templates always create new applications. Ensure null GUID.
+                    jobs[0].Guid = Guid.Empty;
+                }
+
+                jobs[0].Save();
+
+                return jobs[0];
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Replaces all placeholders in a given template with the given values.
+        /// </summary>
+        /// <param name="doc">Template to update</param>
+        /// <param name="values">Values to replace the placeholders with (name, value)</param>
+        private static void SetPlaceholders(XmlDocument doc, Dictionary<string, string> values)
+        {
+            XmlNodeList placeholdersList = doc.GetElementsByTagName("placeholder");
+            // Prevent changing collection!
+            XmlNode[] placeholders = new XmlNode[placeholdersList.Count];
+            for (int i = 0; i < placeholders.Length; i++)
+            {
+                placeholders[i] = placeholdersList[i];
             }
 
             foreach (XmlElement element in placeholders)
@@ -999,16 +1138,13 @@ namespace Ketarin
                 // Replace the placeholder with a text node
                 element.ParentNode.ReplaceChild(doc.CreateTextNode(values[name]), element);
             }
-
-            ApplicationJob[] jobs = ImportFromXmlString(doc.OuterXml);
-            return (jobs.Length > 0) ? jobs[0] : null;
         }
 
         /// <summary>
         /// Imports one or more ApplicationJobs from a piece of XML, 
         /// provided by an XmlReader.
         /// </summary>
-        /// <returns>The last imported ApplicationJob</returns>
+        /// <returns>All imported ApplicationJobs</returns>
         private static ApplicationJob[] ImportFromXml(XmlReader reader, bool save)
         {
             XmlSerializer serializer = new XmlSerializer(typeof(ApplicationJob));
@@ -1113,7 +1249,8 @@ namespace Ketarin
                                                    WebsiteUrl = @WebsiteUrl,
                                                    UserAgent = @UserAgent,
                                                    ExecuteCommandType = @ExecuteCommandType,
-                                                   ExecutePreCommandType = @ExecutePreCommandType
+                                                   ExecutePreCommandType = @ExecutePreCommandType,
+                                                   SourceTemplate = @SourceTemplate
                                              WHERE JobGuid = @JobGuid";
 
                             command.Parameters.Add(new SQLiteParameter("@ApplicationName", Name));
@@ -1146,6 +1283,7 @@ namespace Ketarin
                             command.Parameters.Add(new SQLiteParameter("@UserAgent", UserAgent));
                             command.Parameters.Add(new SQLiteParameter("@ExecuteCommandType", ExecuteCommandType));
                             command.Parameters.Add(new SQLiteParameter("@ExecutePreCommandType", ExecutePreCommandType));
+                            command.Parameters.Add(new SQLiteParameter("@SourceTemplate", SourceTemplate));
 
                             if (DownloadDate.HasValue)
                             {
@@ -1230,7 +1368,8 @@ namespace Ketarin
             UserNotes = reader["UserNotes"] as string;
             WebsiteUrl = reader["WebsiteUrl"] as string;
             UserAgent = reader["UserAgent"] as string;
-            
+            SourceTemplate = reader["SourceTemplate"] as string;
+
             string executeCommandType = reader["ExecuteCommandType"] as string;
             if (executeCommandType != null)
             {
