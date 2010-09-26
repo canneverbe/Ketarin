@@ -354,6 +354,7 @@ namespace Ketarin
             addColumns.Add("ExecuteCommandType", "ALTER TABLE jobs ADD ExecuteCommandType TEXT");
             addColumns.Add("ExecutePreCommand", "ALTER TABLE jobs ADD ExecutePreCommand TEXT");
             addColumns.Add("ExecutePreCommandType", "ALTER TABLE jobs ADD ExecutePreCommandType TEXT");
+            addColumns.Add("SourceTemplate", "ALTER TABLE jobs ADD SourceTemplate TEXT");
             addColumns.Add("Category", "ALTER TABLE jobs ADD Category TEXT");
             addColumns.Add("JobGuid", "ALTER TABLE jobs ADD JobGuid TEXT");
             addColumns.Add("DownloadDate", "ALTER TABLE jobs ADD DownloadDate Date");

@@ -830,7 +830,7 @@ namespace Ketarin
                 }
                 catch (Exception)
                 {
-                    jobs = new ApplicationJob[] { ApplicationJob.ImportFromTemplateOrXml(this, SafeClipboard.GetData(DataFormats.Text) as string, true) };
+                    jobs = new ApplicationJob[] { ApplicationJob.ImportFromTemplateOrXml(this, SafeClipboard.GetData(DataFormats.Text) as string, m_Jobs, true) };
                 }
                 if (jobs == null || jobs.Length == 0) return;
 
@@ -1081,7 +1081,7 @@ namespace Ketarin
             }
             else
             {
-                ApplicationJob.ImportFromTemplateOrXml(this, file);
+                ApplicationJob.ImportFromTemplateOrXml(this, file, m_Jobs);
             }
         }
 
