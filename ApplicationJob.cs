@@ -1001,17 +1001,22 @@ namespace Ketarin
             XmlNodeList appElements = doc.GetElementsByTagName("ApplicationJob");
             foreach (XmlElement appElement in appElements)
             {
-                templateGuid = new Guid(appElement.GetAttribute("Guid"));
-                break;
+                if (!string.IsNullOrEmpty(appElement.GetAttribute("Guid")))
+                {
+                    templateGuid = new Guid(appElement.GetAttribute("Guid"));
+                    break;
+                }
             }
 
             List<ApplicationJob> appsToUpdate = new List<ApplicationJob>();
 
             // Check if any applications have been created from this template
-            foreach (ApplicationJob app in appsToCheckForUpdates)
+            if (templateGuid != Guid.Empty)
             {
-                if (!string.IsNullOrEmpty(app.SourceTemplate))
+                foreach (ApplicationJob app in appsToCheckForUpdates)
                 {
+                    if (string.IsNullOrEmpty(app.SourceTemplate)) continue;
+
                     XmlDocument templateDoc = new XmlDocument();
                     templateDoc.LoadXml(app.SourceTemplate);
                     XmlNodeList sourceTemplateAppElements = templateDoc.GetElementsByTagName("ApplicationJob");
