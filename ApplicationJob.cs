@@ -741,7 +741,7 @@ namespace Ketarin
             SetPlaceholders(newTemplate, previousValues);
 
             // Any placeholders left? Template cannot be applied
-            placeholdersList = sourceTemplateXml.GetElementsByTagName("placeholder");
+            placeholdersList = newTemplate.GetElementsByTagName("placeholder");
             if (placeholdersList.Count > 0)
             {
                 throw new ApplicationException("The new template does not use the same placeholders.\r\n\r\nThe application cannot be updated.");

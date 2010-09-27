@@ -125,15 +125,22 @@ namespace Ketarin
             }
             else if (arguments["install"] != null)
             {
-                // Install all applications in the given XML
-                string path = arguments["install"] as string;
-                ApplicationJob[] appsToInstall = ApplicationJob.ImportFromXml(path);
+                try
+                {
+                    // Install all applications in the given XML
+                    string path = arguments["install"] as string;
+                    ApplicationJob[] appsToInstall = ApplicationJob.ImportFromXml(path);
 
-                InstallingApplicationsDialog dialog = new InstallingApplicationsDialog();
-                dialog.Applications = appsToInstall;
-                dialog.ShowIcon = true;
-                dialog.ShowInTaskbar = true;
-                Application.Run(dialog);
+                    InstallingApplicationsDialog dialog = new InstallingApplicationsDialog();
+                    dialog.Applications = appsToInstall;
+                    dialog.ShowIcon = true;
+                    dialog.ShowInTaskbar = true;
+                    Application.Run(dialog);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Setup cannot be started: " + ex.Message, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
             // ...or launch the GUI.
             else
