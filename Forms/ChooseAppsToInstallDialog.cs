@@ -22,8 +22,17 @@ namespace Ketarin.Forms
         private Dictionary<ApplicationJob, bool> checkedApps = new Dictionary<ApplicationJob, bool>();
         private List<ApplicationJob> selectedApplications = new List<ApplicationJob>();
         private ApplicationList lastDeletedList = null;
+        private bool shouldUpdateApplications = false;
 
         #region Properties
+
+        /// <summary>
+        /// Gets whether or not applications should be updated before installing.
+        /// </summary>
+        public bool ShouldUpdateApplications
+        {
+            get { return shouldUpdateApplications; }
+        }
 
         /// <summary>
         /// Gets the list of selected applications to install.
@@ -139,6 +148,29 @@ namespace Ketarin.Forms
         {
             imlLists.Images.Add(appList.GetIcon());
             lists.Add(appList);
+        }
+
+        /// <summary>
+        /// Close the dialog with selected applications.
+        /// </summary>
+        private void InstallConfirm()
+        {
+            this.selectedApplications.Clear();
+            foreach (ApplicationJob job in olvApps.CheckedObjects)
+            {
+                selectedApplications.Add(job);
+            }
+
+            // No applications selected -> not OK
+            if (selectedApplications.Count == 0)
+            {
+                MessageBox.Show(this, "You did not select any applications to install.\r\n\r\nPlease select at least one application in order to proceed.", System.Windows.Forms.Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.None);
+                DialogResult = DialogResult.None;
+                return;
+            }
+
+            DialogResult = DialogResult.OK;
+            Close();
         }
 
         /// <summary>
@@ -277,18 +309,20 @@ namespace Ketarin.Forms
 
         private void bOK_Click(object sender, EventArgs e)
         {
-            this.selectedApplications.Clear();
-            foreach (ApplicationJob job in olvApps.CheckedObjects)
-            {
-                selectedApplications.Add(job);
-            }
+            this.shouldUpdateApplications = false;
+            InstallConfirm();
+        }
 
-            // No applications selected -> not OK
-            if (selectedApplications.Count == 0)
-            {
-                MessageBox.Show(this, "You did not select any applications to install.\r\n\r\nPlease select at least one application in order to proceed.", System.Windows.Forms.Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.None);
-                DialogResult = DialogResult.None;
-            }
+        private void mnuInstallOnly_Click(object sender, EventArgs e)
+        {
+            this.shouldUpdateApplications = false;
+            InstallConfirm();
+        }
+
+        private void mnuUpdateAndInstall_Click(object sender, EventArgs e)
+        {
+            this.shouldUpdateApplications = true;
+            InstallConfirm();
         }
 
         private void olvApps_ItemDrag(object sender, ItemDragEventArgs e)
