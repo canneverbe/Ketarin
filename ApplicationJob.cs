@@ -34,7 +34,6 @@ namespace Ketarin
         private string m_FileHippoId = string.Empty;
         private string m_FileHippoVersion = string.Empty;
         private bool m_DeletePreviousFile = false;
-        private string m_PreviousLocation = string.Empty;
         private SourceType m_SourceType = SourceType.FixedUrl;
         private UrlVariableCollection m_Variables = null;
         private string m_Category = string.Empty;
@@ -525,10 +524,24 @@ namespace Ketarin
             set { m_SourceType = value; }
         }
 
+        /// <summary>
+        /// Gets or sets the last location the application has been downloaded to.
+        /// </summary>
         public string PreviousLocation
         {
-            get { return m_PreviousLocation; }
-            set { m_PreviousLocation = value; }
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Determines whether or not the file exists.
+        /// </summary>
+        public bool FileExists
+        {
+            get
+            {
+                return !string.IsNullOrEmpty(PreviousLocation) && PathEx.TryGetFileSize(PreviousLocation) > 0;
+            }
         }
 
         [XmlElement("DeletePreviousFile")]
@@ -1265,7 +1278,7 @@ namespace Ketarin
                             command.Parameters.Add(new SQLiteParameter("@IsEnabled", m_Enabled));
                             command.Parameters.Add(new SQLiteParameter("@FileHippoId", m_FileHippoId));
                             command.Parameters.Add(new SQLiteParameter("@DeletePreviousFile", m_DeletePreviousFile));
-                            command.Parameters.Add(new SQLiteParameter("@PreviousLocation", m_PreviousLocation));
+                            command.Parameters.Add(new SQLiteParameter("@PreviousLocation", PreviousLocation));
                             command.Parameters.Add(new SQLiteParameter("@SourceType", m_SourceType));
                             command.Parameters.Add(new SQLiteParameter("@ExecuteCommand", ExecuteCommand));
                             command.Parameters.Add(new SQLiteParameter("@ExecutePreCommand", ExecutePreCommand));
@@ -1353,7 +1366,7 @@ namespace Ketarin
             m_Enabled = Convert.ToBoolean(reader["IsEnabled"]);
             m_FileHippoId = reader["FileHippoId"] as string;
             m_DeletePreviousFile = Convert.ToBoolean(reader["DeletePreviousFile"]);
-            m_PreviousLocation = reader["PreviousLocation"] as string;
+            PreviousLocation = reader["PreviousLocation"] as string;
             m_SourceType = (SourceType)Convert.ToByte(reader["SourceType"]);
             ExecuteCommand = reader["ExecuteCommand"] as string;
             ExecutePreCommand = reader["ExecutePreCommand"] as string;
@@ -1513,11 +1526,11 @@ namespace Ketarin
                     throw new TargetPathInvalidException(targetFile);
                 }
 
-                if (!current.Exists && !string.IsNullOrEmpty(m_PreviousLocation) && m_DeletePreviousFile)
+                if (!current.Exists && !string.IsNullOrEmpty(PreviousLocation) && m_DeletePreviousFile)
                 {
                     // The file does not exist at the target location.
                     // Check if the previously downloaded file still matches.
-                    current = new FileInfo(m_PreviousLocation);
+                    current = new FileInfo(PreviousLocation);
                 }
 
                 if (!IgnoreFileInformation && !current.Exists)
@@ -1557,13 +1570,13 @@ namespace Ketarin
             }
 
             // If using FileHippo, and previous file is available, check MD5
-            if (!string.IsNullOrEmpty(m_FileHippoId) && m_SourceType == SourceType.FileHippo && !string.IsNullOrEmpty(m_PreviousLocation) && File.Exists(m_PreviousLocation))
+            if (!string.IsNullOrEmpty(m_FileHippoId) && m_SourceType == SourceType.FileHippo && !string.IsNullOrEmpty(PreviousLocation) && File.Exists(PreviousLocation))
             {
                 string serverMd5 = ExternalServices.FileHippoMd5(m_FileHippoId, AvoidDownloadBeta);
                 // It may happen, that the MD5 is not calculated
                 if (serverMd5 != null)
                 {
-                    bool md5Result = string.Compare(serverMd5, GetMd5OfFile(m_PreviousLocation), true) != 0;
+                    bool md5Result = string.Compare(serverMd5, GetMd5OfFile(PreviousLocation), true) != 0;
                     LogDialog.Log(this, md5Result ? "Update required, MD5 does not match" : "Update not required");
                     return md5Result;
                 }

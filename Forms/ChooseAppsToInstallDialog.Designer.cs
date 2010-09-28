@@ -30,7 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             this.bCancel = new System.Windows.Forms.Button();
-            this.bOK = new System.Windows.Forms.Button();
+            this.bOK = new wyDay.Controls.SplitButton();
             this.olvLists = new CDBurnerXP.Controls.ObjectListView();
             this.colListName = new CDBurnerXP.Controls.OLVColumn();
             this.colListAppNames = new CDBurnerXP.Controls.OLVColumn();
@@ -54,6 +54,9 @@
             this.pnlApps = new System.Windows.Forms.Panel();
             this.pnlAppLists = new System.Windows.Forms.Panel();
             this.lblUndoDelete = new System.Windows.Forms.LinkLabel();
+            this.mnuInstall = new System.Windows.Forms.ContextMenu();
+            this.mnuInstallOnly = new System.Windows.Forms.MenuItem();
+            this.mnuUpdateAndInstall = new System.Windows.Forms.MenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.olvLists)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.olvApps)).BeginInit();
             this.tableLayoutPanel.SuspendLayout();
@@ -75,10 +78,12 @@
             // bOK
             // 
             this.bOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.bOK.AutoSize = true;
             this.bOK.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.bOK.Location = new System.Drawing.Point(434, 359);
             this.bOK.Name = "bOK";
             this.bOK.Size = new System.Drawing.Size(75, 23);
+            this.bOK.SplitMenu = this.mnuInstall;
             this.bOK.TabIndex = 98;
             this.bOK.Text = "I&nstall";
             this.bOK.UseVisualStyleBackColor = true;
@@ -355,6 +360,24 @@
             this.lblUndoDelete.Visible = false;
             this.lblUndoDelete.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lblUndoDelete_LinkClicked);
             // 
+            // mnuInstall
+            // 
+            this.mnuInstall.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.mnuInstallOnly,
+            this.mnuUpdateAndInstall});
+            // 
+            // mnuInstallOnly
+            // 
+            this.mnuInstallOnly.Index = 0;
+            this.mnuInstallOnly.Text = "&Install";
+            this.mnuInstallOnly.Click += new System.EventHandler(this.mnuInstallOnly_Click);
+            // 
+            // mnuUpdateAndInstall
+            // 
+            this.mnuUpdateAndInstall.Index = 1;
+            this.mnuUpdateAndInstall.Text = "Upd&ate and install";
+            this.mnuUpdateAndInstall.Click += new System.EventHandler(this.mnuUpdateAndInstall_Click);
+            // 
             // ChooseAppsToInstallDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -379,13 +402,14 @@
             this.pnlAppLists.ResumeLayout(false);
             this.pnlAppLists.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
 
         protected System.Windows.Forms.Button bCancel;
-        protected System.Windows.Forms.Button bOK;
+        protected wyDay.Controls.SplitButton bOK;
         private CDBurnerXP.Controls.ObjectListView olvLists;
         private CDBurnerXP.Controls.FastObjectListView olvApps;
         private System.Windows.Forms.Label lblAppLists;
@@ -409,5 +433,8 @@
         private System.Windows.Forms.Panel pnlApps;
         private System.Windows.Forms.Panel pnlAppLists;
         private System.Windows.Forms.LinkLabel lblUndoDelete;
+        private System.Windows.Forms.ContextMenu mnuInstall;
+        private System.Windows.Forms.MenuItem mnuInstallOnly;
+        private System.Windows.Forms.MenuItem mnuUpdateAndInstall;
     }
 }

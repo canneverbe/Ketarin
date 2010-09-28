@@ -19,6 +19,7 @@ namespace Ketarin.Forms
         private bool expanded = false;
         private List<LogItem> logItems = new List<LogItem>();
         private int installCounter = 0;
+        private bool updateApplications = false;
 
         #region LogItem
 
@@ -39,6 +40,15 @@ namespace Ketarin.Forms
         #endregion
 
         #region Properties
+
+        /// <summary>
+        /// Gets or sets whether or not the applications should be updated before installing.
+        /// </summary>
+        public bool UpdateApplications
+        {
+            get { return this.updateApplications; }
+            set { this.updateApplications = value; }
+        }
 
         /// <summary>
         /// Gets or sets the applications that are to be installed.
@@ -133,33 +143,37 @@ namespace Ketarin.Forms
 
             if (bgwSetup.CancellationPending) return;
 
-            UpdateStatus(string.Format("Updating application {0} of {1}: {2}", count, this.Applications.Length, job.Name));
-
-            Updater updater = new Updater();
-            updater.BeginUpdate(new ApplicationJob[] { job }, false, false);
-
-            // Wait until finished
-            while (updater.IsBusy)
+            // Force update if no file exists
+            if (this.updateApplications || !job.FileExists)
             {
-                if (bgwSetup.CancellationPending)
-                {
-                    updater.Cancel();
-                    return;
-                }
-                Thread.Sleep(500);
-            }
+                UpdateStatus(string.Format("Updating application {0} of {1}: {2}", count, this.Applications.Length, job.Name));
 
-            // Did update fail? Install if {file} is present.
-            if (updater.Errors.Length > 0)
-            {
-                if (PathEx.TryGetFileSize(job.PreviousLocation) > 0)
+                Updater updater = new Updater();
+                updater.BeginUpdate(new ApplicationJob[] { job }, false, false);
+
+                // Wait until finished
+                while (updater.IsBusy)
                 {
-                    LogInfo(job.Name + ": Update failed, installing previously available version", LogItemType.Warning);
+                    if (bgwSetup.CancellationPending)
+                    {
+                        updater.Cancel();
+                        return;
+                    }
+                    Thread.Sleep(500);
                 }
-                else
+
+                // Did update fail? Install if {file} is present.
+                if (updater.Errors.Length > 0)
                 {
-                    LogInfo(job.Name + ": Update failed", LogItemType.Error);
-                    return;
+                    if (PathEx.TryGetFileSize(job.PreviousLocation) > 0)
+                    {
+                        LogInfo(job.Name + ": Update failed, installing previously available version", LogItemType.Warning);
+                    }
+                    else
+                    {
+                        LogInfo(job.Name + ": Update failed", LogItemType.Error);
+                        return;
+                    }
                 }
             }
 

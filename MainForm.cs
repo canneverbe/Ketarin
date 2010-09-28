@@ -594,6 +594,7 @@ namespace Ketarin
                 {
                     using (InstallingApplicationsDialog setupDialog = new InstallingApplicationsDialog())
                     {
+                        setupDialog.UpdateApplications = dialog.ShouldUpdateApplications;
                         setupDialog.Applications = dialog.SelectedApplications;
                         setupDialog.ShowDialog(this);
                     }
@@ -754,9 +755,9 @@ namespace Ketarin
             cmnuUpdate.Enabled = (!m_Updater.IsBusy);
             cmnuCheckForUpdate.Enabled = (!m_Updater.IsBusy);
             cmnuForceDownload.Enabled = (!m_Updater.IsBusy);
-            cmnuOpenFile.Enabled = (job != null && !m_Updater.IsBusy && !string.IsNullOrEmpty(job.PreviousLocation) && File.Exists(job.PreviousLocation));
-            cmnuProperties.Enabled = (job != null && !m_Updater.IsBusy && !string.IsNullOrEmpty(job.PreviousLocation) && File.Exists(job.PreviousLocation));
-            cmnuOpenFolder.Enabled = (job != null && !string.IsNullOrEmpty(job.PreviousLocation) && File.Exists(job.PreviousLocation));
+            cmnuOpenFile.Enabled = (job != null && !m_Updater.IsBusy && job.FileExists);
+            cmnuProperties.Enabled = (job != null && !m_Updater.IsBusy && job.FileExists);
+            cmnuOpenFolder.Enabled = (job != null && job.FileExists);
             cmnuRename.Enabled = cmnuOpenFile.Enabled;
             cmnuCopy.Enabled = (olvJobs.SelectedObjects.Count != 0);
             cmnuPaste.Enabled = SafeClipboard.IsDataPresent(DataFormats.Text);

@@ -133,7 +133,7 @@ namespace Ketarin
             List<string> iconPaths = new List<string>();
             foreach (ApplicationJob app in this.Applications)
             {
-                if (!string.IsNullOrEmpty(app.PreviousLocation) && PathEx.TryGetFileSize(app.PreviousLocation) > 0)
+                if (app.FileExists)
                 {
                     iconPaths.Add(app.PreviousLocation);
                 }
