@@ -1035,11 +1035,15 @@ namespace Ketarin
                     XmlNodeList sourceTemplateAppElements = templateDoc.GetElementsByTagName("ApplicationJob");
                     foreach (XmlElement sourceTemplateAppElement in sourceTemplateAppElements)
                     {
-                        Guid sourceTemplateGuid = new Guid(sourceTemplateAppElement.GetAttribute("Guid"));
-                        if (sourceTemplateGuid == templateGuid)
+                        // Only use templates that have a GUID
+                        if (!string.IsNullOrEmpty(sourceTemplateAppElement.GetAttribute("Guid")))
                         {
-                            appsToUpdate.Add(app);
-                            break;
+                            Guid sourceTemplateGuid = new Guid(sourceTemplateAppElement.GetAttribute("Guid"));
+                            if (sourceTemplateGuid == templateGuid)
+                            {
+                                appsToUpdate.Add(app);
+                                break;
+                            }
                         }
                     }
                 }
