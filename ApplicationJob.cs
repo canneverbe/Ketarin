@@ -956,7 +956,7 @@ namespace Ketarin
                         element.RemoveChild(element["PreviousLocation"]);
                     }
                 }
-                
+
                 xmlResult = doc.InnerXml;
             }
 

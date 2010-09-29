@@ -46,14 +46,8 @@
             this.txtProxyPassword = new System.Windows.Forms.TextBox();
             this.lblNumThreads = new System.Windows.Forms.Label();
             this.nNumThreads = new System.Windows.Forms.NumericUpDown();
-            this.cboGlobalVariables = new System.Windows.Forms.ComboBox();
-            this.txtGlobalVariableValue = new System.Windows.Forms.TextBox();
-            this.lblVarName = new System.Windows.Forms.Label();
-            this.lblvalue = new System.Windows.Forms.Label();
-            this.bAdd = new System.Windows.Forms.Button();
-            this.bRemove = new System.Windows.Forms.Button();
             this.nNumRetries = new System.Windows.Forms.NumericUpDown();
-            this.label1 = new System.Windows.Forms.Label();
+            this.lblNumRetries = new System.Windows.Forms.Label();
             this.tcSettings = new System.Windows.Forms.TabControl();
             this.tpGeneral = new System.Windows.Forms.TabPage();
             this.chkOpenWebsite = new System.Windows.Forms.CheckBox();
@@ -62,9 +56,11 @@
             this.chkBackups = new System.Windows.Forms.CheckBox();
             this.chkMinToTray = new System.Windows.Forms.CheckBox();
             this.chkUpdateOnlineDatabase = new System.Windows.Forms.CheckBox();
-            this.sepGlobalVariables = new CDBurnerXP.Controls.Separator();
             this.tpConnection = new System.Windows.Forms.TabPage();
             this.sepProxy = new CDBurnerXP.Controls.Separator();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.gridGlobalVariables = new System.Windows.Forms.DataGridView();
+            this.lblGlobalVariables = new System.Windows.Forms.Label();
             this.tpCommands = new System.Windows.Forms.TabPage();
             this.commandControl = new Ketarin.Forms.CommandControl();
             this.lblCommandEvent = new System.Windows.Forms.Label();
@@ -78,6 +74,8 @@
             this.tcSettings.SuspendLayout();
             this.tpGeneral.SuspendLayout();
             this.tpConnection.SuspendLayout();
+            this.tabPage1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.gridGlobalVariables)).BeginInit();
             this.tpCommands.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -85,7 +83,7 @@
             // 
             this.bCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.bCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.bCancel.Location = new System.Drawing.Point(339, 352);
+            this.bCancel.Location = new System.Drawing.Point(339, 337);
             this.bCancel.Name = "bCancel";
             this.bCancel.Size = new System.Drawing.Size(75, 23);
             this.bCancel.TabIndex = 4;
@@ -96,7 +94,7 @@
             // 
             this.bOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.bOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.bOK.Location = new System.Drawing.Point(258, 352);
+            this.bOK.Location = new System.Drawing.Point(258, 337);
             this.bOK.Name = "bOK";
             this.bOK.Size = new System.Drawing.Size(75, 23);
             this.bOK.TabIndex = 3;
@@ -286,68 +284,6 @@
             0,
             0});
             // 
-            // cboGlobalVariables
-            // 
-            this.cboGlobalVariables.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cboGlobalVariables.FormattingEnabled = true;
-            this.cboGlobalVariables.Location = new System.Drawing.Point(54, 235);
-            this.cboGlobalVariables.Name = "cboGlobalVariables";
-            this.cboGlobalVariables.Size = new System.Drawing.Size(106, 21);
-            this.cboGlobalVariables.Sorted = true;
-            this.cboGlobalVariables.TabIndex = 12;
-            this.cboGlobalVariables.SelectedIndexChanged += new System.EventHandler(this.cboGlobalVariables_SelectedIndexChanged);
-            // 
-            // txtGlobalVariableValue
-            // 
-            this.txtGlobalVariableValue.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtGlobalVariableValue.Location = new System.Drawing.Point(215, 235);
-            this.txtGlobalVariableValue.Name = "txtGlobalVariableValue";
-            this.txtGlobalVariableValue.Size = new System.Drawing.Size(173, 20);
-            this.txtGlobalVariableValue.TabIndex = 14;
-            this.txtGlobalVariableValue.TextChanged += new System.EventHandler(this.txtGlobalVariableValue_TextChanged);
-            // 
-            // lblVarName
-            // 
-            this.lblVarName.AutoSize = true;
-            this.lblVarName.Location = new System.Drawing.Point(10, 238);
-            this.lblVarName.Name = "lblVarName";
-            this.lblVarName.Size = new System.Drawing.Size(38, 13);
-            this.lblVarName.TabIndex = 11;
-            this.lblVarName.Text = "&Name:";
-            // 
-            // lblvalue
-            // 
-            this.lblvalue.AutoSize = true;
-            this.lblvalue.Location = new System.Drawing.Point(172, 238);
-            this.lblvalue.Name = "lblvalue";
-            this.lblvalue.Size = new System.Drawing.Size(37, 13);
-            this.lblvalue.TabIndex = 13;
-            this.lblvalue.Text = "&Value:";
-            // 
-            // bAdd
-            // 
-            this.bAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.bAdd.Location = new System.Drawing.Point(232, 261);
-            this.bAdd.Name = "bAdd";
-            this.bAdd.Size = new System.Drawing.Size(75, 23);
-            this.bAdd.TabIndex = 15;
-            this.bAdd.Text = "&Add";
-            this.bAdd.UseVisualStyleBackColor = true;
-            this.bAdd.Click += new System.EventHandler(this.bAdd_Click);
-            // 
-            // bRemove
-            // 
-            this.bRemove.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.bRemove.Enabled = false;
-            this.bRemove.Location = new System.Drawing.Point(313, 261);
-            this.bRemove.Name = "bRemove";
-            this.bRemove.Size = new System.Drawing.Size(75, 23);
-            this.bRemove.TabIndex = 16;
-            this.bRemove.Text = "&Remove";
-            this.bRemove.UseVisualStyleBackColor = true;
-            this.bRemove.Click += new System.EventHandler(this.bRemove_Click);
-            // 
             // nNumRetries
             // 
             this.nNumRetries.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
@@ -372,14 +308,14 @@
             0,
             0});
             // 
-            // label1
+            // lblNumRetries
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(7, 63);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(90, 13);
-            this.label1.TabIndex = 5;
-            this.label1.Text = "Number of retrie&s:";
+            this.lblNumRetries.AutoSize = true;
+            this.lblNumRetries.Location = new System.Drawing.Point(7, 63);
+            this.lblNumRetries.Name = "lblNumRetries";
+            this.lblNumRetries.Size = new System.Drawing.Size(90, 13);
+            this.lblNumRetries.TabIndex = 5;
+            this.lblNumRetries.Text = "Number of retrie&s:";
             // 
             // tcSettings
             // 
@@ -388,11 +324,12 @@
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.tcSettings.Controls.Add(this.tpGeneral);
             this.tcSettings.Controls.Add(this.tpConnection);
+            this.tcSettings.Controls.Add(this.tabPage1);
             this.tcSettings.Controls.Add(this.tpCommands);
             this.tcSettings.Location = new System.Drawing.Point(12, 12);
             this.tcSettings.Name = "tcSettings";
             this.tcSettings.SelectedIndex = 0;
-            this.tcSettings.Size = new System.Drawing.Size(402, 325);
+            this.tcSettings.Size = new System.Drawing.Size(402, 310);
             this.tcSettings.TabIndex = 0;
             // 
             // tpGeneral
@@ -403,21 +340,14 @@
             this.tpGeneral.Controls.Add(this.chkBackups);
             this.tpGeneral.Controls.Add(this.chkMinToTray);
             this.tpGeneral.Controls.Add(this.chkUpdateOnlineDatabase);
-            this.tpGeneral.Controls.Add(this.bRemove);
             this.tpGeneral.Controls.Add(this.chkUpdateAtStartup);
-            this.tpGeneral.Controls.Add(this.bAdd);
-            this.tpGeneral.Controls.Add(this.lblvalue);
             this.tpGeneral.Controls.Add(this.txtCustomColumn);
-            this.tpGeneral.Controls.Add(this.lblVarName);
             this.tpGeneral.Controls.Add(this.lblCustomColumn);
-            this.tpGeneral.Controls.Add(this.txtGlobalVariableValue);
             this.tpGeneral.Controls.Add(this.chkAvoidBeta);
-            this.tpGeneral.Controls.Add(this.cboGlobalVariables);
-            this.tpGeneral.Controls.Add(this.sepGlobalVariables);
             this.tpGeneral.Location = new System.Drawing.Point(4, 22);
             this.tpGeneral.Name = "tpGeneral";
             this.tpGeneral.Padding = new System.Windows.Forms.Padding(3);
-            this.tpGeneral.Size = new System.Drawing.Size(394, 299);
+            this.tpGeneral.Size = new System.Drawing.Size(394, 284);
             this.tpGeneral.TabIndex = 0;
             this.tpGeneral.Text = "General";
             this.tpGeneral.UseVisualStyleBackColor = true;
@@ -480,23 +410,11 @@
             this.chkUpdateOnlineDatabase.Text = "&Check for updates in the online database";
             this.chkUpdateOnlineDatabase.UseVisualStyleBackColor = true;
             // 
-            // sepGlobalVariables
-            // 
-            this.sepGlobalVariables.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.sepGlobalVariables.ForeColor = System.Drawing.SystemColors.ActiveCaption;
-            this.sepGlobalVariables.Location = new System.Drawing.Point(3, 207);
-            this.sepGlobalVariables.Name = "sepGlobalVariables";
-            this.sepGlobalVariables.Size = new System.Drawing.Size(385, 23);
-            this.sepGlobalVariables.TabIndex = 10;
-            this.sepGlobalVariables.Text = "Global variables";
-            this.sepGlobalVariables.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
             // tpConnection
             // 
             this.tpConnection.Controls.Add(this.nConnectionTimeout);
             this.tpConnection.Controls.Add(this.txtProxyPassword);
-            this.tpConnection.Controls.Add(this.label1);
+            this.tpConnection.Controls.Add(this.lblNumRetries);
             this.tpConnection.Controls.Add(this.lblProxyPassword);
             this.tpConnection.Controls.Add(this.lblConnectionTimeout);
             this.tpConnection.Controls.Add(this.txtProxyUser);
@@ -512,7 +430,7 @@
             this.tpConnection.Location = new System.Drawing.Point(4, 22);
             this.tpConnection.Name = "tpConnection";
             this.tpConnection.Padding = new System.Windows.Forms.Padding(3);
-            this.tpConnection.Size = new System.Drawing.Size(394, 299);
+            this.tpConnection.Size = new System.Drawing.Size(394, 284);
             this.tpConnection.TabIndex = 1;
             this.tpConnection.Text = "Connection";
             this.tpConnection.UseVisualStyleBackColor = true;
@@ -529,6 +447,42 @@
             this.sepProxy.Text = "HTTP proxy settings";
             this.sepProxy.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // tabPage1
+            // 
+            this.tabPage1.Controls.Add(this.gridGlobalVariables);
+            this.tabPage1.Controls.Add(this.lblGlobalVariables);
+            this.tabPage1.Location = new System.Drawing.Point(4, 22);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Size = new System.Drawing.Size(394, 284);
+            this.tabPage1.TabIndex = 3;
+            this.tabPage1.Text = "Global variables";
+            this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // gridGlobalVariables
+            // 
+            this.gridGlobalVariables.AllowUserToResizeRows = false;
+            this.gridGlobalVariables.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.gridGlobalVariables.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.gridGlobalVariables.BackgroundColor = System.Drawing.SystemColors.Window;
+            this.gridGlobalVariables.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.gridGlobalVariables.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.gridGlobalVariables.Location = new System.Drawing.Point(7, 27);
+            this.gridGlobalVariables.Name = "gridGlobalVariables";
+            this.gridGlobalVariables.Size = new System.Drawing.Size(379, 251);
+            this.gridGlobalVariables.TabIndex = 2;
+            // 
+            // lblGlobalVariables
+            // 
+            this.lblGlobalVariables.AutoSize = true;
+            this.lblGlobalVariables.Location = new System.Drawing.Point(4, 11);
+            this.lblGlobalVariables.Name = "lblGlobalVariables";
+            this.lblGlobalVariables.Size = new System.Drawing.Size(85, 13);
+            this.lblGlobalVariables.TabIndex = 0;
+            this.lblGlobalVariables.Text = "&Global variables:";
+            // 
             // tpCommands
             // 
             this.tpCommands.Controls.Add(this.commandControl);
@@ -537,20 +491,22 @@
             this.tpCommands.Location = new System.Drawing.Point(4, 22);
             this.tpCommands.Name = "tpCommands";
             this.tpCommands.Padding = new System.Windows.Forms.Padding(3);
-            this.tpCommands.Size = new System.Drawing.Size(394, 299);
+            this.tpCommands.Size = new System.Drawing.Size(394, 284);
             this.tpCommands.TabIndex = 2;
             this.tpCommands.Text = "Commands";
             this.tpCommands.UseVisualStyleBackColor = true;
             // 
             // commandControl
             // 
+            this.commandControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.commandControl.Application = null;
-            this.commandControl.CommandType = Ketarin.ScriptType.Batch;
             this.commandControl.Location = new System.Drawing.Point(6, 36);
             this.commandControl.Margin = new System.Windows.Forms.Padding(0);
             this.commandControl.Name = "commandControl";
             this.commandControl.ReadOnly = false;
-            this.commandControl.Size = new System.Drawing.Size(382, 257);
+            this.commandControl.Size = new System.Drawing.Size(382, 245);
             this.commandControl.TabIndex = 2;
             this.commandControl.VariableNames = new string[0];
             // 
@@ -582,7 +538,7 @@
             // bExport
             // 
             this.bExport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bExport.Location = new System.Drawing.Point(12, 352);
+            this.bExport.Location = new System.Drawing.Point(12, 337);
             this.bExport.Name = "bExport";
             this.bExport.Size = new System.Drawing.Size(75, 23);
             this.bExport.TabIndex = 1;
@@ -593,7 +549,7 @@
             // bImport
             // 
             this.bImport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bImport.Location = new System.Drawing.Point(93, 352);
+            this.bImport.Location = new System.Drawing.Point(93, 337);
             this.bImport.Name = "bImport";
             this.bImport.Size = new System.Drawing.Size(75, 23);
             this.bImport.TabIndex = 2;
@@ -605,7 +561,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(426, 387);
+            this.ClientSize = new System.Drawing.Size(426, 372);
             this.Controls.Add(this.bImport);
             this.Controls.Add(this.bExport);
             this.Controls.Add(this.tcSettings);
@@ -628,6 +584,9 @@
             this.tpGeneral.PerformLayout();
             this.tpConnection.ResumeLayout(false);
             this.tpConnection.PerformLayout();
+            this.tabPage1.ResumeLayout(false);
+            this.tabPage1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.gridGlobalVariables)).EndInit();
             this.tpCommands.ResumeLayout(false);
             this.tpCommands.PerformLayout();
             this.ResumeLayout(false);
@@ -655,15 +614,8 @@
         private System.Windows.Forms.TextBox txtProxyPassword;
         private System.Windows.Forms.Label lblNumThreads;
         private System.Windows.Forms.NumericUpDown nNumThreads;
-        private CDBurnerXP.Controls.Separator sepGlobalVariables;
-        private System.Windows.Forms.ComboBox cboGlobalVariables;
-        private System.Windows.Forms.TextBox txtGlobalVariableValue;
-        private System.Windows.Forms.Label lblVarName;
-        private System.Windows.Forms.Label lblvalue;
-        private System.Windows.Forms.Button bAdd;
-        private System.Windows.Forms.Button bRemove;
         private System.Windows.Forms.NumericUpDown nNumRetries;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label lblNumRetries;
         private System.Windows.Forms.TabControl tcSettings;
         private System.Windows.Forms.TabPage tpGeneral;
         private System.Windows.Forms.TabPage tpConnection;
@@ -679,5 +631,8 @@
         private System.Windows.Forms.Label lblCommandEvent;
         private System.Windows.Forms.ComboBox cboCommandEvent;
         private CommandControl commandControl;
+        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.Label lblGlobalVariables;
+        private System.Windows.Forms.DataGridView gridGlobalVariables;
     }
 }

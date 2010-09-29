@@ -42,7 +42,7 @@
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.gridData.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.gridData.BackgroundColor = System.Drawing.Color.White;
+            this.gridData.BackgroundColor = System.Drawing.SystemColors.Window;
             this.gridData.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.gridData.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.gridData.Location = new System.Drawing.Point(12, 25);
