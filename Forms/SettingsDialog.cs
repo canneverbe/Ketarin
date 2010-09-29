@@ -16,6 +16,7 @@ namespace Ketarin.Forms
     public partial class SettingsDialog : Form
     {
         private int currentSelectedCommandEvent = -1;
+        private DataTable globalVarsTable = new DataTable();
 
         #region Properties
 
@@ -59,6 +60,15 @@ namespace Ketarin.Forms
 
             AcceptButton = bOK;
             CancelButton = bCancel;
+
+            this.globalVarsTable.Columns.Add("Name");
+            this.globalVarsTable.Columns.Add("Value");
+
+            gridGlobalVariables.DataSource = this.globalVarsTable;
+            gridGlobalVariables.Columns[0].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
+            gridGlobalVariables.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+
+            LoadGlobalVariables();
         }
 
         protected override void OnClosed(EventArgs e)
@@ -99,8 +109,6 @@ namespace Ketarin.Forms
             txtProxyServer.Text = Settings.GetValue("ProxyServer", "") as string;
             txtProxyUser.Text = Settings.GetValue("ProxyUser", "") as string;
             txtProxyPassword.Text = Settings.GetValue("ProxyPassword", "") as string;
-
-            LoadGlobalVariables();
         }
 
         private void bOK_Click(object sender, EventArgs e)
@@ -182,16 +190,11 @@ namespace Ketarin.Forms
 
         private void LoadGlobalVariables()
         {
-            cboGlobalVariables.Items.Clear();
+            this.globalVarsTable.Rows.Clear();
 
             foreach (UrlVariable var in UrlVariable.GlobalVariables.Values)
             {
-                cboGlobalVariables.Items.Add(var);
-            }
-
-            if (cboGlobalVariables.Items.Count > 0)
-            {
-                cboGlobalVariables.SelectedIndex = 0;
+                this.globalVarsTable.Rows.Add(new string[] { var.Name, var.CachedContent });
             }
         }
 
@@ -207,66 +210,25 @@ namespace Ketarin.Forms
                     comm.ExecuteNonQuery();
                 }
 
+                UrlVariable.GlobalVariables.Clear();
+
+                foreach (DataRow row in this.globalVarsTable.Rows)
+                {
+                    string varName = row[0] as string;
+                    // Skip variables without name
+                    if (string.IsNullOrEmpty(varName)) continue;
+
+                    UrlVariable newVariable = new UrlVariable(varName, null);
+                    newVariable.CachedContent = row[1] as string;
+                    UrlVariable.GlobalVariables[varName] = newVariable;
+                }
+
                 foreach (UrlVariable var in UrlVariable.GlobalVariables.Values)
                 {
                     var.Save(transaction, Guid.Empty);
                 }
 
                 transaction.Commit();
-            }
-        }
-
-        private void bAdd_Click(object sender, EventArgs e)
-        {
-            using (NewVariableDialog dialog = new NewVariableDialog(UrlVariable.GlobalVariables))
-            {
-                if (dialog.ShowDialog(this) == DialogResult.OK)
-                {
-                    UrlVariable newVariable = new UrlVariable(dialog.VariableName, null);
-                    UrlVariable.GlobalVariables.Add(dialog.VariableName, newVariable);
-
-                    cboGlobalVariables.Items.Add(newVariable);
-                    cboGlobalVariables.SelectedItem = newVariable;
-                }
-            }
-        }
-
-        private void cboGlobalVariables_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            UrlVariable current = cboGlobalVariables.SelectedItem as UrlVariable;
-            if (current != null)
-            {
-                txtGlobalVariableValue.Text = current.CachedContent;
-            }
-            bRemove.Enabled = (current != null);
-        }
-
-        private void txtGlobalVariableValue_TextChanged(object sender, EventArgs e)
-        {
-            UrlVariable current = cboGlobalVariables.SelectedItem as UrlVariable;
-            if (current != null)
-            {
-                current.CachedContent = txtGlobalVariableValue.Text;
-            }
-        }
-
-        private void bRemove_Click(object sender, EventArgs e)
-        {
-            UrlVariable current = cboGlobalVariables.SelectedItem as UrlVariable;
-            if (current != null)
-            {
-                cboGlobalVariables.Items.Remove(current);
-                if (cboGlobalVariables.Items.Count > 0)
-                {
-                    cboGlobalVariables.SelectedIndex = 0;
-                }
-                else
-                {
-                    bRemove.Enabled = false;
-                    txtGlobalVariableValue.Text = string.Empty;
-                }
-                
-                UrlVariable.GlobalVariables.Remove(current.Name);
             }
         }
 
