@@ -408,7 +408,7 @@ namespace Ketarin
                     // Allow to access all public properties of the object per "property:X" variable.
                     foreach (PropertyInfo property in m_Parent.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
                     {
-                        if (!typeof(IEnumerable).IsAssignableFrom(property.PropertyType))
+                        if (!typeof(IEnumerable).IsAssignableFrom(property.PropertyType) || property.PropertyType == typeof(string))
                         {
                             value = UrlVariable.Replace(value, "property:" + property.Name, Convert.ToString(property.GetValue(m_Parent, null)));
                         }
@@ -1067,20 +1067,23 @@ namespace Ketarin
             // First, grather all values. A placeholder might occur twice.
             Dictionary<string, string> values = new Dictionary<string, string>();
 
-            foreach (XmlElement element in placeholdersList)
+            using (SetPlaceholderDialog dialog = new SetPlaceholderDialog())
             {
-                string name = element.GetAttribute("name");
-
-                if (string.IsNullOrEmpty(name) || values.ContainsKey(name)) continue;
-
-                using (SetPlaceholderDialog dialog = new SetPlaceholderDialog(name))
+                foreach (XmlElement element in placeholdersList)
                 {
-                    dialog.Options = element.GetAttribute("options");
-                    dialog.Value = element.GetAttribute("value");
-                    // Abort importing if cancelled
-                    if (dialog.ShowDialog(owner) == DialogResult.Cancel) return null;
+                    string name = element.GetAttribute("name");
 
-                    values.Add(name, dialog.Value);
+                    if (string.IsNullOrEmpty(name) || values.ContainsKey(name)) continue;
+
+                    dialog.AddPlaceHolder(name, element.GetAttribute("options"), element.GetAttribute("value"));
+                }
+
+                // Abort importing if cancelled
+                if (dialog.ShowDialog(owner) == DialogResult.Cancel) return null;
+
+                foreach (KeyValuePair<string, string> placeholder in dialog.Placeholders)
+                {
+                    values.Add(placeholder.Key, placeholder.Value);
                 }
             }
 
