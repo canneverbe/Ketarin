@@ -390,6 +390,8 @@ namespace Ketarin
 
         protected override void OnLoad(EventArgs e)
         {
+            if (DesignMode) return;
+
             base.OnLoad(e);
 
             mnuShowGroups.Checked = Conversion.ToBoolean(Settings.GetValue("Ketarin", "ShowGroups", true));
@@ -568,6 +570,17 @@ namespace Ketarin
         private void cmnuOnlyCheck_Click(object sender, EventArgs e)
         {
             RunJobs(true, false);
+        }
+
+        private void cmnuUpdateAndInstall_Click(object sender, EventArgs e)
+        {
+            using (InstallingApplicationsDialog setupDialog = new InstallingApplicationsDialog())
+            {
+                setupDialog.UpdateApplications = true;
+                setupDialog.Applications = m_Jobs;
+                setupDialog.DoNotSkipUpdatingIfSetupInstructionsMissing = true;
+                setupDialog.ShowDialog(this);
+            }
         }
 
         private void cmnuForceDownload_Click(object sender, EventArgs e)

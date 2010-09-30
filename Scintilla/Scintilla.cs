@@ -2124,7 +2124,7 @@ namespace ScintillaNet
 		/// Occurs when the text or styling of the document changes or is about to change.
 		/// </summary>
 		[Category("Scintilla"), Description("Occurs when the text has changed.")]
-		public event EventHandler<EventArgs> TextChanged
+		public new event EventHandler<EventArgs> TextChanged
 		{
 			add { Events.AddHandler(_textChangedKey, value); }
 			remove { Events.RemoveHandler(_textChangedKey, value); }

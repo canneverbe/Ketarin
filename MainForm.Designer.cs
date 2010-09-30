@@ -35,6 +35,7 @@
             this.cmnuUpdate = new System.Windows.Forms.MenuItem();
             this.cmnuCheckForUpdate = new System.Windows.Forms.MenuItem();
             this.cmnuForceDownload = new System.Windows.Forms.MenuItem();
+            this.cmnuInstall = new System.Windows.Forms.MenuItem();
             this.cmnuSepUpdates = new System.Windows.Forms.MenuItem();
             this.cmnuOpenFile = new System.Windows.Forms.MenuItem();
             this.cmnuOpenFolder = new System.Windows.Forms.MenuItem();
@@ -66,6 +67,7 @@
             this.mnuHelp = new System.Windows.Forms.MenuItem();
             this.mnuTutorial = new System.Windows.Forms.MenuItem();
             this.mnuAbout = new System.Windows.Forms.MenuItem();
+            this.cmnuUpdateAndInstall = new System.Windows.Forms.MenuItem();
             this.cmuAdd = new System.Windows.Forms.ContextMenu();
             this.cmnuAdd = new System.Windows.Forms.MenuItem();
             this.cmnuImportFile = new System.Windows.Forms.MenuItem();
@@ -94,7 +96,6 @@
             this.bInstall = new wyDay.Controls.SplitButton();
             this.bRun = new wyDay.Controls.SplitButton();
             this.bAddApplication = new wyDay.Controls.SplitButton();
-            this.cmnuInstall = new System.Windows.Forms.MenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.olvJobs)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.m_VistaMenu)).BeginInit();
             this.statusBar.SuspendLayout();
@@ -148,6 +149,12 @@
             this.cmnuForceDownload.Shortcut = System.Windows.Forms.Shortcut.CtrlF5;
             this.cmnuForceDownload.Text = "&Force download";
             this.cmnuForceDownload.Click += new System.EventHandler(this.cmnuForceDownload_Click);
+            // 
+            // cmnuInstall
+            // 
+            this.cmnuInstall.Index = 3;
+            this.cmnuInstall.Text = "&Install";
+            this.cmnuInstall.Click += new System.EventHandler(this.cmnuInstall_Click);
             // 
             // cmnuSepUpdates
             // 
@@ -364,6 +371,12 @@
             this.mnuAbout.Text = "&About";
             this.mnuAbout.Click += new System.EventHandler(this.mnuAbout_Click);
             // 
+            // cmnuUpdateAndInstall
+            // 
+            this.cmnuUpdateAndInstall.Index = 2;
+            this.cmnuUpdateAndInstall.Text = "Update &all and install";
+            this.cmnuUpdateAndInstall.Click += new System.EventHandler(this.cmnuUpdateAndInstall_Click);
+            // 
             // cmuAdd
             // 
             this.cmuAdd.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
@@ -491,18 +504,19 @@
             // 
             this.cmuRun.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.cmnuCheckAndDownload,
-            this.cmnuOnlyCheck});
+            this.cmnuOnlyCheck,
+            this.cmnuUpdateAndInstall});
             // 
             // cmnuCheckAndDownload
             // 
             this.cmnuCheckAndDownload.Index = 0;
-            this.cmnuCheckAndDownload.Text = "&Check for updates and download";
+            this.cmnuCheckAndDownload.Text = "&Update all";
             this.cmnuCheckAndDownload.Click += new System.EventHandler(this.cmnuCheckAndDownload_Click);
             // 
             // cmnuOnlyCheck
             // 
             this.cmnuOnlyCheck.Index = 1;
-            this.cmnuOnlyCheck.Text = "&Only check for updates";
+            this.cmnuOnlyCheck.Text = "&Check all for updates only, do not download";
             this.cmnuOnlyCheck.Click += new System.EventHandler(this.cmnuOnlyCheck_Click);
             // 
             // ntiTrayIcon
@@ -609,12 +623,6 @@
             this.bAddApplication.UseVisualStyleBackColor = true;
             this.bAddApplication.Click += new System.EventHandler(this.sbAddApplication_Click);
             // 
-            // cmnuInstall
-            // 
-            this.cmnuInstall.Index = 3;
-            this.cmnuInstall.Text = "&Install";
-            this.cmnuInstall.Click += new System.EventHandler(this.cmnuInstall_Click);
-            // 
             // MainForm
             // 
             this.AllowDrop = true;
@@ -703,6 +711,7 @@
         private System.Windows.Forms.MenuItem cmnuSepUpdates;
         private System.Windows.Forms.MenuItem mnuFind;
         private System.Windows.Forms.MenuItem mnuAutoScroll;
+        private System.Windows.Forms.MenuItem cmnuUpdateAndInstall;
         private CDBurnerXP.Controls.OLVColumn colStatus;
         private System.Windows.Forms.ToolStripStatusLabel tbNumByStatus;
         private System.Windows.Forms.MenuItem cmnuProperties;

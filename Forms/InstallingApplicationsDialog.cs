@@ -19,7 +19,6 @@ namespace Ketarin.Forms
         private bool expanded = false;
         private List<LogItem> logItems = new List<LogItem>();
         private int installCounter = 0;
-        private bool updateApplications = false;
 
         #region LogItem
 
@@ -42,12 +41,21 @@ namespace Ketarin.Forms
         #region Properties
 
         /// <summary>
+        /// Gets or sets if applications without setup instructions should be skipped.
+        /// </summary>
+        public bool DoNotSkipUpdatingIfSetupInstructionsMissing
+        {
+            get;
+            set;
+        } 
+
+        /// <summary>
         /// Gets or sets whether or not the applications should be updated before installing.
         /// </summary>
         public bool UpdateApplications
         {
-            get { return this.updateApplications; }
-            set { this.updateApplications = value; }
+            get;
+            set;
         }
 
         /// <summary>
@@ -135,7 +143,7 @@ namespace Ketarin.Forms
         private void UpdateAndInstallApp(DoWorkEventArgs e, ApplicationJob job, ref int count)
         {
             // Check: Are actually some instructions defined?
-            if (job.SetupInstructions.Count == 0)
+            if (!DoNotSkipUpdatingIfSetupInstructionsMissing && job.SetupInstructions.Count == 0)
             {
                 LogInfo(job.Name + ": Skipped since no setup instructions exist", LogItemType.Warning);
                 return;
@@ -144,7 +152,7 @@ namespace Ketarin.Forms
             if (bgwSetup.CancellationPending) return;
 
             // Force update if no file exists
-            if (this.updateApplications || !job.FileExists)
+            if (this.UpdateApplications || !job.FileExists)
             {
                 UpdateStatus(string.Format("Updating application {0} of {1}: {2}", count, this.Applications.Length, job.Name));
 
@@ -175,6 +183,13 @@ namespace Ketarin.Forms
                         return;
                     }
                 }
+            }
+
+            // Check: Are actually some instructions defined?
+            if (DoNotSkipUpdatingIfSetupInstructionsMissing && job.SetupInstructions.Count == 0)
+            {
+                LogInfo(job.Name + ": Skipped since no setup instructions exist", LogItemType.Warning);
+                return;
             }
 
             UpdateStatus(string.Format("Installing application {0} of {1}: {2}", count, this.Applications.Length, job.Name));
