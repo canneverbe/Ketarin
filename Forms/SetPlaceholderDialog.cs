@@ -45,7 +45,7 @@ namespace Ketarin.Forms
                     Placeholder placeholder = control.Tag as Placeholder;
                     if (placeholder != null)
                     {
-                        result[placeholder.Name] = placeholder.Value;
+                        result[placeholder.Name] = control.Text;
                     }
                 }
                 return result;
@@ -98,6 +98,20 @@ namespace Ketarin.Forms
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Shows the dialog and requests placeholders if necessary.
+        /// </summary>
+        public new DialogResult ShowDialog(IWin32Window owner)
+        {
+            // Do not show if no placeholders exist
+            if (this.placeholders.Count == 0)
+            {
+                return DialogResult.OK;
+            }
+
+            return base.ShowDialog(owner);
         }
 
         /// <summary>
