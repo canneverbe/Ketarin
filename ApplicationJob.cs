@@ -1109,7 +1109,10 @@ namespace Ketarin
                     jobs[0].Guid = Guid.Empty;
                 }
 
-                jobs[0].Save();
+                foreach (ApplicationJob app in jobs)
+                {
+                    app.Save();
+                }
 
                 return jobs[0];
             }
