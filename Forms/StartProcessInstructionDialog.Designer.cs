@@ -44,18 +44,19 @@
             this.colName = new CDBurnerXP.Controls.OLVColumn();
             this.olvValue = new CDBurnerXP.Controls.OLVColumn();
             this.label1 = new System.Windows.Forms.Label();
+            this.bBrowse = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.olvEnvironmentVariables)).BeginInit();
             this.SuspendLayout();
             // 
             // bCancel
             // 
             this.bCancel.Location = new System.Drawing.Point(316, 235);
-            this.bCancel.TabIndex = 8;
+            this.bCancel.TabIndex = 9;
             // 
             // bOK
             // 
             this.bOK.Location = new System.Drawing.Point(235, 235);
-            this.bOK.TabIndex = 7;
+            this.bOK.TabIndex = 8;
             this.bOK.Click += new System.EventHandler(this.bOK_Click);
             // 
             // lblProgram
@@ -73,7 +74,7 @@
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.txtProgram.Location = new System.Drawing.Point(102, 12);
             this.txtProgram.Name = "txtProgram";
-            this.txtProgram.Size = new System.Drawing.Size(289, 20);
+            this.txtProgram.Size = new System.Drawing.Size(255, 20);
             this.txtProgram.TabIndex = 1;
             // 
             // lblParameters
@@ -82,7 +83,7 @@
             this.lblParameters.Location = new System.Drawing.Point(12, 41);
             this.lblParameters.Name = "lblParameters";
             this.lblParameters.Size = new System.Drawing.Size(60, 13);
-            this.lblParameters.TabIndex = 2;
+            this.lblParameters.TabIndex = 3;
             this.lblParameters.Text = "&Arguments:";
             // 
             // txtParameters
@@ -92,7 +93,7 @@
             this.txtParameters.Location = new System.Drawing.Point(102, 38);
             this.txtParameters.Name = "txtParameters";
             this.txtParameters.Size = new System.Drawing.Size(222, 20);
-            this.txtParameters.TabIndex = 3;
+            this.txtParameters.TabIndex = 4;
             // 
             // bInsertArgument
             // 
@@ -103,7 +104,7 @@
             this.bInsertArgument.SeparateDropdownButton = false;
             this.bInsertArgument.Size = new System.Drawing.Size(61, 23);
             this.bInsertArgument.SplitMenu = this.argumentsMenu;
-            this.bInsertArgument.TabIndex = 4;
+            this.bInsertArgument.TabIndex = 5;
             this.bInsertArgument.Text = "I&nsert";
             this.bInsertArgument.UseVisualStyleBackColor = true;
             // 
@@ -153,7 +154,7 @@
             this.lnkSilentSetups.Location = new System.Drawing.Point(12, 240);
             this.lnkSilentSetups.Name = "lnkSilentSetups";
             this.lnkSilentSetups.Size = new System.Drawing.Size(143, 13);
-            this.lnkSilentSetups.TabIndex = 9;
+            this.lnkSilentSetups.TabIndex = 10;
             this.lnkSilentSetups.TabStop = true;
             this.lnkSilentSetups.Text = "How to control silent setups?";
             this.lnkSilentSetups.Url = "http://unattended.sourceforge.net/installers.php";
@@ -185,7 +186,7 @@
             this.olvEnvironmentVariables.ShowGroups = false;
             this.olvEnvironmentVariables.Size = new System.Drawing.Size(376, 127);
             this.olvEnvironmentVariables.Sorting = System.Windows.Forms.SortOrder.Ascending;
-            this.olvEnvironmentVariables.TabIndex = 6;
+            this.olvEnvironmentVariables.TabIndex = 7;
             this.olvEnvironmentVariables.UseCompatibleStateImageBehavior = false;
             this.olvEnvironmentVariables.View = System.Windows.Forms.View.Details;
             // 
@@ -209,14 +210,26 @@
             this.label1.Location = new System.Drawing.Point(12, 69);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(156, 13);
-            this.label1.TabIndex = 5;
+            this.label1.TabIndex = 6;
             this.label1.Text = "&Override environment variables:";
+            // 
+            // bBrowse
+            // 
+            this.bBrowse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.bBrowse.Location = new System.Drawing.Point(363, 10);
+            this.bBrowse.Name = "bBrowse";
+            this.bBrowse.Size = new System.Drawing.Size(28, 23);
+            this.bBrowse.TabIndex = 2;
+            this.bBrowse.Text = "...";
+            this.bBrowse.UseVisualStyleBackColor = true;
+            this.bBrowse.Click += new System.EventHandler(this.bBrowse_Click);
             // 
             // StartProcessInstructionDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(403, 270);
+            this.Controls.Add(this.bBrowse);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.olvEnvironmentVariables);
             this.Controls.Add(this.lnkSilentSetups);
@@ -238,6 +251,7 @@
             this.Controls.SetChildIndex(this.lnkSilentSetups, 0);
             this.Controls.SetChildIndex(this.olvEnvironmentVariables, 0);
             this.Controls.SetChildIndex(this.label1, 0);
+            this.Controls.SetChildIndex(this.bBrowse, 0);
             ((System.ComponentModel.ISupportInitialize)(this.olvEnvironmentVariables)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -262,5 +276,6 @@
         private CDBurnerXP.Controls.OLVColumn colName;
         private CDBurnerXP.Controls.OLVColumn olvValue;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button bBrowse;
     }
 }

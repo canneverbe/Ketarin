@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using System.Collections;
+using System.IO;
 
 namespace Ketarin.Forms
 {
@@ -105,6 +106,28 @@ namespace Ketarin.Forms
                 if (!string.IsNullOrEmpty(var.Value))
                 {
                     this.instruction.EnvironmentVariables[var.Name] = var.Value;
+                }
+            }
+        }
+
+        private void bBrowse_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog dialog = new OpenFileDialog())
+            {
+                try
+                {
+                    dialog.InitialDirectory = Path.GetDirectoryName(txtProgram.Text);
+                    dialog.FileName = Path.GetFileName(txtProgram.Text);
+                }
+                catch (Exception)
+                {
+                    // user input, may not work
+                }
+
+                dialog.Filter = "Executable file (.exe)|*.exe";
+                if (dialog.ShowDialog(this) == DialogResult.OK)
+                {
+                    txtProgram.Text = dialog.FileName;
                 }
             }
         }

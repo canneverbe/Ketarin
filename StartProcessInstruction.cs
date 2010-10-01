@@ -69,6 +69,9 @@ namespace Ketarin
             string fileName = Application.Variables.ReplaceAllInString(FileName);
             string parameters = Application.Variables.ReplaceAllInString(Parameters);
 
+            fileName = Environment.ExpandEnvironmentVariables(fileName);
+            parameters = Environment.ExpandEnvironmentVariables(parameters);
+
             ProcessStartInfo startInfo = new ProcessStartInfo(fileName, parameters);
 
             foreach (var variable in EnvironmentVariables)
