@@ -414,7 +414,7 @@ namespace Ketarin
 
             if ((bool)Settings.GetValue("UpdateAtStartup", false))
             {
-                RunJobs(false, false);
+                RunJobs(false, false, false);
             }
 
             // Check applications for updates
@@ -558,7 +558,7 @@ namespace Ketarin
             }
             else
             {
-                RunJobs(false, false);
+                RunJobs(false, false, false);
             }
         }
 
@@ -569,29 +569,23 @@ namespace Ketarin
 
         private void cmnuOnlyCheck_Click(object sender, EventArgs e)
         {
-            RunJobs(true, false);
+            RunJobs(true, false, false);
         }
 
         private void cmnuUpdateAndInstall_Click(object sender, EventArgs e)
         {
-            using (InstallingApplicationsDialog setupDialog = new InstallingApplicationsDialog())
-            {
-                setupDialog.UpdateApplications = true;
-                setupDialog.Applications = m_Jobs;
-                setupDialog.DoNotSkipUpdatingIfSetupInstructionsMissing = true;
-                setupDialog.ShowDialog(this);
-            }
+            RunJobs(true, false, true);
         }
 
         private void cmnuForceDownload_Click(object sender, EventArgs e)
         {
             if (olvJobs.SelectedObjects.Count == 0)
             {
-                RunJobs(false, true);
+                RunJobs(false, true, false);
             }
             else
             {
-                RunJobs(olvJobs.SelectedApplications, false, true);
+                RunJobs(olvJobs.SelectedApplications, false, true, false);
             }
         }
 
@@ -621,7 +615,7 @@ namespace Ketarin
         /// Updates all items, using the same order as the
         /// items in the list (considers sorting).
         /// </summary>
-        private void RunJobs(bool onlyCheck, bool forceDownload)
+        private void RunJobs(bool onlyCheck, bool forceDownload, bool installUpdated)
         {
             if (m_Updater.IsBusy) return;
 
@@ -637,10 +631,10 @@ namespace Ketarin
                 }
             } while (startItem != null);
 
-            RunJobs(jobs.ToArray(), onlyCheck, forceDownload);
+            RunJobs(jobs.ToArray(), onlyCheck, forceDownload, installUpdated);
         }
 
-        private void RunJobs(ApplicationJob[] jobs, bool onlyCheck, bool forceDownload)
+        private void RunJobs(ApplicationJob[] jobs, bool onlyCheck, bool forceDownload, bool installUpdated)
         {
             bRun.Text = "Cancel";
             bRun.SplitMenu = null;
@@ -651,7 +645,7 @@ namespace Ketarin
             mnuExportAll.Enabled = false;
             mnuImport.Enabled = false;
 
-            m_Updater.BeginUpdate(jobs, onlyCheck, forceDownload);
+            m_Updater.BeginUpdate(jobs, onlyCheck, forceDownload, installUpdated);
             olvJobs.RefreshObjects(jobs);
         }
 
@@ -736,11 +730,11 @@ namespace Ketarin
         {
             if (olvJobs.SelectedObjects.Count == 0)
             {
-                RunJobs(false, false);
+                RunJobs(false, false, false);
             }
             else
             {
-                RunJobs(olvJobs.SelectedApplications, false, false);
+                RunJobs(olvJobs.SelectedApplications, false, false, false);
             }
         }
 
@@ -809,11 +803,11 @@ namespace Ketarin
             ApplicationJob[] jobs = olvJobs.SelectedApplications;
             if (jobs.Length == 0)
             {
-                RunJobs(true, false);
+                RunJobs(true, false, false);
             }
             else
             {
-                RunJobs(jobs, true, false);
+                RunJobs(jobs, true, false, false);
             }
         }
 
