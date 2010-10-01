@@ -38,6 +38,7 @@ namespace Ketarin
         private List<string> m_NoAutoReferer = new List<string>(new string[] { "sourceforge.net" });
         private CookieContainer m_Cookies = new CookieContainer();
         private static List<WebRequest> m_Requests = new List<WebRequest>();
+        private bool m_InstallUpdated = false;
 
         #region Properties
 
@@ -256,13 +257,14 @@ namespace Ketarin
         /// applications asynchronously.
         /// </summary>
         /// <param name="onlyCheck">Specifies whether or not to download the updates</param>
-        public void BeginUpdate(ApplicationJob[] jobs, bool onlyCheck, bool forceDownload)
+        public void BeginUpdate(ApplicationJob[] jobs, bool onlyCheck, bool forceDownload, bool installUpdated)
         {
             m_IsBusy = true;
             m_Jobs = jobs;
             m_ThreadLimit = Convert.ToInt32(Settings.GetValue("ThreadCount", 2));
             m_OnlyCheck = onlyCheck;
             m_ForceDownload = forceDownload;
+            m_InstallUpdated = installUpdated;
             m_Requests.Clear();
 
             // Initialise progress and status
@@ -363,7 +365,8 @@ namespace Ketarin
                     // - Thread limit is not reached
                     // - The next application is not to be downloaded exclusively
                     // - The application previously started is not to be downloaded exclusively
-                    while (m_Threads.Count >= m_ThreadLimit || (m_Threads.Count > 0 && (job.ExclusiveDownload || (previousJob != null && previousJob.ExclusiveDownload))))
+                    // - Setup is taking place
+                    while (m_Threads.Count >= m_ThreadLimit || (m_Threads.Count > 0 && (m_InstallUpdated || job.ExclusiveDownload || (previousJob != null && previousJob.ExclusiveDownload))))
                     {
                         Thread.Sleep(200);
 
@@ -455,6 +458,12 @@ namespace Ketarin
                             job.Save(); // cached variable content
                         }
 
+                        // Install if updated
+                        if (m_InstallUpdated && m_Status[job] == Status.UpdateSuccessful)
+                        {
+                            job.Install(null);
+                        }
+
                         // If no exception happened, we immediately leave the loop
                         break;
                     }
@@ -540,6 +549,12 @@ namespace Ketarin
                 LogDialog.Log(job, ex);
                 m_Errors.Add(new ApplicationJobError(job, ex));
                 m_Status[job] = Status.Failure;
+            }
+            catch (ApplicationException ex)
+            {
+                // Error executing custom C# script
+                LogDialog.Log(job, ex);
+                m_Errors.Add(new ApplicationJobError(job, ex));
             }
 
             m_Progress[job] = 100;
@@ -721,7 +736,8 @@ namespace Ketarin
                 }
 
                 // Skip downloading!
-                if (!m_ForceDownload && (m_OnlyCheck || job.CheckForUpdatesOnly))
+                // Installing also requires a forced download
+                if (!m_ForceDownload && !m_InstallUpdated && (m_OnlyCheck || job.CheckForUpdatesOnly))
                 {
                     LogDialog.Log(job, "Skipped downloading updates");
                     return Status.UpdateAvailable;

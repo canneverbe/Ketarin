@@ -374,7 +374,7 @@
             // cmnuUpdateAndInstall
             // 
             this.cmnuUpdateAndInstall.Index = 2;
-            this.cmnuUpdateAndInstall.Text = "Update &all and install";
+            this.cmnuUpdateAndInstall.Text = "Update &all and install updates";
             this.cmnuUpdateAndInstall.Click += new System.EventHandler(this.cmnuUpdateAndInstall_Click);
             // 
             // cmuAdd

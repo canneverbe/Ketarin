@@ -1775,5 +1775,19 @@ namespace Ketarin
 
             return fulltextToLower.Contains(subject);
         }
+
+        /// <summary>
+        /// Installs the application, if setup instructions are defined.
+        /// </summary>
+        /// <param name="bgwSetup">Parent background worker, checks for cancellation</param>
+        public void Install(System.ComponentModel.BackgroundWorker bgwSetup)
+        {
+            foreach (SetupInstruction instruction in this.SetupInstructions)
+            {
+                if (bgwSetup != null && bgwSetup.CancellationPending) return;
+
+                instruction.Execute();
+            }
+        }
     }
 }

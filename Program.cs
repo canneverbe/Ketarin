@@ -74,7 +74,7 @@ namespace Ketarin
                 Updater updater = new Updater();
                 updater.StatusChanged += new EventHandler<Updater.JobStatusChangedEventArgs>(updater_StatusChanged);
                 updater.ProgressChanged += new EventHandler<Updater.JobProgressChangedEventArgs>(updater_ProgressChanged);
-                updater.BeginUpdate(jobs, false, false);
+                updater.BeginUpdate(jobs, false, false, false);
 
                 if (arguments["notify"] != null)
                 {
