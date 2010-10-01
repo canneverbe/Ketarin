@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using System.Xml;
 
 namespace Ketarin.Forms
 {
@@ -15,6 +16,9 @@ namespace Ketarin.Forms
     public partial class SetPlaceholderDialog : Form
     {
         private Dictionary<string, Placeholder> placeholders = new Dictionary<string, Placeholder>();
+        private string templateXml = string.Empty;
+        private Dictionary<string, string> result = new Dictionary<string, string>();
+        private bool automaticallyDetermine = true;
 
         #region Placeholder
 
@@ -26,6 +30,7 @@ namespace Ketarin.Forms
             public string Name { get; set; }
             public string Options { get; set; }
             public string Value { get; set; }
+            public string Variable { get; set; }
         }
 
         #endregion
@@ -39,11 +44,11 @@ namespace Ketarin.Forms
         {
             get
             {
-                Dictionary<string, string> result = new Dictionary<string, string>();
                 foreach (Control control in tblMain.Controls)
                 {
                     Placeholder placeholder = control.Tag as Placeholder;
-                    if (placeholder != null)
+                    // Only copy the values from controls that have not been determined automatically
+                    if (placeholder != null && (!result.ContainsKey(placeholder.Name) || string.IsNullOrEmpty(result[placeholder.Name])))
                     {
                         result[placeholder.Name] = control.Text;
                     }
@@ -54,17 +59,21 @@ namespace Ketarin.Forms
 
         #endregion
 
-        public SetPlaceholderDialog()
+        public SetPlaceholderDialog(string templateXml)
         {
             InitializeComponent();
 
             AcceptButton = bOK;
             CancelButton = bCancel;
+
+            this.templateXml = templateXml;
         }
 
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
+
+            this.SuspendLayout();
 
             // Add a TextBox or a ComboBox for each placeholder
             foreach (Placeholder placeholder in this.placeholders.Values)
@@ -76,9 +85,12 @@ namespace Ketarin.Forms
                 placeholderLabel.TextAlign = ContentAlignment.MiddleLeft;
                 tblMain.Controls.Add(placeholderLabel);
 
+                Control placeholderEditControl = null;
+
                 if (string.IsNullOrEmpty(placeholder.Options))
                 {
                     TextBox placeholderTextBox = new TextBox();
+                    placeholderEditControl = placeholderTextBox;
                     placeholderTextBox.Tag = placeholder;
                     placeholderTextBox.Dock = DockStyle.Fill;
                     placeholderTextBox.Text = placeholder.Value ?? string.Empty;
@@ -87,6 +99,7 @@ namespace Ketarin.Forms
                 else
                 {
                     ComboBox placeholderTextBox = new ComboBox();
+                    placeholderEditControl = placeholderTextBox;
                     placeholderTextBox.Tag = placeholder;
                     placeholderTextBox.Dock = DockStyle.Fill;
                     tblMain.Controls.Add(placeholderTextBox);
@@ -97,7 +110,18 @@ namespace Ketarin.Forms
                         placeholderTextBox.SelectedIndex = 0;
                     }
                 }
+
+                tblMain.RowStyles[tblMain.RowCount - 1] = new RowStyle(SizeType.AutoSize);
+
+                // Hide for now, try to determine automatically
+                if (!string.IsNullOrEmpty(placeholder.Variable))
+                {
+                    placeholderLabel.Visible = false;
+                    placeholderEditControl.Visible = false;
+                }
             }
+
+            this.ResumeLayout(true);
         }
 
         /// <summary>
@@ -111,7 +135,30 @@ namespace Ketarin.Forms
                 return DialogResult.OK;
             }
 
-            return base.ShowDialog(owner);
+            // Do not show dialog if all placeholders are determined automatically
+            // Though that should not usually happen.
+            bool allVariables = true;
+            foreach (Placeholder placeholder in this.placeholders.Values)
+            {
+                if (string.IsNullOrEmpty(placeholder.Variable))
+                {
+                    allVariables = false;
+                }
+                else
+                {
+                    // Initial value for XML parsing required
+                    this.result[placeholder.Name] = string.Empty;
+                }
+            }
+
+            if (allVariables && DeterminePlaceholders(owner))
+            {
+                return DialogResult.OK;
+            }
+            else
+            {
+                return base.ShowDialog(owner);
+            }
         }
 
         /// <summary>
@@ -120,9 +167,73 @@ namespace Ketarin.Forms
         /// <param name="name">Name of placeholder (description)</param>
         /// <param name="options">Options to offer for the placeholder (pipe separated), ComboBox</param>
         /// <param name="value">Default value for the placeholder</param>
-        internal void AddPlaceHolder(string name, string options, string value)
+        internal void AddPlaceHolder(string name, string options, string value, string variable)
         {
-            this.placeholders[name] = new Placeholder() { Name = name, Options = options, Value = value };
+            this.placeholders[name] = new Placeholder() { Name = name, Options = options, Value = value, Variable = variable };
+        }
+
+        private void bOK_Click(object sender, EventArgs e)
+        {
+            DeterminePlaceholders(this);
+        }
+
+        /// <summary>
+        /// Tries to determine the variable based placeholders.
+        /// </summary>
+        /// <returns>true if the placeholders could be determined automatically, false otherwise</returns>
+        private bool DeterminePlaceholders(IWin32Window owner)
+        {
+            if (!this.automaticallyDetermine)
+            {
+                return false;
+            }
+
+            // Try to determine variable-based placeholders
+            UseWaitCursor = true;
+            Application.DoEvents();
+
+            try
+            {
+                this.automaticallyDetermine = false;
+
+                XmlDocument doc = new XmlDocument();
+                doc.LoadXml(this.templateXml);
+                ApplicationJob.SetPlaceholders(doc, this.Placeholders);
+
+                ApplicationJob[] jobs = ApplicationJob.ImportFromXmlString(doc.OuterXml, false);
+
+                foreach (Placeholder placeholder in this.placeholders.Values)
+                {
+                    if (!string.IsNullOrEmpty(placeholder.Variable))
+                    {
+                        string newValue = jobs[0].Variables.ReplaceAllInString("{" + placeholder.Variable + "}");
+                        if (string.IsNullOrEmpty(newValue))
+                        {
+                            throw new ApplicationException("\"" + placeholder.Name + "\" is undefined.");
+                        }
+
+                        this.result[placeholder.Name] = newValue;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(this, "Some information cannot not automatically be determined: " + ex.Message + "\r\n\r\nPlease enter the required information manually.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                foreach (Control control in tblMain.Controls)
+                {
+                    control.Visible = !control.Visible;
+                }
+
+                DialogResult = DialogResult.None;
+                return false;
+            }
+            finally
+            {
+                UseWaitCursor = false;
+            }
+
+            return true;
         }
     }
 }

@@ -1067,7 +1067,7 @@ namespace Ketarin
             // First, grather all values. A placeholder might occur twice.
             Dictionary<string, string> values = new Dictionary<string, string>();
 
-            using (SetPlaceholderDialog dialog = new SetPlaceholderDialog())
+            using (SetPlaceholderDialog dialog = new SetPlaceholderDialog(xml))
             {
                 foreach (XmlElement element in placeholdersList)
                 {
@@ -1075,16 +1075,13 @@ namespace Ketarin
 
                     if (string.IsNullOrEmpty(name) || values.ContainsKey(name)) continue;
 
-                    dialog.AddPlaceHolder(name, element.GetAttribute("options"), element.GetAttribute("value"));
+                    dialog.AddPlaceHolder(name, element.GetAttribute("options"), element.GetAttribute("value"), element.GetAttribute("variable"));
                 }
 
                 // Abort importing if cancelled
                 if (dialog.ShowDialog(owner) == DialogResult.Cancel) return null;
 
-                foreach (KeyValuePair<string, string> placeholder in dialog.Placeholders)
-                {
-                    values.Add(placeholder.Key, placeholder.Value);
-                }
+                values = dialog.Placeholders;
             }
 
             SetPlaceholders(doc, values);
@@ -1162,7 +1159,7 @@ namespace Ketarin
         /// </summary>
         /// <param name="doc">Template to update</param>
         /// <param name="values">Values to replace the placeholders with (name, value)</param>
-        private static void SetPlaceholders(XmlDocument doc, Dictionary<string, string> values)
+        internal static void SetPlaceholders(XmlDocument doc, Dictionary<string, string> values)
         {
             XmlNodeList placeholdersList = doc.GetElementsByTagName("placeholder");
             // Prevent changing collection!
