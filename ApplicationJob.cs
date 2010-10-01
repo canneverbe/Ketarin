@@ -1039,7 +1039,7 @@ namespace Ketarin
                         if (!string.IsNullOrEmpty(sourceTemplateAppElement.GetAttribute("Guid")))
                         {
                             Guid sourceTemplateGuid = new Guid(sourceTemplateAppElement.GetAttribute("Guid"));
-                            if (sourceTemplateGuid == templateGuid)
+                            if (sourceTemplateGuid == templateGuid && !AreTemplatesEqual(doc, templateDoc))
                             {
                                 appsToUpdate.Add(app);
                                 break;
@@ -1120,6 +1120,41 @@ namespace Ketarin
             {
                 return null;
             }
+        }
+
+        /// <summary>
+        /// Determines whether or not two application templates with placeholders are equal.
+        /// This is done by removing all placeholder elements and comparing what is left.
+        /// </summary>
+        private static bool AreTemplatesEqual(XmlDocument template1, XmlDocument template2)
+        {
+            XmlDocument templateA = template1.Clone() as XmlDocument;
+            XmlDocument templateB = template2.Clone() as XmlDocument;
+
+            XmlNodeList nodes = templateA.GetElementsByTagName("placeholder");
+            XmlNode[] placeholders = new XmlNode[nodes.Count];
+            for (int i = 0; i < placeholders.Length; i++)
+            {
+                placeholders[i] = nodes[i];
+            }
+
+            foreach (XmlElement element in placeholders)
+            {
+                element.ParentNode.RemoveChild(element);
+            }
+
+            nodes = templateB.GetElementsByTagName("placeholder");
+            placeholders = new XmlNode[nodes.Count];
+            for (int i = 0; i < placeholders.Length; i++)
+            {
+                placeholders[i] = nodes[i];
+            }
+            foreach (XmlElement element in placeholders)
+            {
+                element.ParentNode.RemoveChild(element);
+            }
+
+            return templateA.OuterXml == templateB.OuterXml;
         }
 
         /// <summary>
