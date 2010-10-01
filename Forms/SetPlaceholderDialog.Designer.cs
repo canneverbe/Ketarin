@@ -54,6 +54,7 @@
             this.bOK.TabIndex = 1;
             this.bOK.Text = "OK";
             this.bOK.UseVisualStyleBackColor = true;
+            this.bOK.Click += new System.EventHandler(this.bOK_Click);
             // 
             // tblMain
             // 
