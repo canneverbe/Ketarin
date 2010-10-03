@@ -63,8 +63,25 @@ namespace Ketarin
         /// <summary>
         /// Gets or sets the template from which the application has been created.
         /// </summary>
-        [XmlElement("SourceTemplate")]
+        [XmlIgnore()]
         public string SourceTemplate { get; set; }
+
+        /// <summary>
+        /// Source template property for XML serialization as CDATA.
+        /// </summary>
+        [XmlElement("SourceTemplate", typeof(XmlCDataSection))]
+        public XmlCDataSection SourceTemplateCdata
+        {
+            get
+            {
+                XmlDocument doc = new XmlDocument();
+                return doc.CreateCDataSection(this.SourceTemplate);
+            }
+            set
+            {
+                this.SourceTemplate = (value == null) ? string.Empty : value.InnerText;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the website of the application.
