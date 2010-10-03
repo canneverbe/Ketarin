@@ -148,7 +148,7 @@ namespace Ketarin.Forms
                 UpdateStatus(string.Format("Updating application {0} of {1}: {2}", count, this.Applications.Length, job.Name));
 
                 Updater updater = new Updater();
-                updater.BeginUpdate(new ApplicationJob[] { job }, false, false, false);
+                updater.BeginUpdate(new ApplicationJob[] { job }, false, false, true);
 
                 // Wait until finished
                 while (updater.IsBusy)
