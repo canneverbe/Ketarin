@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using System.Xml;
+using CDBurnerXP.Forms;
 
 namespace Ketarin.Forms
 {
@@ -13,7 +14,7 @@ namespace Ketarin.Forms
     /// Represents a dialog which allows the user to enter 
     /// a value for a placeholder within a template
     /// </summary>
-    public partial class SetPlaceholderDialog : Form
+    public partial class SetPlaceholderDialog : PersistentForm
     {
         private Dictionary<string, Placeholder> placeholders = new Dictionary<string, Placeholder>();
         private string templateXml = string.Empty;
