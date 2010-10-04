@@ -38,6 +38,7 @@ namespace Ketarin.Forms
         private int m_MatchPosition = -1;
         private BrowserPreviewDialog m_Preview = null;
         private Thread regexThread;
+        private bool gotoMatch = false;
 
         private delegate UrlVariable VariableResultDelegate();
 
@@ -262,8 +263,8 @@ namespace Ketarin.Forms
 
         private void lbVariables_SelectedIndexChanged(object sender, EventArgs e)
         {
+            this.gotoMatch = true;
             UpdateInterface();
-            GoToMatch();
             txtUrl.Focus();
         }
 
@@ -379,6 +380,7 @@ namespace Ketarin.Forms
         {
             // Load URL contents and show a wait cursor in the meantime
             Cursor = Cursors.WaitCursor;
+
             try
             {
                 using (WebClient client = new WebClient(this.UserAgent))
@@ -426,6 +428,7 @@ namespace Ketarin.Forms
                     }
 
                     rtfContent.Text = CurrentVariable.TempContent;
+                    this.gotoMatch = true;
                     RefreshRtfFormatting();
 
                     // Show page preview if desired
@@ -719,6 +722,12 @@ namespace Ketarin.Forms
                 {
                     txtRegularExpression.HintText = string.Empty;
                     RefreshRtfFormatting(match);
+
+                    if (match.Success && this.gotoMatch)
+                    {
+                        this.gotoMatch = false;
+                        GoToMatch();
+                    }
                 });
             }
             catch (ThreadAbortException) { /* Thread aborted, no error */ }
