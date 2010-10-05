@@ -32,7 +32,6 @@ namespace Ketarin
         private List<ApplicationJobError> m_Errors;
         private byte m_NoProgressCounter = 0;
         private bool m_OnlyCheck = false;
-        private bool m_ForceDownload = false;
         private int m_ThreadLimit = 2;
         private List<Thread> m_Threads = new List<Thread>();
         private List<string> m_NoAutoReferer = new List<string>(new string[] { "sourceforge.net" });
@@ -41,6 +40,25 @@ namespace Ketarin
         private bool m_InstallUpdated = false;
 
         #region Properties
+
+        /// <summary>
+        /// Forces all applications, even if no updates exist, to download.
+        /// Also ignores the CheckForUpdatesOnly property of applications.
+        /// </summary>
+        public bool ForceDownload
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Ignores the CheckForUpdatesOnly property of applications (for setups).
+        /// </summary>
+        public bool IgnoreCheckForUpdatesOnly
+        {
+            get;
+            set;
+        }
 
         /// <summary>
         /// Gets the list of errors which happened after an update process.
@@ -257,13 +275,12 @@ namespace Ketarin
         /// applications asynchronously.
         /// </summary>
         /// <param name="onlyCheck">Specifies whether or not to download the updates</param>
-        public void BeginUpdate(ApplicationJob[] jobs, bool onlyCheck, bool forceDownload, bool installUpdated)
+        public void BeginUpdate(ApplicationJob[] jobs, bool onlyCheck, bool installUpdated)
         {
             m_IsBusy = true;
             m_Jobs = jobs;
             m_ThreadLimit = Convert.ToInt32(Settings.GetValue("ThreadCount", 2));
             m_OnlyCheck = onlyCheck;
-            m_ForceDownload = forceDownload;
             m_InstallUpdated = installUpdated;
             m_Requests.Clear();
 
@@ -272,7 +289,7 @@ namespace Ketarin
 
             foreach (ApplicationJob job in m_Jobs)
             {
-                m_Progress[job] = (short)((forceDownload || job.Enabled) ? 0 : -1);
+                m_Progress[job] = (short)((ForceDownload || job.Enabled) ? 0 : -1);
                 bool res = m_Progress.ContainsKey(job);
                 m_Status[job] = Status.Idle;
                 m_Size[job] = -2;
@@ -649,6 +666,7 @@ namespace Ketarin
 
             job.Variables.ResetDownloadCount();
 
+            WebRequest.RegisterPrefix("sf", new ScpWebRequestCreator());
             WebRequest req = WebRequest.CreateDefault(urlToRequest);
             AddRequestToCancel(req);
             req.Timeout = Convert.ToInt32(Settings.GetValue("ConnectionTimeout", 10)) * 1000; // 10 seconds by default
@@ -720,7 +738,7 @@ namespace Ketarin
                 LogDialog.Log(job, "Determined target file name: " + targetFileName);
 
                 // Only download, if the file size or date has changed
-                if (!m_ForceDownload && !job.RequiresDownload(response, targetFileName))
+                if (!ForceDownload && !job.RequiresDownload(response, targetFileName))
                 {
                     // If file already exists (created by user),
                     // the download is not necessary. We still need to
@@ -737,7 +755,7 @@ namespace Ketarin
 
                 // Skip downloading!
                 // Installing also requires a forced download
-                if (!m_ForceDownload && !m_InstallUpdated && (m_OnlyCheck || job.CheckForUpdatesOnly))
+                if (!ForceDownload && !m_InstallUpdated && (m_OnlyCheck || (job.CheckForUpdatesOnly && !IgnoreCheckForUpdatesOnly)))
                 {
                     LogDialog.Log(job, "Skipped downloading updates");
                     return Status.UpdateAvailable;
@@ -772,8 +790,12 @@ namespace Ketarin
                         {
                             if (m_CancelUpdates) break;
 
-                            byte[] buffer = new byte[1024];
-                            readBytes = sourceFile.Read(buffer, 0, 1024);
+                            // Some adjustment for SCP download: Read only up to the max known bytes
+                            int maxRead = (fileSize > 0) ? (int)Math.Min(fileSize - byteCount, 1024) : 1024;
+                            if (maxRead == 0) break;
+
+                            byte[] buffer = new byte[maxRead];
+                            readBytes = sourceFile.Read(buffer, 0, maxRead);
                             if (readBytes > 0) targetFile.Write(buffer, 0, readBytes);
                             byteCount += readBytes;
                             OnProgressChanged(byteCount, fileSize, job);
@@ -901,6 +923,12 @@ namespace Ketarin
                         if (ftpConnection != null) ftpConnection.Disconnect();
                     }
                 }
+            }
+
+            ScpWebResponse scp = response as ScpWebResponse;
+            if (scp != null)
+            {
+                return scp.ContentLength;
             }
 
             return -1;
