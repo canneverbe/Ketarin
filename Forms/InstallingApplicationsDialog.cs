@@ -148,7 +148,8 @@ namespace Ketarin.Forms
                 UpdateStatus(string.Format("Updating application {0} of {1}: {2}", count, this.Applications.Length, job.Name));
 
                 Updater updater = new Updater();
-                updater.BeginUpdate(new ApplicationJob[] { job }, false, false, true);
+                updater.IgnoreCheckForUpdatesOnly = true;
+                updater.BeginUpdate(new ApplicationJob[] { job }, false, false);
 
                 // Wait until finished
                 while (updater.IsBusy)
@@ -164,7 +165,7 @@ namespace Ketarin.Forms
                 // Did update fail? Install if {file} is present.
                 if (updater.Errors.Length > 0)
                 {
-                    if (PathEx.TryGetFileSize(job.PreviousLocation) > 0)
+                    if (job.FileExists)
                     {
                         LogInfo(job.Name + ": Update failed, installing previously available version", LogItemType.Warning);
                     }

@@ -33,7 +33,6 @@ namespace Ketarin
         private bool m_Enabled = true;
         private string m_FileHippoId = string.Empty;
         private string m_FileHippoVersion = string.Empty;
-        private bool m_DeletePreviousFile = false;
         private SourceType m_SourceType = SourceType.FixedUrl;
         private UrlVariableCollection m_Variables = null;
         private string m_Category = string.Empty;
@@ -43,6 +42,7 @@ namespace Ketarin
         private string m_HttpReferer = string.Empty;
         private string m_VariableChangeIndicator = string.Empty;
         private string m_VariableChangeIndicatorLastContent = null;
+        private string m_PreviousRelativeLocation = string.Empty;
         private List<SetupInstruction> setupInstructions = null;
 
         public enum SourceType
@@ -329,18 +329,18 @@ namespace Ketarin
             {
                 if (value == null) return value;
 
-                if (m_Parent != null && !string.IsNullOrEmpty(m_Parent.PreviousLocation))
+                if (m_Parent != null && !string.IsNullOrEmpty(m_Parent.CurrentLocation))
                 {
                     try
                     {
                         if (!ContainsKey("file"))
                         {
-                            value = UrlVariable.Replace(value, "file", m_Parent.PreviousLocation);
+                            value = UrlVariable.Replace(value, "file", m_Parent.CurrentLocation);
                         }
 
-                        if (cachedInfo == null || cachedInfo.FullName != m_Parent.PreviousLocation)
+                        if (cachedInfo == null || cachedInfo.FullName != m_Parent.CurrentLocation)
                         {
-                            cachedInfo = new FileInfo(m_Parent.PreviousLocation);
+                            cachedInfo = new FileInfo(m_Parent.CurrentLocation);
                         }
                         // Try to provide file date if missing
                         if (fileDate == DateTime.MinValue)
@@ -557,15 +557,42 @@ namespace Ketarin
         {
             get
             {
-                return !string.IsNullOrEmpty(PreviousLocation) && PathEx.TryGetFileSize(PreviousLocation) > 0;
+                return !string.IsNullOrEmpty(CurrentLocation) && PathEx.TryGetFileSize(CurrentLocation) > 0;
             }
         }
 
+        /// <summary>
+        /// Determines the current location of the file, using the relative URI if necessary.
+        /// </summary>
+        [XmlIgnore()]
+        public string CurrentLocation
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(PreviousLocation) && PathEx.TryGetFileSize(PreviousLocation) > 0)
+                {
+                    return PreviousLocation;
+                }
+                else if (!string.IsNullOrEmpty(m_PreviousRelativeLocation))
+                {
+                    return Path.GetFullPath(Path.Combine(Application.StartupPath, m_PreviousRelativeLocation));
+                }
+                else
+                {
+                    return string.Empty;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets if the previously downloaded file should be deleted
+        /// when downloading a new update.
+        /// </summary>
         [XmlElement("DeletePreviousFile")]
         public bool DeletePreviousFile
         {
-            get { return m_DeletePreviousFile; }
-            set { m_DeletePreviousFile = value; }
+            get;
+            set;
         }
 
         [XmlElement("Enabled")]
@@ -1327,7 +1354,8 @@ namespace Ketarin
                                                    UserAgent = @UserAgent,
                                                    ExecuteCommandType = @ExecuteCommandType,
                                                    ExecutePreCommandType = @ExecutePreCommandType,
-                                                   SourceTemplate = @SourceTemplate
+                                                   SourceTemplate = @SourceTemplate,
+                                                   PreviousRelativeLocation = @PreviousRelativeLocation
                                              WHERE JobGuid = @JobGuid";
 
                             command.Parameters.Add(new SQLiteParameter("@ApplicationName", Name));
@@ -1336,7 +1364,7 @@ namespace Ketarin
                             command.Parameters.Add(new SQLiteParameter("@LastUpdated", m_LastUpdated));
                             command.Parameters.Add(new SQLiteParameter("@IsEnabled", m_Enabled));
                             command.Parameters.Add(new SQLiteParameter("@FileHippoId", m_FileHippoId));
-                            command.Parameters.Add(new SQLiteParameter("@DeletePreviousFile", m_DeletePreviousFile));
+                            command.Parameters.Add(new SQLiteParameter("@DeletePreviousFile", DeletePreviousFile));
                             command.Parameters.Add(new SQLiteParameter("@PreviousLocation", PreviousLocation));
                             command.Parameters.Add(new SQLiteParameter("@SourceType", m_SourceType));
                             command.Parameters.Add(new SQLiteParameter("@ExecuteCommand", ExecuteCommand));
@@ -1361,6 +1389,31 @@ namespace Ketarin
                             command.Parameters.Add(new SQLiteParameter("@ExecuteCommandType", ExecuteCommandType));
                             command.Parameters.Add(new SQLiteParameter("@ExecutePreCommandType", ExecutePreCommandType));
                             command.Parameters.Add(new SQLiteParameter("@SourceTemplate", SourceTemplate));
+
+                            // In order to find files if the drive letter has changed (portable USB stick), also remember the 
+                            // last relative location.
+                            if (!string.IsNullOrEmpty(PreviousLocation))
+                            {
+                                try
+                                {
+                                    Uri uri1 = new Uri(PreviousLocation);
+                                    Uri uri2 = new Uri(Application.StartupPath + "\\");
+
+                                    Uri relativeUri = uri2.MakeRelativeUri(uri1);
+                                    string relativePath = relativeUri.ToString().Replace("/", "\\");
+                                    // If result returns out to be not relative, no need to save
+                                    if (!Path.IsPathRooted(relativePath))
+                                    {
+                                        m_PreviousRelativeLocation = relativePath;
+                                    }
+                                }
+                                catch (Exception)
+                                {
+                                    // Not critical if path cannot be determined.
+                                }
+                            }
+
+                            command.Parameters.Add(new SQLiteParameter("@PreviousRelativeLocation", m_PreviousRelativeLocation));
 
                             if (DownloadDate.HasValue)
                             {
@@ -1424,7 +1477,7 @@ namespace Ketarin
             m_LastUpdated = reader["LastUpdated"] as DateTime?;
             m_Enabled = Convert.ToBoolean(reader["IsEnabled"]);
             m_FileHippoId = reader["FileHippoId"] as string;
-            m_DeletePreviousFile = Convert.ToBoolean(reader["DeletePreviousFile"]);
+            DeletePreviousFile = Convert.ToBoolean(reader["DeletePreviousFile"]);
             PreviousLocation = reader["PreviousLocation"] as string;
             m_SourceType = (SourceType)Convert.ToByte(reader["SourceType"]);
             ExecuteCommand = reader["ExecuteCommand"] as string;
@@ -1446,6 +1499,7 @@ namespace Ketarin
             WebsiteUrl = reader["WebsiteUrl"] as string;
             UserAgent = reader["UserAgent"] as string;
             SourceTemplate = reader["SourceTemplate"] as string;
+            m_PreviousRelativeLocation = reader["PreviousRelativeLocation"] as string;
 
             string executeCommandType = reader["ExecuteCommandType"] as string;
             if (executeCommandType != null)
@@ -1585,11 +1639,11 @@ namespace Ketarin
                     throw new TargetPathInvalidException(targetFile);
                 }
 
-                if (!current.Exists && !string.IsNullOrEmpty(PreviousLocation) && m_DeletePreviousFile)
+                if (!current.Exists && !string.IsNullOrEmpty(CurrentLocation) && DeletePreviousFile)
                 {
                     // The file does not exist at the target location.
                     // Check if the previously downloaded file still matches.
-                    current = new FileInfo(PreviousLocation);
+                    current = new FileInfo(CurrentLocation);
                 }
 
                 if (!IgnoreFileInformation && !current.Exists)
@@ -1629,13 +1683,13 @@ namespace Ketarin
             }
 
             // If using FileHippo, and previous file is available, check MD5
-            if (!string.IsNullOrEmpty(m_FileHippoId) && m_SourceType == SourceType.FileHippo && !string.IsNullOrEmpty(PreviousLocation) && File.Exists(PreviousLocation))
+            if (!string.IsNullOrEmpty(m_FileHippoId) && m_SourceType == SourceType.FileHippo && FileExists)
             {
                 string serverMd5 = ExternalServices.FileHippoMd5(m_FileHippoId, AvoidDownloadBeta);
                 // It may happen, that the MD5 is not calculated
                 if (serverMd5 != null)
                 {
-                    bool md5Result = string.Compare(serverMd5, GetMd5OfFile(PreviousLocation), true) != 0;
+                    bool md5Result = string.Compare(serverMd5, GetMd5OfFile(CurrentLocation), true) != 0;
                     LogDialog.Log(this, md5Result ? "Update required, MD5 does not match" : "Update not required");
                     return md5Result;
                 }

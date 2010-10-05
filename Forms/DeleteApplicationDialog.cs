@@ -68,7 +68,7 @@ namespace Ketarin.Forms
                     case DialogResult.Yes: // "Delete application and file"
                         foreach (ApplicationJob application in applications)
                         {
-                            PathEx.TryDeleteFiles(application.PreviousLocation);
+                            PathEx.TryDeleteFiles(application.CurrentLocation);
                             application.Delete();
                         }
                         return true;

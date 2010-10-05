@@ -111,17 +111,17 @@ namespace Ketarin
                 ApplicationJob job = (ApplicationJob)x;
                 
                 // Gray icon if disabled
-                if (!job.Enabled && !string.IsNullOrEmpty(job.PreviousLocation) && m_Updater.GetStatus(job) == Updater.Status.Idle)
+                if (!job.Enabled && !string.IsNullOrEmpty(job.CurrentLocation) && m_Updater.GetStatus(job) == Updater.Status.Idle)
                 {
                     try
                     {
-                        string disabledKey = job.PreviousLocation + "|Disabled";
+                        string disabledKey = job.CurrentLocation + "|Disabled";
                         if (!imlStatus.Images.ContainsKey(disabledKey))
                         {
                             // No icon if no file exists
-                            if (!File.Exists(job.PreviousLocation)) return 0;
+                            if (!File.Exists(job.CurrentLocation)) return 0;
 
-                            Icon programIcon = IconReader.GetFileIcon(job.PreviousLocation, IconReader.IconSize.Small, false);
+                            Icon programIcon = IconReader.GetFileIcon(job.CurrentLocation, IconReader.IconSize.Small, false);
                             imlStatus.Images.Add(disabledKey, MakeGrayscale(programIcon.ToBitmap()));
                         }
                         return disabledKey;
@@ -133,19 +133,19 @@ namespace Ketarin
                 }
 
                 // If available and idle, use the program icon
-                if (m_Updater.GetStatus(job) == Updater.Status.Idle && !string.IsNullOrEmpty(job.PreviousLocation))
+                if (m_Updater.GetStatus(job) == Updater.Status.Idle && !string.IsNullOrEmpty(job.CurrentLocation))
                 {
                     try
                     {
-                        if (!imlStatus.Images.ContainsKey(job.PreviousLocation))
+                        if (!imlStatus.Images.ContainsKey(job.CurrentLocation))
                         {
                             // No icon if no file exists
-                            if (!File.Exists(job.PreviousLocation)) return 0;
+                            if (!File.Exists(job.CurrentLocation)) return 0;
 
-                            Icon programIcon = IconReader.GetFileIcon(job.PreviousLocation, IconReader.IconSize.Small, false);
-                            imlStatus.Images.Add(job.PreviousLocation, programIcon);
+                            Icon programIcon = IconReader.GetFileIcon(job.CurrentLocation, IconReader.IconSize.Small, false);
+                            imlStatus.Images.Add(job.CurrentLocation, programIcon);
                         }
-                        return job.PreviousLocation;
+                        return job.CurrentLocation;
                     }
                     catch (ArgumentException)
                     {
@@ -645,7 +645,8 @@ namespace Ketarin
             mnuExportAll.Enabled = false;
             mnuImport.Enabled = false;
 
-            m_Updater.BeginUpdate(jobs, onlyCheck, forceDownload, installUpdated);
+            m_Updater.ForceDownload = forceDownload;
+            m_Updater.BeginUpdate(jobs, onlyCheck, installUpdated);
             olvJobs.RefreshObjects(jobs);
         }
 
@@ -658,7 +659,7 @@ namespace Ketarin
             try
             {
                 ApplicationJob job = olvJobs.SelectedObject as ApplicationJob;
-                System.Diagnostics.Process.Start(job.PreviousLocation);
+                System.Diagnostics.Process.Start(job.CurrentLocation);
             }
             catch (Exception)
             {
@@ -671,7 +672,7 @@ namespace Ketarin
             try
             {
                 ApplicationJob job = olvJobs.SelectedObject as ApplicationJob;
-                Shell32.ShowFileProperties(job.PreviousLocation);
+                Shell32.ShowFileProperties(job.CurrentLocation);
             }
             catch (Exception)
             {
@@ -696,7 +697,7 @@ namespace Ketarin
         {
             if (job != null)
             {
-                System.Diagnostics.Process.Start("explorer", " /select," + job.PreviousLocation);
+                System.Diagnostics.Process.Start("explorer", " /select," + job.CurrentLocation);
             }
         }
 
@@ -777,7 +778,7 @@ namespace Ketarin
             
             ApplicationJob job = olvJobs.SelectedObject as ApplicationJob;
 
-            if (string.IsNullOrEmpty(job.PreviousLocation)) return;
+            if (string.IsNullOrEmpty(job.CurrentLocation)) return;
 
             using (RenameFileDialog dialog = new RenameFileDialog())
             {
@@ -786,7 +787,7 @@ namespace Ketarin
                 {
                     try
                     {
-                        File.Move(job.PreviousLocation, dialog.FileName);
+                        File.Move(job.CurrentLocation, dialog.FileName);
                         job.PreviousLocation = dialog.FileName;
                         job.Save();
                     }

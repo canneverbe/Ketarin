@@ -135,7 +135,7 @@ namespace Ketarin
             {
                 if (app.FileExists)
                 {
-                    iconPaths.Add(app.PreviousLocation);
+                    iconPaths.Add(app.CurrentLocation);
                 }
             }
 

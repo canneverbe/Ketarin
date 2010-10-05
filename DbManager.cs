@@ -374,6 +374,7 @@ namespace Ketarin
             addColumns.Add("UserNotes", "ALTER TABLE jobs ADD UserNotes TEXT");
             addColumns.Add("WebsiteUrl", "ALTER TABLE jobs ADD WebsiteUrl TEXT");
             addColumns.Add("UserAgent", "ALTER TABLE jobs ADD UserAgent TEXT");
+            addColumns.Add("PreviousRelativeLocation", "ALTER TABLE jobs ADD PreviousRelativeLocation TEXT");
 
             ExecuteUpgradeQueries(columns, addColumns);
 
