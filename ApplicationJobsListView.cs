@@ -196,6 +196,13 @@ namespace Ketarin
             this.Controls.Add(searchPanel);
         }
 
+        public override void SetObjects(System.Collections.IEnumerable collection)
+        {
+            base.SetObjects(collection);
+
+            this.EmptyListMsg = DefaultEmptyMessage;
+        }
+
         private void enabledJobsCheckbox_CheckStateChanged(object sender, EventArgs e)
         {
             RefreshFilter();
