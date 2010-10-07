@@ -33,7 +33,7 @@ namespace Ketarin.Forms
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(InstallingApplicationsDialog));
             this.bCancel = new System.Windows.Forms.Button();
             this.lblSetupStatus = new System.Windows.Forms.Label();
-            this.progressBar = new MarqueeProgressBar();
+            this.progressBar = new CDBurnerXP.Controls.MarqueeProgressBar();
             this.bgwSetup = new System.ComponentModel.BackgroundWorker();
             this.lbShowHideDetails = new System.Windows.Forms.Label();
             this.imageList = new System.Windows.Forms.ImageList(this.components);
@@ -194,6 +194,7 @@ namespace Ketarin.Forms
             this.Controls.Add(this.lblSetupStatus);
             this.Controls.Add(this.bCancel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(400, 130);
             this.Name = "InstallingApplicationsDialog";
