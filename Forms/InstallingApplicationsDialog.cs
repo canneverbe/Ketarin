@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using CDBurnerXP.Forms;
 using System.Threading;
 using CDBurnerXP.IO;
+using CDBurnerXP;
 
 namespace Ketarin.Forms
 {
@@ -70,9 +71,15 @@ namespace Ketarin.Forms
         {
             if (DesignMode) return;
 
+            bool expandedByDefault = Conversion.ToBoolean(Settings.GetValue(this, "Expanded", false));
             // Collapse dialog initially
-            pnlExpanded.Visible = this.expanded;
-            this.Height -= pnlExpanded.Height;
+            this.expanded = expandedByDefault;
+            if (!this.expanded)
+            {
+                this.Height -= pnlExpanded.Height;
+            }
+            SetExpansionButton();
+            lbShowHideDetails.ImageIndex = (expanded ? 0 : 3);
 
             colTime.ImageGetter = delegate(object x)
             {
@@ -84,6 +91,13 @@ namespace Ketarin.Forms
             // Since progress hardly be determined, show animated progress bar
             progressBar.Style = ProgressBarStyle.Marquee;
             bgwSetup.RunWorkerAsync();
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            base.OnClosing(e);
+
+            Settings.SetValue(this, "Expanded", this.expanded);
         }
 
         /// <summary>
@@ -237,12 +251,17 @@ namespace Ketarin.Forms
         private void lbDetails_Click(object sender, EventArgs e)
         {
             this.expanded = !this.expanded;
-            pnlExpanded.Visible = this.expanded;
-            lbShowHideDetails.Text = (this.expanded ? "        " + "&Hide details" : "        " + "&Show details");
+            SetExpansionButton();
             if (this.expanded)
                 this.Height += pnlExpanded.Height;
             else
                 this.Height -= pnlExpanded.Height;
+        }
+
+        private void SetExpansionButton()
+        {
+            pnlExpanded.Visible = this.expanded;
+            lbShowHideDetails.Text = (this.expanded ? "        " + "&Hide details" : "        " + "&Show details");
         }
 
         #endregion 
