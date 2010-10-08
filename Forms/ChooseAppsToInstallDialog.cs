@@ -10,6 +10,7 @@ using Microsoft.Win32;
 using CDBurnerXP.IO;
 using CDBurnerXP.Controls;
 using System.Data.SQLite;
+using CDBurnerXP;
 
 namespace Ketarin.Forms
 {
@@ -51,6 +52,8 @@ namespace Ketarin.Forms
             AcceptButton = bOK;
             CancelButton = bCancel;
 
+            olvLists.ContextMenu = cmnuView;
+
             colListName.ImageGetter = delegate(object x)
             {
                 return this.lists.IndexOf(x as ApplicationList);
@@ -79,6 +82,17 @@ namespace Ketarin.Forms
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
+
+            // Load view settings
+            View view = (View)Settings.GetValue(this, "ListsView", View.Tile);
+            if (view == View.Tile)
+            {
+                mnuTileView.PerformClick();
+            }
+            else
+            {
+                mnuDetailsView.PerformClick();
+            }
 
             // Item for all apps
             ApplicationList allApps = new ApplicationList("All applications", true);
@@ -119,6 +133,13 @@ namespace Ketarin.Forms
             
             olvLists.SetObjects(lists);
             olvLists.SelectedIndex = 0;
+        }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            base.OnClosed(e);
+
+            Settings.SetValue(this, "ListsView", olvLists.View);
         }
 
         private void EnableDisableButtons()
@@ -203,6 +224,20 @@ namespace Ketarin.Forms
         }
 
         #region Events
+
+        private void mnuTileView_Click(object sender, EventArgs e)
+        {
+            olvLists.View = View.Tile;
+            mnuTileView.Checked = true;
+            mnuDetailsView.Checked = false;
+        }
+
+        private void mnuDetailsView_Click(object sender, EventArgs e)
+        {
+            olvLists.View = View.Details;
+            mnuTileView.Checked = false;
+            mnuDetailsView.Checked = true;
+        }
 
         private void bNewList_Click(object sender, EventArgs e)
         {
@@ -452,5 +487,6 @@ namespace Ketarin.Forms
         }
 
         #endregion
+
     }
 }
