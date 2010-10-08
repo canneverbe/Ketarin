@@ -133,9 +133,10 @@ namespace Ketarin
             List<string> iconPaths = new List<string>();
             foreach (ApplicationJob app in this.Applications)
             {
-                if (app.FileExists)
+                string location = app.CurrentLocation;
+                if (!string.IsNullOrEmpty(location))
                 {
-                    iconPaths.Add(app.CurrentLocation);
+                    iconPaths.Add(location);
                 }
             }
 
