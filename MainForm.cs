@@ -727,6 +727,16 @@ namespace Ketarin
             }
         }
 
+        private void cmnuUpdateInstall_Click(object sender, EventArgs e)
+        {
+            using (InstallingApplicationsDialog setupDialog = new InstallingApplicationsDialog())
+            {
+                setupDialog.Applications = olvJobs.SelectedApplications;
+                setupDialog.UpdateApplications = true;
+                setupDialog.ShowDialog(this);
+            }
+        }
+
         private void cmuUpdate_Click(object sender, EventArgs e)
         {
             if (olvJobs.SelectedObjects.Count == 0)
