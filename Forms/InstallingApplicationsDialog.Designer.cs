@@ -137,6 +137,7 @@ namespace Ketarin.Forms
             this.olvLog.MultiSelect = false;
             this.olvLog.Name = "olvLog";
             this.olvLog.ShowGroups = false;
+            this.olvLog.ShowItemToolTips = true;
             this.olvLog.Size = new System.Drawing.Size(371, 116);
             this.olvLog.SmallImageList = this.imlListIcons;
             this.olvLog.TabIndex = 1;

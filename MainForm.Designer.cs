@@ -35,7 +35,9 @@
             this.cmnuUpdate = new System.Windows.Forms.MenuItem();
             this.cmnuCheckForUpdate = new System.Windows.Forms.MenuItem();
             this.cmnuForceDownload = new System.Windows.Forms.MenuItem();
+            this.menuItem2 = new System.Windows.Forms.MenuItem();
             this.cmnuInstall = new System.Windows.Forms.MenuItem();
+            this.cmnuUpdateInstall = new System.Windows.Forms.MenuItem();
             this.cmnuSepUpdates = new System.Windows.Forms.MenuItem();
             this.cmnuOpenFile = new System.Windows.Forms.MenuItem();
             this.cmnuOpenFolder = new System.Windows.Forms.MenuItem();
@@ -113,7 +115,9 @@
             this.cmnuUpdate,
             this.cmnuCheckForUpdate,
             this.cmnuForceDownload,
+            this.menuItem2,
             this.cmnuInstall,
+            this.cmnuUpdateInstall,
             this.cmnuSepUpdates,
             this.cmnuOpenFile,
             this.cmnuOpenFolder,
@@ -150,34 +154,45 @@
             this.cmnuForceDownload.Text = "&Force download";
             this.cmnuForceDownload.Click += new System.EventHandler(this.cmnuForceDownload_Click);
             // 
+            // menuItem2
+            // 
+            this.menuItem2.Index = 3;
+            this.menuItem2.Text = "-";
+            // 
             // cmnuInstall
             // 
-            this.cmnuInstall.Index = 3;
+            this.cmnuInstall.Index = 4;
             this.cmnuInstall.Text = "&Install";
             this.cmnuInstall.Click += new System.EventHandler(this.cmnuInstall_Click);
             // 
+            // cmnuUpdateInstall
+            // 
+            this.cmnuUpdateInstall.Index = 5;
+            this.cmnuUpdateInstall.Text = "Upda&te and install";
+            this.cmnuUpdateInstall.Click += new System.EventHandler(this.cmnuUpdateInstall_Click);
+            // 
             // cmnuSepUpdates
             // 
-            this.cmnuSepUpdates.Index = 4;
+            this.cmnuSepUpdates.Index = 6;
             this.cmnuSepUpdates.Text = "-";
             // 
             // cmnuOpenFile
             // 
             this.cmnuOpenFile.Enabled = false;
-            this.cmnuOpenFile.Index = 5;
+            this.cmnuOpenFile.Index = 7;
             this.cmnuOpenFile.Text = "&Open file";
             this.cmnuOpenFile.Click += new System.EventHandler(this.cmnuOpenFile_Click);
             // 
             // cmnuOpenFolder
             // 
-            this.cmnuOpenFolder.Index = 6;
+            this.cmnuOpenFolder.Index = 8;
             this.cmnuOpenFolder.Text = "Ope&n folder";
             this.cmnuOpenFolder.Click += new System.EventHandler(this.cmnuOpenFolder_Click);
             // 
             // cmnuProperties
             // 
             this.cmnuProperties.Enabled = false;
-            this.cmnuProperties.Index = 7;
+            this.cmnuProperties.Index = 9;
             this.cmnuProperties.Shortcut = System.Windows.Forms.Shortcut.F9;
             this.cmnuProperties.Text = "File propertie&s";
             this.cmnuProperties.Click += new System.EventHandler(this.cmnuProperties_Click);
@@ -185,56 +200,56 @@
             // cmnuRename
             // 
             this.cmnuRename.Enabled = false;
-            this.cmnuRename.Index = 8;
+            this.cmnuRename.Index = 10;
             this.cmnuRename.Shortcut = System.Windows.Forms.Shortcut.F2;
             this.cmnuRename.Text = "&Rename file";
             this.cmnuRename.Click += new System.EventHandler(this.cmnuRename_Click);
             // 
             // menuItem4
             // 
-            this.menuItem4.Index = 9;
+            this.menuItem4.Index = 11;
             this.menuItem4.Text = "-";
             // 
             // cmnuEdit
             // 
             this.cmnuEdit.DefaultItem = true;
             this.cmnuEdit.Enabled = false;
-            this.cmnuEdit.Index = 10;
+            this.cmnuEdit.Index = 12;
             this.cmnuEdit.Text = "&Edit";
             this.cmnuEdit.Click += new System.EventHandler(this.cmnuEdit_Click);
             // 
             // cmnuDelete
             // 
             this.cmnuDelete.Enabled = false;
-            this.cmnuDelete.Index = 11;
+            this.cmnuDelete.Index = 13;
             this.cmnuDelete.Shortcut = System.Windows.Forms.Shortcut.Del;
             this.cmnuDelete.Text = "&Delete";
             this.cmnuDelete.Click += new System.EventHandler(this.cmnuDelete_Click);
             // 
             // cmnuCopy
             // 
-            this.cmnuCopy.Index = 12;
+            this.cmnuCopy.Index = 14;
             this.cmnuCopy.Shortcut = System.Windows.Forms.Shortcut.CtrlC;
             this.cmnuCopy.Text = "&Copy";
             this.cmnuCopy.Click += new System.EventHandler(this.cmnuCopy_Click);
             // 
             // cmnuPaste
             // 
-            this.cmnuPaste.Index = 13;
+            this.cmnuPaste.Index = 15;
             this.cmnuPaste.Shortcut = System.Windows.Forms.Shortcut.CtrlV;
             this.cmnuPaste.Text = "&Paste";
             this.cmnuPaste.Click += new System.EventHandler(this.cmnuPaste_Click);
             // 
             // mnuSelectAll
             // 
-            this.mnuSelectAll.Index = 14;
+            this.mnuSelectAll.Index = 16;
             this.mnuSelectAll.Shortcut = System.Windows.Forms.Shortcut.CtrlA;
             this.mnuSelectAll.Text = "Select &all";
             this.mnuSelectAll.Click += new System.EventHandler(this.mnuSelectAll_Click);
             // 
             // mnuInvert
             // 
-            this.mnuInvert.Index = 15;
+            this.mnuInvert.Index = 17;
             this.mnuInvert.Shortcut = System.Windows.Forms.Shortcut.CtrlI;
             this.mnuInvert.Text = "In&vert selection";
             this.mnuInvert.Click += new System.EventHandler(this.mnuInvert_Click);
@@ -434,7 +449,7 @@
             this.olvJobs.Location = new System.Drawing.Point(12, 12);
             this.olvJobs.Name = "olvJobs";
             this.olvJobs.OwnerDraw = true;
-            this.olvJobs.Size = new System.Drawing.Size(658, 210);
+            this.olvJobs.Size = new System.Drawing.Size(658, 262);
             this.olvJobs.SmallImageList = this.imlStatus;
             this.olvJobs.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.olvJobs.TabIndex = 0;
@@ -584,7 +599,7 @@
             this.bInstall.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.bInstall.AutoSize = true;
             this.bInstall.Image = global::Ketarin.Properties.Resources.Setup;
-            this.bInstall.Location = new System.Drawing.Point(290, 228);
+            this.bInstall.Location = new System.Drawing.Point(290, 280);
             this.bInstall.Name = "bInstall";
             this.bInstall.Size = new System.Drawing.Size(85, 24);
             this.bInstall.TabIndex = 5;
@@ -598,7 +613,7 @@
             this.bRun.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.bRun.AutoSize = true;
             this.bRun.Image = global::Ketarin.Properties.Resources.Restart;
-            this.bRun.Location = new System.Drawing.Point(168, 228);
+            this.bRun.Location = new System.Drawing.Point(168, 280);
             this.bRun.Name = "bRun";
             this.bRun.Size = new System.Drawing.Size(116, 24);
             this.bRun.SplitMenu = this.cmuRun;
@@ -613,7 +628,7 @@
             this.bAddApplication.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.bAddApplication.AutoSize = true;
             this.bAddApplication.Image = global::Ketarin.Properties.Resources.AddSmall;
-            this.bAddApplication.Location = new System.Drawing.Point(12, 228);
+            this.bAddApplication.Location = new System.Drawing.Point(12, 280);
             this.bAddApplication.Name = "bAddApplication";
             this.bAddApplication.Size = new System.Drawing.Size(150, 24);
             this.bAddApplication.SplitMenu = this.cmuAdd;
@@ -628,7 +643,7 @@
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(682, 264);
+            this.ClientSize = new System.Drawing.Size(682, 316);
             this.Controls.Add(this.bInstall);
             this.Controls.Add(this.bRun);
             this.Controls.Add(this.bAddApplication);
@@ -717,6 +732,8 @@
         private System.Windows.Forms.MenuItem cmnuProperties;
         private wyDay.Controls.SplitButton bInstall;
         private System.Windows.Forms.MenuItem cmnuInstall;
+        private System.Windows.Forms.MenuItem cmnuUpdateInstall;
+        private System.Windows.Forms.MenuItem menuItem2;
     }
 }
 

@@ -168,6 +168,8 @@ namespace Ketarin.Forms
                 // Wait until finished
                 while (updater.IsBusy)
                 {
+                    updater.ProgressChanged += new EventHandler<Updater.JobProgressChangedEventArgs>(updater_ProgressChanged);
+
                     if (bgwSetup.CancellationPending)
                     {
                         updater.Cancel();
@@ -175,6 +177,11 @@ namespace Ketarin.Forms
                     }
                     Thread.Sleep(500);
                 }
+
+                this.Invoke((MethodInvoker)delegate()
+                {
+                    progressBar.Style = ProgressBarStyle.Marquee;
+                }); 
 
                 // Did update fail? Install if {file} is present.
                 if (updater.Errors.Length > 0)
@@ -201,6 +208,21 @@ namespace Ketarin.Forms
             count++;
         }
 
+        private void updater_ProgressChanged(object sender, Updater.JobProgressChangedEventArgs e)
+        {
+            if (InvokeRequired)
+            {
+                this.Invoke((MethodInvoker)delegate()
+                {
+                    updater_ProgressChanged(sender, e);
+                });
+                return;
+            }
+
+            progressBar.Style = ProgressBarStyle.Blocks;
+            progressBar.Value = e.ProgressPercentage;
+        }
+
         private void bgwSetup_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             UpdateStatus(string.Format("{0} of {1} applications installed successfully.", this.installCounter, this.Applications.Length));
@@ -209,7 +231,6 @@ namespace Ketarin.Forms
             bCancel.Enabled = true;
             bCancel.Text = "Close";
         }
-
 
         private void bCancel_Click(object sender, EventArgs e)
         {
