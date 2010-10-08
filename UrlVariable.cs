@@ -618,9 +618,17 @@ namespace Ketarin
                     {
                         string[] contentParts = content.Split(parts[1][0]);
                         int partNum;
-                        if (Int32.TryParse(parts[2], out partNum) && partNum >= 0 && partNum < contentParts.Length)
+                        if (Int32.TryParse(parts[2], out partNum))
                         {
-                            return contentParts[partNum];
+                            if (partNum < 0)
+                            {
+                                // Negative number: Count from the end
+                                partNum = contentParts.Length + partNum;
+                            }
+                            if (partNum >= 0 && partNum < contentParts.Length)
+                            {
+                                return contentParts[partNum];
+                            }
                         }
                     }
                     break;
