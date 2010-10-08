@@ -187,7 +187,7 @@ namespace Ketarin
 
             // exec 'scp -f rfile' remotely
             string sfPath = GetSourceforgePath(uri.LocalPath);
-            String command = "scp -f " + sfPath;
+            String command = "scp -f " + sfPath.Replace(" ", "\\ ");
             Channel channel = session.openChannel("exec");
             ((ChannelExec)channel).setCommand(command);
 
@@ -275,12 +275,12 @@ namespace Ketarin
             string[] parts = path.Split('/');
             for (int i = 0; i < parts.Length; i++)
             {
-                if (parts[i] == "projects")
+                if (parts[i] == "projects" || parts[i] == "project")
                 {
                     string projectName = parts[i + 1];
                     projectPart = projectName.Substring(0, 1) + "/" + projectName.Substring(0, 2) + "/" + projectName;
                 }
-                if (parts[i] == "files")
+                if (parts[i] == "files" || (i > 0 && parts[i-1] == "project"))
                 {
                     for (int j = i + 1; j < parts.Length; j++)
                     {
@@ -288,6 +288,24 @@ namespace Ketarin
                     }
                     // Might be "/download" at the end -> remove
                     filePart = filePart.Replace("/download", "").TrimEnd('/');
+                }
+            }
+
+            // Possibly scheme: http://downloads.sourceforge.net/tortoisesvn/TortoiseSVN-1.6.11.20210-x64-svn-1.6.13.msi?download
+            // Use location header.
+            if (string.IsNullOrEmpty(projectPart) && path.Contains("downloads.sourceforge.net"))
+            {
+                try
+                {
+                    HttpWebRequest request = WebRequest.Create(path.Insert(0, "http:")) as HttpWebRequest;
+                    request.AllowAutoRedirect = false;
+                    WebResponse response = request.GetResponse();
+                    // Remove %20 and the like
+                    return GetSourceforgePath(new Uri(response.Headers["Location"]).ToString());
+                }
+                catch (Exception)
+                {
+                    // Try alternative path
                 }
             }
 
