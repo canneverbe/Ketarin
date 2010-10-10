@@ -761,17 +761,35 @@ namespace Ketarin
                     return Status.UpdateAvailable;
                 }
 
+                // Execute: Default pre-update command
                 string defaultPreCommand = Settings.GetValue("PreUpdateCommand", "") as string;
+                // For starting external download managers: {preupdate-url}
+                defaultPreCommand = UrlVariable.Replace(defaultPreCommand, "preupdate-url", urlToRequest.ToString());
                 ScriptType defaultPreCommandType = Command.ConvertToScriptType(Settings.GetValue("PreUpdateCommandType", ScriptType.Batch.ToString()) as string);
-                if (new Command(defaultPreCommand, defaultPreCommandType).Execute(job) == 1)
+
+                int exitCode = new Command(defaultPreCommand, defaultPreCommandType).Execute(job);
+                if (exitCode == 1)
                 {
-                    LogDialog.Log(job, "Default pre-update command returned '1', download skipped");
+                    LogDialog.Log(job, "Default pre-update command returned '1', download aborted");
                     throw new CommandErrorException();
                 }
-                if (new Command(job.ExecutePreCommand, job.ExecutePreCommandType).Execute(job) == 1)
+                else if (exitCode == 2)
                 {
-                    LogDialog.Log(job, "Pre-update command returned '1', download skipped");
+                    LogDialog.Log(job, "Default pre-update command returned '2', download skipped");
+                    return Status.UpdateAvailable;
+                }
+
+                // Execute: Application pre-update command
+                exitCode = new Command(UrlVariable.Replace(job.ExecutePreCommand, "preupdate-url", urlToRequest.ToString()), job.ExecutePreCommandType).Execute(job);
+                if (exitCode == 1)
+                {
+                    LogDialog.Log(job, "Pre-update command returned '1', download aborted");
                     throw new CommandErrorException();
+                }
+                else if (exitCode == 2)
+                {
+                    LogDialog.Log(job, "Pre-update command returned '2', download skipped");
+                    return Status.UpdateAvailable;
                 }
 
                 // Read all file contents to a temporary location
