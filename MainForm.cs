@@ -1181,7 +1181,7 @@ namespace Ketarin
         {
             try
             {
-                System.Diagnostics.Process.Start("http://cdburnerxp.se/help/kb/20");
+                System.Diagnostics.Process.Start("http://wiki.ketarin.org/index.php/Basics");
             }
             catch (Exception)
             {
