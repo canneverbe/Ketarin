@@ -476,6 +476,11 @@ namespace Ketarin
                 content = string.Empty;
             }
 
+            if (formatString == null)
+            {
+                return string.Empty;
+            }
+
             int pos, length;
             string functionPart;
             int startAt = 0;
