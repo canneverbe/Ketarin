@@ -99,9 +99,21 @@ namespace Ketarin
         private int contentLength = 0;
         private Uri responseUri = null;
         private Session session = null;
+        private DateTime lastModified = DateTime.MinValue;
 
         #region Properties
-        
+
+        /// <summary>
+        /// Gets the last modified date of the requested file.
+        /// </summary>
+        public DateTime LastModified
+        {
+            get
+            {
+                return this.lastModified;
+            }
+        }
+
         /// <summary>
         /// Gets the file size of the request file.
         /// </summary>
@@ -187,6 +199,20 @@ namespace Ketarin
 
             // exec 'scp -f rfile' remotely
             string sfPath = GetSourceforgePath(uri.LocalPath);
+
+            // Determine file modified date
+            ChannelSftp channelSftp = (ChannelSftp)session.openChannel("sftp");
+            channelSftp.connect();
+            try
+            {
+                SftpATTRS attrs = channelSftp.lstat(sfPath);
+                this.lastModified = RpcApplication.UnixToDotNet(attrs.getMTime());
+            }
+            finally
+            {
+                channelSftp.disconnect();
+            }
+
             String command = "scp -f " + sfPath.Replace(" ", "\\ ");
             Channel channel = session.openChannel("exec");
             ((ChannelExec)channel).setCommand(command);
