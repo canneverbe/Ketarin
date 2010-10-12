@@ -1753,6 +1753,11 @@ namespace Ketarin
                     return DateTime.Now;
                 }
             }
+            ScpWebResponse scpResponse = netResponse as ScpWebResponse;
+            if (scpResponse != null)
+            {
+                lastModified = scpResponse.LastModified;
+            }
             return lastModified;
         }
 
