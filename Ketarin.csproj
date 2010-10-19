@@ -91,6 +91,7 @@
   <ItemGroup>
     <Compile Include="ApplicationList.cs" />
     <Compile Include="Command.cs" />
+    <Compile Include="HttpxRequest.cs" />
     <Compile Include="CopyFileInstruction.cs" />
     <Compile Include="CustomSetupInstruction.cs" />
     <Compile Include="Forms\ChooseAppsToInstallDialog.cs">
