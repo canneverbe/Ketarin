@@ -667,6 +667,8 @@ namespace Ketarin
             job.Variables.ResetDownloadCount();
 
             WebRequest.RegisterPrefix("sf", new ScpWebRequestCreator());
+            WebRequest.RegisterPrefix("httpx", new HttpxRequestCreator());
+
             WebRequest req = WebRequest.CreateDefault(urlToRequest);
             AddRequestToCancel(req);
             req.Timeout = Convert.ToInt32(Settings.GetValue("ConnectionTimeout", 10)) * 1000; // 10 seconds by default
@@ -676,7 +678,14 @@ namespace Ketarin
             {
                 // Store cookies for future requests. Some sites
                 // check for previously stored cookies before allowing to download.
-                httpRequest.CookieContainer = m_Cookies;
+                if (httpRequest.CookieContainer == null)
+                {
+                    httpRequest.CookieContainer = m_Cookies;
+                }
+                else
+                {
+                    httpRequest.CookieContainer.Add(m_Cookies.GetCookies(httpRequest.RequestUri));
+                }
 
                 // If we have an HTTP request, some sites may require a correct referer
                 // for the download.
@@ -701,7 +710,7 @@ namespace Ketarin
                 LogDialog.Log(job, "Using referer: " + (string.IsNullOrEmpty(httpRequest.Referer) ? "(none)" : httpRequest.Referer));
                 httpRequest.UserAgent = (string.IsNullOrEmpty(job.UserAgent) ? WebClient.UserAgent : job.UserAgent);
             }
-
+            
             using (WebResponse response = WebClient.GetResponse(req))
             {
                 LogDialog.Log(job, "Server source file: " + req.RequestUri.AbsolutePath);
