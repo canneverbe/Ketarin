@@ -103,6 +103,14 @@ namespace Ketarin
         protected override WebRequest GetWebRequest(Uri address)
         {
             WebRequest request = base.GetWebRequest(address);
+
+            HttpWebRequest httpReq = request as HttpWebRequest;
+            if (httpReq != null)
+            {
+                // DownloadString will not decompress automatically
+                httpReq.AutomaticDecompression = (DecompressionMethods.GZip | DecompressionMethods.Deflate);
+            }
+
             // Make sure that the user defined timeout is used for all web requests!
             request.Timeout = Convert.ToInt32(Settings.GetValue("ConnectionTimeout", 10)) * 1000; // 10 seconds by default
             Updater.AddRequestToCancel(request);
