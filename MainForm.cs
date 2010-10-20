@@ -655,8 +655,6 @@ namespace Ketarin
 
         private void cmnuOpenFile_Click(object sender, EventArgs e)
         {
-            if (m_Updater.IsBusy) return;
-
             try
             {
                 ApplicationJob job = olvJobs.SelectedObject as ApplicationJob;
@@ -774,19 +772,18 @@ namespace Ketarin
             cmnuUpdate.Enabled = (!m_Updater.IsBusy);
             cmnuCheckForUpdate.Enabled = (!m_Updater.IsBusy);
             cmnuForceDownload.Enabled = (!m_Updater.IsBusy);
-            cmnuOpenFile.Enabled = (job != null && !m_Updater.IsBusy && job.FileExists);
-            cmnuProperties.Enabled = (job != null && !m_Updater.IsBusy && job.FileExists);
+            cmnuOpenFile.Enabled = (job != null && !(m_Updater.GetStatus(job) == Updater.Status.Downloading) && job.FileExists);
+            cmnuProperties.Enabled = (job != null && job.FileExists);
             cmnuOpenFolder.Enabled = (job != null && job.FileExists);
             cmnuRename.Enabled = cmnuOpenFile.Enabled;
             cmnuCopy.Enabled = (olvJobs.SelectedObjects.Count != 0);
             cmnuPaste.Enabled = SafeClipboard.IsDataPresent(DataFormats.Text);
             cmnuInstall.Enabled = (!m_Updater.IsBusy);
+            cmnuUpdateInstall.Enabled = (!m_Updater.IsBusy);
         }
 
         private void cmnuRename_Click(object sender, EventArgs e)
-        {
-            if (m_Updater.IsBusy) return;
-            
+        {            
             ApplicationJob job = olvJobs.SelectedObject as ApplicationJob;
 
             if (string.IsNullOrEmpty(job.CurrentLocation)) return;
