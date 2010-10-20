@@ -408,6 +408,9 @@ namespace Ketarin.Forms
                     Cursor = Cursors.Default;
                 }
             }
+
+            // Required for non modal call
+            this.Close();
         }
 
         /// <summary>
@@ -524,6 +527,12 @@ namespace Ketarin.Forms
             WriteApplication();
             string xml = ApplicationJob.GetXml(new ApplicationJob[] { ApplicationJob }, true, Encoding.UTF8);
             Settings.SetValue("DefaultApplication", xml);
+        }
+
+        private void bCancel_Click(object sender, EventArgs e)
+        {
+            // Required for non modal call
+            this.Close();
         }
 
         #region Instructions
