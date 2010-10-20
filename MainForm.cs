@@ -44,6 +44,7 @@ namespace Ketarin
         private string m_CustomColumn1 = string.Empty;
         private string m_CustomColumn2 = string.Empty;
         private FormWindowState m_PreviousState = FormWindowState.Normal;
+        private Dictionary<ApplicationJob, ApplicationJobDialog> openApps = new Dictionary<ApplicationJob, ApplicationJobDialog>();
 
         public static Bitmap MakeGrayscale(Bitmap original)
         {
@@ -955,19 +956,35 @@ namespace Ketarin
             }
         }
 
+        /// <summary>
+        /// Edits an application job. It is possible to edit multiple jobs at the same time.
+        /// </summary>
         private void EditJob(ApplicationJob job)
         {
             if (job == null) return;
 
-            using (ApplicationJobDialog dialog = new ApplicationJobDialog())
+            if (this.openApps.ContainsKey(job))
             {
+                this.openApps[job].BringToFront();
+            }
+            else
+            {
+                ApplicationJobDialog dialog = new ApplicationJobDialog();
+
                 dialog.ApplicationJob = job;
-                if (dialog.ShowDialog(this) == DialogResult.OK)
+                this.openApps[job] = dialog;
+                dialog.Show(this);
+                dialog.FormClosed += new FormClosedEventHandler(delegate(object sender, FormClosedEventArgs e)
                 {
-                    dialog.ApplicationJob.Save();
-                    olvJobs.RefreshObject(job);
-                    UpdateNumByStatus();
-                }
+                    if (dialog.DialogResult == DialogResult.OK)
+                    {
+                        dialog.ApplicationJob.Save();
+                        olvJobs.RefreshObject(job);
+                        UpdateNumByStatus();
+                    }
+                    this.openApps.Remove(job);
+                    dialog.Dispose();
+                });
             }
         }
 

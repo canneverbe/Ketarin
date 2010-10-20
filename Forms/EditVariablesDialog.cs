@@ -150,6 +150,11 @@ namespace Ketarin.Forms
             base.OnLoad(e);
 
             ReloadVariables(true);
+
+            if (m_Job != null && !string.IsNullOrEmpty(m_Job.Name))
+            {
+                this.Text = "Edit Variables - " + m_Job.Name;
+            }
         }
 
         protected override void OnClosed(EventArgs e)

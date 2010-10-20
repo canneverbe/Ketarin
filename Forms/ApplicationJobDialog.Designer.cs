@@ -116,6 +116,7 @@
             this.bCancel.TabIndex = 100;
             this.bCancel.Text = "Cancel";
             this.bCancel.UseVisualStyleBackColor = true;
+            this.bCancel.Click += new System.EventHandler(this.bCancel_Click);
             // 
             // bOK
             // 
@@ -636,7 +637,7 @@
             this.txtExecuteBefore.Location = new System.Drawing.Point(0, 16);
             this.txtExecuteBefore.Margin = new System.Windows.Forms.Padding(0);
             this.txtExecuteBefore.Name = "txtExecuteBefore";
-            this.txtExecuteBefore.ReadOnly = false;
+            this.txtExecuteBefore.ShowBorder = false;
             this.txtExecuteBefore.Size = new System.Drawing.Size(363, 122);
             this.txtExecuteBefore.TabIndex = 1;
             this.txtExecuteBefore.VariableNames = new string[0];
@@ -670,7 +671,7 @@
             this.txtExecuteAfter.Location = new System.Drawing.Point(0, 21);
             this.txtExecuteAfter.Margin = new System.Windows.Forms.Padding(0);
             this.txtExecuteAfter.Name = "txtExecuteAfter";
-            this.txtExecuteAfter.ReadOnly = false;
+            this.txtExecuteAfter.ShowBorder = false;
             this.txtExecuteAfter.Size = new System.Drawing.Size(363, 126);
             this.txtExecuteAfter.TabIndex = 3;
             this.txtExecuteAfter.VariableNames = new string[0];
