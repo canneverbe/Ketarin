@@ -776,7 +776,7 @@ namespace Ketarin
                 defaultPreCommand = UrlVariable.Replace(defaultPreCommand, "preupdate-url", urlToRequest.ToString());
                 ScriptType defaultPreCommandType = Command.ConvertToScriptType(Settings.GetValue("PreUpdateCommandType", ScriptType.Batch.ToString()) as string);
 
-                int exitCode = new Command(defaultPreCommand, defaultPreCommandType).Execute(job);
+                int exitCode = new Command(defaultPreCommand, defaultPreCommandType).Execute(job, targetFileName);
                 if (exitCode == 1)
                 {
                     LogDialog.Log(job, "Default pre-update command returned '1', download aborted");
@@ -789,7 +789,7 @@ namespace Ketarin
                 }
 
                 // Execute: Application pre-update command
-                exitCode = new Command(UrlVariable.Replace(job.ExecutePreCommand, "preupdate-url", urlToRequest.ToString()), job.ExecutePreCommandType).Execute(job);
+                exitCode = new Command(UrlVariable.Replace(job.ExecutePreCommand, "preupdate-url", urlToRequest.ToString()), job.ExecutePreCommandType).Execute(job, targetFileName);
                 if (exitCode == 1)
                 {
                     LogDialog.Log(job, "Pre-update command returned '1', download aborted");
@@ -897,12 +897,12 @@ namespace Ketarin
             // Execute a default command?
             string defaultCommand = Settings.GetValue("DefaultCommand") as string;
             ScriptType defaultCommandType = Command.ConvertToScriptType(Settings.GetValue("DefaultCommandType") as string);
-            new Command(defaultCommand, defaultCommandType).Execute(job);
+            new Command(defaultCommand, defaultCommandType).Execute(job, job.PreviousLocation);
 
             // Do we need to execute a command after downloading?
             if (!string.IsNullOrEmpty(job.ExecuteCommand))
             {
-                new Command(job.ExecuteCommand, job.ExecuteCommandType).Execute(job);
+                new Command(job.ExecuteCommand, job.ExecuteCommandType).Execute(job, job.PreviousLocation);
             }
 
             return Status.UpdateSuccessful;

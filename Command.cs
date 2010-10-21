@@ -40,6 +40,15 @@ namespace Ketarin
         /// </summary>
         public virtual int Execute(ApplicationJob application)
         {
+            return Execute(application, null);
+        }
+
+        /// <summary>
+        /// Executes the command.
+        /// </summary>
+        /// <param name="targetFileName">Content for variable "{url:...}"</param>
+        public virtual int Execute(ApplicationJob application, string targetFileName)
+        {
             switch (Type)
             {
                 case ScriptType.CS:
@@ -48,7 +57,7 @@ namespace Ketarin
                     break;
 
                 default:
-                    return ExecuteBatchCommand(application, this.Text);
+                    return ExecuteBatchCommand(application, this.Text, targetFileName);
             }
 
             return 0;
@@ -58,7 +67,7 @@ namespace Ketarin
         /// Executes a given command for the given application (also resolves variables).
         /// </summary>
         /// <returns>Exit code of the command, if not run in background</returns>
-        private static int ExecuteBatchCommand(ApplicationJob job, string commandText)
+        private static int ExecuteBatchCommand(ApplicationJob job, string commandText, string targetFileName)
         {
             // Ignore empty commands
             if (string.IsNullOrEmpty(commandText)) return 0;
@@ -68,7 +77,7 @@ namespace Ketarin
             // Job specific data
             if (job != null)
             {
-                commandText = job.Variables.ReplaceAllInString(commandText);
+                commandText = job.Variables.ReplaceAllInString(commandText, DateTime.MinValue, targetFileName, false);
             }
             else
             {
