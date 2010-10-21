@@ -448,7 +448,7 @@ namespace Ketarin
         /// </summary>
         /// <param name="name">Name of the variable without { and }</param>
         /// <param name="formatString">String to check</param>
-        private static bool IsVariableUsedInString(string name, string formatString)
+        public static bool IsVariableUsedInString(string name, string formatString)
         {
             int pos, length;
             string functionPart;
