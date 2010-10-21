@@ -35,7 +35,6 @@ namespace Ketarin
         private string m_FileHippoVersion = string.Empty;
         private SourceType m_SourceType = SourceType.FixedUrl;
         private UrlVariableCollection m_Variables = null;
-        private string m_Category = string.Empty;
         private Guid m_Guid = Guid.Empty;
         private bool m_CanBeShared = true;
         private bool m_ShareApplication = false;
@@ -44,6 +43,24 @@ namespace Ketarin
         private string m_VariableChangeIndicatorLastContent = null;
         private string m_PreviousRelativeLocation = string.Empty;
         private List<SetupInstruction> setupInstructions = null;
+        private static PropertyInfo[] applicationJobProperties = null;
+        private string cachedCurrentLocation = null;
+        private string previousLocation = string.Empty;
+
+        /// <summary>
+        /// Cached list of public properties of the type ApplicationJob.
+        /// </summary>
+        private static PropertyInfo[] ApplicationJobProperties
+        {
+            get
+            {
+                if (applicationJobProperties == null)
+                {
+                    applicationJobProperties = typeof(ApplicationJob).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+                }
+                return applicationJobProperties;
+            }
+        }
 
         public enum SourceType
         {
@@ -422,12 +439,18 @@ namespace Ketarin
                     value = UrlVariable.Replace(value, "appname", m_Parent.Name);
                     value = UrlVariable.Replace(value, "appguid", DbManager.FormatGuid(m_Parent.Guid));
                     
+                   
                     // Allow to access all public properties of the object per "property:X" variable.
-                    foreach (PropertyInfo property in m_Parent.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
+                    foreach (PropertyInfo property in ApplicationJob.ApplicationJobProperties)
                     {
-                        if (!typeof(IEnumerable).IsAssignableFrom(property.PropertyType) || property.PropertyType == typeof(string))
+                        // Only make effort if variable is used
+                        string varname = "property:" + property.Name;
+                        if (UrlVariable.IsVariableUsedInString(value, varname))
                         {
-                            value = UrlVariable.Replace(value, "property:" + property.Name, Convert.ToString(property.GetValue(m_Parent, null)));
+                            if (!typeof(IEnumerable).IsAssignableFrom(property.PropertyType) || property.PropertyType == typeof(string))
+                            {
+                                value = UrlVariable.Replace(value, varname, Convert.ToString(property.GetValue(m_Parent, null)));
+                            }
                         }
                     }
 
@@ -530,8 +553,8 @@ namespace Ketarin
         [XmlElement("Category")]
         public string Category
         {
-            get { return m_Category; }
-            set { m_Category = value; }
+            get;
+            set;
         }
 
         [XmlElement("SourceType")]
@@ -546,8 +569,15 @@ namespace Ketarin
         /// </summary>
         public string PreviousLocation
         {
-            get;
-            set;
+            get { return this.previousLocation; }
+            set
+            {
+                if (this.previousLocation != value)
+                {
+                    this.previousLocation = value;
+                    this.cachedCurrentLocation = null;
+                }
+            }
         }
 
         /// <summary>
@@ -569,18 +599,28 @@ namespace Ketarin
         {
             get
             {
+                if (this.cachedCurrentLocation != null)
+                {
+                    return this.cachedCurrentLocation;
+                }
+
+                string result = null;
+
                 if (!string.IsNullOrEmpty(PreviousLocation) && PathEx.TryGetFileSize(PreviousLocation) > 0)
                 {
-                    return PreviousLocation;
+                    result = PreviousLocation;
                 }
                 else if (!string.IsNullOrEmpty(m_PreviousRelativeLocation))
                 {
-                    return Path.GetFullPath(Path.Combine(Application.StartupPath, m_PreviousRelativeLocation));
+                    result = Path.GetFullPath(Path.Combine(Application.StartupPath, m_PreviousRelativeLocation));
                 }
                 else
                 {
-                    return string.Empty;
+                    result = string.Empty;
                 }
+
+                this.cachedCurrentLocation = result;
+                return result;
             }
         }
 
@@ -608,7 +648,7 @@ namespace Ketarin
             {
                 if (string.IsNullOrEmpty(m_TargetPath)) return false;
 
-                return Directory.Exists(m_TargetPath) || TargetPath.EndsWith("\\");
+                return TargetPath.EndsWith("\\") || Directory.Exists(m_TargetPath);
             }
         }
 
@@ -634,7 +674,14 @@ namespace Ketarin
         public DateTime? LastUpdated
         {
             get { return m_LastUpdated; }
-            set { m_LastUpdated = value; }
+            set
+            {
+                if (m_LastUpdated != value)
+                {
+                    m_LastUpdated = value;
+                    this.cachedCurrentLocation = null;
+                }
+            }
         }
 
         [XmlElement("TargetPath")]
@@ -1369,7 +1416,7 @@ namespace Ketarin
                             command.Parameters.Add(new SQLiteParameter("@SourceType", m_SourceType));
                             command.Parameters.Add(new SQLiteParameter("@ExecuteCommand", ExecuteCommand));
                             command.Parameters.Add(new SQLiteParameter("@ExecutePreCommand", ExecutePreCommand));
-                            command.Parameters.Add(new SQLiteParameter("@Category", m_Category));
+                            command.Parameters.Add(new SQLiteParameter("@Category", Category));
                             command.Parameters.Add(new SQLiteParameter("@CanBeShared", m_CanBeShared));
                             command.Parameters.Add(new SQLiteParameter("@ShareApplication", m_ShareApplication));
                             command.Parameters.Add(new SQLiteParameter("@HttpReferer", m_HttpReferer));
@@ -1482,7 +1529,7 @@ namespace Ketarin
             m_SourceType = (SourceType)Convert.ToByte(reader["SourceType"]);
             ExecuteCommand = reader["ExecuteCommand"] as string;
             ExecutePreCommand = reader["ExecutePreCommand"] as string;
-            m_Category = reader["Category"] as string;
+            Category = reader["Category"] as string;
             m_CanBeShared = Convert.ToBoolean(reader["CanBeShared"]);
             m_ShareApplication = Convert.ToBoolean(reader["ShareApplication"]);
             m_FileHippoVersion = reader["FileHippoVersion"] as string;
