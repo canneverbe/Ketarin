@@ -398,6 +398,7 @@ namespace Ketarin
                     {
                         value = value.Replace("{url:ext}", Path.GetExtension(filename).TrimStart('.'));
                         value = value.Replace("{url:basefile}", Path.GetFileNameWithoutExtension(filename));
+                        value = value.Replace("{url:filename}", Path.GetFileName(filename));
                     }
                 }
                 catch (ArgumentException ex)
