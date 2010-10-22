@@ -446,7 +446,7 @@ namespace Ketarin
                     {
                         // Only make effort if variable is used
                         string varname = "property:" + property.Name;
-                        if (UrlVariable.IsVariableUsedInString(value, varname))
+                        if (UrlVariable.IsVariableUsedInString(varname, value))
                         {
                             if (!typeof(IEnumerable).IsAssignableFrom(property.PropertyType) || property.PropertyType == typeof(string))
                             {
