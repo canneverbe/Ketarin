@@ -118,17 +118,20 @@ namespace Ketarin.Forms
         {
             if (string.IsNullOrEmpty(text)) return;
 
-            text = DateTime.Now.ToString() + ": " + text;
-            m_Log.Enqueue(text);
-            m_FullLog.Add(text);
+            lock (m_Log)
+            {
+                text = DateTime.Now.ToString() + ": " + text;
+                m_Log.Enqueue(text);
+                m_FullLog.Add(text);
 
-            if (m_Instance != null)
-            {
-                m_Instance.AddToTextBox(text);
-            }
-            else
-            {
-                Console.Error.WriteLine(text);
+                if (m_Instance != null)
+                {
+                    m_Instance.AddToTextBox(text);
+                }
+                else
+                {
+                    Console.Error.WriteLine(text);
+                }
             }
         }
 

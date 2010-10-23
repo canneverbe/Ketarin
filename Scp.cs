@@ -208,6 +208,10 @@ namespace Ketarin
                 SftpATTRS attrs = channelSftp.lstat(sfPath);
                 this.lastModified = RpcApplication.UnixToDotNet(attrs.getMTime());
             }
+            catch (SftpException)
+            {
+                throw new WebException("The file \"" + sfPath + "\" could not be found.");
+            }
             finally
             {
                 channelSftp.disconnect();
