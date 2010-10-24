@@ -613,7 +613,14 @@ namespace Ketarin
                 }
                 else if (!string.IsNullOrEmpty(m_PreviousRelativeLocation))
                 {
-                    result = Path.GetFullPath(Path.Combine(Application.StartupPath, m_PreviousRelativeLocation));
+                    try
+                    {
+                        result = Path.GetFullPath(Path.Combine(Application.StartupPath, m_PreviousRelativeLocation));
+                    }
+                    catch (NotSupportedException)
+                    {
+                        result = string.Empty;
+                    }
                 }
                 else
                 {
