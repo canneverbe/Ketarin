@@ -467,7 +467,7 @@ namespace Ketarin
                         {
                             if (!string.IsNullOrEmpty(column.Value) && !job.Variables.HasVariableBeenDownloaded(column.Value))
                             {
-                                job.Variables.ReplaceAllInString("{" + column.Value + "}");
+                                job.Variables.ReplaceAllInString("{" + column.Value.TrimStart('{').TrimEnd('}') + "}");
                             }
                         }
                         if (customColumns.Count > 0)
