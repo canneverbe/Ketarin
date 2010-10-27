@@ -17,38 +17,60 @@ namespace Ketarin.Forms
     {
         private int currentSelectedCommandEvent = -1;
         private DataTable globalVarsTable = new DataTable();
+        private SerializableDictionary<string, string> cachedCustomColumns = new SerializableDictionary<string, string>();
+        private bool customColumnsChanged = false;
 
         #region Properties
 
         /// <summary>
-        /// Returns the name of the custom column variable, without { and }.
+        /// Gets whether or not the custom columns have been user changed.
         /// </summary>
-        public static string CustomColumnVariableName1
+        public bool CustomColumnsChanged
         {
-            get
-            {
-                string var = Settings.GetValue("CustomColumn") as string;
-                if (!string.IsNullOrEmpty(var))
-                {
-                    return var.Trim('{', '}');
-                }
-                return string.Empty;
-            }
+            get { return customColumnsChanged; }
         }
 
         /// <summary>
-        /// Returns the name of the second custom column variable, without { and }.
+        /// Gets all currently used custom columns.
         /// </summary>
-        public static string CustomColumnVariableName2
+        public static SerializableDictionary<string, string> CustomColumns
         {
             get
             {
-                string var = Settings.GetValue("CustomColumn2") as string;
-                if (!string.IsNullOrEmpty(var))
+                string customColumnsXml = Settings.GetValue("CustomColumns", "") as string;
+                if (!string.IsNullOrEmpty(customColumnsXml))
                 {
-                    return var.Trim('{', '}');
+                    XmlSerializer serializer = new XmlSerializer(typeof(SerializableDictionary<string, string>));
+                    using (StringReader reader = new StringReader(customColumnsXml))
+                    {
+                        return serializer.Deserialize(reader) as SerializableDictionary<string, string>;
+                    }
                 }
-                return string.Empty;
+
+                SerializableDictionary<string, string> oldColumns = new SerializableDictionary<string, string>();
+
+                // Convert old custom columns if necessary
+                string custOld1 = Settings.GetValue("CustomColumn", null) as string;
+                if (custOld1 != null)
+                {
+                    oldColumns.Add("Custom Value", custOld1);
+                }
+                string custOld2 = Settings.GetValue("CustomColumn2", null) as string;
+                if (custOld2 != null)
+                {
+                    oldColumns.Add("Custom Value 2", custOld2);
+                }
+
+                return oldColumns;
+            }
+            set
+            {
+                XmlSerializer serializer = new XmlSerializer(typeof(SerializableDictionary<string, string>));
+                using (StringWriter writer = new StringWriter())
+                {
+                    serializer.Serialize(writer, value);
+                    Settings.SetValue("CustomColumns", writer.ToString());
+                }
             }
         }
 
@@ -93,10 +115,11 @@ namespace Ketarin.Forms
         /// </summary>
         private void LoadSettings()
         {
+            this.cachedCustomColumns = CustomColumns;
+            olvCustomColumns.SetObjects(this.cachedCustomColumns);
+
             chkUpdateAtStartup.Checked = (bool)Settings.GetValue("UpdateAtStartup", false);
             chkBackups.Checked = (bool)Settings.GetValue("CreateDatabaseBackups", true);
-            txtCustomColumn.Text = Settings.GetValue("CustomColumn", "") as string;
-            txtCustomColumn2.Text = Settings.GetValue("CustomColumn2", "") as string;
             chkAvoidBeta.Checked = (bool)Settings.GetValue("AvoidFileHippoBeta", false);
             chkUpdateOnlineDatabase.Checked = (bool)Settings.GetValue("UpdateOnlineDatabase", true);
             nConnectionTimeout.Value = Convert.ToDecimal(Settings.GetValue("ConnectionTimeout", 10.0));
@@ -115,9 +138,13 @@ namespace Ketarin.Forms
         {
             SaveCurrentCommand();
 
+            CustomColumns = this.cachedCustomColumns;
+
+            // Remove old custom columns
+            Settings.SetValue("CustomColumn", null);
+            Settings.SetValue("CustomColumn2", null);
+
             Settings.SetValue("UpdateAtStartup", chkUpdateAtStartup.Checked);
-            Settings.SetValue("CustomColumn", txtCustomColumn.Text);
-            Settings.SetValue("CustomColumn2", txtCustomColumn2.Text);
             Settings.SetValue("AvoidFileHippoBeta", chkAvoidBeta.Checked);
             Settings.SetValue("ConnectionTimeout", nConnectionTimeout.Value);
             Settings.SetValue("ThreadCount", Convert.ToInt32(nNumThreads.Value));
@@ -285,6 +312,58 @@ namespace Ketarin.Forms
             }
 
             this.currentSelectedCommandEvent = cboCommandEvent.SelectedIndex;
+        }
+
+        #endregion
+
+        #region Custom Columns
+
+        private void bAddCustomColumn_Click(object sender, EventArgs e)
+        {
+            using (AddCustomColumnDialog dialog = new AddCustomColumnDialog())
+            {
+                if (dialog.ShowDialog(this) == DialogResult.OK)
+                {
+                    this.cachedCustomColumns[dialog.ColumnName] = dialog.ColumnValue;
+                    this.olvCustomColumns.SetObjects(cachedCustomColumns);
+                    this.customColumnsChanged = true;
+                }
+            }
+        }
+
+        private void bRemove_Click(object sender, EventArgs e)
+        {
+            if (olvCustomColumns.SelectedObject != null)
+            {
+                this.cachedCustomColumns.Remove(((KeyValuePair<string, string>)olvCustomColumns.SelectedObject).Key);
+                this.olvCustomColumns.SetObjects(cachedCustomColumns);
+                this.customColumnsChanged = true;
+            }
+        }
+
+        private void olvCustomColumns_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            bRemove.Enabled = (olvCustomColumns.SelectedIndex >= 0);
+        }
+
+        private void olvCustomColumns_DoubleClick(object sender, EventArgs e)
+        {
+            if (olvCustomColumns.SelectedObject == null) return;
+
+            KeyValuePair<string, string> selectedItem = (KeyValuePair<string, string>)olvCustomColumns.SelectedObject;
+            using (AddCustomColumnDialog dialog = new AddCustomColumnDialog())
+            {
+                dialog.ColumnName = selectedItem.Key;
+                dialog.ColumnValue = selectedItem.Value;
+                dialog.Text = "Edit " + selectedItem.Key;
+
+                if (dialog.ShowDialog(this) == DialogResult.OK)
+                {
+                    this.cachedCustomColumns[dialog.ColumnName] = dialog.ColumnValue;
+                    this.olvCustomColumns.SetObjects(cachedCustomColumns);
+                    this.customColumnsChanged = true;
+                }
+            }
         }
 
         #endregion

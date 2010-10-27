@@ -91,6 +91,12 @@
   <ItemGroup>
     <Compile Include="ApplicationList.cs" />
     <Compile Include="Command.cs" />
+    <Compile Include="Forms\AddCustomColumnDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\AddCustomColumnDialog.Designer.cs">
+      <DependentUpon>AddCustomColumnDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="HttpxRequest.cs" />
     <Compile Include="CopyFileInstruction.cs" />
     <Compile Include="CustomSetupInstruction.cs" />
@@ -672,6 +678,9 @@
     <None Include="Resources\GoToNextMessage.png" />
     <None Include="Resources\GoToPreviousMessage.png" />
     <None Include="Resources\LineColorHS.png" />
+    <EmbeddedResource Include="Forms\AddCustomColumnDialog.resx">
+      <DependentUpon>AddCustomColumnDialog.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\ChooseAppsToInstallDialog.resx">
       <DependentUpon>ChooseAppsToInstallDialog.cs</DependentUpon>
     </EmbeddedResource>

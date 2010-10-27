@@ -31,8 +31,6 @@
             this.bCancel = new System.Windows.Forms.Button();
             this.bOK = new System.Windows.Forms.Button();
             this.chkUpdateAtStartup = new System.Windows.Forms.CheckBox();
-            this.txtCustomColumn = new System.Windows.Forms.TextBox();
-            this.lblCustomColumn = new System.Windows.Forms.Label();
             this.chkAvoidBeta = new System.Windows.Forms.CheckBox();
             this.lblConnectionTimeout = new System.Windows.Forms.Label();
             this.nConnectionTimeout = new System.Windows.Forms.NumericUpDown();
@@ -50,23 +48,27 @@
             this.lblNumRetries = new System.Windows.Forms.Label();
             this.tcSettings = new System.Windows.Forms.TabControl();
             this.tpGeneral = new System.Windows.Forms.TabPage();
+            this.bRemove = new System.Windows.Forms.Button();
+            this.bAddCustomColumn = new System.Windows.Forms.Button();
             this.chkOpenWebsite = new System.Windows.Forms.CheckBox();
-            this.lblCustomColumn2 = new System.Windows.Forms.Label();
-            this.txtCustomColumn2 = new System.Windows.Forms.TextBox();
             this.chkBackups = new System.Windows.Forms.CheckBox();
             this.chkMinToTray = new System.Windows.Forms.CheckBox();
             this.chkUpdateOnlineDatabase = new System.Windows.Forms.CheckBox();
             this.tpConnection = new System.Windows.Forms.TabPage();
-            this.sepProxy = new CDBurnerXP.Controls.Separator();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.gridGlobalVariables = new System.Windows.Forms.DataGridView();
             this.lblGlobalVariables = new System.Windows.Forms.Label();
             this.tpCommands = new System.Windows.Forms.TabPage();
-            this.commandControl = new Ketarin.Forms.CommandControl();
             this.lblCommandEvent = new System.Windows.Forms.Label();
             this.cboCommandEvent = new System.Windows.Forms.ComboBox();
             this.bExport = new System.Windows.Forms.Button();
             this.bImport = new System.Windows.Forms.Button();
+            this.separator1 = new CDBurnerXP.Controls.Separator();
+            this.olvCustomColumns = new CDBurnerXP.Controls.ObjectListView();
+            this.colName = new CDBurnerXP.Controls.OLVColumn();
+            this.colValue = new CDBurnerXP.Controls.OLVColumn();
+            this.sepProxy = new CDBurnerXP.Controls.Separator();
+            this.commandControl = new Ketarin.Forms.CommandControl();
             ((System.ComponentModel.ISupportInitialize)(this.nConnectionTimeout)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nProxyPort)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nNumThreads)).BeginInit();
@@ -77,13 +79,14 @@
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridGlobalVariables)).BeginInit();
             this.tpCommands.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.olvCustomColumns)).BeginInit();
             this.SuspendLayout();
             // 
             // bCancel
             // 
             this.bCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.bCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.bCancel.Location = new System.Drawing.Point(339, 337);
+            this.bCancel.Location = new System.Drawing.Point(339, 402);
             this.bCancel.Name = "bCancel";
             this.bCancel.Size = new System.Drawing.Size(75, 23);
             this.bCancel.TabIndex = 4;
@@ -94,7 +97,7 @@
             // 
             this.bOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.bOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.bOK.Location = new System.Drawing.Point(258, 337);
+            this.bOK.Location = new System.Drawing.Point(258, 402);
             this.bOK.Name = "bOK";
             this.bOK.Size = new System.Drawing.Size(75, 23);
             this.bOK.TabIndex = 3;
@@ -105,35 +108,17 @@
             // chkUpdateAtStartup
             // 
             this.chkUpdateAtStartup.AutoSize = true;
-            this.chkUpdateAtStartup.Location = new System.Drawing.Point(6, 11);
+            this.chkUpdateAtStartup.Location = new System.Drawing.Point(8, 11);
             this.chkUpdateAtStartup.Name = "chkUpdateAtStartup";
             this.chkUpdateAtStartup.Size = new System.Drawing.Size(172, 17);
             this.chkUpdateAtStartup.TabIndex = 0;
             this.chkUpdateAtStartup.Text = "Upd&ate automatically at startup";
             this.chkUpdateAtStartup.UseVisualStyleBackColor = true;
             // 
-            // txtCustomColumn
-            // 
-            this.txtCustomColumn.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtCustomColumn.Location = new System.Drawing.Point(158, 155);
-            this.txtCustomColumn.Name = "txtCustomColumn";
-            this.txtCustomColumn.Size = new System.Drawing.Size(230, 20);
-            this.txtCustomColumn.TabIndex = 7;
-            // 
-            // lblCustomColumn
-            // 
-            this.lblCustomColumn.AutoSize = true;
-            this.lblCustomColumn.Location = new System.Drawing.Point(6, 158);
-            this.lblCustomColumn.Name = "lblCustomColumn";
-            this.lblCustomColumn.Size = new System.Drawing.Size(137, 13);
-            this.lblCustomColumn.TabIndex = 6;
-            this.lblCustomColumn.Text = "&Variable for custom column:";
-            // 
             // chkAvoidBeta
             // 
             this.chkAvoidBeta.AutoSize = true;
-            this.chkAvoidBeta.Location = new System.Drawing.Point(6, 34);
+            this.chkAvoidBeta.Location = new System.Drawing.Point(8, 34);
             this.chkAvoidBeta.Name = "chkAvoidBeta";
             this.chkAvoidBeta.Size = new System.Drawing.Size(181, 17);
             this.chkAvoidBeta.TabIndex = 1;
@@ -329,61 +314,65 @@
             this.tcSettings.Location = new System.Drawing.Point(12, 12);
             this.tcSettings.Name = "tcSettings";
             this.tcSettings.SelectedIndex = 0;
-            this.tcSettings.Size = new System.Drawing.Size(402, 310);
+            this.tcSettings.Size = new System.Drawing.Size(402, 375);
             this.tcSettings.TabIndex = 0;
             // 
             // tpGeneral
             // 
+            this.tpGeneral.Controls.Add(this.separator1);
+            this.tpGeneral.Controls.Add(this.bRemove);
+            this.tpGeneral.Controls.Add(this.bAddCustomColumn);
+            this.tpGeneral.Controls.Add(this.olvCustomColumns);
             this.tpGeneral.Controls.Add(this.chkOpenWebsite);
-            this.tpGeneral.Controls.Add(this.lblCustomColumn2);
-            this.tpGeneral.Controls.Add(this.txtCustomColumn2);
             this.tpGeneral.Controls.Add(this.chkBackups);
             this.tpGeneral.Controls.Add(this.chkMinToTray);
             this.tpGeneral.Controls.Add(this.chkUpdateOnlineDatabase);
             this.tpGeneral.Controls.Add(this.chkUpdateAtStartup);
-            this.tpGeneral.Controls.Add(this.txtCustomColumn);
-            this.tpGeneral.Controls.Add(this.lblCustomColumn);
             this.tpGeneral.Controls.Add(this.chkAvoidBeta);
             this.tpGeneral.Location = new System.Drawing.Point(4, 22);
             this.tpGeneral.Name = "tpGeneral";
             this.tpGeneral.Padding = new System.Windows.Forms.Padding(3);
-            this.tpGeneral.Size = new System.Drawing.Size(394, 284);
+            this.tpGeneral.Size = new System.Drawing.Size(394, 349);
             this.tpGeneral.TabIndex = 0;
             this.tpGeneral.Text = "General";
             this.tpGeneral.UseVisualStyleBackColor = true;
             // 
+            // bRemove
+            // 
+            this.bRemove.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.bRemove.Location = new System.Drawing.Point(86, 317);
+            this.bRemove.Name = "bRemove";
+            this.bRemove.Size = new System.Drawing.Size(75, 23);
+            this.bRemove.TabIndex = 9;
+            this.bRemove.Text = "&Remove";
+            this.bRemove.UseVisualStyleBackColor = true;
+            this.bRemove.Click += new System.EventHandler(this.bRemove_Click);
+            // 
+            // bAddCustomColumn
+            // 
+            this.bAddCustomColumn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.bAddCustomColumn.Location = new System.Drawing.Point(8, 317);
+            this.bAddCustomColumn.Name = "bAddCustomColumn";
+            this.bAddCustomColumn.Size = new System.Drawing.Size(75, 23);
+            this.bAddCustomColumn.TabIndex = 8;
+            this.bAddCustomColumn.Text = "A&dd...";
+            this.bAddCustomColumn.UseVisualStyleBackColor = true;
+            this.bAddCustomColumn.Click += new System.EventHandler(this.bAddCustomColumn_Click);
+            // 
             // chkOpenWebsite
             // 
             this.chkOpenWebsite.AutoSize = true;
-            this.chkOpenWebsite.Location = new System.Drawing.Point(6, 126);
+            this.chkOpenWebsite.Location = new System.Drawing.Point(8, 126);
             this.chkOpenWebsite.Name = "chkOpenWebsite";
             this.chkOpenWebsite.Size = new System.Drawing.Size(337, 17);
             this.chkOpenWebsite.TabIndex = 5;
             this.chkOpenWebsite.Text = "Ope&n website when double-clicking on an application (if specified)";
             this.chkOpenWebsite.UseVisualStyleBackColor = true;
             // 
-            // lblCustomColumn2
-            // 
-            this.lblCustomColumn2.AutoSize = true;
-            this.lblCustomColumn2.Location = new System.Drawing.Point(6, 184);
-            this.lblCustomColumn2.Name = "lblCustomColumn2";
-            this.lblCustomColumn2.Size = new System.Drawing.Size(146, 13);
-            this.lblCustomColumn2.TabIndex = 8;
-            this.lblCustomColumn2.Text = "&Variable for custom column 2:";
-            // 
-            // txtCustomColumn2
-            // 
-            this.txtCustomColumn2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtCustomColumn2.Location = new System.Drawing.Point(158, 181);
-            this.txtCustomColumn2.Name = "txtCustomColumn2";
-            this.txtCustomColumn2.Size = new System.Drawing.Size(230, 20);
-            this.txtCustomColumn2.TabIndex = 9;
-            // 
             // chkBackups
             // 
             this.chkBackups.AutoSize = true;
-            this.chkBackups.Location = new System.Drawing.Point(6, 103);
+            this.chkBackups.Location = new System.Drawing.Point(8, 103);
             this.chkBackups.Name = "chkBackups";
             this.chkBackups.Size = new System.Drawing.Size(212, 17);
             this.chkBackups.TabIndex = 4;
@@ -393,7 +382,7 @@
             // chkMinToTray
             // 
             this.chkMinToTray.AutoSize = true;
-            this.chkMinToTray.Location = new System.Drawing.Point(6, 80);
+            this.chkMinToTray.Location = new System.Drawing.Point(8, 80);
             this.chkMinToTray.Name = "chkMinToTray";
             this.chkMinToTray.Size = new System.Drawing.Size(98, 17);
             this.chkMinToTray.TabIndex = 3;
@@ -403,7 +392,7 @@
             // chkUpdateOnlineDatabase
             // 
             this.chkUpdateOnlineDatabase.AutoSize = true;
-            this.chkUpdateOnlineDatabase.Location = new System.Drawing.Point(6, 57);
+            this.chkUpdateOnlineDatabase.Location = new System.Drawing.Point(8, 57);
             this.chkUpdateOnlineDatabase.Name = "chkUpdateOnlineDatabase";
             this.chkUpdateOnlineDatabase.Size = new System.Drawing.Size(220, 17);
             this.chkUpdateOnlineDatabase.TabIndex = 2;
@@ -430,22 +419,10 @@
             this.tpConnection.Location = new System.Drawing.Point(4, 22);
             this.tpConnection.Name = "tpConnection";
             this.tpConnection.Padding = new System.Windows.Forms.Padding(3);
-            this.tpConnection.Size = new System.Drawing.Size(394, 284);
+            this.tpConnection.Size = new System.Drawing.Size(394, 349);
             this.tpConnection.TabIndex = 1;
             this.tpConnection.Text = "Connection";
             this.tpConnection.UseVisualStyleBackColor = true;
-            // 
-            // sepProxy
-            // 
-            this.sepProxy.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.sepProxy.ForeColor = System.Drawing.SystemColors.ActiveCaption;
-            this.sepProxy.Location = new System.Drawing.Point(3, 93);
-            this.sepProxy.Name = "sepProxy";
-            this.sepProxy.Size = new System.Drawing.Size(375, 23);
-            this.sepProxy.TabIndex = 7;
-            this.sepProxy.Text = "HTTP proxy settings";
-            this.sepProxy.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // tabPage1
             // 
@@ -454,7 +431,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(394, 284);
+            this.tabPage1.Size = new System.Drawing.Size(394, 349);
             this.tabPage1.TabIndex = 3;
             this.tabPage1.Text = "Global variables";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -471,7 +448,7 @@
             this.gridGlobalVariables.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.gridGlobalVariables.Location = new System.Drawing.Point(7, 27);
             this.gridGlobalVariables.Name = "gridGlobalVariables";
-            this.gridGlobalVariables.Size = new System.Drawing.Size(379, 251);
+            this.gridGlobalVariables.Size = new System.Drawing.Size(379, 316);
             this.gridGlobalVariables.TabIndex = 2;
             // 
             // lblGlobalVariables
@@ -491,24 +468,10 @@
             this.tpCommands.Location = new System.Drawing.Point(4, 22);
             this.tpCommands.Name = "tpCommands";
             this.tpCommands.Padding = new System.Windows.Forms.Padding(3);
-            this.tpCommands.Size = new System.Drawing.Size(394, 284);
+            this.tpCommands.Size = new System.Drawing.Size(394, 349);
             this.tpCommands.TabIndex = 2;
             this.tpCommands.Text = "Commands";
             this.tpCommands.UseVisualStyleBackColor = true;
-            // 
-            // commandControl
-            // 
-            this.commandControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.commandControl.Application = null;
-            this.commandControl.Location = new System.Drawing.Point(6, 36);
-            this.commandControl.Margin = new System.Windows.Forms.Padding(0);
-            this.commandControl.Name = "commandControl";
-            this.commandControl.ReadOnly = false;
-            this.commandControl.Size = new System.Drawing.Size(382, 245);
-            this.commandControl.TabIndex = 2;
-            this.commandControl.VariableNames = new string[0];
             // 
             // lblCommandEvent
             // 
@@ -538,7 +501,7 @@
             // bExport
             // 
             this.bExport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bExport.Location = new System.Drawing.Point(12, 337);
+            this.bExport.Location = new System.Drawing.Point(12, 402);
             this.bExport.Name = "bExport";
             this.bExport.Size = new System.Drawing.Size(75, 23);
             this.bExport.TabIndex = 1;
@@ -549,7 +512,7 @@
             // bImport
             // 
             this.bImport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bImport.Location = new System.Drawing.Point(93, 337);
+            this.bImport.Location = new System.Drawing.Point(93, 402);
             this.bImport.Name = "bImport";
             this.bImport.Size = new System.Drawing.Size(75, 23);
             this.bImport.TabIndex = 2;
@@ -557,11 +520,90 @@
             this.bImport.UseVisualStyleBackColor = true;
             this.bImport.Click += new System.EventHandler(this.bImport_Click);
             // 
+            // separator1
+            // 
+            this.separator1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.separator1.ForeColor = System.Drawing.SystemColors.ActiveCaption;
+            this.separator1.Location = new System.Drawing.Point(6, 153);
+            this.separator1.Name = "separator1";
+            this.separator1.Size = new System.Drawing.Size(382, 23);
+            this.separator1.TabIndex = 6;
+            this.separator1.Text = "Custom columns";
+            this.separator1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // olvCustomColumns
+            // 
+            this.olvCustomColumns.AllColumns.Add(this.colName);
+            this.olvCustomColumns.AllColumns.Add(this.colValue);
+            this.olvCustomColumns.AlternateRowBackColor = System.Drawing.Color.Empty;
+            this.olvCustomColumns.AlwaysGroupByColumn = null;
+            this.olvCustomColumns.AlwaysGroupBySortOrder = System.Windows.Forms.SortOrder.None;
+            this.olvCustomColumns.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.olvCustomColumns.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.colName,
+            this.colValue});
+            this.olvCustomColumns.FullRowSelect = true;
+            this.olvCustomColumns.HideSelection = false;
+            this.olvCustomColumns.HighlightBackgroundColor = System.Drawing.Color.Empty;
+            this.olvCustomColumns.HighlightForegroundColor = System.Drawing.Color.Empty;
+            this.olvCustomColumns.LastSortColumn = null;
+            this.olvCustomColumns.LastSortOrder = System.Windows.Forms.SortOrder.None;
+            this.olvCustomColumns.Location = new System.Drawing.Point(9, 179);
+            this.olvCustomColumns.Name = "olvCustomColumns";
+            this.olvCustomColumns.ShowGroups = false;
+            this.olvCustomColumns.Size = new System.Drawing.Size(379, 132);
+            this.olvCustomColumns.TabIndex = 7;
+            this.olvCustomColumns.UseCompatibleStateImageBehavior = false;
+            this.olvCustomColumns.View = System.Windows.Forms.View.Details;
+            this.olvCustomColumns.SelectedIndexChanged += new System.EventHandler(this.olvCustomColumns_SelectedIndexChanged);
+            this.olvCustomColumns.DoubleClick += new System.EventHandler(this.olvCustomColumns_DoubleClick);
+            // 
+            // colName
+            // 
+            this.colName.AspectName = "Key";
+            this.colName.Text = "Name";
+            this.colName.Width = 125;
+            // 
+            // colValue
+            // 
+            this.colValue.AspectName = "Value";
+            this.colValue.Text = "Value";
+            this.colValue.Width = 216;
+            // 
+            // sepProxy
+            // 
+            this.sepProxy.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.sepProxy.ForeColor = System.Drawing.SystemColors.ActiveCaption;
+            this.sepProxy.Location = new System.Drawing.Point(3, 93);
+            this.sepProxy.Name = "sepProxy";
+            this.sepProxy.Size = new System.Drawing.Size(375, 23);
+            this.sepProxy.TabIndex = 7;
+            this.sepProxy.Text = "HTTP proxy settings";
+            this.sepProxy.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // commandControl
+            // 
+            this.commandControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.commandControl.Application = null;
+            this.commandControl.Location = new System.Drawing.Point(6, 36);
+            this.commandControl.Margin = new System.Windows.Forms.Padding(0);
+            this.commandControl.Name = "commandControl";
+            this.commandControl.ShowBorder = false;
+            this.commandControl.Size = new System.Drawing.Size(382, 310);
+            this.commandControl.TabIndex = 2;
+            this.commandControl.VariableNames = new string[0];
+            // 
             // SettingsDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(426, 372);
+            this.ClientSize = new System.Drawing.Size(426, 437);
             this.Controls.Add(this.bImport);
             this.Controls.Add(this.bExport);
             this.Controls.Add(this.tcSettings);
@@ -589,6 +631,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.gridGlobalVariables)).EndInit();
             this.tpCommands.ResumeLayout(false);
             this.tpCommands.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.olvCustomColumns)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -598,8 +641,6 @@
         private System.Windows.Forms.Button bCancel;
         private System.Windows.Forms.Button bOK;
         private System.Windows.Forms.CheckBox chkUpdateAtStartup;
-        private System.Windows.Forms.TextBox txtCustomColumn;
-        private System.Windows.Forms.Label lblCustomColumn;
         private System.Windows.Forms.CheckBox chkAvoidBeta;
         private System.Windows.Forms.Label lblConnectionTimeout;
         private System.Windows.Forms.NumericUpDown nConnectionTimeout;
@@ -625,8 +666,6 @@
         private System.Windows.Forms.Button bExport;
         private System.Windows.Forms.Button bImport;
         private System.Windows.Forms.CheckBox chkBackups;
-        private System.Windows.Forms.Label lblCustomColumn2;
-        private System.Windows.Forms.TextBox txtCustomColumn2;
         private System.Windows.Forms.CheckBox chkOpenWebsite;
         private System.Windows.Forms.Label lblCommandEvent;
         private System.Windows.Forms.ComboBox cboCommandEvent;
@@ -634,5 +673,11 @@
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.Label lblGlobalVariables;
         private System.Windows.Forms.DataGridView gridGlobalVariables;
+        private CDBurnerXP.Controls.ObjectListView olvCustomColumns;
+        private CDBurnerXP.Controls.OLVColumn colName;
+        private CDBurnerXP.Controls.OLVColumn colValue;
+        private System.Windows.Forms.Button bAddCustomColumn;
+        private System.Windows.Forms.Button bRemove;
+        private CDBurnerXP.Controls.Separator separator1;
     }
 }
