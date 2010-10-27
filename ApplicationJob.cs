@@ -1825,7 +1825,7 @@ namespace Ketarin
         /// Determines whether or not this application matches the given search critera.
         /// <param name="subjects">Lowercased search subjects</param>
         /// </summary>
-        public bool MatchesSearchCriteria(string[] subjects, string customColumn1, string customColumn2)
+        public bool MatchesSearchCriteria(string[] subjects, Dictionary<string, string> customColumns)
         {
             // Always matches if no subject is given
             if (subjects.Length == 0 || (subjects.Length == 1 && string.IsNullOrEmpty(subjects[0])))
@@ -1837,11 +1837,11 @@ namespace Ketarin
             fulltext.Append(Category);
             fulltext.Append(TargetPath);
 
-            string value = Variables.ReplaceAllInString(customColumn1, DateTime.MinValue, null, true);
-            fulltext.Append(value);
-
-            value = Variables.ReplaceAllInString(customColumn2, DateTime.MinValue, null, true);
-            fulltext.Append(value);
+            foreach (KeyValuePair<string, string> column in customColumns)
+            {
+                string value = Variables.ReplaceAllInString(column.Value, DateTime.MinValue, null, true);
+                fulltext.Append(value);
+            }
 
             string fulltextToLower = fulltext.ToString().ToLower();
 

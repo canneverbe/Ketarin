@@ -41,8 +41,7 @@ namespace Ketarin
         private ApplicationJob[] m_Jobs = null;
         private Updater m_Updater = new Updater();
         // For caching purposes
-        private string m_CustomColumn1 = string.Empty;
-        private string m_CustomColumn2 = string.Empty;
+        private Dictionary<string, string> customColumns = new Dictionary<string, string>();
         private FormWindowState m_PreviousState = FormWindowState.Normal;
         private Dictionary<ApplicationJob, ApplicationJobDialog> openApps = new Dictionary<ApplicationJob, ApplicationJobDialog>();
 
@@ -197,24 +196,7 @@ namespace Ketarin
 
             colProgress.AspectGetter = delegate(object x) { return m_Updater.GetProgress(x as ApplicationJob); };
             colProgress.Renderer = new ApplicationJobsListView.ProgressRenderer(m_Updater, 0, 100);
-            colCustomValue.AspectGetter = delegate(object x)
-            {
-                if (string.IsNullOrEmpty(m_CustomColumn1)) return null;
 
-                m_CustomColumn1 = SettingsDialog.CustomColumnVariableName1;
-                string varFind = "{" + m_CustomColumn1 + "}";
-                string value = ((ApplicationJob)x).Variables.ReplaceAllInString(varFind, DateTime.MinValue, null, true);
-                return (varFind == value) ? string.Empty : value;
-            };
-            colCustomValue2.AspectGetter = delegate(object x)
-            {
-                if (string.IsNullOrEmpty(m_CustomColumn2)) return null;
-
-                m_CustomColumn2 = SettingsDialog.CustomColumnVariableName2;
-                string varFind = "{" + m_CustomColumn2 + "}";
-                string value = ((ApplicationJob)x).Variables.ReplaceAllInString(varFind, DateTime.MinValue, null, true);
-                return (varFind == value) ? string.Empty : value;
-            };
 
             m_Updater.ProgressChanged += new EventHandler<Updater.JobProgressChangedEventArgs>(m_Updater_ProgressChanged);
             m_Updater.StatusChanged += new EventHandler<Updater.JobStatusChangedEventArgs>(m_Updater_StatusChanged);
@@ -393,13 +375,14 @@ namespace Ketarin
         {
             if (DesignMode) return;
 
+            RebuildCustomColumns();
+
             base.OnLoad(e);
 
             mnuShowGroups.Checked = Conversion.ToBoolean(Settings.GetValue("Ketarin", "ShowGroups", true));
             mnuAutoScroll.Checked = Conversion.ToBoolean(Settings.GetValue("Ketarin", "AutoScroll", true));
             olvJobs.ShowGroups = mnuShowGroups.Checked;
-            m_CustomColumn1 = SettingsDialog.CustomColumnVariableName1;
-            m_CustomColumn2 = SettingsDialog.CustomColumnVariableName2;
+
             if (Conversion.ToBoolean(Settings.GetValue("Ketarin", "ShowStatusBar", false)))
             {
                 mnuShowStatusBar.PerformClick();
@@ -423,6 +406,38 @@ namespace Ketarin
             {
                 m_Updater.BeginCheckForOnlineUpdates(m_Jobs);
             }
+        }
+
+        private void RebuildCustomColumns()
+        {
+            this.customColumns = SettingsDialog.CustomColumns;
+
+            for (int i = olvJobs.AllColumns.Count - 1; i >= 0; i--)
+            {
+                if (this.olvJobs.AllColumns[i].Tag != null)
+                {
+                    this.olvJobs.AllColumns.RemoveAt(i);
+                }
+            }
+
+            // Add custom columns to list
+            foreach (KeyValuePair<string, string> column in this.customColumns)
+            {
+                OLVColumn newCol = new OLVColumn(column.Key, "");
+                newCol.Name = column.Key;
+                newCol.Tag = column.Value;
+                this.olvJobs.AllColumns.Add(newCol);
+                newCol.AspectGetter = delegate(object x)
+                {
+                    if (string.IsNullOrEmpty(newCol.Tag as string)) return null;
+
+                    string varFind = "{" + ((string)newCol.Tag).TrimStart('{').TrimEnd('}') + "}";
+                    string value = ((ApplicationJob)x).Variables.ReplaceAllInString(varFind, DateTime.MinValue, null, true);
+                    return (varFind == value) ? string.Empty : value;
+                };
+            }
+
+            olvJobs.RebuildColumns();
         }
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
@@ -1124,8 +1139,12 @@ namespace Ketarin
             {
                 if (dialog.ShowDialog(this) == DialogResult.OK)
                 {
-                    m_CustomColumn1 = SettingsDialog.CustomColumnVariableName1;
-                    m_CustomColumn2 = SettingsDialog.CustomColumnVariableName2;
+                    if (dialog.CustomColumnsChanged)
+                    {
+                        SaveDialogSettings();
+                        RebuildCustomColumns();
+                        LoadDialogSettings();
+                    }
                     olvJobs.RefreshObjects(m_Jobs);
                     UpdateStatusbar();
                 }

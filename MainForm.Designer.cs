@@ -80,8 +80,6 @@
             this.colProgress = new CDBurnerXP.Controls.OLVColumn();
             this.colTarget = new CDBurnerXP.Controls.OLVColumn();
             this.colCategory = new CDBurnerXP.Controls.OLVColumn();
-            this.colCustomValue = new CDBurnerXP.Controls.OLVColumn();
-            this.colCustomValue2 = new CDBurnerXP.Controls.OLVColumn();
             this.colStatus = new CDBurnerXP.Controls.OLVColumn();
             this.m_VistaMenu = new CDBurnerXP.Controls.VistaMenu(this.components);
             this.cmuRun = new System.Windows.Forms.ContextMenu();
@@ -424,8 +422,6 @@
             this.olvJobs.AllColumns.Add(this.colProgress);
             this.olvJobs.AllColumns.Add(this.colTarget);
             this.olvJobs.AllColumns.Add(this.colCategory);
-            this.olvJobs.AllColumns.Add(this.colCustomValue);
-            this.olvJobs.AllColumns.Add(this.colCustomValue2);
             this.olvJobs.AllColumns.Add(this.colStatus);
             this.olvJobs.AllowColumnReorder = true;
             this.olvJobs.AlternateRowBackColor = System.Drawing.Color.Empty;
@@ -491,18 +487,6 @@
             this.colCategory.AspectName = "Category";
             this.colCategory.Text = "Category";
             this.colCategory.Width = 80;
-            // 
-            // colCustomValue
-            // 
-            this.colCustomValue.AspectName = null;
-            this.colCustomValue.IsVisible = false;
-            this.colCustomValue.Text = "Custom Value";
-            // 
-            // colCustomValue2
-            // 
-            this.colCustomValue2.AspectName = null;
-            this.colCustomValue2.IsVisible = false;
-            this.colCustomValue2.Text = "Custom Value 2";
             // 
             // colStatus
             // 
@@ -697,7 +681,6 @@
         private System.Windows.Forms.MenuItem cmnuImportOnline;
         private System.Windows.Forms.MenuItem mnusep2;
         private System.Windows.Forms.MenuItem mnuSettings;
-        private CDBurnerXP.Controls.OLVColumn colCustomValue;
         private System.Windows.Forms.MenuItem cmnuCopy;
         private System.Windows.Forms.MenuItem cmnuPaste;
         private System.Windows.Forms.MenuItem mnuSelectAll;
@@ -721,7 +704,6 @@
         private System.Windows.Forms.ToolStripStatusLabel tbTotalApplications;
         private System.Windows.Forms.MenuItem mnuShowStatusBar;
         private System.Windows.Forms.MenuItem mnuInvert;
-        private CDBurnerXP.Controls.OLVColumn colCustomValue2;
         private System.Windows.Forms.MenuItem cmnuForceDownload;
         private System.Windows.Forms.MenuItem cmnuSepUpdates;
         private System.Windows.Forms.MenuItem mnuFind;

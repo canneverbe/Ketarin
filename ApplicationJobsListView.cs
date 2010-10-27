@@ -253,8 +253,7 @@ namespace Ketarin
             List<ApplicationJob> filteredList = new List<ApplicationJob>();
 
             // Cache some data
-            string customColumn1 = "{" + SettingsDialog.CustomColumnVariableName1 + "}";
-            string customColumn2 = "{" + SettingsDialog.CustomColumnVariableName2 + "}";
+            Dictionary<string, string> customColumns = SettingsDialog.CustomColumns;
 
             string[] searchText = searchTextBox.Text.ToLower().Split(' ');
 
@@ -269,7 +268,7 @@ namespace Ketarin
                     }
                 }
 
-                if (job.MatchesSearchCriteria(searchText, customColumn1, customColumn2))
+                if (job.MatchesSearchCriteria(searchText, customColumns))
                 {
                     filteredList.Add(job);
                 }
