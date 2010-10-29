@@ -63,6 +63,7 @@
             this.cboCommandEvent = new System.Windows.Forms.ComboBox();
             this.bExport = new System.Windows.Forms.Button();
             this.bImport = new System.Windows.Forms.Button();
+            this.bEdit = new System.Windows.Forms.Button();
             this.separator1 = new CDBurnerXP.Controls.Separator();
             this.olvCustomColumns = new CDBurnerXP.Controls.ObjectListView();
             this.colName = new CDBurnerXP.Controls.OLVColumn();
@@ -319,6 +320,7 @@
             // 
             // tpGeneral
             // 
+            this.tpGeneral.Controls.Add(this.bEdit);
             this.tpGeneral.Controls.Add(this.separator1);
             this.tpGeneral.Controls.Add(this.bRemove);
             this.tpGeneral.Controls.Add(this.bAddCustomColumn);
@@ -340,10 +342,11 @@
             // bRemove
             // 
             this.bRemove.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bRemove.Location = new System.Drawing.Point(86, 317);
+            this.bRemove.Enabled = false;
+            this.bRemove.Location = new System.Drawing.Point(170, 317);
             this.bRemove.Name = "bRemove";
             this.bRemove.Size = new System.Drawing.Size(75, 23);
-            this.bRemove.TabIndex = 9;
+            this.bRemove.TabIndex = 10;
             this.bRemove.Text = "&Remove";
             this.bRemove.UseVisualStyleBackColor = true;
             this.bRemove.Click += new System.EventHandler(this.bRemove_Click);
@@ -520,6 +523,18 @@
             this.bImport.UseVisualStyleBackColor = true;
             this.bImport.Click += new System.EventHandler(this.bImport_Click);
             // 
+            // bEdit
+            // 
+            this.bEdit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.bEdit.Enabled = false;
+            this.bEdit.Location = new System.Drawing.Point(89, 317);
+            this.bEdit.Name = "bEdit";
+            this.bEdit.Size = new System.Drawing.Size(75, 23);
+            this.bEdit.TabIndex = 9;
+            this.bEdit.Text = "&Edit";
+            this.bEdit.UseVisualStyleBackColor = true;
+            this.bEdit.Click += new System.EventHandler(this.bEdit_Click);
+            // 
             // separator1
             // 
             this.separator1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
@@ -679,5 +694,6 @@
         private System.Windows.Forms.Button bAddCustomColumn;
         private System.Windows.Forms.Button bRemove;
         private CDBurnerXP.Controls.Separator separator1;
+        private System.Windows.Forms.Button bEdit;
     }
 }
