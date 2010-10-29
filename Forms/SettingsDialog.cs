@@ -344,11 +344,14 @@ namespace Ketarin.Forms
         private void olvCustomColumns_SelectedIndexChanged(object sender, EventArgs e)
         {
             bRemove.Enabled = (olvCustomColumns.SelectedIndex >= 0);
+            bEdit.Enabled = (olvCustomColumns.SelectedIndex >= 0);
         }
 
-        private void olvCustomColumns_DoubleClick(object sender, EventArgs e)
+        private void bEdit_Click(object sender, EventArgs e)
         {
             if (olvCustomColumns.SelectedObject == null) return;
+
+            int index = olvCustomColumns.SelectedIndex;
 
             KeyValuePair<string, string> selectedItem = (KeyValuePair<string, string>)olvCustomColumns.SelectedObject;
             using (AddCustomColumnDialog dialog = new AddCustomColumnDialog())
@@ -359,11 +362,18 @@ namespace Ketarin.Forms
 
                 if (dialog.ShowDialog(this) == DialogResult.OK)
                 {
+                    this.cachedCustomColumns.Remove(selectedItem.Key);
                     this.cachedCustomColumns[dialog.ColumnName] = dialog.ColumnValue;
                     this.olvCustomColumns.SetObjects(cachedCustomColumns);
+                    this.olvCustomColumns.SelectedIndex = index;
                     this.customColumnsChanged = true;
                 }
             }
+        }
+
+        private void olvCustomColumns_DoubleClick(object sender, EventArgs e)
+        {
+            bEdit.PerformClick();
         }
 
         #endregion
