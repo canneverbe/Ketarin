@@ -458,7 +458,7 @@ namespace Ketarin
                     if (!ContainsKey("version"))
                     {
                         // FileHippo version
-                        if (m_Parent.DownloadSourceType == SourceType.FileHippo)
+                        if (m_Parent.DownloadSourceType == SourceType.FileHippo && UrlVariable.IsVariableUsedInString("version", value))
                         {
                             if (!onlyCachedContent)
                             {
