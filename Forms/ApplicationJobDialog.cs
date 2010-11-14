@@ -261,7 +261,7 @@ namespace Ketarin.Forms
 
             // Setup instructions
             m_ApplicationJob.SetupInstructions.Clear();
-            foreach (SetupInstructionListBoxPanel panel in instructionsListBox.Panels)
+            foreach (SetupInstructionListBoxPanel panel in instructionsListBox.GetPanels())
             {
                 m_ApplicationJob.SetupInstructions.Add(panel.SetupInstruction);
             }
@@ -564,6 +564,18 @@ namespace Ketarin.Forms
         private void mnuCustomCommand_Click(object sender, EventArgs e)
         {
             CustomSetupInstruction instruction = new CustomSetupInstruction();
+            instruction.Application = m_ApplicationJob;
+            if (InstructionBaseDialog.ShowDialog(this, instruction, txtExecuteAfter.VariableNames, m_ApplicationJob))
+            {
+                SetupInstructionListBoxPanel panel = new SetupInstructionListBoxPanel(instruction);
+                panel.VariableNames = txtExecuteAfter.VariableNames;
+                instructionsListBox.Panels.Add(panel);
+            }
+        }
+
+        private void mnuCloseProcess_Click(object sender, EventArgs e)
+        {
+            CloseProcessInstruction instruction = new CloseProcessInstruction();
             instruction.Application = m_ApplicationJob;
             if (InstructionBaseDialog.ShowDialog(this, instruction, txtExecuteAfter.VariableNames, m_ApplicationJob))
             {

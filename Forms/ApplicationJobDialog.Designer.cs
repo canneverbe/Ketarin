@@ -92,6 +92,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.instructionsListBox = new CDBurnerXP.Controls.AdvancedListBox();
             this.bSaveAsDefault = new System.Windows.Forms.Button();
+            this.mnuCloseProcess = new System.Windows.Forms.MenuItem();
             this.pnlDownloadSource.SuspendLayout();
             this.pnlBeta.SuspendLayout();
             this.pnlTarget.SuspendLayout();
@@ -768,6 +769,7 @@
             // 
             this.cmnuAddInstruction.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.mnuStartProcess,
+            this.mnuCloseProcess,
             this.mnuCopyFile,
             this.mnuCustomCommand});
             // 
@@ -779,13 +781,13 @@
             // 
             // mnuCopyFile
             // 
-            this.mnuCopyFile.Index = 1;
+            this.mnuCopyFile.Index = 2;
             this.mnuCopyFile.Text = "&Copy file...";
             this.mnuCopyFile.Click += new System.EventHandler(this.mnuCopyFile_Click);
             // 
             // mnuCustomCommand
             // 
-            this.mnuCustomCommand.Index = 2;
+            this.mnuCustomCommand.Index = 3;
             this.mnuCustomCommand.Text = "C&ustom command...";
             this.mnuCustomCommand.Click += new System.EventHandler(this.mnuCustomCommand_Click);
             // 
@@ -822,6 +824,12 @@
             this.bSaveAsDefault.Text = "Save as &default";
             this.bSaveAsDefault.UseVisualStyleBackColor = true;
             this.bSaveAsDefault.Click += new System.EventHandler(this.bSaveAsDefault_Click);
+            // 
+            // mnuCloseProcess
+            // 
+            this.mnuCloseProcess.Index = 1;
+            this.mnuCloseProcess.Text = "Cl&ose process...";
+            this.mnuCloseProcess.Click += new System.EventHandler(this.mnuCloseProcess_Click);
             // 
             // ApplicationJobDialog
             // 
@@ -932,5 +940,6 @@
         private System.Windows.Forms.Label lblUserAgent;
         private CommandControl txtExecuteBefore;
         private CommandControl txtExecuteAfter;
+        private System.Windows.Forms.MenuItem mnuCloseProcess;
     }
 }

@@ -38,6 +38,7 @@ namespace Ketarin.Forms
                     this.instruction = instruction;
                     txtProgram.Text = instruction.FileName;
                     txtParameters.Text = instruction.Parameters;
+                    chkWaitUntilExit.Checked = instruction.WaitForExit;
                 }
             }
             get
@@ -101,6 +102,7 @@ namespace Ketarin.Forms
 
             this.instruction.FileName = txtProgram.Text;
             this.instruction.Parameters = txtParameters.Text;
+            this.instruction.WaitForExit = chkWaitUntilExit.Checked;
             foreach (VariableInfo var in this.variables)
             {
                 if (!string.IsNullOrEmpty(var.Value))

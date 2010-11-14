@@ -90,12 +90,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationList.cs" />
+    <Compile Include="CloseProcessInstruction.cs" />
     <Compile Include="Command.cs" />
     <Compile Include="Forms\AddCustomColumnDialog.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\AddCustomColumnDialog.Designer.cs">
       <DependentUpon>AddCustomColumnDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\CloseProcessInstructionDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\CloseProcessInstructionDialog.Designer.cs">
+      <DependentUpon>CloseProcessInstructionDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="HttpxRequest.cs" />
     <Compile Include="CopyFileInstruction.cs" />
@@ -683,6 +690,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ChooseAppsToInstallDialog.resx">
       <DependentUpon>ChooseAppsToInstallDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\CloseProcessInstructionDialog.resx">
+      <DependentUpon>CloseProcessInstructionDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\CommandControl.resx">
       <DependentUpon>CommandControl.cs</DependentUpon>

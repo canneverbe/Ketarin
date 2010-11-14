@@ -84,6 +84,10 @@ namespace Ketarin.Forms
             {
                 dialog = new CustomSetupInstructionDialog();
             }
+            else if (instruction is CloseProcessInstruction)
+            {
+                dialog = new CloseProcessInstructionDialog();
+            }
 
             if (dialog != null)
             {
