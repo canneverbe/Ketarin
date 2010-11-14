@@ -16,6 +16,7 @@ namespace Ketarin
     public class StartProcessInstruction : SetupInstruction
     {
         private SerializableDictionary<string, string> environmentVariables = new SerializableDictionary<string, string>();
+        private bool waitForExit = true;
 
         #region Properties
 
@@ -60,6 +61,15 @@ namespace Ketarin
             get; set;
         }
 
+        /// <summary>
+        /// Gets or sets whether or not to wait for the process to complete.
+        /// </summary>
+        public bool WaitForExit
+        {
+            get { return this.waitForExit; }
+            set { this.waitForExit = value; }
+        }
+
         #endregion
 
         #region ISetupCommand Member
@@ -84,11 +94,14 @@ namespace Ketarin
 
             startInfo.CreateNoWindow = true;
             Process proc = Process.Start(startInfo);
-            proc.WaitForExit();
-
-            if (proc.ExitCode != 0)
+            if (this.WaitForExit)
             {
-                throw new ApplicationException(string.Format("Process exited with error code {0}", proc.ExitCode));
+                proc.WaitForExit();
+
+                if (proc.ExitCode != 0)
+                {
+                    throw new ApplicationException(string.Format("Process exited with error code {0}", proc.ExitCode));
+                }
             }
         }
 

@@ -45,18 +45,19 @@
             this.olvValue = new CDBurnerXP.Controls.OLVColumn();
             this.label1 = new System.Windows.Forms.Label();
             this.bBrowse = new System.Windows.Forms.Button();
+            this.chkWaitUntilExit = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.olvEnvironmentVariables)).BeginInit();
             this.SuspendLayout();
             // 
             // bCancel
             // 
-            this.bCancel.Location = new System.Drawing.Point(316, 235);
-            this.bCancel.TabIndex = 9;
+            this.bCancel.Location = new System.Drawing.Point(316, 264);
+            this.bCancel.TabIndex = 11;
             // 
             // bOK
             // 
-            this.bOK.Location = new System.Drawing.Point(235, 235);
-            this.bOK.TabIndex = 8;
+            this.bOK.Location = new System.Drawing.Point(235, 264);
+            this.bOK.TabIndex = 10;
             this.bOK.Click += new System.EventHandler(this.bOK_Click);
             // 
             // lblProgram
@@ -151,10 +152,10 @@
             // 
             this.lnkSilentSetups.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lnkSilentSetups.AutoSize = true;
-            this.lnkSilentSetups.Location = new System.Drawing.Point(12, 240);
+            this.lnkSilentSetups.Location = new System.Drawing.Point(12, 269);
             this.lnkSilentSetups.Name = "lnkSilentSetups";
             this.lnkSilentSetups.Size = new System.Drawing.Size(143, 13);
-            this.lnkSilentSetups.TabIndex = 10;
+            this.lnkSilentSetups.TabIndex = 12;
             this.lnkSilentSetups.TabStop = true;
             this.lnkSilentSetups.Text = "How to control silent setups?";
             this.lnkSilentSetups.Url = "http://unattended.sourceforge.net/installers.php";
@@ -179,14 +180,14 @@
             this.olvEnvironmentVariables.HighlightForegroundColor = System.Drawing.Color.Empty;
             this.olvEnvironmentVariables.LastSortColumn = null;
             this.olvEnvironmentVariables.LastSortOrder = System.Windows.Forms.SortOrder.None;
-            this.olvEnvironmentVariables.Location = new System.Drawing.Point(15, 85);
+            this.olvEnvironmentVariables.Location = new System.Drawing.Point(15, 114);
             this.olvEnvironmentVariables.MultiSelect = false;
             this.olvEnvironmentVariables.Name = "olvEnvironmentVariables";
             this.olvEnvironmentVariables.SelectColumnsMenuStaysOpen = false;
             this.olvEnvironmentVariables.ShowGroups = false;
             this.olvEnvironmentVariables.Size = new System.Drawing.Size(376, 127);
             this.olvEnvironmentVariables.Sorting = System.Windows.Forms.SortOrder.Ascending;
-            this.olvEnvironmentVariables.TabIndex = 7;
+            this.olvEnvironmentVariables.TabIndex = 8;
             this.olvEnvironmentVariables.UseCompatibleStateImageBehavior = false;
             this.olvEnvironmentVariables.View = System.Windows.Forms.View.Details;
             // 
@@ -207,10 +208,10 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 69);
+            this.label1.Location = new System.Drawing.Point(12, 98);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(156, 13);
-            this.label1.TabIndex = 6;
+            this.label1.TabIndex = 7;
             this.label1.Text = "&Override environment variables:";
             // 
             // bBrowse
@@ -224,11 +225,24 @@
             this.bBrowse.UseVisualStyleBackColor = true;
             this.bBrowse.Click += new System.EventHandler(this.bBrowse_Click);
             // 
+            // chkWaitUntilExit
+            // 
+            this.chkWaitUntilExit.AutoSize = true;
+            this.chkWaitUntilExit.Checked = true;
+            this.chkWaitUntilExit.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkWaitUntilExit.Location = new System.Drawing.Point(15, 64);
+            this.chkWaitUntilExit.Name = "chkWaitUntilExit";
+            this.chkWaitUntilExit.Size = new System.Drawing.Size(161, 17);
+            this.chkWaitUntilExit.TabIndex = 6;
+            this.chkWaitUntilExit.Text = "&Wait until process has exited";
+            this.chkWaitUntilExit.UseVisualStyleBackColor = true;
+            // 
             // StartProcessInstructionDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(403, 270);
+            this.ClientSize = new System.Drawing.Size(403, 299);
+            this.Controls.Add(this.chkWaitUntilExit);
             this.Controls.Add(this.bBrowse);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.olvEnvironmentVariables);
@@ -252,6 +266,7 @@
             this.Controls.SetChildIndex(this.olvEnvironmentVariables, 0);
             this.Controls.SetChildIndex(this.label1, 0);
             this.Controls.SetChildIndex(this.bBrowse, 0);
+            this.Controls.SetChildIndex(this.chkWaitUntilExit, 0);
             ((System.ComponentModel.ISupportInitialize)(this.olvEnvironmentVariables)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -277,5 +292,6 @@
         private CDBurnerXP.Controls.OLVColumn olvValue;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button bBrowse;
+        private System.Windows.Forms.CheckBox chkWaitUntilExit;
     }
 }
