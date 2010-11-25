@@ -13,6 +13,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Net.Security;
 using Ketarin.Forms;
 using CookComputing.XmlRpc;
+using System.Data.SQLite;
 
 namespace Ketarin
 {
@@ -484,6 +485,19 @@ namespace Ketarin
                         // If no exception happened, we immediately leave the loop
                         break;
                     }
+                    catch (SQLiteException ex)
+                    {
+                        // If "locked" exception (slow USB device eg.) continue trying
+                        if (ex.ErrorCode == SQLiteErrorCode.Locked)
+                        {
+                            numTries--;
+                            LogDialog.Log(job, ex);
+                        }
+                        else
+                        {
+                            throw;
+                        }
+                    }
                     catch (Exception ex)
                     {
                         WebException webException = ex as WebException;
@@ -572,6 +586,12 @@ namespace Ketarin
                 // Error executing custom C# script
                 LogDialog.Log(job, ex);
                 m_Errors.Add(new ApplicationJobError(job, ex));
+            }
+            catch (SQLiteException ex)
+            {
+                LogDialog.Log(job, ex);
+                m_Errors.Add(new ApplicationJobError(job, ex));
+                m_Status[job] = Status.Failure;
             }
 
             m_Progress[job] = 100;
