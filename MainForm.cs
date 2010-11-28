@@ -284,7 +284,14 @@ namespace Ketarin
         {
             this.BeginInvoke((MethodInvoker)delegate()
             {
-                string msg = string.Format("Updates for {0} application definitions which you added from the online database have been found. Do you want to update these applications now?", e.Value.Length);
+                List<string> appNames = new List<string>();
+                foreach (string xml in e.Value)
+                {
+                    ApplicationJob job = ApplicationJob.LoadOneFromXml(xml);
+                    appNames.Add(job.Name);
+                }
+
+                string msg = string.Format("Updates for the following application definitions which you added from the online database have been found:\r\n\r\n{0}\r\n\r\nDo you want to update these applications now?", string.Join("\r\n", appNames.ToArray()));
                 if (MessageBox.Show(this, msg, "Updates found", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
                     foreach (ApplicationJob job in m_Jobs)
