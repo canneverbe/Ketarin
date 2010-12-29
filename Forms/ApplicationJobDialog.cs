@@ -208,6 +208,7 @@ namespace Ketarin.Forms
             txtExecuteBefore.CommandType = m_ApplicationJob.ExecutePreCommandType;
 
             // Setup instructions
+            instructionsListBox.Panels.Clear();
             foreach (SetupInstruction instruction in m_ApplicationJob.SetupInstructions)
             {
                 instructionsListBox.Panels.Add(new SetupInstructionListBoxPanel(instruction.Clone() as SetupInstruction));
