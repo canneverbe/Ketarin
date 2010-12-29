@@ -240,32 +240,6 @@ namespace Ketarin
             set { m_TextualContent = value; }
         }
 
-        /// <summary>
-        /// For type 'Textual', this text is to be
-        /// used as replacement for the variable.
-        /// </summary>
-        [XmlIgnore()]
-        public string ExpandedTextualContent
-        {
-            get
-            {
-                if (m_Parent == null || m_Expanding || string.IsNullOrEmpty(m_TextualContent))
-                {
-                    return m_TextualContent;
-                }
-
-                m_Expanding = true;
-                try
-                {
-                    return m_Parent.ReplaceAllInString(m_TextualContent);
-                }
-                finally
-                {
-                    m_Expanding = false;
-                }
-            }
-        }
-
         [XmlElement("Name")]
         public string Name
         {
@@ -760,7 +734,29 @@ namespace Ketarin
         /// </summary>
         public virtual string ReplaceInString(string value)
         {
-            return ReplaceInString(value, false);
+            return ReplaceInString(value, DateTime.MinValue, false);
+        }
+
+        /// <summary>
+        /// For type 'Textual', this text is to be
+        /// used as replacement for the variable.
+        /// </summary>
+        public string GetExpandedTextualContent(DateTime fileDate)
+        {
+            if (m_Parent == null || m_Expanding || string.IsNullOrEmpty(m_TextualContent))
+            {
+                return m_TextualContent;
+            }
+
+            m_Expanding = true;
+            try
+            {
+                return m_Parent.ReplaceAllInString(m_TextualContent, fileDate, string.Empty, false);
+            }
+            finally
+            {
+                m_Expanding = false;
+            }
         }
 
         /// <summary>
@@ -793,7 +789,8 @@ namespace Ketarin
         /// Replaces this variable within a given string.
         /// </summary>
         /// <param name="onlyCached">If true, no new content will be downloaded and only chached content will be used.</param>
-        public virtual string ReplaceInString(string value, bool onlyCached)
+        /// <param name="fileDate">Current file date, when downloading the modification date of the file being downloaded</param>
+        public virtual string ReplaceInString(string value, DateTime fileDate, bool onlyCached)
         {
             if (!IsVariableUsedInString(m_Name, value)) return value;
 
@@ -811,7 +808,7 @@ namespace Ketarin
             // Using textual content?
             if (m_VariableType == Type.Textual)
             {
-                m_CachedContent = ExpandedTextualContent;
+                m_CachedContent = GetExpandedTextualContent(fileDate);
                 LogDialog.Log(this, value, m_CachedContent);
                 return Replace(value, m_CachedContent);
             }
