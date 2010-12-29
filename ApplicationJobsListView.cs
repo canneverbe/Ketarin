@@ -332,7 +332,7 @@ namespace Ketarin
                             {
                                 if (variable.VariableType == UrlVariable.Type.Textual)
                                 {
-                                    System.Diagnostics.Process.Start(variable.ExpandedTextualContent);
+                                    System.Diagnostics.Process.Start(variable.GetExpandedTextualContent(DateTime.MinValue));
                                 }
                                 else
                                 {

@@ -478,13 +478,13 @@ namespace Ketarin
                 foreach (UrlVariable var in Values)
                 {
                     var.Parent = this; // make sure that value is set correctly
-                    value = var.ReplaceInString(value, onlyCachedContent);
+                    value = var.ReplaceInString(value, fileDate, onlyCachedContent);
                 }
 
                 // Global variables
                 foreach (UrlVariable var in UrlVariable.GlobalVariables.Values)
                 {
-                    value = var.ReplaceInString(value, true);
+                    value = var.ReplaceInString(value, fileDate, true);
                 }
 
                 return value;
