@@ -931,7 +931,7 @@ namespace Ketarin
                 {
                     try
                     {
-                        System.Diagnostics.Process.Start(job.WebsiteUrl);
+                        System.Diagnostics.Process.Start(job.ExpandedWebsiteUrl);
                     }
                     catch (Exception)
                     {

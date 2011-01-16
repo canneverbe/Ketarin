@@ -106,6 +106,17 @@ namespace Ketarin
         public string WebsiteUrl { get; set; }
 
         /// <summary>
+        /// Gets the website of an application with all variables replaced.
+        /// </summary>
+        public string ExpandedWebsiteUrl
+        {
+            get
+            {
+                return m_Variables.ReplaceAllInString(WebsiteUrl);
+            }
+        }
+
+        /// <summary>
         /// Gets or sets a custom user agent to use for downloads.
         /// </summary>
         public string UserAgent { get; set; }
