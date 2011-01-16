@@ -729,6 +729,9 @@ namespace Ketarin
 
                 LogDialog.Log(job, "Using referer: " + (string.IsNullOrEmpty(httpRequest.Referer) ? "(none)" : httpRequest.Referer));
                 httpRequest.UserAgent = (string.IsNullOrEmpty(job.UserAgent) ? WebClient.UserAgent : job.UserAgent);
+
+                // PAD files may be compressed
+                httpRequest.AutomaticDecompression = (DecompressionMethods.GZip | DecompressionMethods.Deflate);
             }
             
             using (WebResponse response = WebClient.GetResponse(req))
