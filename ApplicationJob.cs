@@ -110,6 +110,11 @@ namespace Ketarin
                 {
                     XmlDocument doc = new XmlDocument();
                     doc.PreserveWhitespace = true;
+                    if (string.IsNullOrEmpty(value.InnerText))
+                    {
+                        this.SourceTemplate = string.Empty;
+                        return;
+                    }
                     doc.LoadXml(value.InnerText);
                     // Make sure that no nested source templates are saved
                     foreach (XmlElement e in doc.GetElementsByTagName("SourceTemplate"))
@@ -117,7 +122,11 @@ namespace Ketarin
                         e.ParentNode.RemoveChild(e);
                         break;
                     }
-                    this.SourceTemplate = doc.OuterXml;
+                    if (doc.FirstChild is XmlDeclaration)
+                    {
+                        doc.RemoveChild(doc.FirstChild);
+                    }
+                    this.SourceTemplate = doc.OuterXml.Trim();
                 }
             }
         }
