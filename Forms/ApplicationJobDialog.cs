@@ -92,8 +92,6 @@ namespace Ketarin.Forms
             AcceptButton = bOK;
             CancelButton = bCancel;
 
-            cboCategory.DataSource = DbManager.GetCategories();
-
             string defaultXml = Settings.GetValue("DefaultApplication", "") as string;
             if (!string.IsNullOrEmpty(defaultXml))
             {
@@ -106,6 +104,7 @@ namespace Ketarin.Forms
         {
             base.OnLoad(e);
 
+            cboCategory.DataSource = DbManager.GetCategories();
             RefreshVariables();
             SetAutocompleteSource();
 
