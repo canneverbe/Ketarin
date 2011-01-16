@@ -91,12 +91,34 @@ namespace Ketarin
         {
             get
             {
+                // Prevent unnecessary CDATA elements
+                if (string.IsNullOrEmpty(SourceTemplate))
+                {
+                    return null;
+                }
+
                 XmlDocument doc = new XmlDocument();
                 return doc.CreateCDataSection(this.SourceTemplate);
             }
             set
             {
-                this.SourceTemplate = (value == null) ? string.Empty : value.InnerText;
+                if (value == null)
+                {
+                    this.SourceTemplate = string.Empty;
+                }
+                else
+                {
+                    XmlDocument doc = new XmlDocument();
+                    doc.PreserveWhitespace = true;
+                    doc.LoadXml(value.InnerText);
+                    // Make sure that no nested source templates are saved
+                    foreach (XmlElement e in doc.GetElementsByTagName("SourceTemplate"))
+                    {
+                        e.ParentNode.RemoveChild(e);
+                        break;
+                    }
+                    this.SourceTemplate = doc.OuterXml;
+                }
             }
         }
 
