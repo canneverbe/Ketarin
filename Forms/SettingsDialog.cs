@@ -132,6 +132,7 @@ namespace Ketarin.Forms
             txtProxyServer.Text = Settings.GetValue("ProxyServer", "") as string;
             txtProxyUser.Text = Settings.GetValue("ProxyUser", "") as string;
             txtProxyPassword.Text = Settings.GetValue("ProxyPassword", "") as string;
+            LoadCommand();
         }
 
         private void bOK_Click(object sender, EventArgs e)
@@ -292,10 +293,17 @@ namespace Ketarin.Forms
             // Save current command
             SaveCurrentCommand();
 
+            LoadCommand();
+
+            this.currentSelectedCommandEvent = cboCommandEvent.SelectedIndex;
+        }
+
+        private void LoadCommand()
+        {
             // Load other command
             switch (cboCommandEvent.SelectedIndex)
             {
-                case 0:                    
+                case 0:
                     commandControl.Text = Settings.GetValue("PreUpdateCommand", "") as string;
                     commandControl.CommandType = Command.ConvertToScriptType(Settings.GetValue("PreUpdateCommandType", ScriptType.Batch.ToString()) as string);
                     break;
@@ -310,8 +318,6 @@ namespace Ketarin.Forms
                     commandControl.CommandType = Command.ConvertToScriptType(Settings.GetValue("PostUpdateCommandType", ScriptType.Batch.ToString()) as string);
                     break;
             }
-
-            this.currentSelectedCommandEvent = cboCommandEvent.SelectedIndex;
         }
 
         #endregion
