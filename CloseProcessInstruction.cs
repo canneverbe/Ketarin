@@ -83,7 +83,7 @@ namespace Ketarin
             // already dead...
             if (Kernel32.GetExitCodeProcess(bDup ? hProcessDup : hProcess, out dwCode) && dwCode == Kernel32.STILL_ACTIVE)
             {
-                UIntPtr pfnExitProc = Kernel32.GetProcAddress(hKernel, "ExitProcess");
+                IntPtr pfnExitProc = Kernel32.GetProcAddress(hKernel, "ExitProcess");
                 hRT = Kernel32.CreateRemoteThread(bDup ? hProcessDup : hProcess, IntPtr.Zero, 0, pfnExitProc, new IntPtr(uExitCode), 0, out dwTID);
             }
 
