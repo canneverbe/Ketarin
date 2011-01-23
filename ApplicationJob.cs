@@ -852,7 +852,6 @@ namespace Ketarin
         /// </summary>
         private void UpdateTemplatePropertiesFromApp(ApplicationJob job)
         {
-            // The right job is found, update now
             // Basically, we are only interested in properties
             // that change if a different method needs to be used
             // in order to download the file (changed website for example).

@@ -4,6 +4,7 @@ using System.Text;
 using System.Diagnostics;
 using System.Threading;
 using System.Runtime.InteropServices;
+using Microsoft.Win32;
 
 namespace Ketarin
 {
@@ -41,22 +42,66 @@ namespace Ketarin
         {
             foreach (Process process in Process.GetProcessesByName(ProcessName))
             {
-                process.CloseMainWindow();
-
-                // Wait 2 seconds until the process has closed
-                DateTime startWait = DateTime.Now;
-                while (DateTime.Now - startWait < TimeSpan.FromSeconds(2))
+                if (process.CloseMainWindow())
                 {
-                    if (process.HasExited) break;
+                    // Wait 2 seconds until the process has closed
+                    DateTime startWait = DateTime.Now;
+                    while (DateTime.Now - startWait < TimeSpan.FromSeconds(2))
+                    {
+                        if (process.HasExited) break;
 
-                    Thread.Sleep(100);
+                        Thread.Sleep(100);
+                    }
                 }
 
                 if (!process.HasExited)
                 {
-                    process.Kill();
+                    // Safe termination
+                    if (!SafeTerminateProcess(process.Handle, 0))
+                    {
+                        process.Kill();
+                    }
                 }
             }
+        }
+
+        /// <summary>
+        /// Safely terminate a process by creating a remote thread in the process that calls ExitProcess.
+        /// </summary>
+        /// <remarks>http://www.drdobbs.com/184416547;?pgno=3</remarks>
+        private bool SafeTerminateProcess(IntPtr hProcess, uint uExitCode)
+        {
+            uint dwTID, dwCode;
+            IntPtr hProcessDup;
+            IntPtr hRT = IntPtr.Zero;
+            IntPtr hKernel = Kernel32.GetModuleHandle("Kernel32");
+            bool success = false;
+
+            bool bDup = Kernel32.DuplicateHandle(Kernel32.GetCurrentProcess(), hProcess, Kernel32.GetCurrentProcess(), out hProcessDup, Kernel32.PROCESS_ALL_ACCESS, false, 0);
+
+            // Detect the special case where the process is 
+            // already dead...
+            if (Kernel32.GetExitCodeProcess(bDup ? hProcessDup : hProcess, out dwCode) && dwCode == Kernel32.STILL_ACTIVE)
+            {
+                UIntPtr pfnExitProc = Kernel32.GetProcAddress(hKernel, "ExitProcess");
+                hRT = Kernel32.CreateRemoteThread(bDup ? hProcessDup : hProcess, IntPtr.Zero, 0, pfnExitProc, new IntPtr(uExitCode), 0, out dwTID);
+            }
+
+            if (hRT != IntPtr.Zero)
+            {
+                // Must wait process to terminate to 
+                // guarantee that it has exited...
+                Kernel32.WaitForSingleObject(bDup ? hProcessDup : hProcess, Kernel32.INFINITE);
+                Kernel32.CloseHandle(hRT);
+                success = true;
+            }
+
+            if (bDup)
+            {
+                Kernel32.CloseHandle(hProcessDup);
+            }
+
+            return success;
         }
 
         public override string ToString()
