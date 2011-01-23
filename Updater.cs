@@ -422,9 +422,16 @@ namespace Ketarin
                     }
                 }
 
-                string postUpdateCommand = Settings.GetValue("PostUpdateCommand", "") as string;
-                ScriptType postUpdateCommandType = Command.ConvertToScriptType(Settings.GetValue("PostUpdateCommandType", ScriptType.Batch.ToString()) as string);
-                new Command(postUpdateCommand, postUpdateCommandType).Execute(null);
+                try
+                {
+                    string postUpdateCommand = Settings.GetValue("PostUpdateCommand", "") as string;
+                    ScriptType postUpdateCommandType = Command.ConvertToScriptType(Settings.GetValue("PostUpdateCommandType", ScriptType.Batch.ToString()) as string);
+                    new Command(postUpdateCommand, postUpdateCommandType).Execute(null);
+                }
+                catch (ApplicationException ex)
+                {
+                    LogDialog.Log("Post update command failed.", ex);
+                }
 
                 LogDialog.Log("Update finished");
             }
