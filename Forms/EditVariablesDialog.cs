@@ -435,9 +435,10 @@ namespace Ketarin.Forms
                     rtfContent.Text = CurrentVariable.TempContent;
                     // For Regex: Go to match after thread finish
                     this.gotoMatch = true;
+                    UpdateRegexMatches();
                     // For Start/End: Go to match now
                     RefreshRtfFormatting();
-                    // 
+
                     this.GoToMatch();
 
                     // Show page preview if desired
