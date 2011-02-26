@@ -448,7 +448,7 @@ namespace Ketarin
                     LogDialog.Log("Could not determine {url:*} variables", ex);
                 }
 
-                value = UrlVariable.Replace(value, "startuppath", Application.StartupPath);
+                value = UrlVariable.Replace(value, "startuppath", PathEx.QualifyPath(Application.StartupPath));
 
                 // Some date/time variables, only if they were not user defined
                 string[] dateTimeVariables = new string[] { "dd", "ddd", "dddd", "hh", "HH", "mm", "MM", "MMM", "MMMM", "ss", "tt", "yy", "yyyy", "zz", "zzz" };
