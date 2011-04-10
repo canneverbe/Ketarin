@@ -9,6 +9,7 @@ using System.Text.RegularExpressions;
 using Ketarin.Forms;
 using CDBurnerXP;
 using System.Data.SQLite;
+using System.Web;
 
 namespace Ketarin
 {
@@ -652,6 +653,9 @@ namespace Ketarin
 
                 case "startuppath":
                     return System.Windows.Forms.Application.StartupPath;
+
+                case "urldecode":
+                    return HttpUtility.UrlDecode(content);
             }
 
             return content;
