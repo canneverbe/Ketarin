@@ -525,13 +525,14 @@ namespace Ketarin
                         string[] replace = parts[3].Split(delimiter);
                         for (int i = 0; i < search.Length; i++)
                         {
+                            string replaceValue = (replace.Length > i) ? replace[i] : string.Empty;
                             if (parts[0] == "multireplacei")
                             {
-                                content = ReplaceEx(content, search[i], replace[i]);
+                                content = ReplaceEx(content, search[i], replaceValue);
                             }
                             else
                             {
-                                content = content.Replace(search[i], replace[i]);
+                                content = content.Replace(search[i], replaceValue);
                             }
                         }
 
