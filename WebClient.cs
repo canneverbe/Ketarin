@@ -132,7 +132,14 @@ namespace Ketarin
 
         public new string DownloadString(string address)
         {
-            return DownloadString(new Uri(address));
+            try
+            {
+                return DownloadString(new Uri(address));
+            }
+            catch (UriFormatException)
+            {
+                throw new UriFormatException("The format of the URI \"" + address + "\" cannot be determined.");
+            }
         }
 
         public new string DownloadString(Uri address)
