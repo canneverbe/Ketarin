@@ -108,6 +108,11 @@ namespace Ketarin.Forms
             RefreshVariables();
             SetAutocompleteSource();
 
+            if (m_ApplicationJob != null)
+            {
+                cboCategory.Text = string.IsNullOrEmpty(m_ApplicationJob.Category) ? null : m_ApplicationJob.Category;
+            }
+
             this.BeginInvoke((MethodInvoker)delegate()
             {
                 // Do not set focus to TabControl 
