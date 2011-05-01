@@ -723,25 +723,48 @@ namespace Ketarin.Forms
         {
             try
             {
-                Regex regex = CurrentVariable.CreateRegex();
-                if (regex == null) return;
-
-                Match match = regex.Match(text as string);
-
-                this.BeginInvoke((MethodInvoker)delegate()
+                try
                 {
-                    txtRegularExpression.HintText = string.Empty;
-                    RefreshRtfFormatting(match);
+                    Regex regex = CurrentVariable.CreateRegex();
+                    if (regex == null) return;
 
-                    if (match.Success && this.gotoMatch)
+                    Match match = regex.Match(text as string);
+
+                    this.BeginInvoke((MethodInvoker)delegate
                     {
-                        this.gotoMatch = false;
-                        GoToMatch();
-                    }
-                });
+                        txtRegularExpression.HintText = string.Empty;
+                        RefreshRtfFormatting(match);
+
+                        if (match.Success && this.gotoMatch)
+                        {
+                            this.gotoMatch = false;
+                            GoToMatch();
+                        }
+                    });
+                }
+                catch (UriFormatException ex)
+                {
+                    this.BeginInvoke((MethodInvoker)delegate
+                    {
+                        MessageBox.Show(this, "The regular expression cannot be evaluated: " + ex.Message, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    });
+                }
+                catch (ThreadAbortException)
+                {
+                    /* Thread aborted, no error */ 
+                }
+                finally
+                {
+                    this.BeginInvoke((MethodInvoker)delegate
+                    {
+                        txtRegularExpression.HintText = string.Empty;
+                    });
+                }
             }
-            catch (ThreadAbortException) { /* Thread aborted, no error */ }
-            catch (InvalidOperationException) { /* Ignore error if form is closed */ }
+            catch (InvalidOperationException)
+            {
+                /* Ignore error if form is closed */ 
+            }
         }
 
         private void chkRightToLeft_CheckedChanged(object sender, EventArgs e)
