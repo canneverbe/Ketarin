@@ -255,7 +255,10 @@ namespace ScintillaNet
 			}
 			else if ((int)m.Msg >= 10000)
 			{
-				_commands.Execute((BindableCommand)m.Msg);
+                if (_commands != null)
+                {
+                    _commands.Execute((BindableCommand)m.Msg);
+                }
 				return;
 			}
 
