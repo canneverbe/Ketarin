@@ -56,6 +56,7 @@
     <PlatformTarget>x86</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <OutputPath>bin\x86\Release\</OutputPath>
@@ -488,7 +489,6 @@
     </Compile>
     <Compile Include="M:\CsLib\CDBurnerXP\Controls\Separator.cs">
       <Link>CDBurnerXP\Separator.cs</Link>
-      <SubType>Component</SubType>
     </Compile>
     <Compile Include="NonBinaryFileException.cs" />
     <Compile Include="Program.cs" />

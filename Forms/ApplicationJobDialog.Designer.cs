@@ -51,7 +51,7 @@
             this.chkEnabled = new System.Windows.Forms.CheckBox();
             this.chkDeletePrevious = new System.Windows.Forms.CheckBox();
             this.lblCategory = new System.Windows.Forms.Label();
-            this.cboCategory = new System.Windows.Forms.ComboBox();
+            this.cboCategory = new Ketarin.Forms.ApplicationJobDialog.NonValidatingComboBox();
             this.sepTarget = new CDBurnerXP.Controls.Separator();
             this.sepDownload = new CDBurnerXP.Controls.Separator();
             this.chkShareOnline = new System.Windows.Forms.CheckBox();
@@ -87,12 +87,12 @@
             this.bAddInstruction = new wyDay.Controls.SplitButton();
             this.cmnuAddInstruction = new System.Windows.Forms.ContextMenu();
             this.mnuStartProcess = new System.Windows.Forms.MenuItem();
+            this.mnuCloseProcess = new System.Windows.Forms.MenuItem();
             this.mnuCopyFile = new System.Windows.Forms.MenuItem();
             this.mnuCustomCommand = new System.Windows.Forms.MenuItem();
             this.label1 = new System.Windows.Forms.Label();
             this.instructionsListBox = new CDBurnerXP.Controls.AdvancedListBox();
             this.bSaveAsDefault = new System.Windows.Forms.Button();
-            this.mnuCloseProcess = new System.Windows.Forms.MenuItem();
             this.pnlDownloadSource.SuspendLayout();
             this.pnlBeta.SuspendLayout();
             this.pnlTarget.SuspendLayout();
@@ -382,25 +382,21 @@
             // 
             this.sepTarget.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.sepTarget.ForeColor = System.Drawing.SystemColors.ActiveCaption;
             this.sepTarget.Location = new System.Drawing.Point(3, 163);
             this.sepTarget.Name = "sepTarget";
             this.sepTarget.Size = new System.Drawing.Size(366, 23);
             this.sepTarget.TabIndex = 20;
             this.sepTarget.Text = "Download location";
-            this.sepTarget.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // sepDownload
             // 
             this.sepDownload.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.sepDownload.ForeColor = System.Drawing.SystemColors.ActiveCaption;
             this.sepDownload.Location = new System.Drawing.Point(3, 61);
             this.sepDownload.Name = "sepDownload";
             this.sepDownload.Size = new System.Drawing.Size(366, 23);
             this.sepDownload.TabIndex = 10;
             this.sepDownload.Text = "Download source";
-            this.sepDownload.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // chkShareOnline
             // 
@@ -511,37 +507,31 @@
             // 
             this.sepMiscellaneous.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.sepMiscellaneous.ForeColor = System.Drawing.SystemColors.ActiveCaption;
             this.sepMiscellaneous.Location = new System.Drawing.Point(6, 203);
             this.sepMiscellaneous.Name = "sepMiscellaneous";
             this.sepMiscellaneous.Size = new System.Drawing.Size(363, 23);
             this.sepMiscellaneous.TabIndex = 11;
             this.sepMiscellaneous.Text = "Miscellaneous";
-            this.sepMiscellaneous.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // sepUpdateDetection
             // 
             this.sepUpdateDetection.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.sepUpdateDetection.ForeColor = System.Drawing.SystemColors.ActiveCaption;
             this.sepUpdateDetection.Location = new System.Drawing.Point(6, 124);
             this.sepUpdateDetection.Name = "sepUpdateDetection";
             this.sepUpdateDetection.Size = new System.Drawing.Size(363, 23);
             this.sepUpdateDetection.TabIndex = 7;
             this.sepUpdateDetection.Text = "Update detection";
-            this.sepUpdateDetection.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // sepDownloads
             // 
             this.sepDownloads.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.sepDownloads.ForeColor = System.Drawing.SystemColors.ActiveCaption;
             this.sepDownloads.Location = new System.Drawing.Point(6, 3);
             this.sepDownloads.Name = "sepDownloads";
             this.sepDownloads.Size = new System.Drawing.Size(363, 23);
             this.sepDownloads.TabIndex = 0;
             this.sepDownloads.Text = "&Downloading";
-            this.sepDownloads.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // chkIgnoreFileInformation
             // 
@@ -779,6 +769,12 @@
             this.mnuStartProcess.Text = "&Start process...";
             this.mnuStartProcess.Click += new System.EventHandler(this.mnuStartProcess_Click);
             // 
+            // mnuCloseProcess
+            // 
+            this.mnuCloseProcess.Index = 1;
+            this.mnuCloseProcess.Text = "Cl&ose process...";
+            this.mnuCloseProcess.Click += new System.EventHandler(this.mnuCloseProcess_Click);
+            // 
             // mnuCopyFile
             // 
             this.mnuCopyFile.Index = 2;
@@ -824,12 +820,6 @@
             this.bSaveAsDefault.Text = "Save as &default";
             this.bSaveAsDefault.UseVisualStyleBackColor = true;
             this.bSaveAsDefault.Click += new System.EventHandler(this.bSaveAsDefault_Click);
-            // 
-            // mnuCloseProcess
-            // 
-            this.mnuCloseProcess.Index = 1;
-            this.mnuCloseProcess.Text = "Cl&ose process...";
-            this.mnuCloseProcess.Click += new System.EventHandler(this.mnuCloseProcess_Click);
             // 
             // ApplicationJobDialog
             // 
@@ -896,7 +886,7 @@
         private System.Windows.Forms.CheckBox chkDeletePrevious;
         private System.Windows.Forms.Button bVariables;
         private System.Windows.Forms.Label lblCategory;
-        private System.Windows.Forms.ComboBox cboCategory;
+        private NonValidatingComboBox cboCategory;
         private System.Windows.Forms.CheckBox chkShareOnline;
         private System.Windows.Forms.Label lblSpoofReferer;
         private VariableTextBox txtSpoofReferer;
