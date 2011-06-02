@@ -17,6 +17,21 @@ namespace Ketarin.Forms
 {
     public partial class ApplicationJobDialog : PersistentForm
     {
+        #region NonValidatingComboBox
+
+        /// <summary>
+        /// Solved a problem renaming categories: http://ketarin.canneverbe.com/forum/viewtopic.php?id=789
+        /// By not validating, NotifyAutoComplete() is not called in the ComboBox base class.
+        /// </summary>
+        public class NonValidatingComboBox : System.Windows.Forms.ComboBox
+        {
+            protected override void OnValidating(System.ComponentModel.CancelEventArgs e)
+            {
+            }
+        }
+
+        #endregion
+
         private ApplicationJob m_ApplicationJob = new ApplicationJob();
 
         #region Properties
