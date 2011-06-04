@@ -277,6 +277,7 @@
             // 
             this.m_VistaMenu.SetImage(this.mnuNew, global::Ketarin.Properties.Resources.AddSmall);
             this.mnuNew.Index = 0;
+            this.mnuNew.Shortcut = System.Windows.Forms.Shortcut.CtrlN;
             this.mnuNew.Text = "&New application...";
             this.mnuNew.Click += new System.EventHandler(this.mnuAddNew_Click);
             // 
@@ -306,6 +307,7 @@
             // mnuSettings
             // 
             this.mnuSettings.Index = 5;
+            this.mnuSettings.Shortcut = System.Windows.Forms.Shortcut.CtrlT;
             this.mnuSettings.Text = "&Settings";
             this.mnuSettings.Click += new System.EventHandler(this.mnuSettings_Click);
             // 
@@ -334,6 +336,7 @@
             // mnuLog
             // 
             this.mnuLog.Index = 0;
+            this.mnuLog.Shortcut = System.Windows.Forms.Shortcut.CtrlL;
             this.mnuLog.Text = "&Show log";
             this.mnuLog.Click += new System.EventHandler(this.mnuLog_Click);
             // 
@@ -375,6 +378,7 @@
             // mnuTutorial
             // 
             this.mnuTutorial.Index = 0;
+            this.mnuTutorial.Shortcut = System.Windows.Forms.Shortcut.F1;
             this.mnuTutorial.Text = "&Tutorial";
             this.mnuTutorial.Click += new System.EventHandler(this.mnuTutorial_Click);
             // 

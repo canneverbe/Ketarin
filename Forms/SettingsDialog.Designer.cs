@@ -48,39 +48,46 @@
             this.lblNumRetries = new System.Windows.Forms.Label();
             this.tcSettings = new System.Windows.Forms.TabControl();
             this.tpGeneral = new System.Windows.Forms.TabPage();
+            this.bEdit = new System.Windows.Forms.Button();
+            this.separator1 = new CDBurnerXP.Controls.Separator();
             this.bRemove = new System.Windows.Forms.Button();
             this.bAddCustomColumn = new System.Windows.Forms.Button();
+            this.olvCustomColumns = new CDBurnerXP.Controls.ObjectListView();
+            this.colName = new CDBurnerXP.Controls.OLVColumn();
+            this.colValue = new CDBurnerXP.Controls.OLVColumn();
             this.chkOpenWebsite = new System.Windows.Forms.CheckBox();
             this.chkBackups = new System.Windows.Forms.CheckBox();
             this.chkMinToTray = new System.Windows.Forms.CheckBox();
             this.chkUpdateOnlineDatabase = new System.Windows.Forms.CheckBox();
             this.tpConnection = new System.Windows.Forms.TabPage();
+            this.sepProxy = new CDBurnerXP.Controls.Separator();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.gridGlobalVariables = new System.Windows.Forms.DataGridView();
             this.lblGlobalVariables = new System.Windows.Forms.Label();
             this.tpCommands = new System.Windows.Forms.TabPage();
+            this.commandControl = new Ketarin.Forms.CommandControl();
             this.lblCommandEvent = new System.Windows.Forms.Label();
             this.cboCommandEvent = new System.Windows.Forms.ComboBox();
+            this.tpHotkeys = new System.Windows.Forms.TabPage();
+            this.bDoubleClick = new System.Windows.Forms.Button();
+            this.txtHotkeyKeys = new Ketarin.Forms.SettingsDialog.HotkeyTextBox();
+            this.lblHotkey = new System.Windows.Forms.Label();
+            this.lblActions = new System.Windows.Forms.Label();
+            this.lbActions = new System.Windows.Forms.ListBox();
             this.bExport = new System.Windows.Forms.Button();
             this.bImport = new System.Windows.Forms.Button();
-            this.bEdit = new System.Windows.Forms.Button();
-            this.separator1 = new CDBurnerXP.Controls.Separator();
-            this.olvCustomColumns = new CDBurnerXP.Controls.ObjectListView();
-            this.colName = new CDBurnerXP.Controls.OLVColumn();
-            this.colValue = new CDBurnerXP.Controls.OLVColumn();
-            this.sepProxy = new CDBurnerXP.Controls.Separator();
-            this.commandControl = new Ketarin.Forms.CommandControl();
             ((System.ComponentModel.ISupportInitialize)(this.nConnectionTimeout)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nProxyPort)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nNumThreads)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nNumRetries)).BeginInit();
             this.tcSettings.SuspendLayout();
             this.tpGeneral.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.olvCustomColumns)).BeginInit();
             this.tpConnection.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridGlobalVariables)).BeginInit();
             this.tpCommands.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.olvCustomColumns)).BeginInit();
+            this.tpHotkeys.SuspendLayout();
             this.SuspendLayout();
             // 
             // bCancel
@@ -312,6 +319,7 @@
             this.tcSettings.Controls.Add(this.tpConnection);
             this.tcSettings.Controls.Add(this.tabPage1);
             this.tcSettings.Controls.Add(this.tpCommands);
+            this.tcSettings.Controls.Add(this.tpHotkeys);
             this.tcSettings.Location = new System.Drawing.Point(12, 12);
             this.tcSettings.Name = "tcSettings";
             this.tcSettings.SelectedIndex = 0;
@@ -339,6 +347,28 @@
             this.tpGeneral.Text = "General";
             this.tpGeneral.UseVisualStyleBackColor = true;
             // 
+            // bEdit
+            // 
+            this.bEdit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.bEdit.Enabled = false;
+            this.bEdit.Location = new System.Drawing.Point(89, 317);
+            this.bEdit.Name = "bEdit";
+            this.bEdit.Size = new System.Drawing.Size(75, 23);
+            this.bEdit.TabIndex = 9;
+            this.bEdit.Text = "&Edit";
+            this.bEdit.UseVisualStyleBackColor = true;
+            this.bEdit.Click += new System.EventHandler(this.bEdit_Click);
+            // 
+            // separator1
+            // 
+            this.separator1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.separator1.Location = new System.Drawing.Point(6, 153);
+            this.separator1.Name = "separator1";
+            this.separator1.Size = new System.Drawing.Size(382, 23);
+            this.separator1.TabIndex = 6;
+            this.separator1.Text = "Custom columns";
+            // 
             // bRemove
             // 
             this.bRemove.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -361,6 +391,47 @@
             this.bAddCustomColumn.Text = "A&dd...";
             this.bAddCustomColumn.UseVisualStyleBackColor = true;
             this.bAddCustomColumn.Click += new System.EventHandler(this.bAddCustomColumn_Click);
+            // 
+            // olvCustomColumns
+            // 
+            this.olvCustomColumns.AllColumns.Add(this.colName);
+            this.olvCustomColumns.AllColumns.Add(this.colValue);
+            this.olvCustomColumns.AlternateRowBackColor = System.Drawing.Color.Empty;
+            this.olvCustomColumns.AlwaysGroupByColumn = null;
+            this.olvCustomColumns.AlwaysGroupBySortOrder = System.Windows.Forms.SortOrder.None;
+            this.olvCustomColumns.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.olvCustomColumns.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.colName,
+            this.colValue});
+            this.olvCustomColumns.FullRowSelect = true;
+            this.olvCustomColumns.HideSelection = false;
+            this.olvCustomColumns.HighlightBackgroundColor = System.Drawing.Color.Empty;
+            this.olvCustomColumns.HighlightForegroundColor = System.Drawing.Color.Empty;
+            this.olvCustomColumns.LastSortColumn = null;
+            this.olvCustomColumns.LastSortOrder = System.Windows.Forms.SortOrder.None;
+            this.olvCustomColumns.Location = new System.Drawing.Point(9, 179);
+            this.olvCustomColumns.Name = "olvCustomColumns";
+            this.olvCustomColumns.ShowGroups = false;
+            this.olvCustomColumns.Size = new System.Drawing.Size(379, 132);
+            this.olvCustomColumns.TabIndex = 7;
+            this.olvCustomColumns.UseCompatibleStateImageBehavior = false;
+            this.olvCustomColumns.View = System.Windows.Forms.View.Details;
+            this.olvCustomColumns.SelectedIndexChanged += new System.EventHandler(this.olvCustomColumns_SelectedIndexChanged);
+            this.olvCustomColumns.DoubleClick += new System.EventHandler(this.olvCustomColumns_DoubleClick);
+            // 
+            // colName
+            // 
+            this.colName.AspectName = "Key";
+            this.colName.Text = "Name";
+            this.colName.Width = 125;
+            // 
+            // colValue
+            // 
+            this.colValue.AspectName = "Value";
+            this.colValue.Text = "Value";
+            this.colValue.Width = 216;
             // 
             // chkOpenWebsite
             // 
@@ -427,6 +498,16 @@
             this.tpConnection.Text = "Connection";
             this.tpConnection.UseVisualStyleBackColor = true;
             // 
+            // sepProxy
+            // 
+            this.sepProxy.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.sepProxy.Location = new System.Drawing.Point(3, 93);
+            this.sepProxy.Name = "sepProxy";
+            this.sepProxy.Size = new System.Drawing.Size(375, 23);
+            this.sepProxy.TabIndex = 7;
+            this.sepProxy.Text = "HTTP proxy settings";
+            // 
             // tabPage1
             // 
             this.tabPage1.Controls.Add(this.gridGlobalVariables);
@@ -476,6 +557,20 @@
             this.tpCommands.Text = "Commands";
             this.tpCommands.UseVisualStyleBackColor = true;
             // 
+            // commandControl
+            // 
+            this.commandControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.commandControl.Application = null;
+            this.commandControl.Location = new System.Drawing.Point(6, 36);
+            this.commandControl.Margin = new System.Windows.Forms.Padding(0);
+            this.commandControl.Name = "commandControl";
+            this.commandControl.ShowBorder = false;
+            this.commandControl.Size = new System.Drawing.Size(382, 310);
+            this.commandControl.TabIndex = 2;
+            this.commandControl.VariableNames = new string[0];
+            // 
             // lblCommandEvent
             // 
             this.lblCommandEvent.AutoSize = true;
@@ -501,6 +596,69 @@
             this.cboCommandEvent.TabIndex = 1;
             this.cboCommandEvent.SelectedIndexChanged += new System.EventHandler(this.cboCommandEvent_SelectedIndexChanged);
             // 
+            // tpHotkeys
+            // 
+            this.tpHotkeys.Controls.Add(this.bDoubleClick);
+            this.tpHotkeys.Controls.Add(this.txtHotkeyKeys);
+            this.tpHotkeys.Controls.Add(this.lblHotkey);
+            this.tpHotkeys.Controls.Add(this.lblActions);
+            this.tpHotkeys.Controls.Add(this.lbActions);
+            this.tpHotkeys.Location = new System.Drawing.Point(4, 22);
+            this.tpHotkeys.Name = "tpHotkeys";
+            this.tpHotkeys.Padding = new System.Windows.Forms.Padding(3);
+            this.tpHotkeys.Size = new System.Drawing.Size(394, 349);
+            this.tpHotkeys.TabIndex = 4;
+            this.tpHotkeys.Text = "Hotkeys";
+            this.tpHotkeys.UseVisualStyleBackColor = true;
+            // 
+            // bDoubleClick
+            // 
+            this.bDoubleClick.Location = new System.Drawing.Point(237, 160);
+            this.bDoubleClick.Name = "bDoubleClick";
+            this.bDoubleClick.Size = new System.Drawing.Size(75, 23);
+            this.bDoubleClick.TabIndex = 4;
+            this.bDoubleClick.Text = "Doubleclick";
+            this.bDoubleClick.UseVisualStyleBackColor = true;
+            this.bDoubleClick.Click += new System.EventHandler(this.bDoubleClick_Click);
+            // 
+            // txtHotkeyKeys
+            // 
+            this.txtHotkeyKeys.Location = new System.Drawing.Point(73, 162);
+            this.txtHotkeyKeys.Name = "txtHotkeyKeys";
+            this.txtHotkeyKeys.Size = new System.Drawing.Size(158, 20);
+            this.txtHotkeyKeys.TabIndex = 3;
+            // 
+            // lblHotkey
+            // 
+            this.lblHotkey.AutoSize = true;
+            this.lblHotkey.Location = new System.Drawing.Point(6, 165);
+            this.lblHotkey.Name = "lblHotkey";
+            this.lblHotkey.Size = new System.Drawing.Size(61, 13);
+            this.lblHotkey.TabIndex = 2;
+            this.lblHotkey.Text = "&Press keys:";
+            // 
+            // lblActions
+            // 
+            this.lblActions.AutoSize = true;
+            this.lblActions.Location = new System.Drawing.Point(4, 11);
+            this.lblActions.Name = "lblActions";
+            this.lblActions.Size = new System.Drawing.Size(45, 13);
+            this.lblActions.TabIndex = 0;
+            this.lblActions.Text = "&Actions:";
+            // 
+            // lbActions
+            // 
+            this.lbActions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.lbActions.DisplayMember = "DisplayName";
+            this.lbActions.FormattingEnabled = true;
+            this.lbActions.Location = new System.Drawing.Point(7, 27);
+            this.lbActions.Name = "lbActions";
+            this.lbActions.Size = new System.Drawing.Size(381, 121);
+            this.lbActions.Sorted = true;
+            this.lbActions.TabIndex = 1;
+            this.lbActions.SelectedIndexChanged += new System.EventHandler(this.lbActions_SelectedIndexChanged);
+            // 
             // bExport
             // 
             this.bExport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -522,97 +680,6 @@
             this.bImport.Text = "Import...";
             this.bImport.UseVisualStyleBackColor = true;
             this.bImport.Click += new System.EventHandler(this.bImport_Click);
-            // 
-            // bEdit
-            // 
-            this.bEdit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bEdit.Enabled = false;
-            this.bEdit.Location = new System.Drawing.Point(89, 317);
-            this.bEdit.Name = "bEdit";
-            this.bEdit.Size = new System.Drawing.Size(75, 23);
-            this.bEdit.TabIndex = 9;
-            this.bEdit.Text = "&Edit";
-            this.bEdit.UseVisualStyleBackColor = true;
-            this.bEdit.Click += new System.EventHandler(this.bEdit_Click);
-            // 
-            // separator1
-            // 
-            this.separator1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.separator1.ForeColor = System.Drawing.SystemColors.ActiveCaption;
-            this.separator1.Location = new System.Drawing.Point(6, 153);
-            this.separator1.Name = "separator1";
-            this.separator1.Size = new System.Drawing.Size(382, 23);
-            this.separator1.TabIndex = 6;
-            this.separator1.Text = "Custom columns";
-            this.separator1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // olvCustomColumns
-            // 
-            this.olvCustomColumns.AllColumns.Add(this.colName);
-            this.olvCustomColumns.AllColumns.Add(this.colValue);
-            this.olvCustomColumns.AlternateRowBackColor = System.Drawing.Color.Empty;
-            this.olvCustomColumns.AlwaysGroupByColumn = null;
-            this.olvCustomColumns.AlwaysGroupBySortOrder = System.Windows.Forms.SortOrder.None;
-            this.olvCustomColumns.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.olvCustomColumns.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.colName,
-            this.colValue});
-            this.olvCustomColumns.FullRowSelect = true;
-            this.olvCustomColumns.HideSelection = false;
-            this.olvCustomColumns.HighlightBackgroundColor = System.Drawing.Color.Empty;
-            this.olvCustomColumns.HighlightForegroundColor = System.Drawing.Color.Empty;
-            this.olvCustomColumns.LastSortColumn = null;
-            this.olvCustomColumns.LastSortOrder = System.Windows.Forms.SortOrder.None;
-            this.olvCustomColumns.Location = new System.Drawing.Point(9, 179);
-            this.olvCustomColumns.Name = "olvCustomColumns";
-            this.olvCustomColumns.ShowGroups = false;
-            this.olvCustomColumns.Size = new System.Drawing.Size(379, 132);
-            this.olvCustomColumns.TabIndex = 7;
-            this.olvCustomColumns.UseCompatibleStateImageBehavior = false;
-            this.olvCustomColumns.View = System.Windows.Forms.View.Details;
-            this.olvCustomColumns.SelectedIndexChanged += new System.EventHandler(this.olvCustomColumns_SelectedIndexChanged);
-            this.olvCustomColumns.DoubleClick += new System.EventHandler(this.olvCustomColumns_DoubleClick);
-            // 
-            // colName
-            // 
-            this.colName.AspectName = "Key";
-            this.colName.Text = "Name";
-            this.colName.Width = 125;
-            // 
-            // colValue
-            // 
-            this.colValue.AspectName = "Value";
-            this.colValue.Text = "Value";
-            this.colValue.Width = 216;
-            // 
-            // sepProxy
-            // 
-            this.sepProxy.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.sepProxy.ForeColor = System.Drawing.SystemColors.ActiveCaption;
-            this.sepProxy.Location = new System.Drawing.Point(3, 93);
-            this.sepProxy.Name = "sepProxy";
-            this.sepProxy.Size = new System.Drawing.Size(375, 23);
-            this.sepProxy.TabIndex = 7;
-            this.sepProxy.Text = "HTTP proxy settings";
-            this.sepProxy.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // commandControl
-            // 
-            this.commandControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.commandControl.Application = null;
-            this.commandControl.Location = new System.Drawing.Point(6, 36);
-            this.commandControl.Margin = new System.Windows.Forms.Padding(0);
-            this.commandControl.Name = "commandControl";
-            this.commandControl.ShowBorder = false;
-            this.commandControl.Size = new System.Drawing.Size(382, 310);
-            this.commandControl.TabIndex = 2;
-            this.commandControl.VariableNames = new string[0];
             // 
             // SettingsDialog
             // 
@@ -639,6 +706,7 @@
             this.tcSettings.ResumeLayout(false);
             this.tpGeneral.ResumeLayout(false);
             this.tpGeneral.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.olvCustomColumns)).EndInit();
             this.tpConnection.ResumeLayout(false);
             this.tpConnection.PerformLayout();
             this.tabPage1.ResumeLayout(false);
@@ -646,7 +714,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.gridGlobalVariables)).EndInit();
             this.tpCommands.ResumeLayout(false);
             this.tpCommands.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.olvCustomColumns)).EndInit();
+            this.tpHotkeys.ResumeLayout(false);
+            this.tpHotkeys.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -695,5 +764,11 @@
         private System.Windows.Forms.Button bRemove;
         private CDBurnerXP.Controls.Separator separator1;
         private System.Windows.Forms.Button bEdit;
+        private System.Windows.Forms.TabPage tpHotkeys;
+        private System.Windows.Forms.Label lblActions;
+        private System.Windows.Forms.ListBox lbActions;
+        private System.Windows.Forms.Button bDoubleClick;
+        private HotkeyTextBox txtHotkeyKeys;
+        private System.Windows.Forms.Label lblHotkey;
     }
 }

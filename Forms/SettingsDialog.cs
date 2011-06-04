@@ -15,10 +15,57 @@ namespace Ketarin.Forms
 {
     public partial class SettingsDialog : Form
     {
+        #region HotkeyTextBox
+
+        /// <summary>
+        /// Represents a TextBox that allows a user to press keys for hotkey assignment.
+        /// </summary>
+        private class HotkeyTextBox : TextBox
+        {
+            private Keys resultKeys = Keys.None;
+
+            public Keys ResultKeys
+            {
+                get { return resultKeys; }
+            }
+
+            public override string Text
+            {
+                get
+                {
+                    return base.Text;
+                }
+                set
+                {
+                    base.Text = value;
+                    this.resultKeys = Keys.None;
+                }
+            }
+
+            protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+            {
+                foreach (Keys key in Hotkey.EndKeys)
+                {
+                    if ((keyData & key) == key)
+                    {
+                        this.Text = Hotkey.GetShortcutString(keyData);
+                        this.resultKeys = keyData;
+                        return true;
+                    }
+                }
+
+                return base.ProcessCmdKey(ref msg, keyData);
+            }
+        }
+
+        #endregion
+
         private int currentSelectedCommandEvent = -1;
         private DataTable globalVarsTable = new DataTable();
         private SerializableDictionary<string, string> cachedCustomColumns = new SerializableDictionary<string, string>();
         private bool customColumnsChanged = false;
+        private List<Hotkey> hotkeys = new List<Hotkey>();
+        private Hotkey currentSelectedHotkey = null;
 
         #region Properties
 
@@ -91,6 +138,8 @@ namespace Ketarin.Forms
             gridGlobalVariables.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
 
             LoadGlobalVariables();
+
+            this.hotkeys = Hotkey.GetHotkeys();
         }
 
         protected override void OnClosed(EventArgs e)
@@ -133,11 +182,14 @@ namespace Ketarin.Forms
             txtProxyUser.Text = Settings.GetValue("ProxyUser", "") as string;
             txtProxyPassword.Text = Settings.GetValue("ProxyPassword", "") as string;
             LoadCommand();
+
+            lbActions.DataSource = hotkeys;
         }
 
         private void bOK_Click(object sender, EventArgs e)
         {
             SaveCurrentCommand();
+            UpdateHotkey();
 
             CustomColumns = this.cachedCustomColumns;
 
@@ -163,6 +215,11 @@ namespace Ketarin.Forms
             WebRequest.DefaultWebProxy = DbManager.Proxy;
 
             SaveGlobalVariables();
+
+            foreach (Hotkey hotkey in this.hotkeys)
+            {
+                Settings.SetValue("Hotkey: " + hotkey.Name, hotkey.Shortcut);
+            }
         }
 
         private void bExport_Click(object sender, EventArgs e)
@@ -380,6 +437,43 @@ namespace Ketarin.Forms
         private void olvCustomColumns_DoubleClick(object sender, EventArgs e)
         {
             bEdit.PerformClick();
+        }
+
+        #endregion
+
+        #region Hotkeys
+
+        private void lbActions_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UpdateHotkey();
+
+            this.currentSelectedHotkey = lbActions.SelectedItem as Hotkey;
+
+            txtHotkeyKeys.Text = this.currentSelectedHotkey.Shortcut;
+        }
+
+        private void bDoubleClick_Click(object sender, EventArgs e)
+        {
+            if (this.currentSelectedHotkey != null)
+            {
+                this.currentSelectedHotkey.SetDoubleclickShortcut(Control.ModifierKeys);
+                this.txtHotkeyKeys.Text = this.currentSelectedHotkey.Shortcut;
+            }
+        }
+
+        private void UpdateHotkey()
+        {
+            if (this.currentSelectedHotkey != null)
+            {
+                if (string.IsNullOrEmpty(txtHotkeyKeys.Text))
+                {
+                    this.currentSelectedHotkey.SetKeyShortcut(Keys.None);
+                }
+                else if (txtHotkeyKeys.ResultKeys != Keys.None)
+                {
+                    this.currentSelectedHotkey.SetKeyShortcut(txtHotkeyKeys.ResultKeys);
+                }
+            }
         }
 
         #endregion
