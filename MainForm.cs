@@ -44,6 +44,7 @@ namespace Ketarin
         private Dictionary<string, string> customColumns = new Dictionary<string, string>();
         private FormWindowState m_PreviousState = FormWindowState.Normal;
         private Dictionary<ApplicationJob, ApplicationJobDialog> openApps = new Dictionary<ApplicationJob, ApplicationJobDialog>();
+        private List<Hotkey> hotkeys = new List<Hotkey>();
 
         public static Bitmap MakeGrayscale(Bitmap original)
         {
@@ -413,6 +414,8 @@ namespace Ketarin
             {
                 m_Updater.BeginCheckForOnlineUpdates(m_Jobs);
             }
+
+            this.hotkeys = Hotkey.GetHotkeys();
         }
 
         private void RebuildCustomColumns()
@@ -449,6 +452,19 @@ namespace Ketarin
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
+            ApplicationJob job = olvJobs.SelectedObject as ApplicationJob;
+
+            // Check for user defined hotkeys
+            foreach (Hotkey hotkey in this.hotkeys)
+            {
+                if (hotkey.IsMatch(keyData))
+                {
+                    ExecuteHotkey(hotkey, job);
+
+                    return true;
+                }
+            }
+
             // Make shortcuts global
             switch (keyData)
             {
@@ -659,6 +675,8 @@ namespace Ketarin
 
         private void RunJobs(ApplicationJob[] jobs, bool onlyCheck, bool forceDownload, bool installUpdated)
         {
+            if (m_Updater.IsBusy) return;
+
             bRun.Text = "Cancel";
             bRun.SplitMenu = null;
             bRun.Image = null;
@@ -677,15 +695,8 @@ namespace Ketarin
 
         private void cmnuOpenFile_Click(object sender, EventArgs e)
         {
-            try
-            {
-                ApplicationJob job = olvJobs.SelectedObject as ApplicationJob;
-                System.Diagnostics.Process.Start(job.CurrentLocation);
-            }
-            catch (Exception)
-            {
-                // ignore if fails for whatever reason
-            }
+            ApplicationJob job = olvJobs.SelectedObject as ApplicationJob;
+            OpenFile(job);
         }
 
         private void cmnuProperties_Click(object sender, EventArgs e)
@@ -703,23 +714,8 @@ namespace Ketarin
 
         private void cmnuOpenFolder_Click(object sender, EventArgs e)
         {
-            try
-            {
-                ApplicationJob job = olvJobs.SelectedObject as ApplicationJob;
-                OpenDownloadFolder(job);
-            }
-            catch (Exception)
-            {
-                // ignore if fails for whatever reason
-            }
-        }
-
-        private static void OpenDownloadFolder(ApplicationJob job)
-        {
-            if (job != null)
-            {
-                System.Diagnostics.Process.Start("explorer", " /select," + job.CurrentLocation);
-            }
+            ApplicationJob job = olvJobs.SelectedObject as ApplicationJob;
+            OpenDownloadFolder(job);
         }
 
         private void mnuInvert_Click(object sender, EventArgs e)
@@ -741,11 +737,7 @@ namespace Ketarin
 
         private void cmnuInstall_Click(object sender, EventArgs e)
         {
-            using (InstallingApplicationsDialog setupDialog = new InstallingApplicationsDialog())
-            {
-                setupDialog.Applications = olvJobs.SelectedApplications;
-                setupDialog.ShowDialog(this);
-            }
+            InstallSelectedApplications();
         }
 
         private void cmnuUpdateInstall_Click(object sender, EventArgs e)
@@ -916,6 +908,16 @@ namespace Ketarin
         {
             ApplicationJob job = olvJobs.SelectedObject as ApplicationJob;
 
+            // Check for custom hotkeys first
+            foreach (Hotkey hotkey in this.hotkeys)
+            {
+                if (hotkey.IsDoubleClickMatch(Control.ModifierKeys))
+                {
+                    ExecuteHotkey(hotkey, job);
+                    return;
+                }
+            }
+
             if (Control.ModifierKeys == Keys.Control)
             {
                 OpenDownloadFolder(job);
@@ -929,13 +931,7 @@ namespace Ketarin
                 bool openWebsite = (bool)Settings.GetValue("OpenWebsiteOnDoubleClick", false);
                 if (openWebsite && !string.IsNullOrEmpty(job.WebsiteUrl))
                 {
-                    try
-                    {
-                        System.Diagnostics.Process.Start(job.ExpandedWebsiteUrl);
-                    }
-                    catch (Exception)
-                    {
-                    }
+                    OpenWebsite(job);
                 }
                 else
                 {
@@ -976,6 +972,20 @@ namespace Ketarin
         }
 
         /// <summary>
+        /// Opens the website of a specified application.
+        /// </summary>
+        private static void OpenWebsite(ApplicationJob job)
+        {
+            try
+            {
+                System.Diagnostics.Process.Start(job.ExpandedWebsiteUrl);
+            }
+            catch (Exception)
+            {
+            }
+        }
+
+        /// <summary>
         /// Edits an application job. It is possible to edit multiple jobs at the same time.
         /// </summary>
         private void EditJob(ApplicationJob job)
@@ -1004,6 +1014,60 @@ namespace Ketarin
                     this.openApps.Remove(job);
                     dialog.Dispose();
                 });
+            }
+        }
+
+        private static void OpenFile(ApplicationJob job)
+        {
+            try
+            {
+                System.Diagnostics.Process.Start(job.CurrentLocation);
+            }
+            catch (Exception)
+            {
+                // ignore if fails for whatever reason
+            }
+        }
+
+        private static void OpenDownloadFolder(ApplicationJob job)
+        {
+            try
+            {
+                if (job != null)
+                {
+                    System.Diagnostics.Process.Start("explorer", " /select," + job.CurrentLocation);
+                }
+            }
+            catch (Exception)
+            {
+                // ignore if fails for whatever reason
+            }
+        }
+
+        private void InstallSelectedApplications()
+        {
+            using (InstallingApplicationsDialog setupDialog = new InstallingApplicationsDialog())
+            {
+                setupDialog.Applications = olvJobs.SelectedApplications;
+                setupDialog.ShowDialog(this);
+            }
+        }
+
+        private void ExecuteHotkey(Hotkey hotkey, ApplicationJob job)
+        {
+            ApplicationJob[] jobs = olvJobs.SelectedApplications;
+
+            switch (hotkey.Name)
+            {
+                case "OpenWebsite": OpenWebsite(job); break;
+                case "Edit": EditJob(job); break;
+                case "Update": RunJobs(jobs, false, false, false); break;
+                case "ForceDownload": RunJobs(jobs, false, true, false); break;
+                case "InstallSelected": InstallSelectedApplications(); break;
+                case "OpenFile": OpenFile(job); break;
+                case "OpenFolder": OpenDownloadFolder(job); break;
+                case "CheckUpdate": RunJobs(jobs, true, false, false); break;
+                case "UpdateAndInstall": RunJobs(jobs, false, false, true); break;
             }
         }
 
@@ -1154,6 +1218,7 @@ namespace Ketarin
                     }
                     olvJobs.RefreshObjects(m_Jobs);
                     UpdateStatusbar();
+                    this.hotkeys = Hotkey.GetHotkeys();
                 }
             }
         }
