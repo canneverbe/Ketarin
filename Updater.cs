@@ -830,6 +830,13 @@ namespace Ketarin
                     LogDialog.Log(job, "Pre-update command returned '2', download skipped");
                     return Status.UpdateAvailable;
                 }
+                else if (exitCode == 3)
+                {
+                    LogDialog.Log(job, "Pre-update command returned '3', external download");
+                    job.LastUpdated = DateTime.Now;
+                    job.Save();
+                    return Status.UpdateSuccessful;
+                }
 
                 // Read all file contents to a temporary location
                 string tmpLocation = Path.GetTempFileName();
