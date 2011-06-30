@@ -821,6 +821,12 @@ namespace Ketarin.Forms
             GoToMatch();
         }
 
+        private void cmnuWrap_Click(object sender, EventArgs e)
+        {
+            rtfContent.WordWrap = !cmnuWrap.Checked;
+            cmnuWrap.Checked = rtfContent.WordWrap;
+        }
+
         private void cmnuBrowser_Click(object sender, EventArgs e)
         {
             cmnuBrowser.Checked = !cmnuBrowser.Checked;

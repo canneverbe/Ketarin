@@ -43,6 +43,8 @@
             this.cmnuGoToMatch = new System.Windows.Forms.MenuItem();
             this.sepPreview = new System.Windows.Forms.MenuItem();
             this.cmnuBrowser = new System.Windows.Forms.MenuItem();
+            this.sepWrap = new System.Windows.Forms.MenuItem();
+            this.cmnuWrap = new System.Windows.Forms.MenuItem();
             this.bLoad = new System.Windows.Forms.Button();
             this.bUseAsStart = new System.Windows.Forms.Button();
             this.bUseAsEnd = new System.Windows.Forms.Button();
@@ -155,7 +157,9 @@
             this.cmnuCopyMatch,
             this.cmnuGoToMatch,
             this.sepPreview,
-            this.cmnuBrowser});
+            this.cmnuBrowser,
+            this.sepWrap,
+            this.cmnuWrap});
             // 
             // cmnuCopy
             // 
@@ -197,6 +201,18 @@
             this.cmnuBrowser.Index = 5;
             this.cmnuBrowser.Text = "&Show in webbrowser";
             this.cmnuBrowser.Click += new System.EventHandler(this.cmnuBrowser_Click);
+            // 
+            // sepWrap
+            // 
+            this.sepWrap.Index = 6;
+            this.sepWrap.Text = "-";
+            // 
+            // cmnuWrap
+            // 
+            this.cmnuWrap.Index = 7;
+            this.cmnuWrap.Shortcut = System.Windows.Forms.Shortcut.CtrlB;
+            this.cmnuWrap.Text = "&Wrap lines";
+            this.cmnuWrap.Click += new System.EventHandler(this.cmnuWrap_Click);
             // 
             // bLoad
             // 
@@ -454,5 +470,7 @@
         private System.Windows.Forms.MenuItem sepPreview;
         private System.Windows.Forms.MenuItem cmnuBrowser;
         private System.Windows.Forms.MenuItem cmnuPaste;
+        private System.Windows.Forms.MenuItem sepWrap;
+        private System.Windows.Forms.MenuItem cmnuWrap;
     }
 }
