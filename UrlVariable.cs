@@ -656,6 +656,9 @@ namespace Ketarin
 
                 case "urldecode":
                     return HttpUtility.UrlDecode(content);
+
+                case "urlencode":
+                    return HttpUtility.UrlEncode(content);
             }
 
             return content;
