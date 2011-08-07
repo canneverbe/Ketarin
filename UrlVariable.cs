@@ -62,6 +62,7 @@ namespace Ketarin
         /// Prevent recursion with the ExpandedUrl property.
         /// </summary>
         private bool m_Expanding = false;
+        private static Random random = new Random();
 
         #region Properties
 
@@ -548,13 +549,40 @@ namespace Ketarin
                         Match match = regex.Match(content);
                         if (parts.Length > 2)
                         {
-                            int matchNum = Conversion.ToInt(parts[2]);
-                            if (matchNum >= 0 && matchNum < match.Groups.Count)
+                            int groupNum = Conversion.ToInt(parts[2]);
+                            if (groupNum >= 0 && groupNum < match.Groups.Count)
                             {
-                                return match.Groups[matchNum].Value;
+                                return match.Groups[groupNum].Value;
                             }
                         }
                         return (match.Success) ? match.Value : string.Empty;
+                    }
+                    catch (ArgumentException ex)
+                    {
+                        LogDialog.Log("Could not process the function 'regex'.", ex);
+                        return string.Empty;
+                    }
+
+                case "regexrandom":
+                    try
+                    {
+                        Regex regex = new Regex(parts[1], RegexOptions.Singleline);
+                        MatchCollection matches = regex.Matches(content);
+                        if (matches.Count > 0)
+                        {
+                            int randomPos = random.Next(0, matches.Count - 1);
+                            int groupNum = (parts.Length > 2) ? Conversion.ToInt(parts[2]) : -1;
+
+                            if (groupNum >= 0 && groupNum < matches[randomPos].Groups.Count)
+                            {
+                                return matches[randomPos].Groups[groupNum].Value;
+                            }
+                            else
+                            {
+                                return matches[randomPos].Value;
+                            }
+                        }
+                        return string.Empty;
                     }
                     catch (ArgumentException ex)
                     {
