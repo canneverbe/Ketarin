@@ -931,16 +931,7 @@ namespace Ketarin
 
             job.Save();
 
-            // Execute a default command?
-            string defaultCommand = Settings.GetValue("DefaultCommand") as string;
-            ScriptType defaultCommandType = Command.ConvertToScriptType(Settings.GetValue("DefaultCommandType") as string);
-            new Command(defaultCommand, defaultCommandType).Execute(job, job.PreviousLocation);
-
-            // Do we need to execute a command after downloading?
-            if (!string.IsNullOrEmpty(job.ExecuteCommand))
-            {
-                new Command(job.ExecuteCommand, job.ExecuteCommandType).Execute(job, job.PreviousLocation);
-            }
+            job.ExecutePostUpdateCommands();
 
             return Status.UpdateSuccessful;
         }

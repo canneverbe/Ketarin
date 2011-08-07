@@ -1963,5 +1963,23 @@ namespace Ketarin
                 instruction.Execute();
             }
         }
+
+        /// <summary>
+        /// Executes the default post-update command and the application
+        /// specific post-update command (if present).
+        /// </summary>
+        public void ExecutePostUpdateCommands()
+        {
+            // Execute a default command?
+            string defaultCommand = Settings.GetValue("DefaultCommand") as string;
+            ScriptType defaultCommandType = Command.ConvertToScriptType(Settings.GetValue("DefaultCommandType") as string);
+            new Command(defaultCommand, defaultCommandType).Execute(this, this.PreviousLocation);
+
+            // Do we need to execute a command after downloading?
+            if (!string.IsNullOrEmpty(this.ExecuteCommand))
+            {
+                new Command(this.ExecuteCommand, this.ExecuteCommandType).Execute(this, this.PreviousLocation);
+            }
+        }
     }
 }
