@@ -38,7 +38,9 @@
             this.menuItem2 = new System.Windows.Forms.MenuItem();
             this.cmnuInstall = new System.Windows.Forms.MenuItem();
             this.cmnuUpdateInstall = new System.Windows.Forms.MenuItem();
-            this.cmnuSepUpdates = new System.Windows.Forms.MenuItem();
+            this.menuItem1 = new System.Windows.Forms.MenuItem();
+            this.cmnuCommands = new System.Windows.Forms.MenuItem();
+            this.menuItem5 = new System.Windows.Forms.MenuItem();
             this.cmnuOpenFile = new System.Windows.Forms.MenuItem();
             this.cmnuOpenFolder = new System.Windows.Forms.MenuItem();
             this.cmnuProperties = new System.Windows.Forms.MenuItem();
@@ -96,6 +98,7 @@
             this.bInstall = new wyDay.Controls.SplitButton();
             this.bRun = new wyDay.Controls.SplitButton();
             this.bAddApplication = new wyDay.Controls.SplitButton();
+            this.cmnuRunPostDownload = new System.Windows.Forms.MenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.olvJobs)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.m_VistaMenu)).BeginInit();
             this.statusBar.SuspendLayout();
@@ -116,7 +119,9 @@
             this.menuItem2,
             this.cmnuInstall,
             this.cmnuUpdateInstall,
-            this.cmnuSepUpdates,
+            this.menuItem1,
+            this.cmnuCommands,
+            this.menuItem5,
             this.cmnuOpenFile,
             this.cmnuOpenFolder,
             this.cmnuProperties,
@@ -169,28 +174,40 @@
             this.cmnuUpdateInstall.Text = "Upda&te and install";
             this.cmnuUpdateInstall.Click += new System.EventHandler(this.cmnuUpdateInstall_Click);
             // 
-            // cmnuSepUpdates
+            // menuItem1
             // 
-            this.cmnuSepUpdates.Index = 6;
-            this.cmnuSepUpdates.Text = "-";
+            this.menuItem1.Index = 6;
+            this.menuItem1.Text = "-";
+            // 
+            // cmnuCommands
+            // 
+            this.cmnuCommands.Index = 7;
+            this.cmnuCommands.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.cmnuRunPostDownload});
+            this.cmnuCommands.Text = "Com&mands";
+            // 
+            // menuItem5
+            // 
+            this.menuItem5.Index = 8;
+            this.menuItem5.Text = "-";
             // 
             // cmnuOpenFile
             // 
             this.cmnuOpenFile.Enabled = false;
-            this.cmnuOpenFile.Index = 7;
+            this.cmnuOpenFile.Index = 9;
             this.cmnuOpenFile.Text = "&Open file";
             this.cmnuOpenFile.Click += new System.EventHandler(this.cmnuOpenFile_Click);
             // 
             // cmnuOpenFolder
             // 
-            this.cmnuOpenFolder.Index = 8;
+            this.cmnuOpenFolder.Index = 10;
             this.cmnuOpenFolder.Text = "Ope&n folder";
             this.cmnuOpenFolder.Click += new System.EventHandler(this.cmnuOpenFolder_Click);
             // 
             // cmnuProperties
             // 
             this.cmnuProperties.Enabled = false;
-            this.cmnuProperties.Index = 9;
+            this.cmnuProperties.Index = 11;
             this.cmnuProperties.Shortcut = System.Windows.Forms.Shortcut.F9;
             this.cmnuProperties.Text = "File propertie&s";
             this.cmnuProperties.Click += new System.EventHandler(this.cmnuProperties_Click);
@@ -198,56 +215,56 @@
             // cmnuRename
             // 
             this.cmnuRename.Enabled = false;
-            this.cmnuRename.Index = 10;
+            this.cmnuRename.Index = 12;
             this.cmnuRename.Shortcut = System.Windows.Forms.Shortcut.F2;
             this.cmnuRename.Text = "&Rename file";
             this.cmnuRename.Click += new System.EventHandler(this.cmnuRename_Click);
             // 
             // menuItem4
             // 
-            this.menuItem4.Index = 11;
+            this.menuItem4.Index = 13;
             this.menuItem4.Text = "-";
             // 
             // cmnuEdit
             // 
             this.cmnuEdit.DefaultItem = true;
             this.cmnuEdit.Enabled = false;
-            this.cmnuEdit.Index = 12;
+            this.cmnuEdit.Index = 14;
             this.cmnuEdit.Text = "&Edit";
             this.cmnuEdit.Click += new System.EventHandler(this.cmnuEdit_Click);
             // 
             // cmnuDelete
             // 
             this.cmnuDelete.Enabled = false;
-            this.cmnuDelete.Index = 13;
+            this.cmnuDelete.Index = 15;
             this.cmnuDelete.Shortcut = System.Windows.Forms.Shortcut.Del;
             this.cmnuDelete.Text = "&Delete";
             this.cmnuDelete.Click += new System.EventHandler(this.cmnuDelete_Click);
             // 
             // cmnuCopy
             // 
-            this.cmnuCopy.Index = 14;
+            this.cmnuCopy.Index = 16;
             this.cmnuCopy.Shortcut = System.Windows.Forms.Shortcut.CtrlC;
             this.cmnuCopy.Text = "&Copy";
             this.cmnuCopy.Click += new System.EventHandler(this.cmnuCopy_Click);
             // 
             // cmnuPaste
             // 
-            this.cmnuPaste.Index = 15;
+            this.cmnuPaste.Index = 17;
             this.cmnuPaste.Shortcut = System.Windows.Forms.Shortcut.CtrlV;
             this.cmnuPaste.Text = "&Paste";
             this.cmnuPaste.Click += new System.EventHandler(this.cmnuPaste_Click);
             // 
             // mnuSelectAll
             // 
-            this.mnuSelectAll.Index = 16;
+            this.mnuSelectAll.Index = 18;
             this.mnuSelectAll.Shortcut = System.Windows.Forms.Shortcut.CtrlA;
             this.mnuSelectAll.Text = "Select &all";
             this.mnuSelectAll.Click += new System.EventHandler(this.mnuSelectAll_Click);
             // 
             // mnuInvert
             // 
-            this.mnuInvert.Index = 17;
+            this.mnuInvert.Index = 19;
             this.mnuInvert.Shortcut = System.Windows.Forms.Shortcut.CtrlI;
             this.mnuInvert.Text = "In&vert selection";
             this.mnuInvert.Click += new System.EventHandler(this.mnuInvert_Click);
@@ -626,6 +643,12 @@
             this.bAddApplication.UseVisualStyleBackColor = true;
             this.bAddApplication.Click += new System.EventHandler(this.sbAddApplication_Click);
             // 
+            // cmnuRunPostDownload
+            // 
+            this.cmnuRunPostDownload.Index = 0;
+            this.cmnuRunPostDownload.Text = "&Run post-download command";
+            this.cmnuRunPostDownload.Click += new System.EventHandler(this.cmnuRunPostDownload_Click);
+            // 
             // MainForm
             // 
             this.AllowDrop = true;
@@ -709,7 +732,6 @@
         private System.Windows.Forms.MenuItem mnuShowStatusBar;
         private System.Windows.Forms.MenuItem mnuInvert;
         private System.Windows.Forms.MenuItem cmnuForceDownload;
-        private System.Windows.Forms.MenuItem cmnuSepUpdates;
         private System.Windows.Forms.MenuItem mnuFind;
         private System.Windows.Forms.MenuItem mnuAutoScroll;
         private System.Windows.Forms.MenuItem cmnuUpdateAndInstall;
@@ -720,6 +742,10 @@
         private System.Windows.Forms.MenuItem cmnuInstall;
         private System.Windows.Forms.MenuItem cmnuUpdateInstall;
         private System.Windows.Forms.MenuItem menuItem2;
+        private System.Windows.Forms.MenuItem menuItem1;
+        private System.Windows.Forms.MenuItem cmnuCommands;
+        private System.Windows.Forms.MenuItem menuItem5;
+        private System.Windows.Forms.MenuItem cmnuRunPostDownload;
     }
 }
 

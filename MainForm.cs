@@ -794,6 +794,7 @@ namespace Ketarin
             cmnuPaste.Enabled = SafeClipboard.IsDataPresent(DataFormats.Text);
             cmnuInstall.Enabled = (!m_Updater.IsBusy);
             cmnuUpdateInstall.Enabled = (!m_Updater.IsBusy);
+            cmnuRunPostDownload.Enabled = job != null && !string.IsNullOrEmpty(job.ExecuteCommand);
         }
 
         private void cmnuRename_Click(object sender, EventArgs e)
@@ -818,6 +819,15 @@ namespace Ketarin
                         MessageBox.Show(this, "The file to be renamed does not exist anymore.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
+            }
+        }
+
+        private void cmnuRunPostDownload_Click(object sender, EventArgs e)
+        {
+            ApplicationJob job = olvJobs.SelectedObject as ApplicationJob;
+            if (job != null)
+            {
+                job.ExecutePostUpdateCommands();
             }
         }
 
