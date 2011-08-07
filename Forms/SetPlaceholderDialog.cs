@@ -104,11 +104,18 @@ namespace Ketarin.Forms
                     placeholderTextBox.Tag = placeholder;
                     placeholderTextBox.Dock = DockStyle.Fill;
                     tblMain.Controls.Add(placeholderTextBox);
-                    placeholderTextBox.Items.AddRange(placeholder.Options.Split('|'));
-                    placeholderTextBox.Text = placeholder.Value ?? string.Empty;
-                    if (placeholderTextBox.Items.Count > 0)
+                    if (string.Compare(placeholder.Options, "{categories}", true) == 0)
                     {
-                        placeholderTextBox.SelectedIndex = 0;
+                        placeholderTextBox.Items.AddRange(DbManager.GetCategories());
+                    }
+                    else
+                    {
+                        placeholderTextBox.Items.AddRange(placeholder.Options.Split('|'));
+                        placeholderTextBox.Text = placeholder.Value ?? string.Empty;
+                        if (placeholderTextBox.Items.Count > 0)
+                        {
+                            placeholderTextBox.SelectedIndex = 0;
+                        }
                     }
                 }
 
