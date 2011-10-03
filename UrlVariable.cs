@@ -21,6 +21,40 @@ namespace Ketarin
     [XmlRoot("UrlVariable")]
     public class UrlVariable : ICloneable
     {
+        #region GlobalUrlVariableCollection
+
+        /// <summary>
+        /// Represents a collection of all global variables.
+        /// </summary>
+        public class GlobalUrlVariableCollection : ApplicationJob.UrlVariableCollection
+        {
+            /// <summary>
+            /// Saves all global variables to the database.
+            /// </summary>
+            public void Save()
+            {
+                using (IDbTransaction transaction = DbManager.Connection.BeginTransaction())
+                {
+                    using (IDbCommand comm = DbManager.Connection.CreateCommand())
+                    {
+                        comm.Transaction = transaction;
+                        comm.CommandText = "DELETE FROM variables WHERE JobGuid = @JobGuid";
+                        comm.Parameters.Add(new SQLiteParameter("@JobGuid", DbManager.FormatGuid(Guid.Empty)));
+                        comm.ExecuteNonQuery();
+                    }
+
+                    foreach (UrlVariable var in UrlVariable.GlobalVariables.Values)
+                    {
+                        var.Save(transaction, Guid.Empty);
+                    }
+
+                    transaction.Commit();
+                }
+            }
+        }
+
+        #endregion
+
         /// <summary>
         /// Defines the possible types for a variable.
         /// </summary>
@@ -57,7 +91,7 @@ namespace Ketarin
         private int m_DownloadCount = 0;
         private bool m_RegexRightToLeft = false;
         private string m_PostData;
-        private static ApplicationJob.UrlVariableCollection m_GlobalVariables = null;
+        private static GlobalUrlVariableCollection m_GlobalVariables = null;
         /// <summary>
         /// Prevent recursion with the ExpandedUrl property.
         /// </summary>
@@ -108,13 +142,13 @@ namespace Ketarin
         /// <summary>
         /// Collection of all global variables.
         /// </summary>
-        public static ApplicationJob.UrlVariableCollection GlobalVariables
+        public static GlobalUrlVariableCollection GlobalVariables
         {
             get
             {
                 if (m_GlobalVariables == null)
                 {
-                    m_GlobalVariables = new ApplicationJob.UrlVariableCollection();
+                    m_GlobalVariables = new GlobalUrlVariableCollection();
 
                     using (SQLiteConnection conn = DbManager.NewConnection)
                     {

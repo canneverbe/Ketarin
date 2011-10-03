@@ -137,8 +137,6 @@ namespace Ketarin.Forms
             gridGlobalVariables.Columns[0].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
             gridGlobalVariables.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
 
-            LoadGlobalVariables();
-
             this.hotkeys = Hotkey.GetHotkeys();
         }
 
@@ -182,6 +180,7 @@ namespace Ketarin.Forms
             txtProxyUser.Text = Settings.GetValue("ProxyUser", "") as string;
             txtProxyPassword.Text = Settings.GetValue("ProxyPassword", "") as string;
             LoadCommand();
+            LoadGlobalVariables();
 
             lbActions.DataSource = hotkeys;
         }
@@ -231,12 +230,7 @@ namespace Ketarin.Forms
                 {
                     try
                     {
-                        using (FileStream stream = File.Open(dialog.FileName, FileMode.Create, FileAccess.Write))
-                        {
-                            // Export settings to XML file
-                            XmlSerializer serializer = new XmlSerializer(typeof(SerializableDictionary<string, string>));
-                            serializer.Serialize(stream, DbManager.GetSettings());
-                        }
+                        SettingsExporter.ExportToFile(dialog.FileName);                     
                     }
                     catch (Exception ex)
                     {
@@ -255,13 +249,8 @@ namespace Ketarin.Forms
                 {
                     try
                     {
-                        using (FileStream stream = File.OpenRead(dialog.FileName))
-                        {
-                            // Import settings from file as dictionary
-                            XmlSerializer serializer = new XmlSerializer(typeof(SerializableDictionary<string, string>));
-                            DbManager.SetSettings(serializer.Deserialize(stream) as Dictionary<string, string>);
-                            LoadSettings();
-                        }
+                        SettingsExporter.ImportFromFile(dialog.FileName);
+                        LoadSettings();
                     }
                     catch (Exception ex)
                     {
@@ -285,36 +274,20 @@ namespace Ketarin.Forms
 
         private void SaveGlobalVariables()
         {
-            using (IDbTransaction transaction = DbManager.Connection.BeginTransaction())
+            UrlVariable.GlobalVariables.Clear();
+
+            foreach (DataRow row in this.globalVarsTable.Rows)
             {
-                using (IDbCommand comm = DbManager.Connection.CreateCommand())
-                {
-                    comm.Transaction = transaction;
-                    comm.CommandText = "DELETE FROM variables WHERE JobGuid = @JobGuid";
-                    comm.Parameters.Add(new SQLiteParameter("@JobGuid", DbManager.FormatGuid(Guid.Empty)));
-                    comm.ExecuteNonQuery();
-                }
+                string varName = row[0] as string;
+                // Skip variables without name
+                if (string.IsNullOrEmpty(varName)) continue;
 
-                UrlVariable.GlobalVariables.Clear();
-
-                foreach (DataRow row in this.globalVarsTable.Rows)
-                {
-                    string varName = row[0] as string;
-                    // Skip variables without name
-                    if (string.IsNullOrEmpty(varName)) continue;
-
-                    UrlVariable newVariable = new UrlVariable(varName, null);
-                    newVariable.CachedContent = row[1] as string;
-                    UrlVariable.GlobalVariables[varName] = newVariable;
-                }
-
-                foreach (UrlVariable var in UrlVariable.GlobalVariables.Values)
-                {
-                    var.Save(transaction, Guid.Empty);
-                }
-
-                transaction.Commit();
+                UrlVariable newVariable = new UrlVariable(varName, null);
+                newVariable.CachedContent = row[1] as string;
+                UrlVariable.GlobalVariables[varName] = newVariable;
             }
+
+            UrlVariable.GlobalVariables.Save();
         }
 
         #endregion
