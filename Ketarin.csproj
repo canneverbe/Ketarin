@@ -291,6 +291,7 @@
     <Compile Include="Scintilla\XpmAdapter.cs" />
     <Compile Include="Scp.cs" />
     <Compile Include="ScriptType.cs" />
+    <Compile Include="SettingsExporter.cs" />
     <Compile Include="SetupInstruction.cs" />
     <Compile Include="m:\CsLib\CDBurnerXP\IO\Debug.cs">
       <Link>CDBurnerXP\Debug.cs</Link>
