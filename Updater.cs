@@ -846,7 +846,7 @@ namespace Ketarin
                 {
                     using (FileStream targetFile = File.Create(tmpLocation))
                     {
-                        int byteCount = 0;
+                        long byteCount = 0;
                         int readBytes = 0;
                         m_Size[job] = fileSize;
 
