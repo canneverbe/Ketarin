@@ -922,9 +922,21 @@ namespace Ketarin
                     }
                     else if (match.Groups.Count >= 2)
                     {
-                        m_CachedContent = match.Groups[1].Value;
+                        // Use first group (except index 0, which is complete match) with a match
+                        for (int i = 1; i < match.Groups.Count; i++)
+                        {
+                            if (match.Groups[i].Success)
+                            {
+                                m_CachedContent = match.Groups[i].Value;
+                                LogDialog.Log(this, value, m_CachedContent);
+                                return Replace(value, match.Groups[i].Value);
+                            }
+                        }
+
+                        // No group matches, use complete match
+                        m_CachedContent = match.Groups[0].Value;
                         LogDialog.Log(this, value, m_CachedContent);
-                        return Replace(value, match.Groups[1].Value);
+                        return Replace(value, match.Groups[0].Value);
                     }
                 }
                 else
