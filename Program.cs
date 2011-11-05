@@ -135,6 +135,7 @@ namespace Ketarin
                     dialog.Applications = appsToInstall;
                     dialog.ShowIcon = true;
                     dialog.ShowInTaskbar = true;
+                    dialog.AutoClose = (arguments["exit"] != null);
                     Application.Run(dialog);
                 }
                 catch (Exception ex)
