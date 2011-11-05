@@ -42,6 +42,15 @@ namespace Ketarin.Forms
         #region Properties
 
         /// <summary>
+        /// Gets or sets if the dialog should be closed after finishing.
+        /// </summary>
+        public bool AutoClose
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
         /// Gets or sets whether or not the applications should be updated before installing.
         /// </summary>
         public bool UpdateApplications
@@ -230,6 +239,11 @@ namespace Ketarin.Forms
             progressBar.Value = 100;
             bCancel.Enabled = true;
             bCancel.Text = "Close";
+
+            if (this.AutoClose)
+            {
+                this.Close();
+            }
         }
 
         private void bCancel_Click(object sender, EventArgs e)
