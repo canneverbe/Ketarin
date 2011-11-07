@@ -128,8 +128,19 @@ namespace Ketarin
                 try
                 {
                     // Install all applications in the given XML
+                    ApplicationJob[] appsToInstall = null;
                     string path = arguments["install"] as string;
-                    ApplicationJob[] appsToInstall = ApplicationJob.ImportFromXml(path);
+                    if (Uri.IsWellFormedUriString(path, UriKind.Absolute))
+                    {
+                        using (WebClient client = new WebClient())
+                        {
+                            appsToInstall = ApplicationJob.ImportFromXmlString(client.DownloadString(path), false);
+                        }
+                    }
+                    else
+                    {
+                        appsToInstall = ApplicationJob.ImportFromXml(path);
+                    }
 
                     InstallingApplicationsDialog dialog = new InstallingApplicationsDialog();
                     dialog.Applications = appsToInstall;
