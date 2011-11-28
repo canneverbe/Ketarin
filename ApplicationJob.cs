@@ -1171,20 +1171,28 @@ namespace Ketarin
                     if (string.IsNullOrEmpty(app.SourceTemplate)) continue;
 
                     XmlDocument templateDoc = new XmlDocument();
-                    templateDoc.LoadXml(app.SourceTemplate);
-                    XmlNodeList sourceTemplateAppElements = templateDoc.GetElementsByTagName("ApplicationJob");
-                    foreach (XmlElement sourceTemplateAppElement in sourceTemplateAppElements)
+                    try
                     {
-                        // Only use templates that have a GUID
-                        if (!string.IsNullOrEmpty(sourceTemplateAppElement.GetAttribute("Guid")))
+                        templateDoc.LoadXml(app.SourceTemplate);
+                        XmlNodeList sourceTemplateAppElements = templateDoc.GetElementsByTagName("ApplicationJob");
+                        foreach (XmlElement sourceTemplateAppElement in sourceTemplateAppElements)
                         {
-                            Guid sourceTemplateGuid = new Guid(sourceTemplateAppElement.GetAttribute("Guid"));
-                            if (sourceTemplateGuid == templateGuid && !AreTemplatesEqual(doc, templateDoc))
+                            // Only use templates that have a GUID
+                            if (!string.IsNullOrEmpty(sourceTemplateAppElement.GetAttribute("Guid")))
                             {
-                                appsToUpdate.Add(app);
-                                break;
+                                Guid sourceTemplateGuid = new Guid(sourceTemplateAppElement.GetAttribute("Guid"));
+                                if (sourceTemplateGuid == templateGuid && !AreTemplatesEqual(doc, templateDoc))
+                                {
+                                    appsToUpdate.Add(app);
+                                    break;
+                                }
                             }
                         }
+                    }
+                    catch (XmlException)
+                    {
+                        // Error loading SourceTemplate
+                        continue;
                     }
                 }
             }
