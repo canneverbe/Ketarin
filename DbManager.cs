@@ -587,7 +587,7 @@ namespace Ketarin
                         {
                             foreach (UrlVariable var in allVariables[job.Guid])
                             {
-                                job.Variables.Add(var.Name, var);
+                                job.Variables[var.Name] = var;
                             }
                         }
 
