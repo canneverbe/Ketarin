@@ -167,7 +167,15 @@ namespace Ketarin.Forms
         /// </summary>
         private void AddAppToList(ApplicationList appList)
         {
-            imlLists.Images.Add(appList.GetIcon());
+            try
+            {
+                imlLists.Images.Add(appList.GetIcon());
+            }
+            catch (ArgumentException)
+            {
+                // Do not fault on invalid icons
+            }
+
             lists.Add(appList);
         }
 
