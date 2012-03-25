@@ -652,6 +652,15 @@ namespace Ketarin
                     {
                         return content;
                     }
+                case "filenameWithoutExtension":
+                    try
+                    {
+                        return Path.GetFileNameWithoutExtension(content);
+                    }
+                    catch
+                    {
+                        return content;
+                    }
                 case "toupper":
                     return content.ToUpper();
                 case "tolower":
