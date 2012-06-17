@@ -26,7 +26,46 @@ namespace Ketarin
                 return id.Groups[1].Value;
             }
 
+            // Consider multi-language versions too
+            Regex regexLang = new Regex(@"filehippo\.com/([a-z]+)/download_([0-9a-z._-]+)/", RegexOptions.IgnoreCase | RegexOptions.Singleline);
+            Match idLang = regexLang.Match(url);
+            if (idLang.Groups.Count > 2)
+            {
+                return idLang.Groups[1].Value + ":" + idLang.Groups[2].Value;
+            }
+
             return url;
+        }
+
+        /// <summary>
+        /// Builds the base download URL for a given file ID.
+        /// </summary>
+        public static string GetFileHippoBaseDownloadUrl(string fileId)
+        {
+            if (fileId.Contains(":"))
+            {
+                string[] splitData = fileId.Split(':');
+                return string.Format("http://www.filehippo.com/{0}/download_{1}/", splitData);
+            }
+            else
+            {
+                return string.Format("http://www.filehippo.com/download_{0}/", fileId);
+            }
+        }
+
+        /// <summary>
+        /// Returns the FileHipp ID without the language identifier.
+        /// </summary>
+        public static string GetFileHippoCleanFileId(string fileId)
+        {
+            if (fileId.Contains(":"))
+            {
+                return fileId.Substring(fileId.IndexOf(':') + 1);
+            }
+            else
+            {
+                return fileId;
+            }
         }
 
         /// <summary>
@@ -36,7 +75,7 @@ namespace Ketarin
         public static string FileHippoDownloadUrl(string fileId, bool avoidBeta)
         {
             fileId = fileId.ToLower();
-            string url = string.Format("http://www.filehippo.com/download_{0}/", fileId);
+            string url = GetFileHippoBaseDownloadUrl(fileId);
 
             // On the overview page, find the link to the
             // download page of the latest version
@@ -49,7 +88,7 @@ namespace Ketarin
                 if (client.ResponseUri != null)
                 {
                     string newId = GetFileHippoIdFromUrl(client.ResponseUri.ToString());
-                    if (!string.IsNullOrEmpty(newId) && fileId != newId && newId != client.ResponseUri.ToString())
+                    if (!string.IsNullOrEmpty(newId) && GetFileHippoBaseDownloadUrl(newId) != url && newId != client.ResponseUri.ToString())
                     {
                         LogDialog.Log(string.Format("FileHippo ID '{0}' has been renamed to '{1}'.", fileId, newId));
                         fileId = newId;
@@ -62,7 +101,7 @@ namespace Ketarin
                 overviewPage = GetNonBetaPageContent(overviewPage, fileId);
             }
 
-            string findUrl = string.Format("/download_{0}/download/", fileId);
+            string findUrl = string.Format("/download_{0}/download/", GetFileHippoCleanFileId(fileId));
             int pos = overviewPage.IndexOf(findUrl);
             if (pos < 0)
             {
@@ -70,7 +109,7 @@ namespace Ketarin
             }
             pos += findUrl.Length;
 
-            string downloadUrl = string.Format("http://www.filehippo.com/download_{0}/download/{1}/", fileId, overviewPage.Substring(pos, 32));
+            string downloadUrl = GetFileHippoBaseDownloadUrl(fileId) + string.Format("download/{0}/", overviewPage.Substring(pos, 32));
             
             // Now on the download page, find the link which redirects to the latest file
             string downloadPage = string.Empty;
@@ -120,7 +159,7 @@ namespace Ketarin
         {
             if (string.IsNullOrEmpty(fileId)) return null;
 
-            string url = string.Format("http://www.filehippo.com/download_{0}/tech/", fileId);
+            string url = GetFileHippoBaseDownloadUrl(fileId) + "tech/";
 
             string overviewPage = string.Empty;
             using (WebClient client = new WebClient())
@@ -151,10 +190,10 @@ namespace Ketarin
 
             using (WebClient client = new WebClient())
             {
-                string mainPage = client.DownloadString("http://www.filehippo.com/download_" + fileId);
+                string mainPage = client.DownloadString(GetFileHippoBaseDownloadUrl(fileId));
 
                 // It will match almost anything from FileHippo (except drivers without version numbers...)
-                Regex regex = new Regex(@"<h1>(.+) [\.\dab]+(\s.+)?<\/h1>", RegexOptions.IgnoreCase);
+                Regex regex = new Regex(@"<meta itemprop=""softwareVersion"" content=""(.+) [\.\dab]+(\s.+)?""/>", RegexOptions.IgnoreCase);
                 Match match = regex.Match(mainPage);
                 if (match.Success)
                 {
@@ -172,8 +211,7 @@ namespace Ketarin
         public static string FileHippoMd5(string fileId, bool avoidBeta)
         {
             fileId = fileId.ToLower();
-            string url = string.Format("http://www.filehippo.com/download_{0}/tech/", fileId);
-
+            string url = GetFileHippoBaseDownloadUrl(fileId) + "tech/";
             
             string md5Page = string.Empty;
             using (WebClient client = new WebClient())
@@ -184,7 +222,7 @@ namespace Ketarin
                 if (client.ResponseUri != null)
                 {
                     string newId = GetFileHippoIdFromUrl(client.ResponseUri.ToString());
-                    if (!string.IsNullOrEmpty(newId) && fileId != newId && newId != client.ResponseUri.ToString())
+                    if (!string.IsNullOrEmpty(newId) && GetFileHippoBaseDownloadUrl(newId) + "tech/" != url && newId != client.ResponseUri.ToString())
                     {
                         return FileHippoMd5(newId, avoidBeta);
                     }
@@ -195,15 +233,16 @@ namespace Ketarin
                     md5Page = GetNonBetaPageContent(md5Page, fileId);
                 }
 
-                string find = "MD5 Checksum:</b></td><td>";
-                int pos = md5Page.IndexOf(find);
-                if (pos < 0) return string.Empty;
-
-                string result = md5Page.Substring(pos + find.Length, 32);
-                Regex validMd5 = new Regex("[0-9a-f]{32}", RegexOptions.IgnoreCase);
-                if (!validMd5.IsMatch(result)) return null;
-
-                return result;
+                Regex validMd5 = new Regex(">([0-9a-f]{32})<", RegexOptions.IgnoreCase);
+                Match match = validMd5.Match(md5Page);
+                if (match.Success)
+                {
+                    return match.Groups[1].Value;
+                }
+                else
+                {
+                    return string.Empty;
+                }
             }
         }
 
@@ -221,7 +260,7 @@ namespace Ketarin
         /// <param name="pageContent">Starting point of an application (most recent version overview page)</param>
         private static string[] FileHippoGetAllVersions(string pageContent, string fileId)
         {
-            Regex regex = new Regex(string.Format(@"/download_{0}/(tech/)?(\d+)", fileId), RegexOptions.IgnoreCase);
+            Regex regex = new Regex(string.Format(@"/download_{0}/(tech/)?(\d+)", GetFileHippoCleanFileId(fileId)), RegexOptions.IgnoreCase);
             MatchCollection matches = regex.Matches(pageContent);
 
             List<string> urls = new List<string>();
@@ -233,7 +272,7 @@ namespace Ketarin
                 {
                     idPart += "/tech";
                 }
-                string url = string.Format("http://filehippo.com/download_{0}/{1}/", idPart, match.Groups[2].Value);
+                string url = GetFileHippoBaseDownloadUrl(idPart) + string.Format("{0}/", match.Groups[2].Value);
                 urls.Add(url);
             }
 
