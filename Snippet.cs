@@ -39,6 +39,19 @@ namespace Ketarin
             if (this.Guid == null || this.Guid == Guid.Empty)
             {
                 this.Guid = Guid.NewGuid();
+
+                // Overwrite existing names
+                using (IDbCommand command = DbManager.Connection.CreateCommand())
+                {
+                    command.CommandText = @"SELECT SnippetGuid FROM snippets WHERE Name = @Name AND Type = @Type";
+                    command.Parameters.Add(new SQLiteParameter("@Name", Name));
+                    command.Parameters.Add(new SQLiteParameter("@Type", Type.ToString()));
+                    string existingGuid = command.ExecuteScalar() as string;
+                    if (existingGuid != null)
+                    {
+                        this.Guid = new Guid(existingGuid);
+                    }
+                }
             }
 
             using (IDbCommand command = DbManager.Connection.CreateCommand())
