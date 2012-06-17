@@ -1223,7 +1223,20 @@ namespace Ketarin
 
                     if (string.IsNullOrEmpty(name) || values.ContainsKey(name)) continue;
 
-                    dialog.AddPlaceHolder(name, element.GetAttribute("options"), element.GetAttribute("value"), element.GetAttribute("variable"));
+                    List<string> options = new List<string>();
+                    if (!string.IsNullOrEmpty(element.GetAttribute("options")))
+                    {
+                        options.AddRange(element.GetAttribute("options").Split('|'));
+                    }
+                    else
+                    {
+                        foreach (XmlElement optionElem in element.GetElementsByTagName("option"))
+                        {
+                            options.Add(optionElem.InnerText);
+                        }
+                    }
+
+                    dialog.AddPlaceHolder(name, options.ToArray(), element.GetAttribute("value"), element.GetAttribute("variable"));
                 }
 
                 // Abort importing if cancelled

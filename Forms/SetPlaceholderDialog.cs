@@ -29,7 +29,7 @@ namespace Ketarin.Forms
         private class Placeholder
         {
             public string Name { get; set; }
-            public string Options { get; set; }
+            public string[] Options { get; set; }
             public string Value { get; set; }
             public string Variable { get; set; }
         }
@@ -88,7 +88,7 @@ namespace Ketarin.Forms
 
                 Control placeholderEditControl = null;
 
-                if (string.IsNullOrEmpty(placeholder.Options))
+                if (placeholder.Options.Length == 0)
                 {
                     TextBox placeholderTextBox = new TextBox();
                     placeholderEditControl = placeholderTextBox;
@@ -104,13 +104,13 @@ namespace Ketarin.Forms
                     placeholderTextBox.Tag = placeholder;
                     placeholderTextBox.Dock = DockStyle.Fill;
                     tblMain.Controls.Add(placeholderTextBox);
-                    if (string.Compare(placeholder.Options, "{categories}", true) == 0)
+                    if (string.Compare(placeholder.Options[0], "{categories}", true) == 0)
                     {
                         placeholderTextBox.Items.AddRange(DbManager.GetCategories());
                     }
                     else
                     {
-                        placeholderTextBox.Items.AddRange(placeholder.Options.Split('|'));
+                        placeholderTextBox.Items.AddRange(placeholder.Options);
                         placeholderTextBox.Text = placeholder.Value ?? string.Empty;
                         if (placeholderTextBox.Items.Count > 0)
                         {
@@ -175,7 +175,7 @@ namespace Ketarin.Forms
         /// <param name="name">Name of placeholder (description)</param>
         /// <param name="options">Options to offer for the placeholder (pipe separated), ComboBox</param>
         /// <param name="value">Default value for the placeholder</param>
-        internal void AddPlaceHolder(string name, string options, string value, string variable)
+        internal void AddPlaceHolder(string name, string[] options, string value, string variable)
         {
             this.placeholders[name] = new Placeholder() { Name = name, Options = options, Value = value, Variable = variable };
         }
