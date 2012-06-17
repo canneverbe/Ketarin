@@ -251,6 +251,11 @@ namespace Ketarin.Forms
             {
                 ScintillaNet.Snippet sciteSnippet = new ScintillaNet.Snippet(snippet.Name.Replace(" ", "-"), snippet.Text);
                 sciteSnippet.Languages.Add(snippet.Type == ScriptType.Batch ? "batch" : "cs");
+                if (txtCode.Snippets.List.Contains(sciteSnippet.Shortcut))
+                {
+                    continue;
+                }
+
                 txtCode.Snippets.List.Add(sciteSnippet);
                 
                 MenuItem newItem = new MenuItem(snippet.Name);
@@ -452,6 +457,8 @@ namespace Ketarin.Forms
 
         private void cmnuCommand_Popup(object sender, EventArgs e)
         {
+            this.LoadSnippets();
+
             bool isEditControl = (((ContextMenu)sender).SourceControl == txtCode);
             sepDefaultCommands.Visible = isEditControl;
             mnuCut.Visible = isEditControl;
