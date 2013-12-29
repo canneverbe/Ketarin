@@ -204,6 +204,7 @@
       <DependentUpon>AddCustomColumnDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\CloseProcessInstructionDialog.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\CloseProcessInstructionDialog.Designer.cs">
       <DependentUpon>CloseProcessInstructionDialog.cs</DependentUpon>
@@ -213,6 +214,7 @@
     <Compile Include="CopyFileInstruction.cs" />
     <Compile Include="CustomSetupInstruction.cs" />
     <Compile Include="Forms\ChooseAppsToInstallDialog.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\ChooseAppsToInstallDialog.Designer.cs">
       <DependentUpon>ChooseAppsToInstallDialog.cs</DependentUpon>
@@ -224,16 +226,19 @@
       <DependentUpon>CommandControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\CopyFileInstructionDialog.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\CopyFileInstructionDialog.Designer.cs">
       <DependentUpon>CopyFileInstructionDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\CustomSetupInstructionDialog.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\CustomSetupInstructionDialog.Designer.cs">
       <DependentUpon>CustomSetupInstructionDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\InstallingApplicationsDialog.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\InstallingApplicationsDialog.Designer.cs">
       <DependentUpon>InstallingApplicationsDialog.cs</DependentUpon>
@@ -248,18 +253,22 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Forms\SelectApplicationDialog.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\SelectApplicationDialog.Designer.cs">
       <DependentUpon>SelectApplicationDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\SetupInstructionListBoxPanel.cs">
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Forms\InstructionBaseDialog.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\InstructionBaseDialog.Designer.cs">
       <DependentUpon>InstructionBaseDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\StartProcessInstructionDialog.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\StartProcessInstructionDialog.Designer.cs">
       <DependentUpon>StartProcessInstructionDialog.cs</DependentUpon>
@@ -368,6 +377,7 @@
     <Compile Include="ApplicationJob.cs" />
     <Compile Include="ApplicationJobError.cs" />
     <Compile Include="ApplicationJobsListView.cs">
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="CommandErrorException.cs" />
     <Compile Include="CommandLineParser.cs" />
@@ -382,16 +392,19 @@
       <DependentUpon>AboutDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\ApplicationDatabaseBaseDialog.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\ApplicationDatabaseBaseDialog.Designer.cs">
       <DependentUpon>ApplicationDatabaseBaseDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\ApplicationJobDialog.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\ApplicationJobDialog.Designer.cs">
       <DependentUpon>ApplicationJobDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\BrowserPreviewDialog.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\BrowserPreviewDialog.Designer.cs">
       <DependentUpon>BrowserPreviewDialog.cs</DependentUpon>
@@ -403,26 +416,31 @@
       <DependentUpon>DeleteApplicationDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\EditVariablesDialog.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\EditVariablesDialog.Designer.cs">
       <DependentUpon>EditVariablesDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\ErrorsDialog.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\ErrorsDialog.Designer.cs">
       <DependentUpon>ErrorsDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\ImportFromDatabaseDialog.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\ImportFromDatabaseDialog.Designer.cs">
       <DependentUpon>ImportFromDatabaseDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\LogDialog.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\LogDialog.Designer.cs">
       <DependentUpon>LogDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\MultilineEditorDialog.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\MultilineEditorDialog.Designer.cs">
       <DependentUpon>MultilineEditorDialog.cs</DependentUpon>
@@ -446,6 +464,7 @@
       <DependentUpon>RenameFileDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\SetPlaceholderDialog.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\SetPlaceholderDialog.Designer.cs">
       <DependentUpon>SetPlaceholderDialog.cs</DependentUpon>
@@ -457,6 +476,7 @@
       <DependentUpon>SettingsDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\SimilarApplicationsDialog.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\SimilarApplicationsDialog.Designer.cs">
       <DependentUpon>SimilarApplicationsDialog.cs</DependentUpon>
@@ -470,6 +490,7 @@
     <Compile Include="ftplib.cs" />
     <Compile Include="IKetarinRpc.cs" />
     <Compile Include="MainForm.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
