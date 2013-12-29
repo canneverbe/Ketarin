@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using System.IO;
+using CDBurnerXP;
 
 namespace Ketarin.Forms
 {
@@ -28,6 +29,7 @@ namespace Ketarin.Forms
             lblVersion.Text = Application.ProductVersion;
             lblDatabasePath.Text = CDBurnerXP.Utility.CompactString(DbManager.DatabasePath, Width - 150, Font, "");
             lblDatabasePath.Url = Path.GetDirectoryName(DbManager.DatabasePath);
+            txtAuthor.Text = Settings.GetValue("AuthorGuid").ToString().ToUpper();
         }
     }
 }

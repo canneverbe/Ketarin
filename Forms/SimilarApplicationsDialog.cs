@@ -42,17 +42,8 @@ namespace Ketarin.Forms
 
         private void txtNewName_TextChanged(object sender, EventArgs e)
         {
-            // Only enable if the name is not empty and not the
-            // exact same as one in the list.
-            foreach (RpcApplication job in olvApplications.Objects)
-            {
-                if (string.Compare(job.ApplicationName, txtNewName.Text, true) == 0)
-                {
-                    bOK.Enabled = false;
-                    return;
-                }
-            }
-
+            // Only enable if the name is not empty. Allow same name,
+            // badd apps should be purged using a voting mechanism.
             bOK.Enabled = !string.IsNullOrEmpty(txtNewName.Text);
         }
 
