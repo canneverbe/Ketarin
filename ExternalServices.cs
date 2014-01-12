@@ -27,7 +27,7 @@ namespace Ketarin
             }
 
             // Consider multi-language versions too
-            Regex regexLang = new Regex(@"filehippo\.com/([a-z]+)/download_([0-9a-z._-]+)/", RegexOptions.IgnoreCase | RegexOptions.Singleline);
+            Regex regexLang = new Regex(@"filehippo\.com/([a-z]+)/download_([0-9a-z._-]+)?", RegexOptions.IgnoreCase | RegexOptions.Singleline);
             Match idLang = regexLang.Match(url);
             if (idLang.Groups.Count > 2)
             {
@@ -173,7 +173,7 @@ namespace Ketarin
             }
 
             // Extract version from title like: <title>Download Firefox 3.0.4 - FileHippo.com</title>
-            Regex regex = new Regex(@"((?<=\>Title:\<.*?\s)(?:\(?\d+?\.\d+?.*?)(?=\</td\>)|(?:[a-z]+?\s\d{1,2},\s\d{4}))", RegexOptions.IgnoreCase);
+            Regex regex = new Regex(@"<meta property=""og:title"" content="".+?(\d[\d\.]+.*)""", RegexOptions.IgnoreCase);
             Match match = regex.Match(overviewPage);
             if (!match.Success) return null;
 
@@ -251,7 +251,7 @@ namespace Ketarin
         /// </summary>
         private static bool FileHippoIsBeta(string pageContent)
         {
-            return pageContent.Contains("filehippo.com/img/beta.gif");
+            return pageContent.Contains("<span class=\"beta-text\">BETA</span>");
         }
 
         /// <summary>
