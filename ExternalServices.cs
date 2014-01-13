@@ -173,7 +173,7 @@ namespace Ketarin
             }
 
             // Extract version from title like: <title>Download Firefox 3.0.4 - FileHippo.com</title>
-            Regex regex = new Regex(@"<meta property=""og:title"" content="".+?(\d[\d\.]+.*)""", RegexOptions.IgnoreCase);
+            Regex regex = new Regex(@"<meta property=""og:title"" content="".+?\s(([\d]+\.|[\d]+\s).*)""", RegexOptions.IgnoreCase);
             Match match = regex.Match(overviewPage);
             if (!match.Success) return null;
 
