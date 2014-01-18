@@ -40,6 +40,7 @@
             this.cmnuUpdateInstall = new System.Windows.Forms.MenuItem();
             this.menuItem1 = new System.Windows.Forms.MenuItem();
             this.cmnuCommands = new System.Windows.Forms.MenuItem();
+            this.cmnuRunPostDownload = new System.Windows.Forms.MenuItem();
             this.menuItem5 = new System.Windows.Forms.MenuItem();
             this.cmnuOpenFile = new System.Windows.Forms.MenuItem();
             this.cmnuOpenFolder = new System.Windows.Forms.MenuItem();
@@ -98,7 +99,6 @@
             this.bInstall = new wyDay.Controls.SplitButton();
             this.bRun = new wyDay.Controls.SplitButton();
             this.bAddApplication = new wyDay.Controls.SplitButton();
-            this.cmnuRunPostDownload = new System.Windows.Forms.MenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.olvJobs)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.m_VistaMenu)).BeginInit();
             this.statusBar.SuspendLayout();
@@ -185,6 +185,12 @@
             this.cmnuCommands.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.cmnuRunPostDownload});
             this.cmnuCommands.Text = "Com&mands";
+            // 
+            // cmnuRunPostDownload
+            // 
+            this.cmnuRunPostDownload.Index = 0;
+            this.cmnuRunPostDownload.Text = "&Run post-download command";
+            this.cmnuRunPostDownload.Click += new System.EventHandler(this.cmnuRunPostDownload_Click);
             // 
             // menuItem5
             // 
@@ -642,12 +648,6 @@
             this.bAddApplication.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.bAddApplication.UseVisualStyleBackColor = true;
             this.bAddApplication.Click += new System.EventHandler(this.sbAddApplication_Click);
-            // 
-            // cmnuRunPostDownload
-            // 
-            this.cmnuRunPostDownload.Index = 0;
-            this.cmnuRunPostDownload.Text = "&Run post-download command";
-            this.cmnuRunPostDownload.Click += new System.EventHandler(this.cmnuRunPostDownload_Click);
             // 
             // MainForm
             // 
