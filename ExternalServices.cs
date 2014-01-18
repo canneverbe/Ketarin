@@ -98,7 +98,7 @@ namespace Ketarin
 
             if (avoidBeta && FileHippoIsBeta(overviewPage))
             {
-                overviewPage = GetNonBetaPageContent(overviewPage, fileId);
+                overviewPage = GetNonBetaPageContent(overviewPage, fileId, false);
             }
 
             string findUrl = string.Format("/download_{0}/download/", GetFileHippoCleanFileId(fileId));
@@ -132,16 +132,23 @@ namespace Ketarin
         /// overview page on FileHippo, which is not a beta version.
         /// </summary>
         /// <param name="overviewPage">Starting point of an application (most recent version overview page)</param>
-        private static string GetNonBetaPageContent(string overviewPage, string fileId)
+        private static string GetNonBetaPageContent(string overviewPage, string fileId, bool techTab)
         {
             // Find the most recent version which is not a beta
             string[] otherUrls = FileHippoGetAllVersions(overviewPage, fileId);
 
             foreach (string altUrl in otherUrls)
             {
+                string downloadUrl = altUrl;
+
+                if (techTab)
+                {
+                    downloadUrl = downloadUrl.Replace(fileId, fileId + "/tech");
+                }
+
                 using (WebClient altUrlDownloader = new WebClient())
                 {
-                    string newPage = altUrlDownloader.DownloadString(altUrl);
+                    string newPage = altUrlDownloader.DownloadString(downloadUrl);
                     if (!FileHippoIsBeta(newPage))
                     {
                         return newPage;
@@ -169,7 +176,7 @@ namespace Ketarin
             
             if (avoidBeta && FileHippoIsBeta(overviewPage))
             {
-                overviewPage = GetNonBetaPageContent(overviewPage, fileId);
+                overviewPage = GetNonBetaPageContent(overviewPage, fileId, false);
             }
 
             // Extract version from title like: <title>Download Firefox 3.0.4 - FileHippo.com</title>
@@ -230,7 +237,7 @@ namespace Ketarin
 
                 if (avoidBeta && FileHippoIsBeta(md5Page))
                 {
-                    md5Page = GetNonBetaPageContent(md5Page, fileId);
+                    md5Page = GetNonBetaPageContent(md5Page, fileId, true);
                 }
 
                 Regex validMd5 = new Regex(">([0-9a-f]{32})<", RegexOptions.IgnoreCase);
@@ -260,6 +267,12 @@ namespace Ketarin
         /// <param name="pageContent">Starting point of an application (most recent version overview page)</param>
         private static string[] FileHippoGetAllVersions(string pageContent, string fileId)
         {
+            string historyUrl = GetFileHippoBaseDownloadUrl(fileId) + "/history/";
+            using (WebClient client = new WebClient())
+            {
+                pageContent = client.DownloadString(historyUrl);
+            }
+
             Regex regex = new Regex(string.Format(@"/download_{0}/(tech/)?(\d+)", GetFileHippoCleanFileId(fileId)), RegexOptions.IgnoreCase);
             MatchCollection matches = regex.Matches(pageContent);
 
