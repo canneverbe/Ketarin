@@ -267,26 +267,56 @@ namespace Ketarin
         /// <param name="pageContent">Starting point of an application (most recent version overview page)</param>
         private static string[] FileHippoGetAllVersions(string pageContent, string fileId)
         {
-            string historyUrl = GetFileHippoBaseDownloadUrl(fileId) + "/history/";
-            using (WebClient client = new WebClient())
-            {
-                pageContent = client.DownloadString(historyUrl);
-            }
-
-            Regex regex = new Regex(string.Format(@"/download_{0}/(tech/)?(\d+)", GetFileHippoCleanFileId(fileId)), RegexOptions.IgnoreCase);
-            MatchCollection matches = regex.Matches(pageContent);
-
+            int historypage = 1;
+            int historypagemax = 1;
             List<string> urls = new List<string>();
+            string FileHippoBaseDownloadUrl = GetFileHippoBaseDownloadUrl(fileId);
 
-            foreach (Match match in matches)
+            while (historypage <= historypagemax)
             {
-                string idPart = fileId;
-                if (!string.IsNullOrEmpty(match.Groups[1].Value))
+                string historyUrl = FileHippoBaseDownloadUrl + "/history/" + historypage + "/";
+                using (WebClient client = new WebClient())
                 {
-                    idPart += "/tech";
+                    pageContent = client.DownloadString(historyUrl);
                 }
-                string url = GetFileHippoBaseDownloadUrl(idPart) + string.Format("{0}/", match.Groups[2].Value);
-                urls.Add(url);
+
+                if (historypage == 1)
+                {
+                    Regex pagecount = new Regex(@"class=""pager-page-link"">(?!.*class=""pager-page-link"">)(\d+)</a>", RegexOptions.IgnoreCase | RegexOptions.Singleline);
+                    Match countmatch = pagecount.Match(pageContent);
+                    if (countmatch.Success)
+                    {
+                        historypagemax = Convert.ToInt32(countmatch.Groups[1].Value);
+                    }
+                }
+
+                Regex regex = new Regex(string.Format(@"/download_{0}/(tech/)?(\d+)", GetFileHippoCleanFileId(fileId)), RegexOptions.IgnoreCase);
+                MatchCollection matches = regex.Matches(pageContent);
+
+                foreach (Match match in matches)
+                {
+                    string idPart = fileId;
+                    if (!string.IsNullOrEmpty(match.Groups[1].Value))
+                    {
+                        idPart += "/tech";
+                    }
+
+                    string url = GetFileHippoBaseDownloadUrl(idPart) + string.Format("{0}/", match.Groups[2].Value);
+                    urls.Add(url);
+                    using (WebClient client = new WebClient())
+                    {
+                        pageContent = client.DownloadString(url);
+                    }
+
+                    if (!FileHippoIsBeta(pageContent))
+                    {
+                        urls = new List<string>();
+                        urls.Add(url);
+                        return urls.ToArray();
+                    }
+                }
+
+                historypage++;
             }
 
             return urls.ToArray();
