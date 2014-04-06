@@ -102,6 +102,7 @@ namespace Ketarin
 
         protected override WebRequest GetWebRequest(Uri address)
         {
+            address = FixNoProtocolUri(address);
             WebRequest request = base.GetWebRequest(address);
 
             HttpWebRequest httpReq = request as HttpWebRequest;
@@ -205,7 +206,7 @@ namespace Ketarin
                     throw;
                 }
 
-                WebRequest nextRequest = WebRequest.CreateDefault(new Uri(nextUrl));
+                WebRequest nextRequest = WebRequest.CreateDefault(FixNoProtocolUri(new Uri(nextUrl)));
                 nextRequest.Timeout = request.Timeout;
                 if (request.Credentials != null)
                 {
@@ -265,6 +266,21 @@ namespace Ketarin
             }
 
             return results.ToArray();
+        }
+
+        /// <summary>
+        /// Not using a protocol will default to file:// which is looking for a network resource.
+        /// This won't work properly in Ketarin's context, but looks like missing protocols
+        /// have become hip http://www.paulirish.com/2010/the-protocol-relative-url/ lately.
+        /// </summary>
+        public static Uri FixNoProtocolUri(Uri urlToRequest)
+        {
+            if (urlToRequest.OriginalString.StartsWith("//") && urlToRequest.Scheme == "file")
+            {
+                return new Uri("http:" + urlToRequest.OriginalString);
+            }
+
+            return urlToRequest;
         }
     }
 }

@@ -696,7 +696,7 @@ namespace Ketarin
             WebRequest.RegisterPrefix("sf", new ScpWebRequestCreator());
             WebRequest.RegisterPrefix("httpx", new HttpxRequestCreator());
 
-            WebRequest req = WebRequest.CreateDefault(urlToRequest);
+            WebRequest req = WebRequest.CreateDefault(WebClient.FixNoProtocolUri(urlToRequest));
             AddRequestToCancel(req);
             req.Timeout = Convert.ToInt32(Settings.GetValue("ConnectionTimeout", 10)) * 1000; // 10 seconds by default
 
