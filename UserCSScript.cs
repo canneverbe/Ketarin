@@ -109,6 +109,7 @@ namespace Ketarin
             options.ReferencedAssemblies.Add(Assembly.GetExecutingAssembly().Location);
             options.ReferencedAssemblies.Add("System.Windows.Forms.dll");
             options.ReferencedAssemblies.Add("System.dll");
+            options.ReferencedAssemblies.Add("System.Xml.dll");
 
             // Compile our code
             CompilerResults result;
