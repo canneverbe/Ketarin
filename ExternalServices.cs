@@ -240,7 +240,7 @@ namespace Ketarin
                     md5Page = GetNonBetaPageContent(md5Page, fileId, true);
                 }
 
-                Regex validMd5 = new Regex(">([0-9a-f]{32})<", RegexOptions.IgnoreCase);
+                Regex validMd5 = new Regex("(?si)md5.+?([0-9a-f]{32})", RegexOptions.IgnoreCase);
                 Match match = validMd5.Match(md5Page);
                 if (match.Success)
                 {
