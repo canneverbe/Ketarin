@@ -735,7 +735,7 @@ namespace Ketarin
                 }
 
                 LogDialog.Log(job, "Using referer: " + (string.IsNullOrEmpty(httpRequest.Referer) ? "(none)" : httpRequest.Referer));
-                httpRequest.UserAgent = (string.IsNullOrEmpty(job.UserAgent) ? WebClient.UserAgent : job.UserAgent);
+                httpRequest.UserAgent = (string.IsNullOrEmpty(job.UserAgent) ? WebClient.UserAgent : job.Variables.ReplaceAllInString(job.UserAgent));
 
                 // PAD files may be compressed
                 httpRequest.AutomaticDecompression = (DecompressionMethods.GZip | DecompressionMethods.Deflate);
