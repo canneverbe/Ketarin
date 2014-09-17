@@ -7,6 +7,8 @@ using CDBurnerXP;
 using System.Web;
 using System.IO;
 using System.Reflection;
+using System.Security.Cryptography.X509Certificates;
+using System.Net.Security;
 
 namespace Ketarin
 {
@@ -74,6 +76,10 @@ namespace Ketarin
         public WebClient()
             : this(null)
         {
+            ServicePointManager.ServerCertificateValidationCallback = delegate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
+            {
+                return true;
+            };
         }
 
         public WebClient(string userAgent)
@@ -151,8 +157,22 @@ namespace Ketarin
             {
                 return base.DownloadString(address);
             }
-            catch (WebException)
+            catch (WebException ex)
             {
+                // If only SSL3 is supported, use this temporarily.
+                if (ex.Status == WebExceptionStatus.SecureChannelFailure && ServicePointManager.SecurityProtocol != SecurityProtocolType.Ssl3)
+                {
+                    ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3;
+                    try
+                    {
+                        return base.DownloadString(address);
+                    }
+                    finally
+                    {
+                        ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls;
+                    }
+                }
+
                 if (!string.IsNullOrEmpty(m_ReplacementString))
                 {
                     return m_ReplacementString;
