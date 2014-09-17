@@ -109,7 +109,7 @@ namespace Ketarin
             }
             pos += findUrl.Length;
 
-            string downloadUrl = GetFileHippoBaseDownloadUrl(fileId) + string.Format("download/{0}/", overviewPage.Substring(pos, 32));
+            string downloadUrl = GetFileHippoBaseDownloadUrl(fileId) + string.Format("download/{0}/", overviewPage.Substring(pos, 32)) + "?direct";
             
             // Now on the download page, find the link which redirects to the latest file
             string downloadPage = string.Empty;
