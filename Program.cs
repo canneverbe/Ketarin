@@ -120,7 +120,24 @@ namespace Ketarin
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("Could export to the specified location: " + ex.Message);
+                    Console.WriteLine("Could not export to the specified location: " + ex.Message);
+                }
+            }
+            else if (arguments["import"] != null)
+            {
+                string sourceFile = arguments["import"] as string;
+                try
+                {
+                    if (arguments["clear"] != null)
+                    {
+                        ApplicationJob.DeleteAll();
+                    }
+
+                    ApplicationJob.ImportFromXml(sourceFile);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Could not import from the specified location: " + ex.Message);
                 }
             }
             else if (arguments["install"] != null)
