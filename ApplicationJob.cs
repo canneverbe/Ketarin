@@ -824,6 +824,31 @@ namespace Ketarin
         }
 
         /// <summary>
+        /// Deletes this job from the database.
+        /// </summary>
+        public static void DeleteAll()
+        {
+            SQLiteTransaction transaction = DbManager.Connection.BeginTransaction();
+
+            using (IDbCommand command = DbManager.Connection.CreateCommand())
+            {
+                command.Transaction = transaction;
+                command.CommandText = @"DELETE FROM jobs";
+                command.ExecuteNonQuery();
+            }
+
+            // Delete variables
+            using (IDbCommand command = DbManager.Connection.CreateCommand())
+            {
+                command.Transaction = transaction;
+                command.CommandText = "DELETE FROM variables";
+                command.ExecuteNonQuery();
+            }
+
+            transaction.Commit();
+        }
+
+        /// <summary>
         /// Updates an application downloaded from the online
         /// database based on the return value of the web service.
         /// </summary>
