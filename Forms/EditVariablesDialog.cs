@@ -149,6 +149,10 @@ namespace Ketarin.Forms
         {
             base.OnLoad(e);
 
+            // Turn off auto word selection (workaround .NET bug).
+            this.rtfContent.AutoWordSelection = true;
+            this.rtfContent.AutoWordSelection = false;
+
             ReloadVariables(true);
 
             if (m_Job != null && !string.IsNullOrEmpty(m_Job.Name))
