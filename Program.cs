@@ -65,6 +65,10 @@ namespace Ketarin
                 return;
             }
 
+            // Initialisation of protocols.
+            WebRequest.RegisterPrefix("sf", new ScpWebRequestCreator());
+            WebRequest.RegisterPrefix("httpx", new HttpxRequestCreator());
+
             // Either run silently on command line...
             if (arguments["silent"] != null)
             {
