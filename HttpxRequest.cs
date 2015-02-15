@@ -21,6 +21,7 @@ namespace Ketarin
 
             CookieContainer cookies = new CookieContainer();
             string accept = null;
+            string referer = null;
 
             NameValueCollection parameters = HttpUtility.ParseQueryString(uri.Query);
 
@@ -39,6 +40,10 @@ namespace Ketarin
                 else if (key.StartsWith("header:accept"))
                 {
                     accept = parameters[key];
+                }
+                else if (key.StartsWith("header:referer"))
+                {
+                    referer = parameters[key];
                 }
             }
 
@@ -61,6 +66,11 @@ namespace Ketarin
             if (accept != null)
             {
                 req.Accept = accept;
+            }
+
+            if (referer != null)
+            {
+                req.Referer = referer;
             }
 
             return req;
