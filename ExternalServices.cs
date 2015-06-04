@@ -258,7 +258,7 @@ namespace Ketarin
         /// </summary>
         private static bool FileHippoIsBeta(string pageContent)
         {
-            return pageContent.Contains("<span class=\"beta-text\">BETA</span>");
+            return pageContent.Contains("<span class=\"beta-text hidden-xs\">BETA</span>");
         }
 
         /// <summary>
