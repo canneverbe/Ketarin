@@ -852,7 +852,7 @@ namespace Ketarin
                             if (m_CancelUpdates) break;
 
                             // Some adjustment for SCP download: Read only up to the max known bytes
-                            int maxRead = (fileSize > 0) ? (int)Math.Min(fileSize - byteCount, 1024) : 1024;
+                            int maxRead = (fileSize > 0) ? (int)Math.Min(fileSize - byteCount, 1024) : 1024 * 1024;
                             if (maxRead == 0) break;
 
                             byte[] buffer = new byte[maxRead];
