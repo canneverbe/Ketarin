@@ -32,6 +32,7 @@ using CDBurnerXP.Forms;
 using System.Xml;
 using System.Xml.Serialization;
 using System.Drawing.Imaging;
+using System.Linq;
 using System.Runtime.InteropServices;
 
 namespace Ketarin
@@ -1150,10 +1151,10 @@ namespace Ketarin
                 return;
             }
 
-            ExportJobs(olvJobs.SelectedObjects);
+            ExportJobs(olvJobs.SelectedObjects.OfType<ApplicationJob>());
         }
 
-        private void ExportJobs(System.Collections.IEnumerable objects)
+        private void ExportJobs(IEnumerable<ApplicationJob> objects)
         {
             using (SaveFileDialog dialog = new SaveFileDialog())
             {

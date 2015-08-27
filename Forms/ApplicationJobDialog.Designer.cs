@@ -48,7 +48,6 @@
             this.txtTarget = new Ketarin.Forms.VariableTextBox();
             this.rbFolder = new System.Windows.Forms.RadioButton();
             this.rbFileName = new System.Windows.Forms.RadioButton();
-            this.chkEnabled = new System.Windows.Forms.CheckBox();
             this.chkDeletePrevious = new System.Windows.Forms.CheckBox();
             this.lblCategory = new System.Windows.Forms.Label();
             this.cboCategory = new Ketarin.Forms.ApplicationJobDialog.NonValidatingComboBox();
@@ -59,7 +58,12 @@
             this.txtSpoofReferer = new Ketarin.Forms.VariableTextBox();
             this.tcApplication = new System.Windows.Forms.TabControl();
             this.tpApplication = new System.Windows.Forms.TabPage();
+            this.chkEnabled = new System.Windows.Forms.CheckBox();
             this.tpSettings = new System.Windows.Forms.TabPage();
+            this.lblHashVariable = new System.Windows.Forms.Label();
+            this.cboHashType = new System.Windows.Forms.ComboBox();
+            this.cboHashVariable = new System.Windows.Forms.ComboBox();
+            this.lblCompareWithHash = new System.Windows.Forms.Label();
             this.txtUserAgent = new Ketarin.Forms.VariableTextBox();
             this.lblUserAgent = new System.Windows.Forms.Label();
             this.sepMiscellaneous = new CDBurnerXP.Controls.Separator();
@@ -142,8 +146,8 @@
             // 
             // txtApplicationName
             // 
-            this.txtApplicationName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtApplicationName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.txtApplicationName.Location = new System.Drawing.Point(101, 7);
             this.txtApplicationName.MaxLength = 255;
             this.txtApplicationName.Name = "txtApplicationName";
@@ -152,18 +156,18 @@
             // 
             // pnlDownloadSource
             // 
-            this.pnlDownloadSource.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.pnlDownloadSource.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.pnlDownloadSource.Controls.Add(this.pnlBeta);
             this.pnlDownloadSource.Controls.Add(this.bVariables);
             this.pnlDownloadSource.Controls.Add(this.txtFileHippoId);
             this.pnlDownloadSource.Controls.Add(this.rbFileHippo);
             this.pnlDownloadSource.Controls.Add(this.txtFixedUrl);
             this.pnlDownloadSource.Controls.Add(this.rbFixedUrl);
-            this.pnlDownloadSource.Location = new System.Drawing.Point(4, 84);
+            this.pnlDownloadSource.Location = new System.Drawing.Point(4, 104);
             this.pnlDownloadSource.Name = "pnlDownloadSource";
             this.pnlDownloadSource.Size = new System.Drawing.Size(365, 80);
-            this.pnlDownloadSource.TabIndex = 3;
+            this.pnlDownloadSource.TabIndex = 6;
             // 
             // pnlBeta
             // 
@@ -231,8 +235,8 @@
             // 
             // txtFileHippoId
             // 
-            this.txtFileHippoId.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtFileHippoId.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.txtFileHippoId.Location = new System.Drawing.Point(95, 31);
             this.txtFileHippoId.Name = "txtFileHippoId";
             this.txtFileHippoId.Size = new System.Drawing.Size(270, 20);
@@ -253,8 +257,8 @@
             // 
             // txtFixedUrl
             // 
-            this.txtFixedUrl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtFixedUrl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.txtFixedUrl.Location = new System.Drawing.Point(95, 2);
             this.txtFixedUrl.Name = "txtFixedUrl";
             this.txtFixedUrl.Size = new System.Drawing.Size(186, 20);
@@ -276,16 +280,16 @@
             // 
             // pnlTarget
             // 
-            this.pnlTarget.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.pnlTarget.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.pnlTarget.Controls.Add(this.bBrowseFile);
             this.pnlTarget.Controls.Add(this.txtTarget);
             this.pnlTarget.Controls.Add(this.rbFolder);
             this.pnlTarget.Controls.Add(this.rbFileName);
-            this.pnlTarget.Location = new System.Drawing.Point(3, 186);
+            this.pnlTarget.Location = new System.Drawing.Point(3, 208);
             this.pnlTarget.Name = "pnlTarget";
             this.pnlTarget.Size = new System.Drawing.Size(365, 53);
-            this.pnlTarget.TabIndex = 9;
+            this.pnlTarget.TabIndex = 8;
             // 
             // bBrowseFile
             // 
@@ -300,8 +304,8 @@
             // 
             // txtTarget
             // 
-            this.txtTarget.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtTarget.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.txtTarget.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.txtTarget.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.FileSystem;
             this.txtTarget.Location = new System.Drawing.Point(4, 26);
@@ -333,18 +337,6 @@
             this.rbFileName.UseVisualStyleBackColor = true;
             this.rbFileName.CheckedChanged += new System.EventHandler(this.rbFileName_CheckedChanged);
             // 
-            // chkEnabled
-            // 
-            this.chkEnabled.AutoSize = true;
-            this.chkEnabled.Checked = true;
-            this.chkEnabled.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkEnabled.Location = new System.Drawing.Point(9, 229);
-            this.chkEnabled.Name = "chkEnabled";
-            this.chkEnabled.Size = new System.Drawing.Size(65, 17);
-            this.chkEnabled.TabIndex = 12;
-            this.chkEnabled.Text = "&Enabled";
-            this.chkEnabled.UseVisualStyleBackColor = true;
-            // 
             // chkDeletePrevious
             // 
             this.chkDeletePrevious.AutoSize = true;
@@ -353,7 +345,7 @@
             this.chkDeletePrevious.Location = new System.Drawing.Point(9, 275);
             this.chkDeletePrevious.Name = "chkDeletePrevious";
             this.chkDeletePrevious.Size = new System.Drawing.Size(218, 17);
-            this.chkDeletePrevious.TabIndex = 14;
+            this.chkDeletePrevious.TabIndex = 17;
             this.chkDeletePrevious.Text = "Always &delete previously downloaded file";
             this.chkDeletePrevious.UseVisualStyleBackColor = true;
             // 
@@ -368,8 +360,8 @@
             // 
             // cboCategory
             // 
-            this.cboCategory.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.cboCategory.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.cboCategory.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
             this.cboCategory.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.cboCategory.FormattingEnabled = true;
@@ -380,22 +372,22 @@
             // 
             // sepTarget
             // 
-            this.sepTarget.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.sepTarget.Location = new System.Drawing.Point(3, 163);
+            this.sepTarget.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.sepTarget.Location = new System.Drawing.Point(3, 185);
             this.sepTarget.Name = "sepTarget";
             this.sepTarget.Size = new System.Drawing.Size(366, 23);
-            this.sepTarget.TabIndex = 20;
+            this.sepTarget.TabIndex = 7;
             this.sepTarget.Text = "Download location";
             // 
             // sepDownload
             // 
-            this.sepDownload.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.sepDownload.Location = new System.Drawing.Point(3, 61);
+            this.sepDownload.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.sepDownload.Location = new System.Drawing.Point(3, 81);
             this.sepDownload.Name = "sepDownload";
             this.sepDownload.Size = new System.Drawing.Size(366, 23);
-            this.sepDownload.TabIndex = 10;
+            this.sepDownload.TabIndex = 5;
             this.sepDownload.Text = "Download source";
             // 
             // chkShareOnline
@@ -404,8 +396,8 @@
             this.chkShareOnline.Location = new System.Drawing.Point(9, 252);
             this.chkShareOnline.Name = "chkShareOnline";
             this.chkShareOnline.Size = new System.Drawing.Size(212, 17);
-            this.chkShareOnline.TabIndex = 13;
-            this.chkShareOnline.Text = "S&hare this application online with others";
+            this.chkShareOnline.TabIndex = 16;
+            this.chkShareOnline.Text = "Sh&are this application online with others";
             this.chkShareOnline.UseVisualStyleBackColor = true;
             // 
             // lblSpoofReferer
@@ -419,8 +411,8 @@
             // 
             // txtSpoofReferer
             // 
-            this.txtSpoofReferer.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtSpoofReferer.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.txtSpoofReferer.Location = new System.Drawing.Point(115, 75);
             this.txtSpoofReferer.Name = "txtSpoofReferer";
             this.txtSpoofReferer.Size = new System.Drawing.Size(253, 20);
@@ -428,9 +420,9 @@
             // 
             // tcApplication
             // 
-            this.tcApplication.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.tcApplication.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.tcApplication.Controls.Add(this.tpApplication);
             this.tcApplication.Controls.Add(this.tpSettings);
             this.tcApplication.Controls.Add(this.tpCommands);
@@ -444,6 +436,7 @@
             // 
             // tpApplication
             // 
+            this.tpApplication.Controls.Add(this.chkEnabled);
             this.tpApplication.Controls.Add(this.lblApplicationName);
             this.tpApplication.Controls.Add(this.txtApplicationName);
             this.tpApplication.Controls.Add(this.lblCategory);
@@ -460,8 +453,24 @@
             this.tpApplication.Text = "Application";
             this.tpApplication.UseVisualStyleBackColor = true;
             // 
+            // chkEnabled
+            // 
+            this.chkEnabled.AutoSize = true;
+            this.chkEnabled.Checked = true;
+            this.chkEnabled.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkEnabled.Location = new System.Drawing.Point(7, 60);
+            this.chkEnabled.Name = "chkEnabled";
+            this.chkEnabled.Size = new System.Drawing.Size(65, 17);
+            this.chkEnabled.TabIndex = 4;
+            this.chkEnabled.Text = "&Enabled";
+            this.chkEnabled.UseVisualStyleBackColor = true;
+            // 
             // tpSettings
             // 
+            this.tpSettings.Controls.Add(this.lblHashVariable);
+            this.tpSettings.Controls.Add(this.cboHashType);
+            this.tpSettings.Controls.Add(this.cboHashVariable);
+            this.tpSettings.Controls.Add(this.lblCompareWithHash);
             this.tpSettings.Controls.Add(this.txtUserAgent);
             this.tpSettings.Controls.Add(this.lblUserAgent);
             this.tpSettings.Controls.Add(this.sepMiscellaneous);
@@ -472,7 +481,6 @@
             this.tpSettings.Controls.Add(this.chkDownloadExclusively);
             this.tpSettings.Controls.Add(this.txtUseVariablesForChanges);
             this.tpSettings.Controls.Add(this.lblUseVariableForChanges);
-            this.tpSettings.Controls.Add(this.chkEnabled);
             this.tpSettings.Controls.Add(this.chkDeletePrevious);
             this.tpSettings.Controls.Add(this.txtSpoofReferer);
             this.tpSettings.Controls.Add(this.chkShareOnline);
@@ -485,10 +493,50 @@
             this.tpSettings.Text = "Advanced settings";
             this.tpSettings.UseVisualStyleBackColor = true;
             // 
+            // lblHashVariable
+            // 
+            this.lblHashVariable.AutoSize = true;
+            this.lblHashVariable.Location = new System.Drawing.Point(205, 203);
+            this.lblHashVariable.Name = "lblHashVariable";
+            this.lblHashVariable.Size = new System.Drawing.Size(48, 13);
+            this.lblHashVariable.TabIndex = 13;
+            this.lblHashVariable.Text = "&Variable:";
+            // 
+            // cboHashType
+            // 
+            this.cboHashType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboHashType.FormattingEnabled = true;
+            this.cboHashType.Items.AddRange(new object[] {
+            "MD5",
+            "CRC32",
+            "SHA1"});
+            this.cboHashType.Location = new System.Drawing.Point(141, 200);
+            this.cboHashType.Name = "cboHashType";
+            this.cboHashType.Size = new System.Drawing.Size(58, 21);
+            this.cboHashType.TabIndex = 12;
+            // 
+            // cboHashVariable
+            // 
+            this.cboHashVariable.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.cboHashVariable.Location = new System.Drawing.Point(259, 200);
+            this.cboHashVariable.Name = "cboHashVariable";
+            this.cboHashVariable.Size = new System.Drawing.Size(109, 21);
+            this.cboHashVariable.TabIndex = 14;
+            // 
+            // lblCompareWithHash
+            // 
+            this.lblCompareWithHash.AutoSize = true;
+            this.lblCompareWithHash.Location = new System.Drawing.Point(6, 203);
+            this.lblCompareWithHash.Name = "lblCompareWithHash";
+            this.lblCompareWithHash.Size = new System.Drawing.Size(129, 13);
+            this.lblCompareWithHash.TabIndex = 11;
+            this.lblCompareWithHash.Text = "Compare with &hash value:";
+            // 
             // txtUserAgent
             // 
-            this.txtUserAgent.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtUserAgent.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.txtUserAgent.Location = new System.Drawing.Point(115, 101);
             this.txtUserAgent.Name = "txtUserAgent";
             this.txtUserAgent.Size = new System.Drawing.Size(253, 20);
@@ -505,18 +553,18 @@
             // 
             // sepMiscellaneous
             // 
-            this.sepMiscellaneous.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.sepMiscellaneous.Location = new System.Drawing.Point(6, 203);
+            this.sepMiscellaneous.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.sepMiscellaneous.Location = new System.Drawing.Point(6, 226);
             this.sepMiscellaneous.Name = "sepMiscellaneous";
             this.sepMiscellaneous.Size = new System.Drawing.Size(363, 23);
-            this.sepMiscellaneous.TabIndex = 11;
+            this.sepMiscellaneous.TabIndex = 15;
             this.sepMiscellaneous.Text = "Miscellaneous";
             // 
             // sepUpdateDetection
             // 
-            this.sepUpdateDetection.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.sepUpdateDetection.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.sepUpdateDetection.Location = new System.Drawing.Point(6, 124);
             this.sepUpdateDetection.Name = "sepUpdateDetection";
             this.sepUpdateDetection.Size = new System.Drawing.Size(363, 23);
@@ -525,8 +573,8 @@
             // 
             // sepDownloads
             // 
-            this.sepDownloads.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.sepDownloads.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.sepDownloads.Location = new System.Drawing.Point(6, 3);
             this.sepDownloads.Name = "sepDownloads";
             this.sepDownloads.Size = new System.Drawing.Size(363, 23);
@@ -565,8 +613,8 @@
             // 
             // txtUseVariablesForChanges
             // 
-            this.txtUseVariablesForChanges.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtUseVariablesForChanges.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.txtUseVariablesForChanges.Location = new System.Drawing.Point(259, 173);
             this.txtUseVariablesForChanges.Name = "txtUseVariablesForChanges";
             this.txtUseVariablesForChanges.Size = new System.Drawing.Size(109, 21);
@@ -593,9 +641,9 @@
             // 
             // tableLayoutCommands
             // 
-            this.tableLayoutCommands.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.tableLayoutCommands.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.tableLayoutCommands.ColumnCount = 1;
             this.tableLayoutCommands.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutCommands.Controls.Add(this.pnlCommandBefore, 0, 0);
@@ -621,9 +669,9 @@
             // 
             // txtExecuteBefore
             // 
-            this.txtExecuteBefore.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtExecuteBefore.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.txtExecuteBefore.Application = null;
             this.txtExecuteBefore.Location = new System.Drawing.Point(0, 16);
             this.txtExecuteBefore.Margin = new System.Windows.Forms.Padding(0);
@@ -655,9 +703,9 @@
             // 
             // txtExecuteAfter
             // 
-            this.txtExecuteAfter.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtExecuteAfter.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.txtExecuteAfter.Application = null;
             this.txtExecuteAfter.Location = new System.Drawing.Point(0, 21);
             this.txtExecuteAfter.Margin = new System.Windows.Forms.Padding(0);
@@ -692,9 +740,9 @@
             // txtNotes
             // 
             this.txtNotes.AcceptsReturn = true;
-            this.txtNotes.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtNotes.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.txtNotes.Location = new System.Drawing.Point(6, 55);
             this.txtNotes.Multiline = true;
             this.txtNotes.Name = "txtNotes";
@@ -713,8 +761,8 @@
             // 
             // txtWebsite
             // 
-            this.txtWebsite.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtWebsite.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.txtWebsite.Location = new System.Drawing.Point(58, 7);
             this.txtWebsite.Name = "txtWebsite";
             this.txtWebsite.Size = new System.Drawing.Size(311, 20);
@@ -798,9 +846,9 @@
             // 
             // instructionsListBox
             // 
-            this.instructionsListBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.instructionsListBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.instructionsListBox.AutoScroll = true;
             this.instructionsListBox.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.instructionsListBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -880,7 +928,6 @@
         private CDBurnerXP.Controls.Separator sepTarget;
         private VariableTextBox txtTarget;
         private System.Windows.Forms.Button bBrowseFile;
-        private System.Windows.Forms.CheckBox chkEnabled;
         private System.Windows.Forms.TextBox txtFileHippoId;
         private System.Windows.Forms.RadioButton rbFileHippo;
         private System.Windows.Forms.CheckBox chkDeletePrevious;
@@ -931,5 +978,10 @@
         private CommandControl txtExecuteBefore;
         private CommandControl txtExecuteAfter;
         private System.Windows.Forms.MenuItem mnuCloseProcess;
+        private System.Windows.Forms.CheckBox chkEnabled;
+        private System.Windows.Forms.Label lblHashVariable;
+        private System.Windows.Forms.ComboBox cboHashType;
+        private System.Windows.Forms.ComboBox cboHashVariable;
+        private System.Windows.Forms.Label lblCompareWithHash;
     }
 }

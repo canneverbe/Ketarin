@@ -93,6 +93,8 @@ namespace Ketarin.Forms
                 bBrowseFile.Enabled = enable;
                 bAddInstruction.Enabled = enable;
                 instructionsListBox.Enabled = enable;
+                this.cboHashVariable.Enabled = enable;
+                this.cboHashType.Enabled = enable;
                 bOK.Enabled = enable;
                 bOK.Visible = enable;
                 bCancel.Text = value ? "Close" : "Cancel";
@@ -106,6 +108,7 @@ namespace Ketarin.Forms
             InitializeComponent();
             AcceptButton = bOK;
             CancelButton = bCancel;
+            this.cboHashType.SelectedIndex = 0;
 
             string defaultXml = Settings.GetValue("DefaultApplication", "") as string;
             if (!string.IsNullOrEmpty(defaultXml))
@@ -179,6 +182,8 @@ namespace Ketarin.Forms
             txtSpoofReferer.SetVariableNames(new string[] { "category", "appname" }, appVarNames.ToArray());
             txtUseVariablesForChanges.Items.Clear();
             txtUseVariablesForChanges.Items.AddRange(appVarNames.ToArray());
+            cboHashVariable.Items.Clear();
+            cboHashVariable.Items.AddRange(appVarNames.ToArray());
 
             foreach (SetupInstructionListBoxPanel panel in this.instructionsListBox.Panels)
             {
@@ -219,6 +224,8 @@ namespace Ketarin.Forms
             rbAlwaysDownload.Checked = (ApplicationJob.DownloadBeta == ApplicationJob.DownloadBetaType.AlwaysDownload);
             txtUseVariablesForChanges.Text = m_ApplicationJob.VariableChangeIndicator;
             chkIgnoreFileInformation.Checked = m_ApplicationJob.IgnoreFileInformation;
+            this.cboHashType.SelectedIndex = (int)m_ApplicationJob.HashType;
+            this.cboHashVariable.Text = m_ApplicationJob.HashVariable;
 
             txtWebsite.Text = m_ApplicationJob.WebsiteUrl;
             txtNotes.Text = m_ApplicationJob.UserNotes;
@@ -260,6 +267,8 @@ namespace Ketarin.Forms
             m_ApplicationJob.VariableChangeIndicator = txtUseVariablesForChanges.Text;
             m_ApplicationJob.CheckForUpdatesOnly = chkCheckForUpdatesOnly.Checked;
             m_ApplicationJob.IgnoreFileInformation = chkIgnoreFileInformation.Checked;
+            m_ApplicationJob.HashType = (HashType)this.cboHashType.SelectedIndex;
+            m_ApplicationJob.HashVariable = this.cboHashVariable.Text;
 
             m_ApplicationJob.WebsiteUrl = txtWebsite.Text;
             m_ApplicationJob.UserNotes = txtNotes.Text;

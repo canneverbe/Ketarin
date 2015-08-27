@@ -375,6 +375,8 @@ namespace Ketarin
             addColumns.Add("WebsiteUrl", "ALTER TABLE jobs ADD WebsiteUrl TEXT");
             addColumns.Add("UserAgent", "ALTER TABLE jobs ADD UserAgent TEXT");
             addColumns.Add("PreviousRelativeLocation", "ALTER TABLE jobs ADD PreviousRelativeLocation TEXT");
+            addColumns.Add("HashType", "ALTER TABLE jobs ADD HashType INTEGER DEFAULT 0");
+            addColumns.Add("HashVariable", "ALTER TABLE jobs ADD HashVariable TEXT");
 
             ExecuteUpgradeQueries(columns, addColumns);
 
