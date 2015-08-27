@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Ketarin</RootNamespace>
     <AssemblyName>Ketarin</AssemblyName>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ApplicationIcon>ketarin.ico</ApplicationIcon>
     <PublishUrl>publish\</PublishUrl>
@@ -33,6 +33,7 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>3.5</OldToolsVersion>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -200,6 +201,7 @@
     <Compile Include="ApplicationList.cs" />
     <Compile Include="CloseProcessInstruction.cs" />
     <Compile Include="Command.cs" />
+    <Compile Include="CrcStream.cs" />
     <Compile Include="Forms\AddCustomColumnDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -212,6 +214,7 @@
     <Compile Include="Forms\CloseProcessInstructionDialog.Designer.cs">
       <DependentUpon>CloseProcessInstructionDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="HashType.cs" />
     <Compile Include="Hotkey.cs" />
     <Compile Include="HttpxRequest.cs" />
     <Compile Include="CopyFileInstruction.cs" />
