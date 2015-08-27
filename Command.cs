@@ -158,6 +158,11 @@ namespace Ketarin
         {
             try
             {
+                if (string.IsNullOrEmpty(text))
+                {
+                    return ScriptType.Batch;
+                }
+
                 return (ScriptType)Enum.Parse(typeof(ScriptType), text);
             }
             catch (Exception)

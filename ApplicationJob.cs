@@ -15,6 +15,7 @@ using CDBurnerXP.IO;
 using Ketarin.Forms;
 using System.Reflection;
 using System.Collections;
+using CodeProject.ReiMiyasaka;
 
 namespace Ketarin
 {
@@ -46,6 +47,7 @@ namespace Ketarin
         private static PropertyInfo[] applicationJobProperties = null;
         private string cachedCurrentLocation = null;
         private string previousLocation = string.Empty;
+        private string hashVariable;
 
         /// <summary>
         /// Cached list of public properties of the type ApplicationJob.
@@ -215,6 +217,20 @@ namespace Ketarin
                 }
             }
         }
+
+        /// <summary>
+        /// Gets or sets the variable which contains the hash value.
+        /// </summary>
+        public string HashVariable
+        {
+            get { return this.hashVariable; }
+            set { this.hashVariable = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the kind of hash used for change detection.
+        /// </summary>
+        public HashType HashType { get; set; }
 
         /// <summary>
         /// Determines whether or not a user can
@@ -1075,7 +1091,7 @@ namespace Ketarin
         /// </summary>
         /// <param name="jobs">The jobs which should be included in the XML</param>
         /// <param name="isTemplate">Determines whether or not a template should be generated. Templates lack a few properties.</param>
-        public static string GetXml(System.Collections.IEnumerable jobs, bool isTemplate, Encoding encoding)
+        public static string GetXml(IEnumerable<ApplicationJob> jobs, bool isTemplate, Encoding encoding)
         {
             XmlSerializer serializer = new XmlSerializer(typeof(ApplicationJob));
             XmlWriterSettings settings = new XmlWriterSettings();
@@ -1497,7 +1513,9 @@ namespace Ketarin
                                                    ExecuteCommandType = @ExecuteCommandType,
                                                    ExecutePreCommandType = @ExecutePreCommandType,
                                                    SourceTemplate = @SourceTemplate,
-                                                   PreviousRelativeLocation = @PreviousRelativeLocation
+                                                   PreviousRelativeLocation = @PreviousRelativeLocation,
+                                                   HashVariable = @HashVariable,
+                                                   HashType = @HashType
                                              WHERE JobGuid = @JobGuid";
 
                             command.Parameters.Add(new SQLiteParameter("@ApplicationName", Name));
@@ -1531,6 +1549,8 @@ namespace Ketarin
                             command.Parameters.Add(new SQLiteParameter("@ExecuteCommandType", ExecuteCommandType));
                             command.Parameters.Add(new SQLiteParameter("@ExecutePreCommandType", ExecutePreCommandType));
                             command.Parameters.Add(new SQLiteParameter("@SourceTemplate", SourceTemplate));
+                            command.Parameters.Add(new SQLiteParameter("@HashVariable", this.hashVariable));
+                            command.Parameters.Add(new SQLiteParameter("@HashType", (int)this.HashType));
 
                             // In order to find files if the drive letter has changed (portable USB stick), also remember the 
                             // last relative location.
@@ -1630,6 +1650,8 @@ namespace Ketarin
             m_FileHippoVersion = reader["FileHippoVersion"] as string;
             m_HttpReferer = reader["HttpReferer"] as string;
             m_VariableChangeIndicator = reader["VariableChangeIndicator"] as string;
+            this.hashVariable = reader["HashVariable"] as string;
+            this.HashType = (HashType)Convert.ToByte(reader["HashType"]);
             m_VariableChangeIndicatorLastContent = reader["VariableChangeIndicatorLastContent"] as string;
             ExclusiveDownload = Convert.ToBoolean(reader["ExclusiveDownload"]);
             CheckForUpdatesOnly = Convert.ToBoolean(reader["CheckForUpdateOnly"]);
@@ -1755,6 +1777,21 @@ namespace Ketarin
             }
         }
 
+        private static string GetSha1OfFile(string filename)
+        {
+            SHA1 hash = new SHA1CryptoServiceProvider();
+            using (FileStream stream = File.OpenRead(filename))
+            {
+                byte[] localSha1 = hash.ComputeHash(stream);
+                StringBuilder result = new StringBuilder(32);
+                for (int i = 0; i < localSha1.Length; i++)
+                {
+                    result.Append(localSha1[i].ToString("X2"));
+                }
+                return result.ToString();
+            }
+        }
+
         /// <summary>
         /// Determines whether or not it is required to (re-)download the file.
         /// </summary>
@@ -1826,6 +1863,35 @@ namespace Ketarin
                 }
             }
 
+            // Check hash value?
+            if (!string.IsNullOrEmpty(this.hashVariable))
+            {
+                string varName = this.hashVariable.Trim('{', '}');
+                string content = this.Variables.ReplaceAllInString("{" + varName + "}");
+                
+                // Compare online hash with actual current hash.
+                if (!string.IsNullOrEmpty(content))
+                {
+                    string currentHash = this.GetFileHash(targetFile);
+                    bool update = (content != currentHash);
+                    if (update)
+                    {
+                        LogDialog.Log(this, string.Format("Update required, hash in {0} has changed from '{1}' to '{2}'", "{" + varName + "}", currentHash, content));
+                    }
+                    else
+                    {
+                        LogDialog.Log(this, string.Format("Update not required, hash in {0} has not changed", "{" + varName + "}"));
+                    }
+
+                    if (update) this.Save();
+                    return update;
+                }
+                else
+                {
+                    LogDialog.Log(this, string.Format("Value of hash variable {0} cannot be determined, ignoring hash as indicator for changes", "{" + varName + "}"));
+                }
+            }
+
             // If using FileHippo, and previous file is available, check MD5
             if (!string.IsNullOrEmpty(m_FileHippoId) && m_SourceType == SourceType.FileHippo && FileExists)
             {
@@ -1871,6 +1937,26 @@ namespace Ketarin
             LogDialog.Log(this, fileSizeMismatch, dateMismatch);
 
             return result;
+        }
+
+        /// <summary>
+        /// Determines the hash value of a certain file.
+        /// </summary>
+        private string GetFileHash(string targetFile)
+        {
+            switch (this.HashType)
+            {
+                case HashType.Md5:
+                    return GetMd5OfFile(targetFile);
+
+                case HashType.Sha1:
+                    return GetSha1OfFile(targetFile);
+
+                case HashType.Crc:
+                    return CrcStream.GetCrcFromFile(targetFile).ToString("X2");
+            }
+
+            return string.Empty;
         }
 
         /// <summary>
