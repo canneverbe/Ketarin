@@ -1867,13 +1867,13 @@ namespace Ketarin
             if (!string.IsNullOrEmpty(this.hashVariable))
             {
                 string varName = this.hashVariable.Trim('{', '}');
-                string content = this.Variables.ReplaceAllInString("{" + varName + "}");
+                string content = this.Variables.ReplaceAllInString("{" + varName + "}").Trim();
                 
                 // Compare online hash with actual current hash.
                 if (!string.IsNullOrEmpty(content))
                 {
                     string currentHash = this.GetFileHash(targetFile);
-                    bool update = (content != currentHash);
+                    bool update = string.Compare(content, currentHash, StringComparison.OrdinalIgnoreCase) != 0;
                     if (update)
                     {
                         LogDialog.Log(this, string.Format("Update required, hash in {0} has changed from '{1}' to '{2}'", "{" + varName + "}", currentHash, content));
@@ -1942,7 +1942,7 @@ namespace Ketarin
         /// <summary>
         /// Determines the hash value of a certain file.
         /// </summary>
-        private string GetFileHash(string targetFile)
+        internal string GetFileHash(string targetFile)
         {
             switch (this.HashType)
             {

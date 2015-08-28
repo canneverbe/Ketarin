@@ -1,19 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Threading;
-using System.Net;
-using System.IO;
 using System.ComponentModel;
-using CDBurnerXP.IO;
-using System.Diagnostics;
-using System.Windows.Forms;
-using CDBurnerXP;
-using System.Security.Cryptography.X509Certificates;
-using System.Net.Security;
-using Ketarin.Forms;
-using CookComputing.XmlRpc;
 using System.Data.SQLite;
+using System.IO;
+using System.Net;
+using System.Threading;
+using CDBurnerXP;
+using CDBurnerXP.IO;
+using CookComputing.XmlRpc;
+using FTPLib;
+using Ketarin.Forms;
 
 namespace Ketarin
 {
@@ -23,22 +19,22 @@ namespace Ketarin
     /// </summary>
     public class Updater
     {
-        private ApplicationJob[] m_Jobs = null;
-        private Dictionary<ApplicationJob, short> m_Progress = null;
-        private Dictionary<ApplicationJob, Status> m_Status = new Dictionary<ApplicationJob,Status>();
-        private Dictionary<ApplicationJob, long> m_Size = new Dictionary<ApplicationJob, long>();
-        private bool m_CancelUpdates = false;
-        private bool m_IsBusy = false;
+        private ApplicationJob[] m_Jobs;
+        private Dictionary<ApplicationJob, short> m_Progress;
+        private readonly Dictionary<ApplicationJob, Status> m_Status = new Dictionary<ApplicationJob,Status>();
+        private readonly Dictionary<ApplicationJob, long> m_Size = new Dictionary<ApplicationJob, long>();
+        private bool m_CancelUpdates;
+        private bool m_IsBusy;
         protected int m_LastProgress = -1;
         private List<ApplicationJobError> m_Errors;
-        private byte m_NoProgressCounter = 0;
-        private bool m_OnlyCheck = false;
+        private byte m_NoProgressCounter;
+        private bool m_OnlyCheck;
         private int m_ThreadLimit = 2;
-        private List<Thread> m_Threads = new List<Thread>();
-        private List<string> m_NoAutoReferer = new List<string>(new string[] { "sourceforge.net" });
-        private CookieContainer m_Cookies = new CookieContainer();
-        private static List<WebRequest> m_Requests = new List<WebRequest>();
-        private bool m_InstallUpdated = false;
+        private readonly List<Thread> m_Threads = new List<Thread>();
+        private readonly List<string> m_NoAutoReferer = new List<string>(new[] { "sourceforge.net" });
+        private readonly CookieContainer m_Cookies = new CookieContainer();
+        private static readonly List<WebRequest> m_Requests = new List<WebRequest>();
+        private bool m_InstallUpdated;
 
         #region Properties
 
@@ -401,7 +397,7 @@ namespace Ketarin
                     // Stop if cancelled
                     if (m_CancelUpdates) break;
 
-                    Thread newThread = new Thread(new ParameterizedThreadStart(StartNewThread));
+                    Thread newThread = new Thread(this.StartNewThread);
                     previousJob = job;
                     newThread.Start(job);
                     m_Threads.Add(newThread);
@@ -518,7 +514,7 @@ namespace Ketarin
                         // Only throw an exception if we have run out of tries
                         if (numTries == maxTries)
                         {
-                            throw ex;
+                            throw;
                         }
                         else
                         {
@@ -650,15 +646,13 @@ namespace Ketarin
                 {
                     return Status.UpdateAvailable;
                 }
-                else
-                {
-                    return Status.NoUpdate;
-                }
+                
+                return Status.NoUpdate;
             }
 
             Uri url = new Uri(downloadUrl);
 
-            return DoDownload(job, url);
+            return this.DoDownload(job, url);
         }
 
         /// <summary>
@@ -682,8 +676,7 @@ namespace Ketarin
                 // .NET bug under special circumstances
             }
 
-            ServicePointManager.ServerCertificateValidationCallback = delegate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
-            {
+            ServicePointManager.ServerCertificateValidationCallback = delegate {
                 return true;
             };
 
@@ -754,7 +747,7 @@ namespace Ketarin
                         if (padJob != null)
                         {
                             job.CachedPadFileVersion = padJob.CachedPadFileVersion;
-                            return DoDownload(job, new Uri(padJob.FixedDownloadUrl));
+                            return this.DoDownload(job, new Uri(padJob.FixedDownloadUrl));
                         }
                     }
                     if (response.ContentType.StartsWith("text/html"))
@@ -844,7 +837,7 @@ namespace Ketarin
                     using (FileStream targetFile = File.Create(tmpLocation))
                     {
                         long byteCount = 0;
-                        int readBytes = 0;
+                        int readBytes;
                         m_Size[job] = fileSize;
 
                         do
@@ -887,6 +880,25 @@ namespace Ketarin
                 catch (ArgumentException)
                 {
                     // Invalid file date. Ignore and just use DateTime.Now
+                }
+
+                // File downloaded. Now let's check if the hash value is valid or abort otherwise!
+                if (!string.IsNullOrEmpty(job.HashVariable))
+                {
+                    string varName = job.HashVariable.Trim('{', '}');
+                    string expectedHash = job.Variables.ReplaceAllInString("{" + varName + "}").Trim();
+
+                    // Compare online hash with actual current hash.
+                    if (!string.IsNullOrEmpty(expectedHash))
+                    {
+                        string currentHash = job.GetFileHash(tmpLocation);
+                        if (string.Compare(expectedHash, currentHash, StringComparison.OrdinalIgnoreCase) != 0)
+                        {
+                            LogDialog.Log(job, string.Format("File downloaded, but hash of downloaded file {0} does not match the expected hash {1}.", currentHash, expectedHash));
+                            File.Delete(tmpLocation);
+                            throw new IOException("Hash verification failed.");
+                        }
+                    }
                 }
 
                 try
@@ -959,10 +971,10 @@ namespace Ketarin
                     // "TYPE I" is never sent unless a file is requested, but is sometimes
                     // required by FTP servers to get the file size (otherwise error 550).
                     // Thus, we use a custom FTP library from code project for this task.
-                    FTPLib.FTP ftpConnection = null;
+                    FTP ftpConnection = null;
                     try
                     {
-                        ftpConnection = new FTPLib.FTP(response.ResponseUri.Host, "anonymous", "ketarin@canneverbe.com");
+                        ftpConnection = new FTP(response.ResponseUri.Host, "anonymous", "ketarin@canneverbe.com");
                         return ftpConnection.GetFileSize(response.ResponseUri.LocalPath);
                     }
                     catch (Exception)
@@ -1031,11 +1043,11 @@ namespace Ketarin
             if (length == -1)
             {
                 // Cannot report progress if no info given
-                if (ProgressChanged != null)
+                if (this.ProgressChanged != null)
                 {
                     if (m_NoProgressCounter > 100) m_NoProgressCounter = 0;
                     m_Progress[job] = m_NoProgressCounter;
-                    ProgressChanged(this, new JobProgressChangedEventArgs(m_NoProgressCounter++, job));
+                    this.ProgressChanged(this, new JobProgressChangedEventArgs(m_NoProgressCounter++, job));
                 }
                 return;
             }
@@ -1045,9 +1057,9 @@ namespace Ketarin
 
             if (progressInt != m_LastProgress)
             {
-                if (ProgressChanged != null)
+                if (this.ProgressChanged != null)
                 {
-                    ProgressChanged(this, new JobProgressChangedEventArgs(progressInt, job));
+                    this.ProgressChanged(this, new JobProgressChangedEventArgs(progressInt, job));
                 }
 
                 m_Progress[job] = progressInt;
