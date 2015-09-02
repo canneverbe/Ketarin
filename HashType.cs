@@ -5,8 +5,9 @@
     /// </summary>
     public enum HashType
     {
-        Md5,
-        Crc,
-        Sha1
+        None = 0,
+        Md5 = 1,
+        Crc = 2,
+        Sha1 = 3
     }
 }

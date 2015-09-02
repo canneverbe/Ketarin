@@ -507,6 +507,7 @@
             this.cboHashType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboHashType.FormattingEnabled = true;
             this.cboHashType.Items.AddRange(new object[] {
+            "(None)",
             "MD5",
             "CRC32",
             "SHA1"});
