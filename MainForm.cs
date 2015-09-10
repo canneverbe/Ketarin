@@ -18,33 +18,32 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
+using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
+using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using Ketarin.Forms;
-using CDBurnerXP.Controls;
-using Microsoft.Win32;
-using System.IO;
-using CDBurnerXP.IO;
 using CDBurnerXP;
+using CDBurnerXP.Controls;
 using CDBurnerXP.Forms;
-using System.Xml;
-using System.Xml.Serialization;
-using System.Drawing.Imaging;
-using System.Linq;
-using System.Runtime.InteropServices;
+using CDBurnerXP.IO;
+using Ketarin.Forms;
+using Ketarin.Properties;
+using Microsoft.Win32;
+using Settings = CDBurnerXP.Settings;
 
 namespace Ketarin
 {
     public partial class MainForm : PersistentForm
     {
-        private ApplicationJob[] m_Jobs = null;
+        private ApplicationJob[] m_Jobs;
         private Updater m_Updater = new Updater();
         // For caching purposes
         private Dictionary<string, string> customColumns = new Dictionary<string, string>();
         private FormWindowState m_PreviousState = FormWindowState.Normal;
-        private Dictionary<ApplicationJob, ApplicationJobDialog> openApps = new Dictionary<ApplicationJob, ApplicationJobDialog>();
+        private readonly Dictionary<ApplicationJob, ApplicationJobDialog> openApps = new Dictionary<ApplicationJob, ApplicationJobDialog>();
         private List<Hotkey> hotkeys = new List<Hotkey>();
 
         public static Bitmap MakeGrayscale(Bitmap original)
@@ -91,7 +90,7 @@ namespace Ketarin
             olvJobs.Initialize();
             olvJobs.ContextMenu = cmnuJobs;
 
-            colName.AspectGetter = delegate(object x) { return ((ApplicationJob)x).Name; };
+            colName.AspectGetter = x => ((ApplicationJob) x).Name;
             colName.GroupKeyGetter = delegate(object x) {
                 ApplicationJob job = (ApplicationJob)x;
                 if (job.Name.Length == 0) return string.Empty;
@@ -158,10 +157,7 @@ namespace Ketarin
                 return (int)m_Updater.GetStatus(job);
             };
 
-            colStatus.AspectGetter = delegate(object x)
-            {
-                return m_Updater.GetStatus(x as ApplicationJob);
-            };
+            colStatus.AspectGetter = x => this.m_Updater.GetStatus(x as ApplicationJob);
             colStatus.AspectToStringConverter = delegate(object x)
             {
                 switch ((Updater.Status)x)
@@ -180,9 +176,9 @@ namespace Ketarin
                 ApplicationJob job = x as ApplicationJob;
                 return job.Variables.ReplaceAllInString(job.TargetPath, DateTime.MinValue, null, true);
             };
-            colTarget.GroupKeyGetter = delegate(object x) { return ((ApplicationJob)x).TargetPath.ToLower(); };
+            colTarget.GroupKeyGetter = x => ((ApplicationJob)x).TargetPath.ToLower();
 
-            colLastUpdate.AspectGetter = delegate(object x) { return ((ApplicationJob)x).LastUpdated; };
+            colLastUpdate.AspectGetter = x => ((ApplicationJob)x).LastUpdated;
             colLastUpdate.AspectToStringFormat = "{0:g}";
             colLastUpdate.GroupKeyGetter = delegate(object x)
             {
@@ -196,29 +192,28 @@ namespace Ketarin
                 return ((DateTime)x).ToString("d");
             };
 
-            colProgress.AspectGetter = delegate(object x) { return m_Updater.GetProgress(x as ApplicationJob); };
+            colProgress.AspectGetter = x => this.m_Updater.GetProgress(x as ApplicationJob);
             colProgress.Renderer = new ApplicationJobsListView.ProgressRenderer(m_Updater, 0, 100);
 
 
-            m_Updater.ProgressChanged += new EventHandler<Updater.JobProgressChangedEventArgs>(m_Updater_ProgressChanged);
-            m_Updater.StatusChanged += new EventHandler<Updater.JobStatusChangedEventArgs>(m_Updater_StatusChanged);
-            m_Updater.UpdateCompleted += new EventHandler(m_Updater_UpdateCompleted);
-            m_Updater.UpdatesFound += new EventHandler<GenericEventArgs<string[]>>(m_Updater_UpdatesFound);
+            m_Updater.ProgressChanged += this.m_Updater_ProgressChanged;
+            m_Updater.StatusChanged += this.m_Updater_StatusChanged;
+            m_Updater.UpdateCompleted += this.m_Updater_UpdateCompleted;
+            m_Updater.UpdatesFound += this.m_Updater_UpdatesFound;
 
-            LogDialog.Instance.VisibleChanged += new EventHandler(delegate(object sender, EventArgs e)
-            {
+            LogDialog.Instance.VisibleChanged += delegate {
                 mnuLog.Checked = LogDialog.Instance.Visible;
-            });
+            };
 
-            this.olvJobs.FilterChanged += new EventHandler(olvJobs_FilterChanged);
+            this.olvJobs.FilterChanged += this.olvJobs_FilterChanged;
 
-            imlStatus.Images.Add(Properties.Resources.Document);
-            imlStatus.Images.Add(Properties.Resources.Import);
-            imlStatus.Images.Add(Properties.Resources.New);
-            imlStatus.Images.Add(Properties.Resources.NewDownloaded);
-            imlStatus.Images.Add(Properties.Resources.Symbol_Check);
-            imlStatus.Images.Add(Properties.Resources.Symbol_Delete);
-            imlStatus.Images.Add(Properties.Resources.Document_Restricted);
+            imlStatus.Images.Add(Resources.Document);
+            imlStatus.Images.Add(Resources.Import);
+            imlStatus.Images.Add(Resources.New);
+            imlStatus.Images.Add(Resources.NewDownloaded);
+            imlStatus.Images.Add(Resources.Symbol_Check);
+            imlStatus.Images.Add(Resources.Symbol_Delete);
+            imlStatus.Images.Add(Resources.Document_Restricted);
         }
 
         #region Updater events
@@ -229,7 +224,7 @@ namespace Ketarin
             {
                 bRun.Text = "&Update all";
                 bRun.SplitMenu = cmuRun;
-                bRun.Image = Properties.Resources.Restart;
+                bRun.Image = Resources.Restart;
                 cmnuImportFile.Enabled = true;
                 mnuExportSelected.Enabled = true;
                 mnuExportAll.Enabled = true;
@@ -922,18 +917,18 @@ namespace Ketarin
             // Check for custom hotkeys first
             foreach (Hotkey hotkey in this.hotkeys)
             {
-                if (hotkey.IsDoubleClickMatch(Control.ModifierKeys))
+                if (hotkey.IsDoubleClickMatch(ModifierKeys))
                 {
                     ExecuteHotkey(hotkey, job);
                     return;
                 }
             }
 
-            if (Control.ModifierKeys == Keys.Control)
+            if (ModifierKeys == Keys.Control)
             {
                 OpenDownloadFolder(job);
             }
-            else if (Control.ModifierKeys == Keys.Alt)
+            else if (ModifierKeys == Keys.Alt)
             {
                 cmnuOpenFile.PerformClick();
             }
@@ -989,7 +984,7 @@ namespace Ketarin
         {
             try
             {
-                System.Diagnostics.Process.Start(job.ExpandedWebsiteUrl);
+                Process.Start(job.ExpandedWebsiteUrl);
             }
             catch (Exception)
             {
@@ -1032,7 +1027,7 @@ namespace Ketarin
         {
             try
             {
-                System.Diagnostics.Process.Start(job.CurrentLocation);
+                Process.Start(job.CurrentLocation);
             }
             catch (Exception)
             {
@@ -1046,7 +1041,7 @@ namespace Ketarin
             {
                 if (job != null)
                 {
-                    System.Diagnostics.Process.Start("explorer", " /select," + job.CurrentLocation);
+                    Process.Start("explorer", " /select," + job.CurrentLocation);
                 }
             }
             catch (Exception)
@@ -1297,7 +1292,7 @@ namespace Ketarin
         {
             try
             {
-                System.Diagnostics.Process.Start("http://wiki.ketarin.org/index.php/Basics");
+                Process.Start("http://wiki.ketarin.org/index.php/Basics");
             }
             catch (Exception)
             {

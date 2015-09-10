@@ -28,6 +28,27 @@ namespace Ketarin
         /// </summary>
         public class GlobalUrlVariableCollection : ApplicationJob.UrlVariableCollection
         {
+            public override string ReplaceAllInString(string value, DateTime fileDate, string filename, bool onlyCachedContent, bool skipGlobalVariables)
+            {
+                // Replace until no further replacements have been made.
+                string valueAfterReplacement = value;
+                string valueBeforeReplacement;
+
+                do
+                {
+                    valueBeforeReplacement = valueAfterReplacement;
+                    valueAfterReplacement = base.ReplaceAllInString(valueAfterReplacement, fileDate, filename, onlyCachedContent, true);
+                }
+                while (valueBeforeReplacement != valueAfterReplacement);
+
+                return valueAfterReplacement;
+            }
+
+            public override string ReplaceAllInString(string value)
+            {
+                return this.ReplaceAllInString(value, DateTime.MinValue, null, false, false);
+            }
+
             /// <summary>
             /// Saves all global variables to the database.
             /// </summary>
@@ -830,7 +851,7 @@ namespace Ketarin
             m_Expanding = true;
             try
             {
-                return m_Parent.ReplaceAllInString(m_TextualContent, fileDate, string.Empty, false);
+                return m_Parent.ReplaceAllInString(this.m_TextualContent, fileDate, string.Empty, false);
             }
             finally
             {

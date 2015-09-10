@@ -395,12 +395,12 @@ namespace Ketarin
                 return (var.DownloadCount > 0);
             }
 
-            public string ReplaceAllInString(string value)
+            public virtual string ReplaceAllInString(string value)
             {
-                return ReplaceAllInString(value, DateTime.MinValue, null, false);
+                return this.ReplaceAllInString(value, DateTime.MinValue, null, false);
             }
 
-            public string ReplaceAllInString(string value, DateTime fileDate, string filename, bool onlyCachedContent)
+            public virtual string ReplaceAllInString(string value, DateTime fileDate, string filename, bool onlyCachedContent, bool skipGlobalVariables = false)
             {
                 if (value == null) return value;
 
@@ -540,9 +540,9 @@ namespace Ketarin
                 }
 
                 // Global variables
-                foreach (UrlVariable var in UrlVariable.GlobalVariables.Values)
+                if (!skipGlobalVariables)
                 {
-                    value = var.ReplaceInString(value, fileDate, true);
+                    value = UrlVariable.GlobalVariables.ReplaceAllInString(value, fileDate, null, true, skipGlobalVariables);
                 }
 
                 return value;
