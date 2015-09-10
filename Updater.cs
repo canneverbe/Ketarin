@@ -883,7 +883,7 @@ namespace Ketarin
                 }
 
                 // File downloaded. Now let's check if the hash value is valid or abort otherwise!
-                if (!string.IsNullOrEmpty(job.HashVariable))
+                if (!string.IsNullOrEmpty(job.HashVariable) && job.HashType != HashType.None)
                 {
                     string varName = job.HashVariable.Trim('{', '}');
                     string expectedHash = job.Variables.ReplaceAllInString("{" + varName + "}").Trim();
