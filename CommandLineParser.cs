@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Specialized;
+﻿using System.Collections.Specialized;
 using System.Text.RegularExpressions;
 
 namespace Ketarin
@@ -10,7 +9,7 @@ namespace Ketarin
     public class CommandlineArguments
     {
         // Variables
-        private StringDictionary Parameters;
+        private readonly StringDictionary Parameters;
 
         // Constructor
         public CommandlineArguments(string[] Args)
@@ -23,7 +22,6 @@ namespace Ketarin
                 RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
             string Parameter = null;
-            string[] Parts;
 
             // Valid parameters forms:
             // {-,/,--}param{ ,=,:}((",')value(",'))
@@ -35,7 +33,7 @@ namespace Ketarin
                 // Look for new parameters (-,/ or --) and a
                 // possible enclosed value (=,:)
 
-                Parts = Spliter.Split(Txt, 3);
+                string[] Parts = Spliter.Split(Txt, 3);
                 switch (Parts.Length)
                 {
                     // Found a value (for the last parameter 

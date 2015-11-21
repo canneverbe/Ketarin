@@ -38,7 +38,7 @@ namespace Ketarin
                     using (IDbCommand command = Connection.CreateCommand())
                     {
                         command.CommandText = "SELECT SettingValue FROM settings WHERE SettingPath = @SettingPath";
-                        command.Parameters.Add(new SQLiteParameter("@SettingPath", GetPath(path)));
+                        command.Parameters.Add(new SQLiteParameter("@SettingPath", this.GetPath(path)));
                         return command.ExecuteScalar();
                     }
                 }
@@ -69,7 +69,7 @@ namespace Ketarin
 
             public void SetValue(string value, params string[] path)
             {
-                SetValueRaw(value, GetPath(path), null);
+                this.SetValueRaw(value, this.GetPath(path), null);
             }
 
             #endregion
@@ -79,15 +79,15 @@ namespace Ketarin
 
         private static SQLiteConnection m_DbConn;
         private static string m_DatabasePath;
-        private static bool m_BackupDone = false;
+        private static bool m_BackupDone;
 
         /// <summary>
         /// Sets a predefined database path if necessary.
         /// </summary>
         public static string DatabasePath
         {
-            set { DbManager.m_DatabasePath = (value == null) ? null : Path.GetFullPath(value); }
-            get { return DbManager.m_DatabasePath; }
+            set { m_DatabasePath = (value == null) ? null : Path.GetFullPath(value); }
+            get { return m_DatabasePath; }
         }
 
         /// <summary>
@@ -138,7 +138,7 @@ namespace Ketarin
                 if (m_DbConn == null)
                 {
                     m_DbConn = NewConnection;
-                    Settings.Provider = new DbManager.SettingsProvider();
+                    Settings.Provider = new SettingsProvider();
 
                     try
                     {
@@ -150,7 +150,7 @@ namespace Ketarin
                     catch (Exception)
                     {
                         // We can ignore these kind of errors
-                        Ketarin.Forms.LogDialog.Log("Creating database backup failed.");
+                        Forms.LogDialog.Log("Creating database backup failed.");
                     }
                 }
                 return m_DbConn;
@@ -171,7 +171,7 @@ namespace Ketarin
                     // Only determine the path once
                     string path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Ketarin\\jobs.db";
                     // Is a special path set in the registry?
-                    string regPath = CDBurnerXP.Settings.GetValue("Ketarin", "DatabasePath", "") as string;
+                    string regPath = Settings.GetValue("Ketarin", "DatabasePath", "") as string;
                     if (!string.IsNullOrEmpty(regPath) && File.Exists(regPath))
                     {
                         path = regPath;
@@ -187,14 +187,13 @@ namespace Ketarin
                     m_DatabasePath = path;
                 }
 
-                SQLiteConnection connection;
                 string connString = string.Format("Data Source={0};Version=3;", m_DatabasePath);
                 if (!File.Exists(m_DatabasePath))
                 {
                     connString += "New=True;";
                 }
 
-                connection = new SQLiteConnection(connString);
+                SQLiteConnection connection = new SQLiteConnection(connString);
                 connection.Open();
 
                 return connection;
@@ -349,45 +348,49 @@ namespace Ketarin
             // Upgrade tables
             List<string> columns = GetColumns("jobs");
 
-            Dictionary<string, string> addColumns = new Dictionary<string, string>();
-            addColumns.Add("ExecuteCommand", "ALTER TABLE jobs ADD ExecuteCommand TEXT");
-            addColumns.Add("ExecuteCommandType", "ALTER TABLE jobs ADD ExecuteCommandType TEXT");
-            addColumns.Add("ExecutePreCommand", "ALTER TABLE jobs ADD ExecutePreCommand TEXT");
-            addColumns.Add("ExecutePreCommandType", "ALTER TABLE jobs ADD ExecutePreCommandType TEXT");
-            addColumns.Add("SourceTemplate", "ALTER TABLE jobs ADD SourceTemplate TEXT");
-            addColumns.Add("Category", "ALTER TABLE jobs ADD Category TEXT");
-            addColumns.Add("JobGuid", "ALTER TABLE jobs ADD JobGuid TEXT");
-            addColumns.Add("DownloadDate", "ALTER TABLE jobs ADD DownloadDate Date");
-            addColumns.Add("CanBeShared", "ALTER TABLE jobs ADD CanBeShared INTEGER DEFAULT 1");
-            addColumns.Add("ExclusiveDownload", "ALTER TABLE jobs ADD ExclusiveDownload INTEGER DEFAULT 0");
-            addColumns.Add("CheckForUpdateOnly", "ALTER TABLE jobs ADD CheckForUpdateOnly INTEGER DEFAULT 0");
-            addColumns.Add("ShareApplication", "ALTER TABLE jobs ADD ShareApplication INTEGER DEFAULT 0");
-            addColumns.Add("HttpReferer", "ALTER TABLE jobs ADD HttpReferer TEXT");
-            addColumns.Add("FileHippoVersion", "ALTER TABLE jobs ADD FileHippoVersion TEXT");
-            addColumns.Add("DownloadBeta", "ALTER TABLE jobs ADD DownloadBeta INTEGER DEFAULT 0");
-            addColumns.Add("VariableChangeIndicator", "ALTER TABLE jobs ADD VariableChangeIndicator TEXT");
-            addColumns.Add("VariableChangeIndicatorLastContent", "ALTER TABLE jobs ADD VariableChangeIndicatorLastContent TEXT");
-            addColumns.Add("CachedPadFileVersion", "ALTER TABLE jobs ADD CachedPadFileVersion TEXT");
-            addColumns.Add("LastFileSize", "ALTER TABLE jobs ADD LastFileSize INTEGER DEFAULT 0");
-            addColumns.Add("LastFileDate", "ALTER TABLE jobs ADD LastFileDate Date");
-            addColumns.Add("IgnoreFileInformation", "ALTER TABLE jobs ADD IgnoreFileInformation INTEGER DEFAULT 0");
-            addColumns.Add("UserNotes", "ALTER TABLE jobs ADD UserNotes TEXT");
-            addColumns.Add("WebsiteUrl", "ALTER TABLE jobs ADD WebsiteUrl TEXT");
-            addColumns.Add("UserAgent", "ALTER TABLE jobs ADD UserAgent TEXT");
-            addColumns.Add("PreviousRelativeLocation", "ALTER TABLE jobs ADD PreviousRelativeLocation TEXT");
-            addColumns.Add("HashType", "ALTER TABLE jobs ADD HashType INTEGER DEFAULT 0");
-            addColumns.Add("HashVariable", "ALTER TABLE jobs ADD HashVariable TEXT");
+            Dictionary<string, string> addColumns = new Dictionary<string, string>
+            {
+                {"ExecuteCommand", "ALTER TABLE jobs ADD ExecuteCommand TEXT"},
+                {"ExecuteCommandType", "ALTER TABLE jobs ADD ExecuteCommandType TEXT"},
+                {"ExecutePreCommand", "ALTER TABLE jobs ADD ExecutePreCommand TEXT"},
+                {"ExecutePreCommandType", "ALTER TABLE jobs ADD ExecutePreCommandType TEXT"},
+                {"SourceTemplate", "ALTER TABLE jobs ADD SourceTemplate TEXT"},
+                {"Category", "ALTER TABLE jobs ADD Category TEXT"},
+                {"JobGuid", "ALTER TABLE jobs ADD JobGuid TEXT"},
+                {"DownloadDate", "ALTER TABLE jobs ADD DownloadDate Date"},
+                {"CanBeShared", "ALTER TABLE jobs ADD CanBeShared INTEGER DEFAULT 1"},
+                {"ExclusiveDownload", "ALTER TABLE jobs ADD ExclusiveDownload INTEGER DEFAULT 0"},
+                {"CheckForUpdateOnly", "ALTER TABLE jobs ADD CheckForUpdateOnly INTEGER DEFAULT 0"},
+                {"ShareApplication", "ALTER TABLE jobs ADD ShareApplication INTEGER DEFAULT 0"},
+                {"HttpReferer", "ALTER TABLE jobs ADD HttpReferer TEXT"},
+                {"FileHippoVersion", "ALTER TABLE jobs ADD FileHippoVersion TEXT"},
+                {"DownloadBeta", "ALTER TABLE jobs ADD DownloadBeta INTEGER DEFAULT 0"},
+                {"VariableChangeIndicator", "ALTER TABLE jobs ADD VariableChangeIndicator TEXT"},
+                {"VariableChangeIndicatorLastContent", "ALTER TABLE jobs ADD VariableChangeIndicatorLastContent TEXT"},
+                {"CachedPadFileVersion", "ALTER TABLE jobs ADD CachedPadFileVersion TEXT"},
+                {"LastFileSize", "ALTER TABLE jobs ADD LastFileSize INTEGER DEFAULT 0"},
+                {"LastFileDate", "ALTER TABLE jobs ADD LastFileDate Date"},
+                {"IgnoreFileInformation", "ALTER TABLE jobs ADD IgnoreFileInformation INTEGER DEFAULT 0"},
+                {"UserNotes", "ALTER TABLE jobs ADD UserNotes TEXT"},
+                {"WebsiteUrl", "ALTER TABLE jobs ADD WebsiteUrl TEXT"},
+                {"UserAgent", "ALTER TABLE jobs ADD UserAgent TEXT"},
+                {"PreviousRelativeLocation", "ALTER TABLE jobs ADD PreviousRelativeLocation TEXT"},
+                {"HashType", "ALTER TABLE jobs ADD HashType INTEGER DEFAULT 0"},
+                {"HashVariable", "ALTER TABLE jobs ADD HashVariable TEXT"}
+            };
 
             ExecuteUpgradeQueries(columns, addColumns);
 
             columns = GetColumns("variables");
-            addColumns = new Dictionary<string, string>();
-            addColumns.Add("RegularExpression", "ALTER TABLE variables ADD RegularExpression TEXT");
-            addColumns.Add("RegexRightToLeft", "ALTER TABLE variables ADD RegexRightToLeft INTEGER DEFAULT 0");
-            addColumns.Add("CachedContent", "ALTER TABLE variables ADD CachedContent TEXT");
-            addColumns.Add("VariableType", "ALTER TABLE variables ADD VariableType INTEGER DEFAULT 0");
-            addColumns.Add("TextualContent", "ALTER TABLE variables ADD TextualContent TEXT");
-            addColumns.Add("PostData", "ALTER TABLE variables ADD PostData TEXT");
+            addColumns = new Dictionary<string, string>
+            {
+                {"RegularExpression", "ALTER TABLE variables ADD RegularExpression TEXT"},
+                {"RegexRightToLeft", "ALTER TABLE variables ADD RegexRightToLeft INTEGER DEFAULT 0"},
+                {"CachedContent", "ALTER TABLE variables ADD CachedContent TEXT"},
+                {"VariableType", "ALTER TABLE variables ADD VariableType INTEGER DEFAULT 0"},
+                {"TextualContent", "ALTER TABLE variables ADD TextualContent TEXT"},
+                {"PostData", "ALTER TABLE variables ADD PostData TEXT"}
+            };
 
             ExecuteUpgradeQueries(columns, addColumns);
 
@@ -628,7 +631,7 @@ namespace Ketarin
                 using (IDbCommand command = Connection.CreateCommand())
                 {
                     command.CommandText = @"SELECT * FROM variables WHERE JobGuid = @JobGuid";
-                    command.Parameters.Add(new SQLiteParameter("@JobGuid", DbManager.FormatGuid(appGuid)));
+                    command.Parameters.Add(new SQLiteParameter("@JobGuid", FormatGuid(appGuid)));
                     using (IDataReader reader = command.ExecuteReader())
                     {
                         while (reader.Read())
@@ -658,7 +661,7 @@ namespace Ketarin
         /// </summary>
         public static bool ApplicationExists(IDbConnection conn, Guid appGuid)
         {
-            if (appGuid == null || appGuid == Guid.Empty) return false;
+            if (appGuid == Guid.Empty) return false;
 
             using (IDbCommand command = conn.CreateCommand())
             {
@@ -771,7 +774,7 @@ namespace Ketarin
                 using (IDbCommand command = Connection.CreateCommand())
                 {
                     command.CommandText = "SELECT * FROM setuplists_applications WHERE ListGuid = @ListGuid";
-                    command.Parameters.Add(new SQLiteParameter("@ListGuid", DbManager.FormatGuid(list.Guid)));
+                    command.Parameters.Add(new SQLiteParameter("@ListGuid", FormatGuid(list.Guid)));
 
                     using (IDataReader reader = command.ExecuteReader())
                     {

@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.CodeDom.Compiler;
 using System.Reflection;
 using System.Windows.Forms;
+using Microsoft.CSharp;
 
 namespace Ketarin
 {
@@ -91,12 +90,16 @@ namespace Ketarin
             // This class implements the 'CodeDomProvider' class as its base. All of the current .Net languages (at least Microsoft ones)
             // come with thier own implemtation, thus you can allow the user to use the language of thier choice (though i recommend that
             // you don't allow the use of c++, which is too volatile for scripting use - memory leaks anyone?)
-            Microsoft.CSharp.CSharpCodeProvider csProvider = new Microsoft.CSharp.CSharpCodeProvider();
+            CSharpCodeProvider csProvider = new CSharpCodeProvider();
 
             // Setup our options
-            CompilerParameters options = new CompilerParameters();
-            options.GenerateExecutable = false; // we want a Dll (or "Class Library" as its called in .Net)
-            options.GenerateInMemory = true; // Saves us from deleting the Dll when we are done with it, though you could set this to false and save start-up time by next time by not having to re-compile
+            CompilerParameters options = new CompilerParameters
+            {
+                GenerateExecutable = false,
+                GenerateInMemory = true
+            };
+            // we want a Dll (or "Class Library" as its called in .Net)
+            // Saves us from deleting the Dll when we are done with it, though you could set this to false and save start-up time by next time by not having to re-compile
             // And set any others you want, there a quite a few, take some time to look through them all and decide which fit your application best!
 
             // Add any references you want the users to be able to access, be warned that giving them access to some classes can allow
@@ -112,8 +115,7 @@ namespace Ketarin
             options.ReferencedAssemblies.Add("System.Xml.dll");
 
             // Compile our code
-            CompilerResults result;
-            result = csProvider.CompileAssemblyFromSource(options, codeTemplate.Replace("{0}", this.Code));
+            CompilerResults result = csProvider.CompileAssemblyFromSource(options, codeTemplate.Replace("{0}", this.Code));
 
             errors = result.Errors;
             return errors.HasErrors ? null : result.CompiledAssembly;
@@ -141,7 +143,7 @@ namespace Ketarin
                     // Get the constructor for the current type
                     // you can also specify what creation parameter types you want to pass to it,
                     // so you could possibly pass in data it might need, or a class that it can use to query the host application
-                    ConstructorInfo constructor = type.GetConstructor(System.Type.EmptyTypes);
+                    ConstructorInfo constructor = type.GetConstructor(Type.EmptyTypes);
                     if (constructor != null && constructor.IsPublic)
                     {
                         // lets be friendly and only do things legitimitely by only using valid constructors
@@ -152,20 +154,6 @@ namespace Ketarin
                         {
                             scriptObject.Execute(null, argument);
                         }
-                        else
-                        {
-                            // hmmm, for some reason it didn't create the object
-                            // this shouldn't happen, as we have been doing checks all along, but we should
-                            // inform the user something bad has happened, and possibly request them to send
-                            // you the script so you can debug this problem
-                            // floele: Should not occur without an exception anyway.
-                        }
-                    }
-                    else
-                    {
-                        // and even more friendly and explain that there was no valid constructor
-                        // found and thats why this script object wasn't run
-                        // floele: Our scripts will automatically have a valid constructor.
                     }
                 }
             }

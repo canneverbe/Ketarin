@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
 using System.Net;
 using System.Windows.Forms;
 using CDBurnerXP;
@@ -14,7 +9,7 @@ namespace Ketarin.Forms
     public partial class ImportFromDatabaseDialog : ApplicationDatabaseBaseDialog
     {
         private ApplicationJob m_ImportedApplication;
-        private static RpcApplication[] m_LastLoadedApplications = null;
+        private static RpcApplication[] m_LastLoadedApplications;
         private static string m_LastSearchText = string.Empty;
 
         #region Properties

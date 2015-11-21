@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Collections.Specialized;
 using System.Net;
 using System.Web;
-using System.Collections.Specialized;
 
 namespace Ketarin
 {
@@ -61,7 +59,7 @@ namespace Ketarin
             }
             httpUri = new Uri(httpUri.Scheme + "://" + httpUri.Host + newPathAndQuery);
 
-            HttpWebRequest req = HttpWebRequest.CreateDefault(httpUri) as HttpWebRequest;
+            HttpWebRequest req = WebRequest.CreateDefault(httpUri) as HttpWebRequest;
             req.CookieContainer = cookies;
             if (accept != null)
             {

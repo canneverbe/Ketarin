@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Ketarin.Forms;
-using System.Windows.Forms.VisualStyles;
-using System.ComponentModel;
-using System.Windows.Forms;
+﻿using System.ComponentModel;
 using System.Drawing;
+using System.Windows.Forms;
+using System.Windows.Forms.VisualStyles;
+using Ketarin.Forms;
 
 namespace Ketarin
 {
@@ -61,7 +58,7 @@ namespace Ketarin
 
         #endregion
 
-        protected override void OnPaint(System.Windows.Forms.PaintEventArgs e)
+        protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
 

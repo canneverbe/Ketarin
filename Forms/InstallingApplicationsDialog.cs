@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
-using CDBurnerXP.Forms;
 using System.Threading;
-using CDBurnerXP.IO;
+using System.Windows.Forms;
 using CDBurnerXP;
+using CDBurnerXP.Forms;
 
 namespace Ketarin.Forms
 {
@@ -17,9 +13,9 @@ namespace Ketarin.Forms
     /// </summary>
     public partial class InstallingApplicationsDialog : PersistentForm
     {
-        private bool expanded = false;
-        private List<LogItem> logItems = new List<LogItem>();
-        private int installCounter = 0;
+        private bool expanded;
+        private readonly List<LogItem> logItems = new List<LogItem>();
+        private int installCounter;
 
         #region LogItem
 
@@ -90,10 +86,7 @@ namespace Ketarin.Forms
             SetExpansionButton();
             lbShowHideDetails.ImageIndex = (expanded ? 0 : 3);
 
-            colTime.ImageGetter = delegate(object x)
-            {
-                return Convert.ToInt32(((LogItem)x).Type);
-            };
+            colTime.ImageGetter = x => Convert.ToInt32(((LogItem) x).Type);
 
             base.OnLoad(e);
 
@@ -170,14 +163,13 @@ namespace Ketarin.Forms
             {
                 UpdateStatus(string.Format("Updating application {0} of {1}: {2}", count, this.Applications.Length, job.Name));
 
-                Updater updater = new Updater();
-                updater.IgnoreCheckForUpdatesOnly = true;
-                updater.BeginUpdate(new ApplicationJob[] { job }, false, false);
+                Updater updater = new Updater {IgnoreCheckForUpdatesOnly = true};
+                updater.BeginUpdate(new[] { job }, false, false);
 
                 // Wait until finished
                 while (updater.IsBusy)
                 {
-                    updater.ProgressChanged += new EventHandler<Updater.JobProgressChangedEventArgs>(updater_ProgressChanged);
+                    updater.ProgressChanged += this.updater_ProgressChanged;
 
                     if (bgwSetup.CancellationPending)
                     {
@@ -276,11 +268,6 @@ namespace Ketarin.Forms
         private void lbDetails_MouseUp(object sender, MouseEventArgs e)
         {
             lbShowHideDetails.ImageIndex = (expanded ? 1 : 4);
-        }
-
-        private void lbDetails_MouseDown(object sender, MouseEventArgs e)
-        {
-            lbShowHideDetails.ImageIndex = (expanded ? 2 : 5);
         }
 
         private void lbDetails_Click(object sender, EventArgs e)

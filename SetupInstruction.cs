@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Data;
-using System.Xml.Serialization;
-using System.Xml;
 using System.Data.SQLite;
-using System.Runtime.Serialization;
+using System.Text;
+using System.Xml;
+using System.Xml.Serialization;
 
 namespace Ketarin
 {
@@ -39,11 +37,10 @@ namespace Ketarin
         /// <summary>
         /// Saves the setup instructions to the database.
         /// </summary>
-        public void Save(System.Data.IDbTransaction transaction, int position)
+        public void Save(IDbTransaction transaction, int position)
         {
             XmlSerializer serializer = new XmlSerializer(this.GetType());
-            XmlWriterSettings settings = new XmlWriterSettings();
-            settings.Indent = true;
+            XmlWriterSettings settings = new XmlWriterSettings {Indent = true};
 
             StringBuilder output = new StringBuilder();
 

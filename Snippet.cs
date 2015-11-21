@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Data;
 using System.Data.SQLite;
 
@@ -36,7 +34,7 @@ namespace Ketarin
         /// </summary>
         public void Save()
         {
-            if (this.Guid == null || this.Guid == Guid.Empty)
+            if (this.Guid == Guid.Empty)
             {
                 this.Guid = Guid.NewGuid();
 

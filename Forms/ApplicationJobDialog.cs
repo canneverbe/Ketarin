@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
 using System.IO;
-using System.Text.RegularExpressions;
+using System.Linq;
+using System.Net;
+using System.Text;
 using System.Threading;
-using CookComputing.XmlRpc;
+using System.Windows.Forms;
 using CDBurnerXP;
-using CDBurnerXP.IO;
 using CDBurnerXP.Forms;
+using CDBurnerXP.IO;
+using CookComputing.XmlRpc;
 
 namespace Ketarin.Forms
 {
@@ -23,9 +22,9 @@ namespace Ketarin.Forms
         /// Solved a problem renaming categories: http://ketarin.canneverbe.com/forum/viewtopic.php?id=789
         /// By not validating, NotifyAutoComplete() is not called in the ComboBox base class.
         /// </summary>
-        public class NonValidatingComboBox : System.Windows.Forms.ComboBox
+        public class NonValidatingComboBox : ComboBox
         {
-            protected override void OnValidating(System.ComponentModel.CancelEventArgs e)
+            protected override void OnValidating(CancelEventArgs e)
             {
             }
         }
@@ -42,18 +41,18 @@ namespace Ketarin.Forms
         internal ApplicationJob ApplicationJob
         {
             get {
-                return m_ApplicationJob;
+                return this.m_ApplicationJob;
             }
             set {
-                if (m_ApplicationJob == null)
+                if (this.m_ApplicationJob == null)
                 {
                     throw new ArgumentNullException("value");
                 }
 
-                m_ApplicationJob = value;
-                bSaveAsDefault.Visible = false;
-                ReadApplication();
-                this.Text = "Edit " + m_ApplicationJob.Name;
+                this.m_ApplicationJob = value;
+                this.bSaveAsDefault.Visible = false;
+                this.ReadApplication();
+                this.Text = "Edit " + this.m_ApplicationJob.Name;
             }
         }
 
@@ -64,40 +63,40 @@ namespace Ketarin.Forms
         {
             get
             {
-                return txtApplicationName.ReadOnly;
+                return this.txtApplicationName.ReadOnly;
             }
             set
             {
                 bool enable = !value;
-                txtApplicationName.ReadOnly = value;
-                txtExecuteAfter.ReadOnly = value;
-                txtExecuteBefore.ReadOnly = value;
-                txtNotes.ReadOnly = value;
-                txtWebsite.ReadOnly = value;
-                txtFixedUrl.ReadOnly = value;
-                txtTarget.ReadOnly = value;
-                txtSpoofReferer.ReadOnly = value;
-                txtUserAgent.ReadOnly = value;
-                txtFileHippoId.ReadOnly = value;
-                txtUseVariablesForChanges.Enabled = enable;
-                cboCategory.Enabled = enable;
-                chkDownloadExclusively.Enabled = enable;
-                chkDeletePrevious.Enabled = enable;
-                chkEnabled.Enabled = enable;
-                chkShareOnline.Enabled = enable;
-                chkCheckForUpdatesOnly.Enabled = enable;
-                chkIgnoreFileInformation.Enabled = enable;
-                rbAlwaysDownload.Enabled = enable;
-                rbBetaAvoid.Enabled = enable;
-                rbBetaDefault.Enabled = enable;
-                bBrowseFile.Enabled = enable;
-                bAddInstruction.Enabled = enable;
-                instructionsListBox.Enabled = enable;
+                this.txtApplicationName.ReadOnly = value;
+                this.txtExecuteAfter.ReadOnly = value;
+                this.txtExecuteBefore.ReadOnly = value;
+                this.txtNotes.ReadOnly = value;
+                this.txtWebsite.ReadOnly = value;
+                this.txtFixedUrl.ReadOnly = value;
+                this.txtTarget.ReadOnly = value;
+                this.txtSpoofReferer.ReadOnly = value;
+                this.txtUserAgent.ReadOnly = value;
+                this.txtFileHippoId.ReadOnly = value;
+                this.txtUseVariablesForChanges.Enabled = enable;
+                this.cboCategory.Enabled = enable;
+                this.chkDownloadExclusively.Enabled = enable;
+                this.chkDeletePrevious.Enabled = enable;
+                this.chkEnabled.Enabled = enable;
+                this.chkShareOnline.Enabled = enable;
+                this.chkCheckForUpdatesOnly.Enabled = enable;
+                this.chkIgnoreFileInformation.Enabled = enable;
+                this.rbAlwaysDownload.Enabled = enable;
+                this.rbBetaAvoid.Enabled = enable;
+                this.rbBetaDefault.Enabled = enable;
+                this.bBrowseFile.Enabled = enable;
+                this.bAddInstruction.Enabled = enable;
+                this.instructionsListBox.Enabled = enable;
                 this.cboHashVariable.Enabled = enable;
                 this.cboHashType.Enabled = enable;
-                bOK.Enabled = enable;
-                bOK.Visible = enable;
-                bCancel.Text = value ? "Close" : "Cancel";
+                this.bOK.Enabled = enable;
+                this.bOK.Visible = enable;
+                this.bCancel.Text = value ? "Close" : "Cancel";
             }
         }
 
@@ -105,16 +104,16 @@ namespace Ketarin.Forms
 
         public ApplicationJobDialog()
         {
-            InitializeComponent();
-            AcceptButton = bOK;
-            CancelButton = bCancel;
+            this.InitializeComponent();
+            this.AcceptButton = this.bOK;
+            this.CancelButton = this.bCancel;
             this.cboHashType.SelectedIndex = 0;
 
             string defaultXml = Settings.GetValue("DefaultApplication", "") as string;
             if (!string.IsNullOrEmpty(defaultXml))
             {
-                m_ApplicationJob = ApplicationJob.LoadOneFromXml(defaultXml);
-                ReadApplication();
+                this.m_ApplicationJob = ApplicationJob.LoadOneFromXml(defaultXml);
+                this.ReadApplication();
             }
         }
 
@@ -122,13 +121,13 @@ namespace Ketarin.Forms
         {
             base.OnLoad(e);
 
-            cboCategory.DataSource = DbManager.GetCategories();
-            RefreshVariables();
-            SetAutocompleteSource();
+            this.cboCategory.DataSource = DbManager.GetCategories();
+            this.RefreshVariables();
+            this.SetAutocompleteSource();
 
-            if (m_ApplicationJob != null)
+            if (this.m_ApplicationJob != null)
             {
-                cboCategory.Text = string.IsNullOrEmpty(m_ApplicationJob.Category) ? null : m_ApplicationJob.Category;
+                this.cboCategory.Text = string.IsNullOrEmpty(this.m_ApplicationJob.Category) ? null : this.m_ApplicationJob.Category;
             }
 
             this.BeginInvoke((MethodInvoker)delegate()
@@ -143,7 +142,7 @@ namespace Ketarin.Forms
             base.OnClosed(e);
 
             // Prevent an invalid operation exception because of automcomplete
-            txtTarget.Dispose();
+            this.txtTarget.Dispose();
         }
 
         /// <summary>
@@ -151,43 +150,36 @@ namespace Ketarin.Forms
         /// </summary>
         private void RefreshVariables()
         {
-            if (m_ApplicationJob == null) return;
+            if (this.m_ApplicationJob == null) return;
 
-            this.txtExecuteAfter.Application = m_ApplicationJob;
-            this.txtExecuteBefore.Application = m_ApplicationJob;
+            this.txtExecuteAfter.Application = this.m_ApplicationJob;
+            this.txtExecuteBefore.Application = this.m_ApplicationJob;
 
             // Adjust context menus
-            List<string> appVarNames = new List<string>();
-            foreach (UrlVariable var in m_ApplicationJob.Variables.Values)
-            {
-                appVarNames.Add(var.Name);
-            }
+            List<string> appVarNames = this.m_ApplicationJob.Variables.Values.Select(var => var.Name).ToList();
+            appVarNames.AddRange(UrlVariable.GlobalVariables.Values.Select(gVar => gVar.Name));
 
             // Add global  variables
-            foreach (UrlVariable gVar in UrlVariable.GlobalVariables.Values)
-            {
-                appVarNames.Add(gVar.Name);
-            }
 
             // Add "version" variable to context menu if filehippo ID is present
-            if (rbFileHippo.Checked && !string.IsNullOrEmpty(txtFileHippoId.Text) && !appVarNames.Contains("version"))
+            if (this.rbFileHippo.Checked && !string.IsNullOrEmpty(this.txtFileHippoId.Text) && !appVarNames.Contains("version"))
             {
                 appVarNames.Add("version");
             }
 
-            txtExecuteAfter.SetVariableNames(new string[] { "file", "root", "category", "appname" }, appVarNames.ToArray());
-            txtExecuteBefore.SetVariableNames(new string[] { "file", "root", "category", "appname" }, appVarNames.ToArray());
-            txtFixedUrl.SetVariableNames(new string[] { "category", "appname" }, appVarNames.ToArray());
-            txtTarget.SetVariableNames(new string[] { "category", "appname" }, appVarNames.ToArray());
-            txtSpoofReferer.SetVariableNames(new string[] { "category", "appname" }, appVarNames.ToArray());
-            txtUseVariablesForChanges.Items.Clear();
-            txtUseVariablesForChanges.Items.AddRange(appVarNames.ToArray());
-            cboHashVariable.Items.Clear();
-            cboHashVariable.Items.AddRange(appVarNames.ToArray());
+            this.txtExecuteAfter.SetVariableNames(new[] { "file", "root", "category", "appname" }, appVarNames.ToArray());
+            this.txtExecuteBefore.SetVariableNames(new[] { "file", "root", "category", "appname" }, appVarNames.ToArray());
+            this.txtFixedUrl.SetVariableNames(new[] { "category", "appname" }, appVarNames.ToArray());
+            this.txtTarget.SetVariableNames(new[] { "category", "appname" }, appVarNames.ToArray());
+            this.txtSpoofReferer.SetVariableNames(new[] { "category", "appname" }, appVarNames.ToArray());
+            this.txtUseVariablesForChanges.Items.Clear();
+            this.txtUseVariablesForChanges.Items.AddRange(appVarNames.ToArray());
+            this.cboHashVariable.Items.Clear();
+            this.cboHashVariable.Items.AddRange(appVarNames.ToArray());
 
             foreach (SetupInstructionListBoxPanel panel in this.instructionsListBox.Panels)
             {
-                panel.VariableNames = txtExecuteAfter.VariableNames;
+                panel.VariableNames = this.txtExecuteAfter.VariableNames;
             }
         }
 
@@ -196,48 +188,48 @@ namespace Ketarin.Forms
         /// </summary>
         private void ReadApplication()
         {
-            txtApplicationName.Text = m_ApplicationJob.Name;
-            txtFixedUrl.Text = m_ApplicationJob.FixedDownloadUrl;
-            txtTarget.Text = m_ApplicationJob.TargetPath;
-            txtUserAgent.Text = m_ApplicationJob.UserAgent;
-            txtFileHippoId.Text = m_ApplicationJob.FileHippoId;
-            rbFileHippo.Checked = (m_ApplicationJob.DownloadSourceType == ApplicationJob.SourceType.FileHippo);
-            rbFixedUrl.Checked = (m_ApplicationJob.DownloadSourceType == ApplicationJob.SourceType.FixedUrl);
-            chkEnabled.Checked = m_ApplicationJob.Enabled;
-            
-            rbFolder.Checked = m_ApplicationJob.TargetIsFolder;
+            this.txtApplicationName.Text = this.m_ApplicationJob.Name;
+            this.txtFixedUrl.Text = this.m_ApplicationJob.FixedDownloadUrl;
+            this.txtTarget.Text = this.m_ApplicationJob.TargetPath;
+            this.txtUserAgent.Text = this.m_ApplicationJob.UserAgent;
+            this.txtFileHippoId.Text = this.m_ApplicationJob.FileHippoId;
+            this.rbFileHippo.Checked = (this.m_ApplicationJob.DownloadSourceType == ApplicationJob.SourceType.FileHippo);
+            this.rbFixedUrl.Checked = (this.m_ApplicationJob.DownloadSourceType == ApplicationJob.SourceType.FixedUrl);
+            this.chkEnabled.Checked = this.m_ApplicationJob.Enabled;
+
+            this.rbFolder.Checked = this.m_ApplicationJob.TargetIsFolder;
             // One of the two must be checked (always)
-            if (!rbFolder.Checked) rbFileName.Checked = true;
+            if (!this.rbFolder.Checked) this.rbFileName.Checked = true;
 
-            chkDeletePrevious.Checked = m_ApplicationJob.DeletePreviousFile;
-            txtExecuteAfter.Text = m_ApplicationJob.ExecuteCommand;
-            txtExecuteBefore.Text = m_ApplicationJob.ExecutePreCommand;
-            cboCategory.SelectedIndex = -1;
-            cboCategory.Text = string.IsNullOrEmpty(m_ApplicationJob.Category) ? null : m_ApplicationJob.Category;
-            chkShareOnline.Checked = m_ApplicationJob.ShareApplication;
-            chkShareOnline.Enabled = m_ApplicationJob.CanBeShared;
-            chkDownloadExclusively.Checked = m_ApplicationJob.ExclusiveDownload;
-            chkCheckForUpdatesOnly.Checked = m_ApplicationJob.CheckForUpdatesOnly;
-            txtSpoofReferer.Text = m_ApplicationJob.HttpReferer;
-            rbBetaAvoid.Checked = (ApplicationJob.DownloadBeta == ApplicationJob.DownloadBetaType.Avoid);
-            rbBetaDefault.Checked = (ApplicationJob.DownloadBeta == ApplicationJob.DownloadBetaType.Default);
-            rbAlwaysDownload.Checked = (ApplicationJob.DownloadBeta == ApplicationJob.DownloadBetaType.AlwaysDownload);
-            txtUseVariablesForChanges.Text = m_ApplicationJob.VariableChangeIndicator;
-            chkIgnoreFileInformation.Checked = m_ApplicationJob.IgnoreFileInformation;
-            this.cboHashType.SelectedIndex = (int)m_ApplicationJob.HashType;
-            this.cboHashVariable.Text = m_ApplicationJob.HashVariable;
+            this.chkDeletePrevious.Checked = this.m_ApplicationJob.DeletePreviousFile;
+            this.txtExecuteAfter.Text = this.m_ApplicationJob.ExecuteCommand;
+            this.txtExecuteBefore.Text = this.m_ApplicationJob.ExecutePreCommand;
+            this.cboCategory.SelectedIndex = -1;
+            this.cboCategory.Text = string.IsNullOrEmpty(this.m_ApplicationJob.Category) ? null : this.m_ApplicationJob.Category;
+            this.chkShareOnline.Checked = this.m_ApplicationJob.ShareApplication;
+            this.chkShareOnline.Enabled = this.m_ApplicationJob.CanBeShared;
+            this.chkDownloadExclusively.Checked = this.m_ApplicationJob.ExclusiveDownload;
+            this.chkCheckForUpdatesOnly.Checked = this.m_ApplicationJob.CheckForUpdatesOnly;
+            this.txtSpoofReferer.Text = this.m_ApplicationJob.HttpReferer;
+            this.rbBetaAvoid.Checked = (this.ApplicationJob.DownloadBeta == ApplicationJob.DownloadBetaType.Avoid);
+            this.rbBetaDefault.Checked = (this.ApplicationJob.DownloadBeta == ApplicationJob.DownloadBetaType.Default);
+            this.rbAlwaysDownload.Checked = (this.ApplicationJob.DownloadBeta == ApplicationJob.DownloadBetaType.AlwaysDownload);
+            this.txtUseVariablesForChanges.Text = this.m_ApplicationJob.VariableChangeIndicator;
+            this.chkIgnoreFileInformation.Checked = this.m_ApplicationJob.IgnoreFileInformation;
+            this.cboHashType.SelectedIndex = (int) this.m_ApplicationJob.HashType;
+            this.cboHashVariable.Text = this.m_ApplicationJob.HashVariable;
 
-            txtWebsite.Text = m_ApplicationJob.WebsiteUrl;
-            txtNotes.Text = m_ApplicationJob.UserNotes;
+            this.txtWebsite.Text = this.m_ApplicationJob.WebsiteUrl;
+            this.txtNotes.Text = this.m_ApplicationJob.UserNotes;
 
-            txtExecuteAfter.CommandType = m_ApplicationJob.ExecuteCommandType;
-            txtExecuteBefore.CommandType = m_ApplicationJob.ExecutePreCommandType;
+            this.txtExecuteAfter.CommandType = this.m_ApplicationJob.ExecuteCommandType;
+            this.txtExecuteBefore.CommandType = this.m_ApplicationJob.ExecutePreCommandType;
 
             // Setup instructions
-            instructionsListBox.Panels.Clear();
-            foreach (SetupInstruction instruction in m_ApplicationJob.SetupInstructions)
+            this.instructionsListBox.Panels.Clear();
+            foreach (SetupInstruction instruction in this.m_ApplicationJob.SetupInstructions)
             {
-                instructionsListBox.Panels.Add(new SetupInstructionListBoxPanel(instruction.Clone() as SetupInstruction));
+                this.instructionsListBox.Panels.Add(new SetupInstructionListBoxPanel(instruction.Clone() as SetupInstruction));
             }
         }
 
@@ -246,53 +238,53 @@ namespace Ketarin.Forms
         /// </summary>
         private void WriteApplication()
         {
-            m_ApplicationJob.Name = txtApplicationName.Text;
-            m_ApplicationJob.FixedDownloadUrl = txtFixedUrl.Text;
-            m_ApplicationJob.TargetPath = txtTarget.Text;
-            if (rbFolder.Checked)
+            this.m_ApplicationJob.Name = this.txtApplicationName.Text;
+            this.m_ApplicationJob.FixedDownloadUrl = this.txtFixedUrl.Text;
+            this.m_ApplicationJob.TargetPath = this.txtTarget.Text;
+            if (this.rbFolder.Checked)
             {
-                m_ApplicationJob.TargetPath = PathEx.QualifyPath(m_ApplicationJob.TargetPath);
+                this.m_ApplicationJob.TargetPath = PathEx.QualifyPath(this.m_ApplicationJob.TargetPath);
             }
-            m_ApplicationJob.Enabled = chkEnabled.Checked;
-            m_ApplicationJob.FileHippoId = txtFileHippoId.Text;
-            m_ApplicationJob.DeletePreviousFile = chkDeletePrevious.Checked;
-            m_ApplicationJob.ExecuteCommand = txtExecuteAfter.Text;
-            m_ApplicationJob.ExecutePreCommand = txtExecuteBefore.Text;
-            m_ApplicationJob.DownloadSourceType = (rbFixedUrl.Checked) ? ApplicationJob.SourceType.FixedUrl : ApplicationJob.SourceType.FileHippo;
-            m_ApplicationJob.Category = cboCategory.Text;
-            m_ApplicationJob.ExclusiveDownload = chkDownloadExclusively.Checked;
-            m_ApplicationJob.ShareApplication = chkShareOnline.Checked;
-            m_ApplicationJob.HttpReferer = txtSpoofReferer.Text;
-            m_ApplicationJob.UserAgent = txtUserAgent.Text;
-            m_ApplicationJob.VariableChangeIndicator = txtUseVariablesForChanges.Text;
-            m_ApplicationJob.CheckForUpdatesOnly = chkCheckForUpdatesOnly.Checked;
-            m_ApplicationJob.IgnoreFileInformation = chkIgnoreFileInformation.Checked;
-            m_ApplicationJob.HashType = (HashType)this.cboHashType.SelectedIndex;
-            m_ApplicationJob.HashVariable = this.cboHashVariable.Text;
+            this.m_ApplicationJob.Enabled = this.chkEnabled.Checked;
+            this.m_ApplicationJob.FileHippoId = this.txtFileHippoId.Text;
+            this.m_ApplicationJob.DeletePreviousFile = this.chkDeletePrevious.Checked;
+            this.m_ApplicationJob.ExecuteCommand = this.txtExecuteAfter.Text;
+            this.m_ApplicationJob.ExecutePreCommand = this.txtExecuteBefore.Text;
+            this.m_ApplicationJob.DownloadSourceType = (this.rbFixedUrl.Checked) ? ApplicationJob.SourceType.FixedUrl : ApplicationJob.SourceType.FileHippo;
+            this.m_ApplicationJob.Category = this.cboCategory.Text;
+            this.m_ApplicationJob.ExclusiveDownload = this.chkDownloadExclusively.Checked;
+            this.m_ApplicationJob.ShareApplication = this.chkShareOnline.Checked;
+            this.m_ApplicationJob.HttpReferer = this.txtSpoofReferer.Text;
+            this.m_ApplicationJob.UserAgent = this.txtUserAgent.Text;
+            this.m_ApplicationJob.VariableChangeIndicator = this.txtUseVariablesForChanges.Text;
+            this.m_ApplicationJob.CheckForUpdatesOnly = this.chkCheckForUpdatesOnly.Checked;
+            this.m_ApplicationJob.IgnoreFileInformation = this.chkIgnoreFileInformation.Checked;
+            this.m_ApplicationJob.HashType = (HashType)this.cboHashType.SelectedIndex;
+            this.m_ApplicationJob.HashVariable = this.cboHashVariable.Text;
 
-            m_ApplicationJob.WebsiteUrl = txtWebsite.Text;
-            m_ApplicationJob.UserNotes = txtNotes.Text;
-            m_ApplicationJob.ExecuteCommandType = txtExecuteAfter.CommandType;
-            m_ApplicationJob.ExecutePreCommandType = txtExecuteBefore.CommandType;
+            this.m_ApplicationJob.WebsiteUrl = this.txtWebsite.Text;
+            this.m_ApplicationJob.UserNotes = this.txtNotes.Text;
+            this.m_ApplicationJob.ExecuteCommandType = this.txtExecuteAfter.CommandType;
+            this.m_ApplicationJob.ExecutePreCommandType = this.txtExecuteBefore.CommandType;
 
-            if (rbAlwaysDownload.Checked)
+            if (this.rbAlwaysDownload.Checked)
             {
-                m_ApplicationJob.DownloadBeta = ApplicationJob.DownloadBetaType.AlwaysDownload;
+                this.m_ApplicationJob.DownloadBeta = ApplicationJob.DownloadBetaType.AlwaysDownload;
             }
-            else if (rbBetaAvoid.Checked)
+            else if (this.rbBetaAvoid.Checked)
             {
-                m_ApplicationJob.DownloadBeta = ApplicationJob.DownloadBetaType.Avoid;
+                this.m_ApplicationJob.DownloadBeta = ApplicationJob.DownloadBetaType.Avoid;
             }
             else
             {
-                m_ApplicationJob.DownloadBeta = ApplicationJob.DownloadBetaType.Default;
+                this.m_ApplicationJob.DownloadBeta = ApplicationJob.DownloadBetaType.Default;
             }
 
             // Setup instructions
-            m_ApplicationJob.SetupInstructions.Clear();
-            foreach (SetupInstructionListBoxPanel panel in instructionsListBox.GetPanels())
+            this.m_ApplicationJob.SetupInstructions.Clear();
+            foreach (SetupInstructionListBoxPanel panel in this.instructionsListBox.GetPanels())
             {
-                m_ApplicationJob.SetupInstructions.Add(panel.SetupInstruction);
+                this.m_ApplicationJob.SetupInstructions.Add(panel.SetupInstruction);
             }
         }
 
@@ -300,14 +292,14 @@ namespace Ketarin.Forms
         {
             // Depending on the save type, either open a file or directory.
 
-            if (rbFileName.Checked)
+            if (this.rbFileName.Checked)
             {
                 using (SaveFileDialog dialog = new SaveFileDialog())
                 {
-                    dialog.InitialDirectory = txtTarget.Text;
+                    dialog.InitialDirectory = this.txtTarget.Text;
                     if (dialog.ShowDialog() == DialogResult.OK)
                     {
-                        txtTarget.Text = dialog.FileName;
+                        this.txtTarget.Text = dialog.FileName;
                     }
                 }
             }
@@ -318,9 +310,9 @@ namespace Ketarin.Forms
                     string defaultTargetDir = Settings.GetValue("DefaultTargetDir") as string;
 
                     // Folder browser doesn't like file names
-                    if (Directory.Exists(txtTarget.Text))
+                    if (Directory.Exists(this.txtTarget.Text))
                     {
-                        dialog.SelectedPath = Path.GetDirectoryName(txtTarget.Text);
+                        dialog.SelectedPath = Path.GetDirectoryName(this.txtTarget.Text);
                     }
                     else if (!string.IsNullOrEmpty(defaultTargetDir))
                     {
@@ -328,12 +320,12 @@ namespace Ketarin.Forms
                     }
                     else
                     {
-                        dialog.SelectedPath = txtTarget.Text;
+                        dialog.SelectedPath = this.txtTarget.Text;
                     }
 
                     if (dialog.ShowDialog() == DialogResult.OK)
                     {
-                        txtTarget.Text = dialog.SelectedPath;
+                        this.txtTarget.Text = dialog.SelectedPath;
                         Settings.SetValue("DefaultTargetDir", dialog.SelectedPath);
                     }
                 }
@@ -342,12 +334,12 @@ namespace Ketarin.Forms
 
         private void rbFileName_CheckedChanged(object sender, EventArgs e)
         {
-            SetAutocompleteSource();
+            this.SetAutocompleteSource();
         }
 
         private void rbDirectory_CheckedChanged(object sender, EventArgs e)
         {
-            SetAutocompleteSource();
+            this.SetAutocompleteSource();
         }
 
         /// <summary>
@@ -357,52 +349,52 @@ namespace Ketarin.Forms
         {
             // Setting the auto complete value will reset the text.
             // Thus, save and restore it.
-            string current = txtTarget.Text;
-            txtTarget.AutoCompleteSource = (rbFileName.Checked) ? AutoCompleteSource.FileSystem : AutoCompleteSource.FileSystemDirectories;
-            txtTarget.Text = current;
+            string current = this.txtTarget.Text;
+            this.txtTarget.AutoCompleteSource = (this.rbFileName.Checked) ? AutoCompleteSource.FileSystem : AutoCompleteSource.FileSystemDirectories;
+            this.txtTarget.Text = current;
         }
 
         private void bOK_Click(object sender, EventArgs e)
         {
             // Check that name is not empty
-            if (string.IsNullOrEmpty(txtApplicationName.Text))
+            if (string.IsNullOrEmpty(this.txtApplicationName.Text))
             {
                 MessageBox.Show(this, "The application name must not be empty.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                DialogResult = DialogResult.None;
+                this.DialogResult = DialogResult.None;
                 return;
             }
 
             // Check for valid URL
-            if (rbFixedUrl.Checked && string.IsNullOrEmpty(txtFixedUrl.Text))
+            if (this.rbFixedUrl.Checked && string.IsNullOrEmpty(this.txtFixedUrl.Text))
             {
                 MessageBox.Show(this, "You did not enter a download URL. The application will not be downloaded as long as no URL is specified.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             else
             {
                 // Check that a target location is given
-                if (string.IsNullOrEmpty(txtTarget.Text))
+                if (string.IsNullOrEmpty(this.txtTarget.Text))
                 {
                     MessageBox.Show(this, "You did not specify a target location.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    DialogResult = DialogResult.None;
+                    this.DialogResult = DialogResult.None;
                     return;
                 }
             }
 
-            if (rbFileHippo.Checked && String.IsNullOrEmpty(txtFileHippoId.Text))
+            if (this.rbFileHippo.Checked && String.IsNullOrEmpty(this.txtFileHippoId.Text))
             {
                 MessageBox.Show(this, "You did not specify a FileHippo ID.\r\nYou can paste the desired URL from the FileHippo.com website, the ID will be extracted automatically.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                DialogResult = DialogResult.None;
+                this.DialogResult = DialogResult.None;
                 return;
             }
 
-            WriteApplication();
+            this.WriteApplication();
 
             // All good. If necessary, now start a thread
             // which is going to share the application online.
             ApplicationJob job = this.ApplicationJob;
             if (job.ShareApplication)
             {
-                Cursor = Cursors.WaitCursor;
+                this.Cursor = Cursors.WaitCursor;
 
                 try
                 {
@@ -414,9 +406,11 @@ namespace Ketarin.Forms
                     {
                         // Prevent similar entries by asking the author
                         // to reconsider his choice of name.
-                        SimilarApplicationsDialog dialog = new SimilarApplicationsDialog();
-                        dialog.ApplicationJob = job;
-                        dialog.Applications = existingApps;
+                        SimilarApplicationsDialog dialog = new SimilarApplicationsDialog
+                        {
+                            ApplicationJob = job,
+                            Applications = existingApps
+                        };
                         if (dialog.ShowDialog(this) != DialogResult.OK)
                         {
                             return;
@@ -424,17 +418,16 @@ namespace Ketarin.Forms
                     }
 
                     // Everything is fine, upload now.
-                    Thread thread = new Thread(new ParameterizedThreadStart(ShareOnline));
-                    thread.IsBackground = true;
+                    Thread thread = new Thread(ShareOnline) {IsBackground = true};
                     thread.Start(job);
                 }
-                catch (System.Net.WebException ex)
+                catch (WebException ex)
                 {
                     MessageBox.Show(this, "Your application could not be submitted to the online database because of an connection error: " + ex.Message, "Connection error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
                 finally
                 {
-                    Cursor = Cursors.Default;
+                    this.Cursor = Cursors.Default;
                 }
             }
 
@@ -470,18 +463,18 @@ namespace Ketarin.Forms
 
         private void txtFileHippoId_TextChanged(object sender, EventArgs e)
         {
-            rbFileHippo.Checked = true;
-            txtFileHippoId.Text = ExternalServices.GetFileHippoIdFromUrl(txtFileHippoId.Text);
+            this.rbFileHippo.Checked = true;
+            this.txtFileHippoId.Text = ExternalServices.GetFileHippoIdFromUrl(this.txtFileHippoId.Text);
 
-            RefreshVariables();
+            this.RefreshVariables();
         }
 
-        private void txtFileHippoId_LostFocus(object sender, System.EventArgs e)
+        private void txtFileHippoId_LostFocus(object sender, EventArgs e)
         {
             // Determine name in background to prevent annoying users
-            Cursor = Cursors.AppStarting;
-            Thread thread = new Thread(new ParameterizedThreadStart(AutoFillApplicationName));
-            thread.Start(txtFileHippoId.Text);
+            this.Cursor = Cursors.AppStarting;
+            Thread thread = new Thread(this.AutoFillApplicationName);
+            thread.Start(this.txtFileHippoId.Text);
         }
 
         /// <summary>
@@ -507,9 +500,9 @@ namespace Ketarin.Forms
             finally
             {
                 // Make sure that form does still exist
-                if (Visible)
+                if (this.Visible)
                 {
-                    this.BeginInvoke((MethodInvoker)delegate()
+                    this.BeginInvoke((MethodInvoker)delegate
                     {
                         // Reset cursor
                         Cursor = Cursors.Default;
@@ -525,36 +518,36 @@ namespace Ketarin.Forms
 
         private void txtFixedUrl_TextChanged(object sender, EventArgs e)
         {
-            rbFixedUrl.Checked = true;
+            this.rbFixedUrl.Checked = true;
         }
 
         private void bVariables_Click(object sender, EventArgs e)
         {
-            using (EditVariablesDialog dialog = new EditVariablesDialog(m_ApplicationJob))
+            using (EditVariablesDialog dialog = new EditVariablesDialog(this.m_ApplicationJob))
             {
-                dialog.ReadOnly = ReadOnly;
-                dialog.UserAgent = txtUserAgent.Text;
+                dialog.ReadOnly = this.ReadOnly;
+                dialog.UserAgent = this.txtUserAgent.Text;
                 if (dialog.ShowDialog(this) == DialogResult.OK) {
-                    RefreshVariables();
+                    this.RefreshVariables();
                 }
             }
         }
 
         private void rbFileHippo_CheckedChanged(object sender, EventArgs e)
         {
-            RefreshVariables();
+            this.RefreshVariables();
         }
 
         private void rbFixedUrl_CheckedChanged(object sender, EventArgs e)
         {
-            RefreshVariables();
+            this.RefreshVariables();
         }
 
         private void bSaveAsDefault_Click(object sender, EventArgs e)
         {
             // Save entered values as default for next time
-            WriteApplication();
-            string xml = ApplicationJob.GetXml(new ApplicationJob[] { ApplicationJob }, true, Encoding.UTF8);
+            this.WriteApplication();
+            string xml = ApplicationJob.GetXml(new[] {this.ApplicationJob }, true, Encoding.UTF8);
             Settings.SetValue("DefaultApplication", xml);
         }
 
@@ -569,48 +562,56 @@ namespace Ketarin.Forms
         private void mnuStartProcess_Click(object sender, EventArgs e)
         {
             StartProcessInstruction instruction = new StartProcessInstruction();
-            instruction.Application = m_ApplicationJob;
-            if (InstructionBaseDialog.ShowDialog(this, instruction, txtExecuteAfter.VariableNames, m_ApplicationJob))
+            instruction.Application = this.m_ApplicationJob;
+            if (InstructionBaseDialog.ShowDialog(this, instruction, this.txtExecuteAfter.VariableNames, this.m_ApplicationJob))
             {
-                SetupInstructionListBoxPanel panel = new SetupInstructionListBoxPanel(instruction);
-                panel.VariableNames = txtExecuteAfter.VariableNames;
-                instructionsListBox.Panels.Add(panel);
+                SetupInstructionListBoxPanel panel = new SetupInstructionListBoxPanel(instruction)
+                {
+                    VariableNames = this.txtExecuteAfter.VariableNames
+                };
+                this.instructionsListBox.Panels.Add(panel);
             }
         }
 
         private void mnuCopyFile_Click(object sender, EventArgs e)
         {
             CopyFileInstruction instruction = new CopyFileInstruction();
-            instruction.Application = m_ApplicationJob;
-            if (InstructionBaseDialog.ShowDialog(this, instruction, txtExecuteAfter.VariableNames, m_ApplicationJob))
+            instruction.Application = this.m_ApplicationJob;
+            if (InstructionBaseDialog.ShowDialog(this, instruction, this.txtExecuteAfter.VariableNames, this.m_ApplicationJob))
             {
-                SetupInstructionListBoxPanel panel = new SetupInstructionListBoxPanel(instruction);
-                panel.VariableNames = txtExecuteAfter.VariableNames;
-                instructionsListBox.Panels.Add(panel);
+                SetupInstructionListBoxPanel panel = new SetupInstructionListBoxPanel(instruction)
+                {
+                    VariableNames = this.txtExecuteAfter.VariableNames
+                };
+                this.instructionsListBox.Panels.Add(panel);
             }
         }
 
         private void mnuCustomCommand_Click(object sender, EventArgs e)
         {
             CustomSetupInstruction instruction = new CustomSetupInstruction();
-            instruction.Application = m_ApplicationJob;
-            if (InstructionBaseDialog.ShowDialog(this, instruction, txtExecuteAfter.VariableNames, m_ApplicationJob))
+            instruction.Application = this.m_ApplicationJob;
+            if (InstructionBaseDialog.ShowDialog(this, instruction, this.txtExecuteAfter.VariableNames, this.m_ApplicationJob))
             {
-                SetupInstructionListBoxPanel panel = new SetupInstructionListBoxPanel(instruction);
-                panel.VariableNames = txtExecuteAfter.VariableNames;
-                instructionsListBox.Panels.Add(panel);
+                SetupInstructionListBoxPanel panel = new SetupInstructionListBoxPanel(instruction)
+                {
+                    VariableNames = this.txtExecuteAfter.VariableNames
+                };
+                this.instructionsListBox.Panels.Add(panel);
             }
         }
 
         private void mnuCloseProcess_Click(object sender, EventArgs e)
         {
             CloseProcessInstruction instruction = new CloseProcessInstruction();
-            instruction.Application = m_ApplicationJob;
-            if (InstructionBaseDialog.ShowDialog(this, instruction, txtExecuteAfter.VariableNames, m_ApplicationJob))
+            instruction.Application = this.m_ApplicationJob;
+            if (InstructionBaseDialog.ShowDialog(this, instruction, this.txtExecuteAfter.VariableNames, this.m_ApplicationJob))
             {
-                SetupInstructionListBoxPanel panel = new SetupInstructionListBoxPanel(instruction);
-                panel.VariableNames = txtExecuteAfter.VariableNames;
-                instructionsListBox.Panels.Add(panel);
+                SetupInstructionListBoxPanel panel = new SetupInstructionListBoxPanel(instruction)
+                {
+                    VariableNames = this.txtExecuteAfter.VariableNames
+                };
+                this.instructionsListBox.Panels.Add(panel);
             }
         }
 

@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows.Forms;
+using System.Diagnostics;
 using System.Drawing;
+using System.Windows.Forms;
 
 namespace Ketarin.Forms
 {
@@ -17,8 +16,8 @@ namespace Ketarin.Forms
         private const int WM_SETFOCUS = 0x7;
         private const int WM_LBUTTONDOWN = 0x201;
 
-        [System.Diagnostics.DebuggerStepThrough()]
-        protected override void WndProc(ref System.Windows.Forms.Message m)
+        [DebuggerStepThrough()]
+        protected override void WndProc(ref Message m)
         {
             base.WndProc(ref m);
 
@@ -40,7 +39,7 @@ namespace Ketarin.Forms
             }
         }
 
-        protected override void OnTextChanged(System.EventArgs e)
+        protected override void OnTextChanged(EventArgs e)
         {
             base.OnTextChanged(e);
 

@@ -18,15 +18,15 @@ namespace wyDay.Controls
         private const int SplitSectionWidth = 18;
 
         private static int BorderSize = SystemInformation.Border3DSize.Width * 2;
-        private bool skipNextOpen = false;
-        private Rectangle dropDownRectangle = new Rectangle();
-        private bool showSplit = false;
+        private bool skipNextOpen;
+        private Rectangle dropDownRectangle;
+        private bool showSplit;
 
-        private bool isSplitMenuVisible = false;
+        private bool isSplitMenuVisible;
 
 
-        private ContextMenuStrip m_SplitMenuStrip = null;
-        private ContextMenu m_SplitMenu = null;
+        private ContextMenuStrip m_SplitMenuStrip;
+        private ContextMenu m_SplitMenu;
 
         TextFormatFlags textFormatFlags = TextFormatFlags.Default;
 
@@ -246,7 +246,7 @@ namespace wyDay.Controls
             }
         }
 
-        bool isMouseEntered = false;
+        bool isMouseEntered;
 
         protected override void OnMouseEnter(EventArgs e)
         {

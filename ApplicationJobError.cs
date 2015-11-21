@@ -1,44 +1,26 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Ketarin
 {
     public class ApplicationJobError
     {
-        private ApplicationJob m_ApplicationJob;
-        private Exception m_Error;
-        private string m_RequestedUrl = string.Empty;
-
         #region Properties
 
-        public string RequestedUrl
-        {
-            get { return m_RequestedUrl; }
-            set { m_RequestedUrl = value; }
-        }
+        public string RequestedUrl { get; set; }
 
-        internal ApplicationJob ApplicationJob
-        {
-            get { return m_ApplicationJob; }
-            set { m_ApplicationJob = value; }
-        }
+        internal ApplicationJob ApplicationJob { get; set; }
 
-        public Exception Error
-        {
-            get { return m_Error; }
-            set { m_Error = value; }
-        }
+        public Exception Error { get; set; }
 
         public string Message
         {
             get
             {
-                if (string.IsNullOrEmpty(m_RequestedUrl))
+                if (string.IsNullOrEmpty(this.RequestedUrl))
                 {
-                    return m_Error.Message;
+                    return this.Error.Message;
                 }
-                return m_Error.Message + " (" + m_RequestedUrl + ")";
+                return this.Error.Message + " (" + this.RequestedUrl + ")";
             }
         }
 
@@ -46,15 +28,16 @@ namespace Ketarin
 
         public ApplicationJobError(ApplicationJob job, Exception error)
         {
-            m_ApplicationJob = job;
-            m_Error = error;
+            this.RequestedUrl = string.Empty;
+            this.ApplicationJob = job;
+            this.Error = error;
         }
 
         public ApplicationJobError(ApplicationJob job, Exception error, string requestedUrl)
         {
-            m_ApplicationJob = job;
-            m_Error = error;
-            m_RequestedUrl = requestedUrl;
+            this.ApplicationJob = job;
+            this.Error = error;
+            this.RequestedUrl = requestedUrl;
         }
     }
 }

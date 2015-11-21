@@ -1,11 +1,14 @@
-﻿namespace Ketarin.Forms
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace Ketarin.Forms
 {
     partial class CloseProcessInstructionDialog
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -81,7 +84,7 @@
 
         #endregion
 
-        private System.Windows.Forms.Label lnlProcessName;
-        private System.Windows.Forms.ComboBox cboProcessName;
+        private Label lnlProcessName;
+        private ComboBox cboProcessName;
     }
 }

@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
+using System.Linq;
 using System.Windows.Forms;
 using CDBurnerXP.Forms;
 
@@ -23,12 +20,7 @@ namespace Ketarin.Forms
         {
             get
             {
-                List<ApplicationJob> jobs = new List<ApplicationJob>();
-                foreach (ApplicationJob job in olvApplications.CheckedObjects)
-                {
-                    jobs.Add(job);
-                }
-                return jobs.ToArray();
+                return this.olvApplications.CheckedObjects.Cast<ApplicationJob>().ToArray();
             }
         }
 

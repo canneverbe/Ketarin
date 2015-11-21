@@ -1,11 +1,14 @@
-﻿namespace Ketarin.Forms
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace Ketarin.Forms
 {
     partial class RenameFileDialog
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -99,9 +102,9 @@
 
         #endregion
 
-        private System.Windows.Forms.Label lblFileName;
+        private Label lblFileName;
         private System.Windows.Forms.TextBox txtFileName;
-        private System.Windows.Forms.Button bOK;
-        private System.Windows.Forms.Button bCancel;
+        private Button bOK;
+        private Button bCancel;
     }
 }

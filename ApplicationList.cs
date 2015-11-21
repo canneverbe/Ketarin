@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Data;
-using System.Drawing;
-using Microsoft.Win32;
-using CDBurnerXP.IO;
-using System.Data.SQLite;
 using System.ComponentModel;
+using System.Data;
+using System.Data.SQLite;
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
+using System.Linq;
+using System.Text;
+using Ketarin.Properties;
+using Microsoft.Win32;
 
 namespace Ketarin
 {
@@ -25,9 +28,9 @@ namespace Ketarin
             protected override void InsertItem(int index, ApplicationJob item)
             {
                 // Do not allow duplicate apps in a list
-                foreach (ApplicationJob app in this)
+                if (this.Any(app => app == item))
                 {
-                    if (app == item) return;
+                    return;
                 }
 
                 base.InsertItem(index, item);
@@ -54,8 +57,8 @@ namespace Ketarin
 
         #endregion
 
-        private bool isPredefined = false;
-        private ApplicationBindingList applications = new ApplicationBindingList();
+        private readonly bool isPredefined;
+        private readonly ApplicationBindingList applications = new ApplicationBindingList();
 
         /// <summary>
         /// Gets or sets the GUID of the list.
@@ -130,27 +133,19 @@ namespace Ketarin
         internal Image GetIcon()
         {
             // Check for application icons that can be extracted
-            List<string> iconPaths = new List<string>();
-            foreach (ApplicationJob app in this.Applications)
-            {
-                string location = app.CurrentLocation;
-                if (!string.IsNullOrEmpty(location))
-                {
-                    iconPaths.Add(location);
-                }
-            }
+            List<string> iconPaths = this.Applications.Select(app => app.CurrentLocation).Where(location => !string.IsNullOrEmpty(location)).ToList();
 
             if (iconPaths.Count == 0)
             {
-                return Properties.Resources.Setup32;
+                return Resources.Setup32;
             }
             else
             {
-                Bitmap bitmap = new Bitmap(32, 32, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                Bitmap bitmap = new Bitmap(32, 32, PixelFormat.Format32bppArgb);
 
                 using (Graphics g = Graphics.FromImage(bitmap))
                 {
-                    g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+                    g.InterpolationMode = InterpolationMode.HighQualityBicubic;
 
                     if (iconPaths.Count == 1)
                     {
@@ -217,7 +212,7 @@ namespace Ketarin
         {
             using (SQLiteTransaction transaction = DbManager.Connection.BeginTransaction())
             {
-                if (this.Guid == null || this.Guid == Guid.Empty)
+                if (this.Guid == Guid.Empty)
                 {
                     this.Guid = Guid.NewGuid();
                 }

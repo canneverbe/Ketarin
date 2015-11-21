@@ -1,11 +1,15 @@
-﻿namespace Ketarin.Forms
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+using CDBurnerXP.Controls;
+
+namespace Ketarin.Forms
 {
     partial class ApplicationDatabaseBaseDialog
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -159,14 +163,14 @@
 
         #endregion
 
-        private CDBurnerXP.Controls.OLVColumn colAppName;
-        private CDBurnerXP.Controls.OLVColumn colDate;
-        private System.Windows.Forms.ContextMenu cmnuApplications;
-        private System.Windows.Forms.MenuItem cmnuProperties;
-        protected System.Windows.Forms.Button bOK;
-        protected CDBurnerXP.Controls.FastObjectListView olvApplications;
-        protected System.Windows.Forms.Label lblResults;
-        protected System.Windows.Forms.Button bCancel;
-        protected CDBurnerXP.Controls.OLVColumn colUseCount;
+        private OLVColumn colAppName;
+        private OLVColumn colDate;
+        private ContextMenu cmnuApplications;
+        private MenuItem cmnuProperties;
+        protected Button bOK;
+        protected FastObjectListView olvApplications;
+        protected Label lblResults;
+        protected Button bCancel;
+        protected OLVColumn colUseCount;
     }
 }

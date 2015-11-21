@@ -1,19 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
 using System.IO;
+using System.Windows.Forms;
+using CDBurnerXP.Forms;
 
 namespace Ketarin.Forms
 {
-    public partial class LogDialog : CDBurnerXP.Forms.PersistentForm
+    public partial class LogDialog : PersistentForm
     {
         private static LogDialog m_Instance;
-        private static Queue<string> m_Log = new Queue<string>();
-        private static List<string> m_FullLog = new List<string>();
+        private static readonly Queue<string> m_Log = new Queue<string>();
+        private static readonly List<string> m_FullLog = new List<string>();
 
         #region Properties
 
@@ -24,9 +22,9 @@ namespace Ketarin.Forms
                 {
                     m_Instance = new LogDialog();
                 }
-                return LogDialog.m_Instance;
+                return m_Instance;
             }
-            set { LogDialog.m_Instance = value; }
+            set { m_Instance = value; }
         }
 
         #endregion

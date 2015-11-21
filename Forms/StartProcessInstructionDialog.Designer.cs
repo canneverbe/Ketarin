@@ -1,11 +1,16 @@
-﻿namespace Ketarin.Forms
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+using CDBurnerXP.Controls;
+using wyDay.Controls;
+
+namespace Ketarin.Forms
 {
     partial class StartProcessInstructionDialog
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -275,23 +280,23 @@
 
         #endregion
 
-        private System.Windows.Forms.Label lblProgram;
+        private Label lblProgram;
         private VariableTextBox txtProgram;
-        private System.Windows.Forms.Label lblParameters;
+        private Label lblParameters;
         private VariableTextBox txtParameters;
-        private wyDay.Controls.SplitButton bInsertArgument;
-        private System.Windows.Forms.ContextMenu argumentsMenu;
-        private System.Windows.Forms.MenuItem mnuVerySilent;
-        private System.Windows.Forms.MenuItem mnuQN;
-        private System.Windows.Forms.MenuItem mnuS;
-        private System.Windows.Forms.MenuItem mnuPassive;
-        private System.Windows.Forms.MenuItem mnuNsis;
-        private CDBurnerXP.Controls.WebLink lnkSilentSetups;
-        private CDBurnerXP.Controls.ObjectListView olvEnvironmentVariables;
-        private CDBurnerXP.Controls.OLVColumn colName;
-        private CDBurnerXP.Controls.OLVColumn olvValue;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button bBrowse;
-        private System.Windows.Forms.CheckBox chkWaitUntilExit;
+        private SplitButton bInsertArgument;
+        private ContextMenu argumentsMenu;
+        private MenuItem mnuVerySilent;
+        private MenuItem mnuQN;
+        private MenuItem mnuS;
+        private MenuItem mnuPassive;
+        private MenuItem mnuNsis;
+        private WebLink lnkSilentSetups;
+        private ObjectListView olvEnvironmentVariables;
+        private OLVColumn colName;
+        private OLVColumn olvValue;
+        private Label label1;
+        private Button bBrowse;
+        private CheckBox chkWaitUntilExit;
     }
 }

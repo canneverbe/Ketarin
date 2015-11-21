@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
 using System.Xml.Serialization;
-using System.Xml;
-using System.Data;
-using System.Data.SQLite;
 
 namespace Ketarin
 {
@@ -94,7 +89,7 @@ namespace Ketarin
 
             startInfo.CreateNoWindow = true;
             Process proc = Process.Start(startInfo);
-            if (this.WaitForExit)
+            if (this.WaitForExit && proc != null)
             {
                 proc.WaitForExit();
 

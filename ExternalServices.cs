@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Net;
 using System.Text.RegularExpressions;
 using Ketarin.Forms;
@@ -47,10 +46,8 @@ namespace Ketarin
                 string[] splitData = fileId.Split(':');
                 return string.Format("http://www.filehippo.com/{0}/download_{1}/", splitData);
             }
-            else
-            {
-                return string.Format("http://www.filehippo.com/download_{0}/", fileId);
-            }
+            
+            return string.Format("http://www.filehippo.com/download_{0}/", fileId);
         }
 
         /// <summary>
@@ -79,7 +76,7 @@ namespace Ketarin
 
             // On the overview page, find the link to the
             // download page of the latest version
-            string overviewPage = string.Empty;
+            string overviewPage;
             using (WebClient client = new WebClient())
             {
                 overviewPage = client.DownloadString(url);
@@ -112,7 +109,7 @@ namespace Ketarin
             string downloadUrl = GetFileHippoBaseDownloadUrl(fileId) + string.Format("download/{0}/", overviewPage.Substring(pos, 32)) + "?direct";
             
             // Now on the download page, find the link which redirects to the latest file
-            string downloadPage = string.Empty;
+            string downloadPage;
             using (WebClient client = new WebClient())
             {
                 downloadPage = client.DownloadString(downloadUrl);
@@ -168,7 +165,7 @@ namespace Ketarin
 
             string url = GetFileHippoBaseDownloadUrl(fileId) + "tech/";
 
-            string overviewPage = string.Empty;
+            string overviewPage;
             using (WebClient client = new WebClient())
             {
                 overviewPage = client.DownloadString(url);
@@ -220,7 +217,7 @@ namespace Ketarin
             fileId = fileId.ToLower();
             string url = GetFileHippoBaseDownloadUrl(fileId) + "tech/";
             
-            string md5Page = string.Empty;
+            string md5Page;
             using (WebClient client = new WebClient())
             {
                 md5Page = client.DownloadString(url);
@@ -310,8 +307,7 @@ namespace Ketarin
 
                     if (!FileHippoIsBeta(pageContent))
                     {
-                        urls = new List<string>();
-                        urls.Add(url);
+                        urls = new List<string> {url};
                         return urls.ToArray();
                     }
                 }

@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Data;
+using System.Data.SQLite;
+using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
-using System.IO;
-using System.Data.SQLite;
-using System.Data;
 
 namespace Ketarin
 {
@@ -16,8 +15,7 @@ namespace Ketarin
     {
         public static void ExportToFile(string filename)
         {
-            XmlWriterSettings settings = new XmlWriterSettings();
-            settings.Indent = true;
+            XmlWriterSettings settings = new XmlWriterSettings {Indent = true};
 
             XmlWriter writer = XmlWriter.Create(filename, settings);
 
@@ -87,12 +85,8 @@ namespace Ketarin
             doc.Load(filename);
 
             // Import settings from file as dictionary
-            XmlElement settingsElem = doc.SelectSingleNode("//Settings/dictionary") as XmlElement;
-            if (settingsElem == null)
-            {
-                // Backward compatibility
-                settingsElem = doc.SelectSingleNode("//dictionary") as XmlElement;
-            }
+            XmlElement settingsElem = doc.SelectSingleNode("//Settings/dictionary") as XmlElement ??
+                                      doc.SelectSingleNode("//dictionary") as XmlElement;
 
             if (settingsElem != null)
             {
@@ -112,9 +106,11 @@ namespace Ketarin
 
                 foreach (XmlElement varElem in doc.SelectNodes("//GlobalVariables/Variable"))
                 {
-                    UrlVariable newVar = new UrlVariable();
-                    newVar.Name = varElem.GetAttribute("Name");
-                    newVar.CachedContent = varElem.GetAttribute("Content");
+                    UrlVariable newVar = new UrlVariable
+                    {
+                        Name = varElem.GetAttribute("Name"),
+                        CachedContent = varElem.GetAttribute("Content")
+                    };
                     UrlVariable.GlobalVariables[newVar.Name] = newVar;
                 }
 
@@ -133,11 +129,13 @@ namespace Ketarin
 
                 foreach (XmlElement snippetElem in doc.SelectNodes("//CodeSnippets/Snippet"))
                 {
-                    Snippet snippet = new Snippet();
-                    snippet.Guid = new Guid(snippetElem.GetAttribute("Guid"));
-                    snippet.Name = snippetElem.GetAttribute("Name");
-                    snippet.Type = (ScriptType)Convert.ToInt32(snippetElem.GetAttribute("Type"));
-                    snippet.Text = snippetElem.InnerText;
+                    Snippet snippet = new Snippet
+                    {
+                        Guid = new Guid(snippetElem.GetAttribute("Guid")),
+                        Name = snippetElem.GetAttribute("Name"),
+                        Type = (ScriptType) Convert.ToInt32(snippetElem.GetAttribute("Type")),
+                        Text = snippetElem.InnerText
+                    };
                     snippet.Save();
                 }
             }
@@ -145,8 +143,6 @@ namespace Ketarin
             XmlElement setupNodes = doc.SelectSingleNode("//SetupLists") as XmlElement;
             if (setupNodes != null)
             {
-                ApplicationJob[] apps = DbManager.GetJobs();
-
                 using (IDbCommand command = DbManager.Connection.CreateCommand())
                 {
                     command.CommandText = @"DELETE FROM setuplists_applications";
@@ -161,9 +157,11 @@ namespace Ketarin
 
                 foreach (XmlElement listElem in doc.SelectNodes("//SetupLists/List"))
                 {
-                    ApplicationList list = new ApplicationList();
-                    list.Name = listElem.GetAttribute("Name");
-                    list.Guid = new Guid(listElem.GetAttribute("Guid"));
+                    ApplicationList list = new ApplicationList
+                    {
+                        Name = listElem.GetAttribute("Name"),
+                        Guid = new Guid(listElem.GetAttribute("Guid"))
+                    };
 
                     foreach (XmlElement appListElem in listElem.SelectNodes("Applications/Application"))
                     {

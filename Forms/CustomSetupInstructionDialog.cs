@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
-using System.CodeDom.Compiler;
 
 namespace Ketarin.Forms
 {
@@ -15,7 +8,7 @@ namespace Ketarin.Forms
     /// </summary>
     public partial class CustomSetupInstructionDialog : InstructionBaseDialog
     {
-        private CustomSetupInstruction instruction = null;
+        private CustomSetupInstruction instruction;
 
         #region Properties
 

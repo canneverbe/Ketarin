@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.Text;
-using System.Windows.Forms;
 using System.Web;
+using System.Windows.Forms;
 
 namespace Ketarin.Forms
 {
@@ -16,13 +14,13 @@ namespace Ketarin.Forms
     public partial class PostDataEditor : Form
     {
         private string m_PostData;
-        private DataTable m_Table = new DataTable();
+        private readonly DataTable m_Table = new DataTable();
 
         #region Properties
 
         /// <summary>
         /// Gets or sets the POST data.
-        /// Example: a=b&c=d
+        /// Example: a=b&amp;c=d
         /// </summary>
         [Browsable(false)]
         public string PostData

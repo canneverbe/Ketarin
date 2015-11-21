@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
 using System.IO;
+using System.Text;
 using System.Windows.Forms;
 using Ketarin.Forms;
 
@@ -75,14 +74,7 @@ namespace Ketarin
             commandText = commandText.Replace("\r\n", "\n");
 
             // Job specific data
-            if (job != null)
-            {
-                commandText = job.Variables.ReplaceAllInString(commandText, DateTime.MinValue, targetFileName, false);
-            }
-            else
-            {
-                commandText = UrlVariable.GlobalVariables.ReplaceAllInString(commandText);
-            }
+            commandText = job != null ? job.Variables.ReplaceAllInString(commandText, DateTime.MinValue, targetFileName, false) : UrlVariable.GlobalVariables.ReplaceAllInString(commandText);
 
             // Replace variable: root
             try
@@ -92,12 +84,14 @@ namespace Ketarin
             catch (ArgumentException) { }
 
             // Feed cmd.exe with our commands
-            ProcessStartInfo cmdExe = new ProcessStartInfo("cmd.exe");
-            cmdExe.RedirectStandardInput = true;
-            cmdExe.UseShellExecute = false;
-            cmdExe.CreateNoWindow = true;
-            cmdExe.RedirectStandardOutput = true;
-            cmdExe.RedirectStandardError = true;
+            ProcessStartInfo cmdExe = new ProcessStartInfo("cmd.exe")
+            {
+                RedirectStandardInput = true,
+                UseShellExecute = false,
+                CreateNoWindow = true,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true
+            };
 
             bool executeBackground = commandText.EndsWith("&");
             commandText = commandText.TrimEnd('&');
@@ -107,14 +101,14 @@ namespace Ketarin
                 StringBuilder commandResult = new StringBuilder();
 
                 // Set the event handler to asynchronously read the command output.
-                proc.OutputDataReceived += new DataReceivedEventHandler(delegate(object sendingProcess, DataReceivedEventArgs outLine)
+                proc.OutputDataReceived += delegate(object sendingProcess, DataReceivedEventArgs outLine)
                 {
                     if (!string.IsNullOrEmpty(outLine.Data)) commandResult.AppendLine(outLine.Data);
-                });
-                proc.ErrorDataReceived += new DataReceivedEventHandler(delegate(object sendingProcess, DataReceivedEventArgs outLine)
+                };
+                proc.ErrorDataReceived += delegate(object sendingProcess, DataReceivedEventArgs outLine)
                 {
                     if (!string.IsNullOrEmpty(outLine.Data)) commandResult.AppendLine(outLine.Data);
-                });
+                };
 
                 // Start the asynchronous read of the command output stream.
                 proc.BeginOutputReadLine();

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Ketarin
+﻿namespace Ketarin
 {
     /// <summary>
     /// Scripting language used for a command.

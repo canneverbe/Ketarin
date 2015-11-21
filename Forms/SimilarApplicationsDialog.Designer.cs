@@ -1,11 +1,14 @@
-﻿namespace Ketarin.Forms
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace Ketarin.Forms
 {
     partial class SimilarApplicationsDialog
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -105,8 +108,8 @@
 
         #endregion
 
-        private System.Windows.Forms.Label lblIntro;
-        private System.Windows.Forms.Label lblNewName;
+        private Label lblIntro;
+        private Label lblNewName;
         private System.Windows.Forms.TextBox txtNewName;
     }
 }

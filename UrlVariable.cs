@@ -1,15 +1,16 @@
 ﻿using System;
-using System.IO;
 using System.Collections.Generic;
-using System.Text;
 using System.Data;
-using System.Xml;
-using System.Xml.Serialization;
-using System.Text.RegularExpressions;
-using Ketarin.Forms;
-using CDBurnerXP;
 using System.Data.SQLite;
+using System.IO;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Web;
+using System.Windows.Forms;
+using System.Xml.Serialization;
+using CDBurnerXP;
+using CDBurnerXP.IO;
+using Ketarin.Forms;
 
 namespace Ketarin
 {
@@ -64,7 +65,7 @@ namespace Ketarin
                         comm.ExecuteNonQuery();
                     }
 
-                    foreach (UrlVariable var in UrlVariable.GlobalVariables.Values)
+                    foreach (UrlVariable var in GlobalVariables.Values)
                     {
                         var.Save(transaction, Guid.Empty);
                     }
@@ -106,17 +107,17 @@ namespace Ketarin
         private string m_Name;
         private string m_TempContent = string.Empty;
         private string m_Regex = string.Empty;
-        private string m_CachedContent = null;
-        private ApplicationJob.UrlVariableCollection m_Parent = null;
+        private string m_CachedContent;
+        private ApplicationJob.UrlVariableCollection m_Parent;
         private Guid m_JobGuid = Guid.Empty;
-        private int m_DownloadCount = 0;
-        private bool m_RegexRightToLeft = false;
+        private int m_DownloadCount;
+        private bool m_RegexRightToLeft;
         private string m_PostData;
-        private static GlobalUrlVariableCollection m_GlobalVariables = null;
+        private static GlobalUrlVariableCollection m_GlobalVariables;
         /// <summary>
         /// Prevent recursion with the ExpandedUrl property.
         /// </summary>
-        private bool m_Expanding = false;
+        private bool m_Expanding;
         private static Random random = new Random();
 
         #region Properties
@@ -425,8 +426,10 @@ namespace Ketarin
         /// </summary>
         /// <param name="input">String to search for the variable</param>
         /// <param name="varname">Name of the variable to search</param>
+        /// <param name="startAt">Starting point for search</param>
         /// <param name="position">Position of the found variable</param>
         /// <param name="length">Length of the variable string</param>
+        /// <param name="functionPart">Name of the function (if any)</param>
         /// <returns>true, if the variable has been found, false otherwise</returns>
         private static bool GetVariablePosition(string input, string varname, int startAt, out int position, out int length, out string functionPart)
         {
@@ -534,6 +537,7 @@ namespace Ketarin
         /// </summary>
         /// <param name="function">A function specification, for example "replace:a:b"</param>
         /// <param name="content">The usual variable content</param>
+        /// <param name="context">ApplicationJob context for referencing values of other variables</param>
         private static string ReplaceFunction(string function, string content, ApplicationJob context = null)
         {
             function = function.TrimStart(':');
@@ -592,14 +596,7 @@ namespace Ketarin
                         for (int i = 0; i < search.Length; i++)
                         {
                             string replaceValue = (replace.Length > i) ? replace[i] : string.Empty;
-                            if (parts[0] == "multireplacei")
-                            {
-                                content = ReplaceEx(content, search[i], replaceValue);
-                            }
-                            else
-                            {
-                                content = content.Replace(search[i], replaceValue);
-                            }
+                            content = parts[0] == "multireplacei" ? ReplaceEx(content, search[i], replaceValue) : content.Replace(search[i], replaceValue);
                         }
 
                         return content;
@@ -750,10 +747,10 @@ namespace Ketarin
                     break;
 
                 case "formatfilesize":
-                    return CDBurnerXP.IO.FormatFileSize.Format(Conversion.ToInt(content));
+                    return FormatFileSize.Format(Conversion.ToInt(content));
 
                 case "startuppath":
-                    return System.Windows.Forms.Application.StartupPath;
+                    return Application.StartupPath;
 
                 case "urldecode":
                     return HttpUtility.UrlDecode(content);
@@ -771,8 +768,8 @@ namespace Ketarin
         /// </summary>
         private static string ReplaceEx(string original, string pattern, string replacement) 
         {
-            int count, position0, position1;
-            count = position0 = position1 = 0;
+            int position0, position1;
+            int count = position0 = 0;
             string upperString = original.ToUpper();
             string upperPattern = pattern.ToUpper();
             int inc = (original.Length / pattern.Length) *

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 using System.Windows.Forms;
 using CDBurnerXP;
 
@@ -11,7 +11,7 @@ namespace Ketarin
     /// </summary>
     internal class Hotkey
     {
-        public static readonly Keys[] EndKeys = new Keys[] { Keys.A, Keys.B, Keys.C, Keys.D, Keys.E, Keys.F, Keys.G, Keys.H, Keys.I, Keys.J, Keys.K, Keys.L, Keys.M, Keys.N, Keys.O, Keys.P, Keys.Q, Keys.R, Keys.S, Keys.T, Keys.U, Keys.V, Keys.W, Keys.X, Keys.Y, Keys.Z, Keys.D0, Keys.D1, Keys.D2, Keys.D3, Keys.D4, Keys.D5, Keys.D6, Keys.D7, Keys.D8, Keys.D9, Keys.D0, Keys.F1, Keys.F2, Keys.F3, Keys.F4, Keys.F5, Keys.F6, Keys.F7, Keys.F8, Keys.F9, Keys.F10, Keys.F11, Keys.F12 };
+        public static readonly Keys[] EndKeys = { Keys.A, Keys.B, Keys.C, Keys.D, Keys.E, Keys.F, Keys.G, Keys.H, Keys.I, Keys.J, Keys.K, Keys.L, Keys.M, Keys.N, Keys.O, Keys.P, Keys.Q, Keys.R, Keys.S, Keys.T, Keys.U, Keys.V, Keys.W, Keys.X, Keys.Y, Keys.Z, Keys.D0, Keys.D1, Keys.D2, Keys.D3, Keys.D4, Keys.D5, Keys.D6, Keys.D7, Keys.D8, Keys.D9, Keys.D0, Keys.F1, Keys.F2, Keys.F3, Keys.F4, Keys.F5, Keys.F6, Keys.F7, Keys.F8, Keys.F9, Keys.F10, Keys.F11, Keys.F12 };
 
         #region Properties
 
@@ -74,13 +74,7 @@ namespace Ketarin
                 keys = keys ^ Keys.Shift;
             }
 
-            foreach (Keys key in EndKeys)
-            {
-                if (keys == key)
-                {
-                    singleKeys.Add(new KeysConverter().ConvertTo(key, typeof(string)) as string);
-                }
-            }
+            singleKeys.AddRange(from key in EndKeys where keys == key select new KeysConverter().ConvertTo(key, typeof (string)) as string);
 
             return String.Join("+", singleKeys.ToArray());
         }
@@ -99,7 +93,7 @@ namespace Ketarin
         /// Sets the key combination for this hotkey.
         /// </summary>
         /// <param name="keys">Keys required to press</param>
-        public void SetKeyShortcut(System.Windows.Forms.Keys keys)
+        public void SetKeyShortcut(Keys keys)
         {
             this.Shortcut = GetShortcutString(keys);
         }
@@ -110,7 +104,7 @@ namespace Ketarin
         /// <param name="keys">Keys to hold, when executing a double click</param>
         public void SetDoubleclickShortcut(Keys keys)
         {
-            this.Shortcut = GetDoubleClickShortcutString(keys);
+            this.Shortcut = this.GetDoubleClickShortcutString(keys);
         }
 
         /// <summary>
@@ -119,16 +113,18 @@ namespace Ketarin
         /// <returns></returns>
         public static List<Hotkey> GetHotkeys()
         {
-            List<Hotkey> hotkeys = new List<Hotkey>();
-            hotkeys.Add(new Hotkey("OpenWebsite", "Open website"));
-            hotkeys.Add(new Hotkey("Edit", "Edit application"));
-            hotkeys.Add(new Hotkey("Update", "Update application"));
-            hotkeys.Add(new Hotkey("ForceDownload", "Force download"));
-            hotkeys.Add(new Hotkey("InstallSelected", "Install selected applications"));
-            hotkeys.Add(new Hotkey("OpenFile", "Open file"));
-            hotkeys.Add(new Hotkey("OpenFolder", "Open folder"));
-            hotkeys.Add(new Hotkey("CheckUpdate", "Check for update"));
-            hotkeys.Add(new Hotkey("UpdateAndInstall", "Update and install"));
+            List<Hotkey> hotkeys = new List<Hotkey>
+            {
+                new Hotkey("OpenWebsite", "Open website"),
+                new Hotkey("Edit", "Edit application"),
+                new Hotkey("Update", "Update application"),
+                new Hotkey("ForceDownload", "Force download"),
+                new Hotkey("InstallSelected", "Install selected applications"),
+                new Hotkey("OpenFile", "Open file"),
+                new Hotkey("OpenFolder", "Open folder"),
+                new Hotkey("CheckUpdate", "Check for update"),
+                new Hotkey("UpdateAndInstall", "Update and install")
+            };
 
             foreach (Hotkey hotkey in hotkeys)
             {

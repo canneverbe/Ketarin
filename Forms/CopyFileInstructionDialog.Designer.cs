@@ -1,11 +1,15 @@
-﻿namespace Ketarin.Forms
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+using wyDay.Controls;
+
+namespace Ketarin.Forms
 {
     partial class CopyFileInstructionDialog
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -124,11 +128,11 @@
 
         #endregion
 
-        private System.Windows.Forms.Label lblSource;
+        private Label lblSource;
         private VariableTextBox txtSource;
-        private System.Windows.Forms.Label lblTarget;
+        private Label lblTarget;
         private VariableTextBox txtTarget;
-        private wyDay.Controls.SplitButton bInsertArgument;
-        private System.Windows.Forms.ContextMenu environmentMenu;
+        private SplitButton bInsertArgument;
+        private ContextMenu environmentMenu;
     }
 }
