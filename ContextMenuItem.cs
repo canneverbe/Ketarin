@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Runtime.InteropServices;
 using Microsoft.Win32;
 
 namespace Ketarin.Forms
@@ -17,29 +15,17 @@ namespace Ketarin.Forms
         /// <param name="menuItem">Item which has been clicked</param>
         public delegate void ItemSelectHandler(ContextMenuItem menuItem);
 
-        private short m_Id = 0;
+        private readonly short m_Id;
         private int m_Position = -1;
-        private string m_Text = string.Empty;
-        private ItemSelectHandler m_Handler = null;
-        private List<ContextMenuItem> m_Items = new List<ContextMenuItem>();
-        private object m_Tag;
+        private string m_Text;
+        private readonly List<ContextMenuItem> m_Items = new List<ContextMenuItem>();
 
         #region Properties
 
         /// <summary>
         /// User defined object which belongs to the menu item.
         /// </summary>
-        public object Tag
-        {
-            get
-            {
-                return m_Tag;
-            }
-            set
-            {
-                m_Tag = value;
-            }
-        }
+        public object Tag { get; set; }
 
         /// <summary>
         /// Gets the list of sub menu items.
@@ -100,17 +86,7 @@ namespace Ketarin.Forms
         /// Gets or sets the function, which is executed when the
         /// item is clicked.
         /// </summary>
-        public ItemSelectHandler EventHandler
-        {
-            get
-            {
-                return m_Handler;
-            }
-            set
-            {
-                m_Handler = value;
-            }
-        }
+        public ItemSelectHandler EventHandler { get; set; }
 
         #endregion
 

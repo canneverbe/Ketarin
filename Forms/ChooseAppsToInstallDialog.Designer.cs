@@ -1,11 +1,16 @@
-﻿namespace Ketarin.Forms
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+using CDBurnerXP.Controls;
+using wyDay.Controls;
+
+namespace Ketarin.Forms
 {
     partial class ChooseAppsToInstallDialog
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -435,36 +440,36 @@
 
         #endregion
 
-        protected System.Windows.Forms.Button bCancel;
-        protected wyDay.Controls.SplitButton bOK;
-        private CDBurnerXP.Controls.ObjectListView olvLists;
-        private CDBurnerXP.Controls.FastObjectListView olvApps;
-        private System.Windows.Forms.Label lblAppLists;
-        private System.Windows.Forms.Label lblAppsInCurrentList;
-        private System.Windows.Forms.Button bNewList;
-        private System.Windows.Forms.Button bRemoveList;
-        private CDBurnerXP.Controls.OLVColumn colListName;
-        private CDBurnerXP.Controls.OLVColumn colListAppNames;
-        private System.Windows.Forms.ImageList imlLists;
-        private wyDay.Controls.SplitButton bSelectApp;
-        private System.Windows.Forms.Button bAddApp;
-        private System.Windows.Forms.Button bRemoveApp;
-        private System.Windows.Forms.ContextMenu selectionMenu;
-        private CDBurnerXP.Controls.OLVColumn colAppsName;
-        private System.Windows.Forms.MenuItem mnuSelectAll;
-        private System.Windows.Forms.MenuItem mnuSelectNone;
-        private System.Windows.Forms.MenuItem mnuInvertSelection;
-        private System.Windows.Forms.MenuItem sepNewList;
-        private System.Windows.Forms.MenuItem mnuSaveAsNewList;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel;
-        private System.Windows.Forms.Panel pnlApps;
-        private System.Windows.Forms.Panel pnlAppLists;
-        private System.Windows.Forms.LinkLabel lblUndoDelete;
-        private System.Windows.Forms.ContextMenu mnuInstall;
-        private System.Windows.Forms.MenuItem mnuInstallOnly;
-        private System.Windows.Forms.MenuItem mnuUpdateAndInstall;
-        private System.Windows.Forms.ContextMenu cmnuView;
-        private System.Windows.Forms.MenuItem mnuTileView;
-        private System.Windows.Forms.MenuItem mnuDetailsView;
+        protected Button bCancel;
+        protected SplitButton bOK;
+        private ObjectListView olvLists;
+        private FastObjectListView olvApps;
+        private Label lblAppLists;
+        private Label lblAppsInCurrentList;
+        private Button bNewList;
+        private Button bRemoveList;
+        private OLVColumn colListName;
+        private OLVColumn colListAppNames;
+        private ImageList imlLists;
+        private SplitButton bSelectApp;
+        private Button bAddApp;
+        private Button bRemoveApp;
+        private ContextMenu selectionMenu;
+        private OLVColumn colAppsName;
+        private MenuItem mnuSelectAll;
+        private MenuItem mnuSelectNone;
+        private MenuItem mnuInvertSelection;
+        private MenuItem sepNewList;
+        private MenuItem mnuSaveAsNewList;
+        private TableLayoutPanel tableLayoutPanel;
+        private Panel pnlApps;
+        private Panel pnlAppLists;
+        private LinkLabel lblUndoDelete;
+        private ContextMenu mnuInstall;
+        private MenuItem mnuInstallOnly;
+        private MenuItem mnuUpdateAndInstall;
+        private ContextMenu cmnuView;
+        private MenuItem mnuTileView;
+        private MenuItem mnuDetailsView;
     }
 }

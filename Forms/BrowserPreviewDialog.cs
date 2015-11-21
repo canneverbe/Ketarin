@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using CDBurnerXP.Forms;
 
 namespace Ketarin.Forms
 {
@@ -12,7 +10,7 @@ namespace Ketarin.Forms
     /// Represents a dialog, which visualises the HTML code
     /// loaded by a variable.
     /// </summary>
-    public partial class BrowserPreviewDialog : CDBurnerXP.Forms.PersistentForm, IComponent
+    public partial class BrowserPreviewDialog : PersistentForm, IComponent
     {
         public BrowserPreviewDialog()
         {

@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using CDBurnerXP.Controls;
-using System.Windows.Forms;
 using System.Drawing;
+using System.Windows.Forms;
+using CDBurnerXP.Controls;
 using CDBurnerXP.Forms;
-using System.Threading;
+using Ketarin.Properties;
 
 namespace Ketarin.Forms
 {
@@ -56,9 +54,9 @@ namespace Ketarin.Forms
         private LinkLabel lnkEdit;
         private LinkLabel lnkRemove;
         private TransparentLabel lblCommandName;
-        private ListBoxPanel.TransparentLabel lblMoveUp;
-        private ListBoxPanel.TransparentLabel lblMoveDown;
-        private SetupInstruction instruction = null;
+        private TransparentLabel lblMoveUp;
+        private TransparentLabel lblMoveDown;
+        private SetupInstruction instruction;
 
         public SetupInstructionListBoxPanel()
         {
@@ -169,23 +167,23 @@ namespace Ketarin.Forms
 
         private void InitializeComponent()
         {
-            this.lblCommandName = new CDBurnerXP.Controls.ListBoxPanel.TransparentLabel();
-            this.lblCommandText = new CDBurnerXP.Controls.ListBoxPanel.TransparentLabel();
-            this.lnkEdit = new System.Windows.Forms.LinkLabel();
-            this.lnkRemove = new System.Windows.Forms.LinkLabel();
-            this.lblMoveDown = new CDBurnerXP.Controls.ListBoxPanel.TransparentLabel();
-            this.lblMoveUp = new CDBurnerXP.Controls.ListBoxPanel.TransparentLabel();
+            this.lblCommandName = new TransparentLabel();
+            this.lblCommandText = new TransparentLabel();
+            this.lnkEdit = new LinkLabel();
+            this.lnkRemove = new LinkLabel();
+            this.lblMoveDown = new TransparentLabel();
+            this.lblMoveUp = new TransparentLabel();
             this.SuspendLayout();
             // 
             // lblCommandName
             // 
             this.lblCommandName.AutoHeight = false;
             this.lblCommandName.AutoSize = true;
-            this.lblCommandName.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
-            this.lblCommandName.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblCommandName.Location = new System.Drawing.Point(3, 4);
+            this.lblCommandName.BackColor = Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
+            this.lblCommandName.Font = new Font("Microsoft Sans Serif", 8.25F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(0)));
+            this.lblCommandName.Location = new Point(3, 4);
             this.lblCommandName.Name = "lblCommandName";
-            this.lblCommandName.Size = new System.Drawing.Size(97, 13);
+            this.lblCommandName.Size = new Size(97, 13);
             this.lblCommandName.TabIndex = 0;
             this.lblCommandName.Text = "Command Name";
             // 
@@ -193,64 +191,64 @@ namespace Ketarin.Forms
             // 
             this.lblCommandText.AutoHeight = false;
             this.lblCommandText.AutoSize = true;
-            this.lblCommandText.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
-            this.lblCommandText.Location = new System.Drawing.Point(3, 20);
+            this.lblCommandText.BackColor = Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
+            this.lblCommandText.Location = new Point(3, 20);
             this.lblCommandText.Name = "lblCommandText";
-            this.lblCommandText.Size = new System.Drawing.Size(74, 13);
+            this.lblCommandText.Size = new Size(74, 13);
             this.lblCommandText.TabIndex = 1;
             this.lblCommandText.Text = "Command text";
             // 
             // lnkEdit
             // 
-            this.lnkEdit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.lnkEdit.Anchor = ((AnchorStyles)((AnchorStyles.Bottom | AnchorStyles.Right)));
             this.lnkEdit.AutoSize = true;
-            this.lnkEdit.BackColor = System.Drawing.Color.Transparent;
-            this.lnkEdit.Location = new System.Drawing.Point(225, 20);
+            this.lnkEdit.BackColor = Color.Transparent;
+            this.lnkEdit.Location = new Point(225, 20);
             this.lnkEdit.Name = "lnkEdit";
-            this.lnkEdit.Size = new System.Drawing.Size(25, 13);
+            this.lnkEdit.Size = new Size(25, 13);
             this.lnkEdit.TabIndex = 2;
             this.lnkEdit.TabStop = true;
             this.lnkEdit.Text = "Edit";
-            this.lnkEdit.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkEdit_LinkClicked);
+            this.lnkEdit.LinkClicked += this.lnkEdit_LinkClicked;
             // 
             // lnkRemove
             // 
-            this.lnkRemove.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.lnkRemove.Anchor = ((AnchorStyles)((AnchorStyles.Bottom | AnchorStyles.Right)));
             this.lnkRemove.AutoSize = true;
-            this.lnkRemove.BackColor = System.Drawing.Color.Transparent;
-            this.lnkRemove.Location = new System.Drawing.Point(253, 20);
+            this.lnkRemove.BackColor = Color.Transparent;
+            this.lnkRemove.Location = new Point(253, 20);
             this.lnkRemove.Name = "lnkRemove";
-            this.lnkRemove.Size = new System.Drawing.Size(47, 13);
+            this.lnkRemove.Size = new Size(47, 13);
             this.lnkRemove.TabIndex = 3;
             this.lnkRemove.TabStop = true;
             this.lnkRemove.Text = "Remove";
-            this.lnkRemove.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkRemove_LinkClicked);
+            this.lnkRemove.LinkClicked += this.lnkRemove_LinkClicked;
             // 
             // lblMoveDown
             // 
-            this.lblMoveDown.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblMoveDown.Anchor = ((AnchorStyles)((AnchorStyles.Top | AnchorStyles.Right)));
             this.lblMoveDown.AutoHeight = false;
-            this.lblMoveDown.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
-            this.lblMoveDown.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.lblMoveDown.Image = global::Ketarin.Properties.Resources.Arrow_Down;
-            this.lblMoveDown.Location = new System.Drawing.Point(283, 0);
+            this.lblMoveDown.BackColor = Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
+            this.lblMoveDown.Cursor = Cursors.Hand;
+            this.lblMoveDown.Image = Resources.Arrow_Down;
+            this.lblMoveDown.Location = new Point(283, 0);
             this.lblMoveDown.Name = "lblMoveDown";
-            this.lblMoveDown.Size = new System.Drawing.Size(17, 17);
+            this.lblMoveDown.Size = new Size(17, 17);
             this.lblMoveDown.TabIndex = 5;
-            this.lblMoveDown.Click += new System.EventHandler(this.lblMoveDown_Click);
+            this.lblMoveDown.Click += this.lblMoveDown_Click;
             // 
             // lblMoveUp
             // 
-            this.lblMoveUp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblMoveUp.Anchor = ((AnchorStyles)((AnchorStyles.Top | AnchorStyles.Right)));
             this.lblMoveUp.AutoHeight = false;
-            this.lblMoveUp.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
-            this.lblMoveUp.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.lblMoveUp.Image = global::Ketarin.Properties.Resources.Arrow_Up;
-            this.lblMoveUp.Location = new System.Drawing.Point(266, -1);
+            this.lblMoveUp.BackColor = Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
+            this.lblMoveUp.Cursor = Cursors.Hand;
+            this.lblMoveUp.Image = Resources.Arrow_Up;
+            this.lblMoveUp.Location = new Point(266, -1);
             this.lblMoveUp.Name = "lblMoveUp";
-            this.lblMoveUp.Size = new System.Drawing.Size(17, 17);
+            this.lblMoveUp.Size = new Size(17, 17);
             this.lblMoveUp.TabIndex = 4;
-            this.lblMoveUp.Click += new System.EventHandler(this.lblMoveUp_Click);
+            this.lblMoveUp.Click += this.lblMoveUp_Click;
             // 
             // SetupInstructionListBoxPanel
             // 
@@ -261,7 +259,7 @@ namespace Ketarin.Forms
             this.Controls.Add(this.lblCommandText);
             this.Controls.Add(this.lblCommandName);
             this.Name = "SetupInstructionListBoxPanel";
-            this.Size = new System.Drawing.Size(303, 41);
+            this.Size = new Size(303, 41);
             this.ResumeLayout(false);
             this.PerformLayout();
 

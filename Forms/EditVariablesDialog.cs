@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
-using System.Net;
+using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading;
+using System.Windows.Forms;
 using CDBurnerXP.Forms;
 using CDBurnerXP.IO;
 using Microsoft.Win32;
-using System.Threading;
 
 namespace Ketarin.Forms
 {
@@ -31,14 +28,14 @@ namespace Ketarin.Forms
             }
         }
 
-        private ApplicationJob.UrlVariableCollection m_Variables = null;
-        private ApplicationJob m_Job = null;
-        private bool m_Updating = false;
-        private string m_MatchSelection = null;
+        private readonly ApplicationJob.UrlVariableCollection m_Variables;
+        private readonly ApplicationJob m_Job;
+        private bool m_Updating;
+        private string m_MatchSelection;
         private int m_MatchPosition = -1;
-        private BrowserPreviewDialog m_Preview = null;
+        private BrowserPreviewDialog m_Preview;
         private Thread regexThread;
-        private bool gotoMatch = false;
+        private bool gotoMatch;
 
         private delegate UrlVariable VariableResultDelegate();
 
@@ -73,14 +70,7 @@ namespace Ketarin.Forms
         /// </summary>
         protected BrowserPreviewDialog PreviewDialog
         {
-            get
-            {
-                if (m_Preview == null)
-                {
-                    m_Preview = new BrowserPreviewDialog();
-                }
-                return m_Preview;
-            }
+            get { return this.m_Preview ?? (this.m_Preview = new BrowserPreviewDialog()); }
         }
 
         /// <summary>
@@ -184,7 +174,7 @@ namespace Ketarin.Forms
             }
 
             // Adjust context menus
-            txtUrl.SetVariableNames(new string[] { "category", "appname" }, appVarNames.ToArray());
+            txtUrl.SetVariableNames(new[] { "category", "appname" }, appVarNames.ToArray());
         }
 
         /// <summary>
@@ -400,7 +390,7 @@ namespace Ketarin.Forms
                     // Note: The Text property might modify the text value
                     using (ProgressDialog dialog = new ProgressDialog("Loading URL", "Please wait while the content is being downloaded..."))
                     {
-                        dialog.OnDoWork = delegate()
+                        dialog.OnDoWork = delegate
                         {
                             expandedUrl = CurrentVariable.ExpandedUrl;
                             if (dialog.Cancelled) return false;
@@ -409,8 +399,7 @@ namespace Ketarin.Forms
                             CurrentVariable.TempContent = client.DownloadString(new Uri(expandedUrl));
                             return true;
                         };
-                        dialog.OnCancel = delegate()
-                        {
+                        dialog.OnCancel = delegate {
                             dialog.Cancel();
                         };
                         dialog.ShowDialog(this);
@@ -488,9 +477,11 @@ namespace Ketarin.Forms
                 case Keys.F2:
                     if (CurrentVariable != null)
                     {
-                        NewVariableDialog dialog = new NewVariableDialog(m_Variables);
-                        dialog.VariableName = CurrentVariable.Name;
-                        dialog.Text = "Rename variable";
+                        NewVariableDialog dialog = new NewVariableDialog(m_Variables)
+                        {
+                            VariableName = this.CurrentVariable.Name,
+                            Text = "Rename variable"
+                        };
                         if (dialog.ShowDialog(this) == DialogResult.OK)
                         {
                             m_Variables.Remove(CurrentVariable.Name);
@@ -550,16 +541,7 @@ namespace Ketarin.Forms
         /// Highlights the currently matched content (based 
         /// on regex or start/end) within the richtextbox.
         /// </summary>
-        private void RefreshRtfFormatting()
-        {
-            RefreshRtfFormatting(null);
-        }
-        
-        /// <summary>
-        /// Highlights the currently matched content (based 
-        /// on regex or start/end) within the richtextbox.
-        /// </summary>
-        private void RefreshRtfFormatting(Match match)
+        private void RefreshRtfFormatting(Match match = null)
         {
             if (string.IsNullOrEmpty(rtfContent.Text) || CurrentVariable.VariableType == UrlVariable.Type.Textual) return;
 
@@ -719,7 +701,7 @@ namespace Ketarin.Forms
                 regexThread.Abort();
                 regexThread = null;
             }
-            regexThread = new Thread(new ParameterizedThreadStart(EvaluateRegex));
+            regexThread = new Thread(this.EvaluateRegex);
             regexThread.Start(rtfContent.Text);
         }
 
@@ -780,11 +762,7 @@ namespace Ketarin.Forms
         private void bOK_Click(object sender, EventArgs e)
         {
             // Delete empty variables
-            List<string> toDelete = new List<string>();
-            foreach (KeyValuePair<string, UrlVariable> pair in m_Variables) 
-            {
-                if (pair.Value.IsEmpty) toDelete.Add(pair.Key);
-            }
+            List<string> toDelete = this.m_Variables.Where(pair => pair.Value.IsEmpty).Select(pair => pair.Key).ToList();
             while (toDelete.Count > 0) { m_Variables.Remove(toDelete[0]); toDelete.RemoveAt(0); }
 
             // Save results
@@ -838,7 +816,7 @@ namespace Ketarin.Forms
             {
                 if (m_Preview == null)
                 {
-                    PreviewDialog.VisibleChanged += new EventHandler(PreviewDialog_VisibleChanged);
+                    PreviewDialog.VisibleChanged += this.PreviewDialog_VisibleChanged;
                 }
                 bLoad.PerformClick(); // Reload browser contents
             }

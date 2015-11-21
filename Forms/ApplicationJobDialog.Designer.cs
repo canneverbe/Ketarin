@@ -1,11 +1,16 @@
-﻿namespace Ketarin.Forms
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+using CDBurnerXP.Controls;
+using wyDay.Controls;
+
+namespace Ketarin.Forms
 {
     partial class ApplicationJobDialog
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -915,74 +920,74 @@
 
         #endregion
 
-        private System.Windows.Forms.Button bCancel;
-        private System.Windows.Forms.Button bOK;
-        private System.Windows.Forms.Label lblApplicationName;
+        private Button bCancel;
+        private Button bOK;
+        private Label lblApplicationName;
         private System.Windows.Forms.TextBox txtApplicationName;
-        private System.Windows.Forms.Panel pnlDownloadSource;
+        private Panel pnlDownloadSource;
         private VariableTextBox txtFixedUrl;
-        private System.Windows.Forms.RadioButton rbFixedUrl;
-        private CDBurnerXP.Controls.Separator sepDownload;
-        private System.Windows.Forms.Panel pnlTarget;
-        private System.Windows.Forms.RadioButton rbFolder;
-        private System.Windows.Forms.RadioButton rbFileName;
-        private CDBurnerXP.Controls.Separator sepTarget;
+        private RadioButton rbFixedUrl;
+        private Separator sepDownload;
+        private Panel pnlTarget;
+        private RadioButton rbFolder;
+        private RadioButton rbFileName;
+        private Separator sepTarget;
         private VariableTextBox txtTarget;
-        private System.Windows.Forms.Button bBrowseFile;
+        private Button bBrowseFile;
         private System.Windows.Forms.TextBox txtFileHippoId;
-        private System.Windows.Forms.RadioButton rbFileHippo;
-        private System.Windows.Forms.CheckBox chkDeletePrevious;
-        private System.Windows.Forms.Button bVariables;
-        private System.Windows.Forms.Label lblCategory;
+        private RadioButton rbFileHippo;
+        private CheckBox chkDeletePrevious;
+        private Button bVariables;
+        private Label lblCategory;
         private NonValidatingComboBox cboCategory;
-        private System.Windows.Forms.CheckBox chkShareOnline;
-        private System.Windows.Forms.Label lblSpoofReferer;
+        private CheckBox chkShareOnline;
+        private Label lblSpoofReferer;
         private VariableTextBox txtSpoofReferer;
-        private System.Windows.Forms.TabControl tcApplication;
-        private System.Windows.Forms.TabPage tpApplication;
-        private System.Windows.Forms.TabPage tpSettings;
-        private System.Windows.Forms.Label lblUseVariableForChanges;
-        private System.Windows.Forms.ComboBox txtUseVariablesForChanges;
-        private System.Windows.Forms.TabPage tpCommands;
-        private System.Windows.Forms.Label lblCommandBefore;
-        private System.Windows.Forms.Label lblExecuteCommand;
-        private System.Windows.Forms.CheckBox chkDownloadExclusively;
-        private System.Windows.Forms.Button bSaveAsDefault;
-        private System.Windows.Forms.CheckBox chkCheckForUpdatesOnly;
-        private System.Windows.Forms.CheckBox chkIgnoreFileInformation;
-        private System.Windows.Forms.TabPage tpInformation;
-        private System.Windows.Forms.Label lblNotes;
+        private TabControl tcApplication;
+        private TabPage tpApplication;
+        private TabPage tpSettings;
+        private Label lblUseVariableForChanges;
+        private ComboBox txtUseVariablesForChanges;
+        private TabPage tpCommands;
+        private Label lblCommandBefore;
+        private Label lblExecuteCommand;
+        private CheckBox chkDownloadExclusively;
+        private Button bSaveAsDefault;
+        private CheckBox chkCheckForUpdatesOnly;
+        private CheckBox chkIgnoreFileInformation;
+        private TabPage tpInformation;
+        private Label lblNotes;
         private System.Windows.Forms.TextBox txtWebsite;
-        private System.Windows.Forms.Label lblWebsite;
+        private Label lblWebsite;
         private System.Windows.Forms.TextBox txtNotes;
-        private System.Windows.Forms.TabPage tpSetup;
-        private wyDay.Controls.SplitButton bAddInstruction;
-        private System.Windows.Forms.Label label1;
-        private CDBurnerXP.Controls.AdvancedListBox instructionsListBox;
-        private System.Windows.Forms.ContextMenu cmnuAddInstruction;
-        private System.Windows.Forms.MenuItem mnuCopyFile;
-        private System.Windows.Forms.MenuItem mnuCustomCommand;
-        private System.Windows.Forms.MenuItem mnuStartProcess;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutCommands;
-        private System.Windows.Forms.Panel pnlCommandBefore;
-        private System.Windows.Forms.Panel pnlCommandAfter;
-        private CDBurnerXP.Controls.Separator sepMiscellaneous;
-        private CDBurnerXP.Controls.Separator sepUpdateDetection;
-        private CDBurnerXP.Controls.Separator sepDownloads;
-        private System.Windows.Forms.Panel pnlBeta;
-        private System.Windows.Forms.RadioButton rbBetaAvoid;
-        private System.Windows.Forms.RadioButton rbAlwaysDownload;
-        private System.Windows.Forms.Label lblBetaVersions;
-        private System.Windows.Forms.RadioButton rbBetaDefault;
+        private TabPage tpSetup;
+        private SplitButton bAddInstruction;
+        private Label label1;
+        private AdvancedListBox instructionsListBox;
+        private ContextMenu cmnuAddInstruction;
+        private MenuItem mnuCopyFile;
+        private MenuItem mnuCustomCommand;
+        private MenuItem mnuStartProcess;
+        private TableLayoutPanel tableLayoutCommands;
+        private Panel pnlCommandBefore;
+        private Panel pnlCommandAfter;
+        private Separator sepMiscellaneous;
+        private Separator sepUpdateDetection;
+        private Separator sepDownloads;
+        private Panel pnlBeta;
+        private RadioButton rbBetaAvoid;
+        private RadioButton rbAlwaysDownload;
+        private Label lblBetaVersions;
+        private RadioButton rbBetaDefault;
         private VariableTextBox txtUserAgent;
-        private System.Windows.Forms.Label lblUserAgent;
+        private Label lblUserAgent;
         private CommandControl txtExecuteBefore;
         private CommandControl txtExecuteAfter;
-        private System.Windows.Forms.MenuItem mnuCloseProcess;
-        private System.Windows.Forms.CheckBox chkEnabled;
-        private System.Windows.Forms.Label lblHashVariable;
-        private System.Windows.Forms.ComboBox cboHashType;
-        private System.Windows.Forms.ComboBox cboHashVariable;
-        private System.Windows.Forms.Label lblCompareWithHash;
+        private MenuItem mnuCloseProcess;
+        private CheckBox chkEnabled;
+        private Label lblHashVariable;
+        private ComboBox cboHashType;
+        private ComboBox cboHashVariable;
+        private Label lblCompareWithHash;
     }
 }

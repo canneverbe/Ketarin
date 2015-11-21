@@ -1,18 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
 using System.Collections;
 using System.IO;
+using System.Windows.Forms;
 
 namespace Ketarin.Forms
 {
     public partial class CopyFileInstructionDialog : InstructionBaseDialog
     {
-        private CopyFileInstruction instruction = null;
+        private CopyFileInstruction instruction;
 
         public override SetupInstruction SetupInstruction
         {
@@ -52,7 +47,7 @@ namespace Ketarin.Forms
                     if (Directory.Exists(var.Value as string))
                     {
                         MenuItem newItem = new MenuItem(var.Key as string);
-                        newItem.Click += new EventHandler(EnvironmentVariableClick);
+                        newItem.Click += this.EnvironmentVariableClick;
                         environmentMenu.MenuItems.Add(newItem);
                     }
                 }

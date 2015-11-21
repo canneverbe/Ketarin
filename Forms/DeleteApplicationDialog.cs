@@ -1,9 +1,7 @@
-﻿using System;
+﻿using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Text;
+using System.Linq;
 using System.Windows.Forms;
 using CDBurnerXP.IO;
 
@@ -26,14 +24,9 @@ namespace Ketarin.Forms
         /// and deletes them if wanted.
         /// </summary>
         /// <returns>true if the application has been deleted, false otherwise</returns>
-        public static bool Show(IWin32Window owner, System.Collections.ArrayList applications)
+        public static bool Show(IWin32Window owner, ArrayList applications)
         {
-            List<ApplicationJob> jobs = new List<ApplicationJob>();
-            foreach (ApplicationJob app in applications)
-            {
-                jobs.Add(app);
-            }
-            return Show(owner, jobs.ToArray());
+            return Show(owner, applications.Cast<ApplicationJob>().ToArray());
         }
 
         /// <summary>

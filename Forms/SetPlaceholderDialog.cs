@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 using System.Xml;
 using CDBurnerXP.Forms;
@@ -16,9 +13,9 @@ namespace Ketarin.Forms
     /// </summary>
     public partial class SetPlaceholderDialog : PersistentForm
     {
-        private Dictionary<string, Placeholder> placeholders = new Dictionary<string, Placeholder>();
-        private string templateXml = string.Empty;
-        private Dictionary<string, string> result = new Dictionary<string, string>();
+        private readonly Dictionary<string, Placeholder> placeholders = new Dictionary<string, Placeholder>();
+        private readonly string templateXml = string.Empty;
+        private readonly Dictionary<string, string> result = new Dictionary<string, string>();
         private bool automaticallyDetermine = true;
 
         #region Placeholder
@@ -79,14 +76,16 @@ namespace Ketarin.Forms
             // Add a TextBox or a ComboBox for each placeholder
             foreach (Placeholder placeholder in this.placeholders.Values)
             {
-                Label placeholderLabel = new Label();
-                placeholderLabel.Text = placeholder.Name + ":";
-                placeholderLabel.Dock = DockStyle.Fill;
-                placeholderLabel.AutoSize = true;
-                placeholderLabel.TextAlign = ContentAlignment.MiddleLeft;
+                Label placeholderLabel = new Label
+                {
+                    Text = placeholder.Name + ":",
+                    Dock = DockStyle.Fill,
+                    AutoSize = true,
+                    TextAlign = ContentAlignment.MiddleLeft
+                };
                 tblMain.Controls.Add(placeholderLabel);
 
-                Control placeholderEditControl = null;
+                Control placeholderEditControl;
 
                 if (placeholder.Options.Length == 0)
                 {
@@ -226,7 +225,7 @@ namespace Ketarin.Forms
             }
             catch (Exception ex)
             {
-                MessageBox.Show(this, "Some information cannot not automatically be determined: " + ex.Message + "\r\n\r\nPlease enter the required information manually.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(owner, "Some information cannot not automatically be determined: " + ex.Message + "\r\n\r\nPlease enter the required information manually.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 foreach (Control control in tblMain.Controls)
                 {

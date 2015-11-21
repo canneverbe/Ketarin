@@ -1,11 +1,14 @@
-﻿namespace Ketarin.Forms
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace Ketarin.Forms
 {
     partial class AddCustomColumnDialog
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -133,12 +136,12 @@
 
         #endregion
 
-        private System.Windows.Forms.Button bOK;
-        private System.Windows.Forms.Button bCancel;
-        private System.Windows.Forms.Label lblColName;
+        private Button bOK;
+        private Button bCancel;
+        private Label lblColName;
         private TextBox txtColumnName;
-        private System.Windows.Forms.Label lblColValue;
+        private Label lblColValue;
         private System.Windows.Forms.TextBox txtColumnValue;
-        private System.Windows.Forms.Label lblExample;
+        private Label lblExample;
     }
 }

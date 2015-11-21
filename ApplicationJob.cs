@@ -15,6 +15,7 @@ using CDBurnerXP.IO;
 using Ketarin.Forms;
 using System.Reflection;
 using System.Collections;
+using System.Linq;
 using CodeProject.ReiMiyasaka;
 
 namespace Ketarin
@@ -30,22 +31,19 @@ namespace Ketarin
         private string m_Name;
         private string m_FixedDownloadUrl = string.Empty;
         private string m_TargetPath = string.Empty;
-        private DateTime? m_LastUpdated = null;
-        private bool m_Enabled = true;
-        private string m_FileHippoId = string.Empty;
-        private string m_FileHippoVersion = string.Empty;
+        private DateTime? m_LastUpdated;
         private SourceType m_SourceType = SourceType.FixedUrl;
-        private UrlVariableCollection m_Variables = null;
+        private UrlVariableCollection m_Variables;
         private Guid m_Guid = Guid.Empty;
         private bool m_CanBeShared = true;
-        private bool m_ShareApplication = false;
+        private bool m_ShareApplication;
         private string m_HttpReferer = string.Empty;
         private string m_VariableChangeIndicator = string.Empty;
-        private string m_VariableChangeIndicatorLastContent = null;
+        private string m_VariableChangeIndicatorLastContent;
         private string m_PreviousRelativeLocation = string.Empty;
-        private List<SetupInstruction> setupInstructions = null;
-        private static PropertyInfo[] applicationJobProperties = null;
-        private string cachedCurrentLocation = null;
+        private List<SetupInstruction> setupInstructions;
+        private static PropertyInfo[] applicationJobProperties;
+        private string cachedCurrentLocation;
         private string previousLocation = string.Empty;
         private string hashVariable;
 
@@ -54,13 +52,10 @@ namespace Ketarin
         /// </summary>
         private static PropertyInfo[] ApplicationJobProperties
         {
-            get
-            {
-                if (applicationJobProperties == null)
-                {
-                    applicationJobProperties = typeof(ApplicationJob).GetProperties(BindingFlags.Public | BindingFlags.Instance);
-                }
-                return applicationJobProperties;
+            get {
+                return applicationJobProperties ??
+                       (applicationJobProperties =
+                           typeof (ApplicationJob).GetProperties(BindingFlags.Public | BindingFlags.Instance));
             }
         }
 
@@ -94,7 +89,7 @@ namespace Ketarin
             get
             {
                 // Prevent unnecessary CDATA elements
-                if (string.IsNullOrEmpty(SourceTemplate))
+                if (string.IsNullOrEmpty(this.SourceTemplate))
                 {
                     return null;
                 }
@@ -110,8 +105,7 @@ namespace Ketarin
                 }
                 else
                 {
-                    XmlDocument doc = new XmlDocument();
-                    doc.PreserveWhitespace = true;
+                    XmlDocument doc = new XmlDocument {PreserveWhitespace = true};
                     if (string.IsNullOrEmpty(value.InnerText))
                     {
                         this.SourceTemplate = string.Empty;
@@ -145,7 +139,7 @@ namespace Ketarin
         {
             get
             {
-                return m_Variables.ReplaceAllInString(WebsiteUrl);
+                return this.m_Variables.ReplaceAllInString(this.WebsiteUrl);
             }
         }
 
@@ -207,13 +201,13 @@ namespace Ketarin
         /// </summary>
         public string VariableChangeIndicator
         {
-            get { return m_VariableChangeIndicator; }
+            get { return this.m_VariableChangeIndicator; }
             set
             {
-                if (m_VariableChangeIndicator != value)
+                if (this.m_VariableChangeIndicator != value)
                 {
-                    m_VariableChangeIndicator = value;
-                    m_VariableChangeIndicatorLastContent = null;
+                    this.m_VariableChangeIndicator = value;
+                    this.m_VariableChangeIndicatorLastContent = null;
                 }
             }
         }
@@ -242,16 +236,16 @@ namespace Ketarin
         /// remote server, so this is not a security measure.</remarks>
         public bool CanBeShared
         {
-            get { return m_CanBeShared; }
-            set { m_CanBeShared = value; }
+            get { return this.m_CanBeShared; }
+            set { this.m_CanBeShared = value; }
         }
 
         public bool ShareApplication
         {
-            get { return m_ShareApplication; }
+            get { return this.m_ShareApplication; }
             set
             {
-                m_ShareApplication = value && CanBeShared;
+                this.m_ShareApplication = value && this.CanBeShared;
             }
         }
 
@@ -269,8 +263,8 @@ namespace Ketarin
         /// </summary>
         public string HttpReferer
         {
-            get { return m_HttpReferer; }
-            set { m_HttpReferer = value; }
+            get { return this.m_HttpReferer; }
+            set { this.m_HttpReferer = value; }
         }
 
         /// <summary>
@@ -282,11 +276,11 @@ namespace Ketarin
         {
             get
             {
-                return m_Guid;
+                return this.m_Guid;
             }
             set
             {
-                m_Guid = value;
+                this.m_Guid = value;
             }
         }
 
@@ -322,7 +316,7 @@ namespace Ketarin
                                     XmlSerializer serializer = new XmlSerializer(Type.GetType("Ketarin." + doc.DocumentElement.Name));
                                     SetupInstruction instruction = (SetupInstruction)serializer.Deserialize(xmlReader);
                                     instruction.Application = this;
-                                    setupInstructions.Add(instruction);
+                                    this.setupInstructions.Add(instruction);
                                 }
                             }
                         }
@@ -342,8 +336,8 @@ namespace Ketarin
         public class UrlVariableCollection : SerializableDictionary<string, UrlVariable>
         {
             private ApplicationJob parent;
-            private bool m_VersionDownloaded = false;
-            private FileInfo cachedInfo = null;
+            private bool m_VersionDownloaded;
+            private FileInfo cachedInfo;
 
             #region Properties
 
@@ -377,7 +371,7 @@ namespace Ketarin
                 {
                     var.DownloadCount = 0;
                 }
-                m_VersionDownloaded = false;
+                this.m_VersionDownloaded = false;
             }
 
             /// <summary>
@@ -387,9 +381,9 @@ namespace Ketarin
             /// <param name="name">Name of the variable, { and }.</param>
             public bool HasVariableBeenDownloaded(string name)
             {
-                if (name == "version") return m_VersionDownloaded;
+                if (name == "version") return this.m_VersionDownloaded;
 
-                if (!ContainsKey(name)) return false;
+                if (!this.ContainsKey(name)) return false;
 
                 UrlVariable var = this[name];
                 return (var.DownloadCount > 0);
@@ -402,30 +396,30 @@ namespace Ketarin
 
             public virtual string ReplaceAllInString(string value, DateTime fileDate, string filename, bool onlyCachedContent, bool skipGlobalVariables = false)
             {
-                if (value == null) return value;
+                if (value == null) return null;
 
                 if (this.parent != null && !string.IsNullOrEmpty(this.parent.CurrentLocation))
                 {
                     try
                     {
-                        if (!ContainsKey("file"))
+                        if (!this.ContainsKey("file"))
                         {
                             value = UrlVariable.Replace(value, "file", this.parent.CurrentLocation, this.parent);
                         }
 
-                        if (cachedInfo == null || cachedInfo.FullName != this.parent.CurrentLocation)
+                        if (this.cachedInfo == null || this.cachedInfo.FullName != this.parent.CurrentLocation)
                         {
-                            cachedInfo = new FileInfo(this.parent.CurrentLocation);
+                            this.cachedInfo = new FileInfo(this.parent.CurrentLocation);
                         }
                         // Try to provide file date if missing
                         if (fileDate == DateTime.MinValue)
                         {
-                            fileDate = cachedInfo.LastWriteTime;
+                            fileDate = this.cachedInfo.LastWriteTime;
                         }
                         // Provide file size
-                        if (cachedInfo.Exists)
+                        if (this.cachedInfo.Exists)
                         {
-                            value = UrlVariable.Replace(value, "filesize", cachedInfo.Length.ToString(), this.parent);
+                            value = UrlVariable.Replace(value, "filesize", this.cachedInfo.Length.ToString(), this.parent);
                         }
                     }
                     catch (Exception)
@@ -439,10 +433,10 @@ namespace Ketarin
                 if (fileDate > DateTime.MinValue)
                 {
                     // Some date/time variables, only if they were not user defined
-                    string[] dateTimeVars = new string[] { "dd", "ddd", "dddd", "hh", "HH", "mm", "MM", "MMM", "MMMM", "ss", "tt", "yy", "yyyy", "zz", "zzz" };
+                    string[] dateTimeVars = { "dd", "ddd", "dddd", "hh", "HH", "mm", "MM", "MMM", "MMMM", "ss", "tt", "yy", "yyyy", "zz", "zzz" };
                     foreach (string dateTimeVar in dateTimeVars)
                     {
-                        if (!ContainsKey(dateTimeVar))
+                        if (!this.ContainsKey(dateTimeVar))
                         {
                             value = value.Replace("{f:" + dateTimeVar + "}", fileDate.ToString(dateTimeVar));
                         }
@@ -467,10 +461,10 @@ namespace Ketarin
                 value = UrlVariable.Replace(value, "startuppath", PathEx.QualifyPath(Application.StartupPath), this.parent);
 
                 // Some date/time variables, only if they were not user defined
-                string[] dateTimeVariables = new string[] { "dd", "ddd", "dddd", "hh", "HH", "mm", "MM", "MMM", "MMMM", "ss", "tt", "yy", "yyyy", "zz", "zzz" };
+                string[] dateTimeVariables = { "dd", "ddd", "dddd", "hh", "HH", "mm", "MM", "MMM", "MMMM", "ss", "tt", "yy", "yyyy", "zz", "zzz" };
                 foreach (string dateTimeVar in dateTimeVariables)
                 {
-                    if (!ContainsKey(dateTimeVar))
+                    if (!this.ContainsKey(dateTimeVar))
                     {
                         value = value.Replace("{" + dateTimeVar + "}", DateTime.Now.ToString(dateTimeVar));
                     }
@@ -500,7 +494,7 @@ namespace Ketarin
                     
                    
                     // Allow to access all public properties of the object per "property:X" variable.
-                    foreach (PropertyInfo property in ApplicationJob.ApplicationJobProperties)
+                    foreach (PropertyInfo property in ApplicationJobProperties)
                     {
                         // Only make effort if variable is used
                         string varname = "property:" + property.Name;
@@ -513,7 +507,7 @@ namespace Ketarin
                         }
                     }
 
-                    if (!ContainsKey("version"))
+                    if (!this.ContainsKey("version"))
                     {
                         // FileHippo version
                         if (this.parent.DownloadSourceType == SourceType.FileHippo && UrlVariable.IsVariableUsedInString("version", value))
@@ -521,7 +515,7 @@ namespace Ketarin
                             if (!onlyCachedContent)
                             {
                                 this.parent.FileHippoVersion = ExternalServices.FileHippoVersion(this.parent.FileHippoId, this.parent.AvoidDownloadBeta);
-                                m_VersionDownloaded = true;
+                                this.m_VersionDownloaded = true;
                             }
                             value = UrlVariable.Replace(value, "version", this.parent.FileHippoVersion, this.parent);
                         }
@@ -533,7 +527,7 @@ namespace Ketarin
                     }
                 }
 
-                foreach (UrlVariable var in Values)
+                foreach (UrlVariable var in this.Values)
                 {
                     var.Parent = this; // make sure that value is set correctly
                     value = var.ReplaceInString(value, fileDate, onlyCachedContent);
@@ -555,14 +549,14 @@ namespace Ketarin
         public UrlVariableCollection Variables
         {
             get {
-                return m_Variables;
+                return this.m_Variables;
             }
             set
             {
                 if (value != null)
                 {
-                    m_Variables = value;
-                    m_Variables.Parent = this;
+                    this.m_Variables = value;
+                    this.m_Variables.Parent = this;
                 }
             }
         }
@@ -619,8 +613,8 @@ namespace Ketarin
         [XmlElement("SourceType")]
         public SourceType DownloadSourceType
         {
-            get { return m_SourceType; }
-            set { m_SourceType = value; }
+            get { return this.m_SourceType; }
+            set { this.m_SourceType = value; }
         }
 
         /// <summary>
@@ -646,7 +640,7 @@ namespace Ketarin
         {
             get
             {
-                return !string.IsNullOrEmpty(CurrentLocation) && PathEx.TryGetFileSize(CurrentLocation) > 0;
+                return !string.IsNullOrEmpty(this.CurrentLocation) && PathEx.TryGetFileSize(this.CurrentLocation) > 0;
             }
         }
 
@@ -663,17 +657,17 @@ namespace Ketarin
                     return this.cachedCurrentLocation;
                 }
 
-                string result = null;
+                string result;
 
-                if (!string.IsNullOrEmpty(PreviousLocation) && PathEx.TryGetFileSize(PreviousLocation) > 0)
+                if (!string.IsNullOrEmpty(this.PreviousLocation) && PathEx.TryGetFileSize(this.PreviousLocation) > 0)
                 {
-                    result = PreviousLocation;
+                    result = this.PreviousLocation;
                 }
-                else if (!string.IsNullOrEmpty(m_PreviousRelativeLocation))
+                else if (!string.IsNullOrEmpty(this.m_PreviousRelativeLocation))
                 {
                     try
                     {
-                        result = Path.GetFullPath(Path.Combine(Application.StartupPath, m_PreviousRelativeLocation));
+                        result = Path.GetFullPath(Path.Combine(Application.StartupPath, this.m_PreviousRelativeLocation));
                     }
                     catch (NotSupportedException)
                     {
@@ -697,54 +691,41 @@ namespace Ketarin
         [XmlElement("DeletePreviousFile")]
         public bool DeletePreviousFile
         {
-            get;
-            set;
+            get; set;
         }
 
         [XmlElement("Enabled")]
-        public bool Enabled
-        {
-            get { return m_Enabled; }
-            set { m_Enabled = value; }
-        }
+        public bool Enabled { get; set; }
 
         public bool TargetIsFolder
         {
             get
             {
-                if (string.IsNullOrEmpty(m_TargetPath)) return false;
+                if (string.IsNullOrEmpty(this.m_TargetPath)) return false;
 
-                return TargetPath.EndsWith("\\") || Directory.Exists(m_TargetPath);
+                return this.TargetPath.EndsWith("\\") || Directory.Exists(this.m_TargetPath);
             }
         }
 
         [XmlElement("FileHippoId")]
-        public string FileHippoId
-        {
-            get { return m_FileHippoId; }
-            set { m_FileHippoId = value; }
-        }
+        public string FileHippoId { get; set; }
 
         /// <summary>
         /// Contains the cached version information
         /// on FileHippo.
         /// </summary>
         [XmlIgnore()]
-        public string FileHippoVersion
-        {
-            get { return m_FileHippoVersion; }
-            set { m_FileHippoVersion = value; }
-        }
+        public string FileHippoVersion { get; set; }
 
         [XmlElement("LastUpdated")]
         public DateTime? LastUpdated
         {
-            get { return m_LastUpdated; }
+            get { return this.m_LastUpdated; }
             set
             {
-                if (m_LastUpdated != value)
+                if (this.m_LastUpdated != value)
                 {
-                    m_LastUpdated = value;
+                    this.m_LastUpdated = value;
                     this.cachedCurrentLocation = null;
                 }
             }
@@ -753,31 +734,23 @@ namespace Ketarin
         [XmlElement("TargetPath")]
         public string TargetPath
         {
-            get { return m_TargetPath; }
-            set { m_TargetPath = value; }
+            get { return this.m_TargetPath; }
+            set { this.m_TargetPath = value; }
         }
 
         [XmlElement("FixedDownloadUrl")]
         public string FixedDownloadUrl
         {
-            get { return m_FixedDownloadUrl; }
-            set { m_FixedDownloadUrl = value; }
+            get { return this.m_FixedDownloadUrl; }
+            set { this.m_FixedDownloadUrl = value; }
         }
 
         [XmlElement("Name")]
         public string Name
         {
-            get { return m_Name; }
-            set
-            {
-                if (value.Length > 255)
-                {
-                    m_Name = value.Substring(0, 255);
-                }
-                else
-                {
-                    m_Name = value;
-                }
+            get { return this.m_Name; }
+            set {
+                this.m_Name = value.Length > 255 ? value.Substring(0, 255) : value;
             }
         }
 
@@ -791,12 +764,12 @@ namespace Ketarin
             get
             {
                 bool defaultValue = (bool)Settings.GetValue("AvoidFileHippoBeta", false);
-                if (DownloadBeta == DownloadBetaType.Default)
+                if (this.DownloadBeta == DownloadBetaType.Default)
                 {
                     return defaultValue;
                 }
 
-                return (DownloadBeta == DownloadBetaType.Avoid);
+                return (this.DownloadBeta == DownloadBetaType.Avoid);
             }
         }
 
@@ -807,9 +780,12 @@ namespace Ketarin
         /// </summary>
         public ApplicationJob()
         {
-            m_Variables = new ApplicationJob.UrlVariableCollection(this);
-            ExecuteCommandType = ScriptType.Batch;
-            ExecutePreCommandType = ScriptType.Batch;
+            this.Enabled = true;
+            this.FileHippoId = string.Empty;
+            this.FileHippoVersion = string.Empty;
+            this.m_Variables = new UrlVariableCollection(this);
+            this.ExecuteCommandType = ScriptType.Batch;
+            this.ExecutePreCommandType = ScriptType.Batch;
         }
 
         /// <summary>
@@ -823,7 +799,7 @@ namespace Ketarin
             {
                 command.Transaction = transaction;
                 command.CommandText = @"DELETE FROM jobs WHERE JobGuid = @JobGuid";
-                command.Parameters.Add(new SQLiteParameter("@JobGuid", DbManager.FormatGuid(m_Guid)));
+                command.Parameters.Add(new SQLiteParameter("@JobGuid", DbManager.FormatGuid(this.m_Guid)));
                 command.ExecuteNonQuery();
             }
 
@@ -832,7 +808,7 @@ namespace Ketarin
             {
                 command.Transaction = transaction;
                 command.CommandText = "DELETE FROM variables WHERE JobGuid = @JobGuid";
-                command.Parameters.Add(new SQLiteParameter("@JobGuid", DbManager.FormatGuid(m_Guid)));
+                command.Parameters.Add(new SQLiteParameter("@JobGuid", DbManager.FormatGuid(this.m_Guid)));
                 command.ExecuteNonQuery();
             }
 
@@ -872,14 +848,14 @@ namespace Ketarin
         public bool UpdateFromXml(string[] xmlValues)
         {
             // No update possible
-            if (CanBeShared) return false;
+            if (this.CanBeShared) return false;
 
             foreach (string xml in xmlValues)
             {
                 ApplicationJob job = LoadOneFromXml(xml);
-                if (job.Guid == Guid)
+                if (job.Guid == this.Guid)
                 {
-                    UpdateTemplatePropertiesFromApp(job); 
+                    this.UpdateTemplatePropertiesFromApp(job); 
                     return true;
                 }
             }
@@ -896,18 +872,18 @@ namespace Ketarin
             // Basically, we are only interested in properties
             // that change if a different method needs to be used
             // in order to download the file (changed website for example).
-            DownloadDate = DateTime.Now;
-            DownloadSourceType = job.DownloadSourceType;
-            FileHippoId = job.FileHippoId;
-            FixedDownloadUrl = job.FixedDownloadUrl;
-            HttpReferer = job.HttpReferer;
-            UserAgent = job.UserAgent;
-            Name = job.Name;
-            VariableChangeIndicator = job.VariableChangeIndicator;
-            Variables = job.Variables;
-            SetupInstructions = job.SetupInstructions;
+            this.DownloadDate = DateTime.Now;
+            this.DownloadSourceType = job.DownloadSourceType;
+            this.FileHippoId = job.FileHippoId;
+            this.FixedDownloadUrl = job.FixedDownloadUrl;
+            this.HttpReferer = job.HttpReferer;
+            this.UserAgent = job.UserAgent;
+            this.Name = job.Name;
+            this.VariableChangeIndicator = job.VariableChangeIndicator;
+            this.Variables = job.Variables;
+            this.SetupInstructions = job.SetupInstructions;
 
-            Save();
+            this.Save();
         }
 
         /// <summary>
@@ -915,13 +891,13 @@ namespace Ketarin
         /// </summary>
         private void UpdateFromTemplate(string xml)
         {
-            if (string.IsNullOrEmpty(SourceTemplate)) return;
+            if (string.IsNullOrEmpty(this.SourceTemplate)) return;
 
             Dictionary<string, string> previousValues = new Dictionary<string, string>();
 
             // Extract previously used values
             XmlDocument sourceTemplateXml = new XmlDocument();
-            sourceTemplateXml.LoadXml(SourceTemplate);
+            sourceTemplateXml.LoadXml(this.SourceTemplate);
 
             XmlNodeList placeholdersList = sourceTemplateXml.GetElementsByTagName("placeholder");
             foreach (XmlElement element in placeholdersList)
@@ -942,7 +918,7 @@ namespace Ketarin
             }
 
             ApplicationJob newAppDefinition = LoadOneFromXml(newTemplate.OuterXml);
-            UpdateTemplatePropertiesFromApp(newAppDefinition);
+            this.UpdateTemplatePropertiesFromApp(newAppDefinition);
         }        
 
         /// <summary>
@@ -993,8 +969,7 @@ namespace Ketarin
 
             if (progNames.Count == 0 && downloadUrls.Count == 0) return null;
 
-            ApplicationJob job = new ApplicationJob();
-            job.DownloadSourceType = SourceType.FixedUrl;
+            ApplicationJob job = new ApplicationJob {DownloadSourceType = SourceType.FixedUrl};
             if (progNames.Count > 0)
             {
                 job.Name = doc.GetElementsByTagName("Program_Name")[0].InnerText;
@@ -1044,7 +1019,7 @@ namespace Ketarin
         /// </summary>
         public string GetXml()
         {
-            return GetXml(new ApplicationJob[] { this }, false, Encoding.UTF8);
+            return GetXml(new[] { this }, false, Encoding.UTF8);
         }
 
         /// <summary>
@@ -1055,7 +1030,7 @@ namespace Ketarin
         {
             // Replace global variables
             XmlDocument doc = new XmlDocument();
-            doc.LoadXml(GetXml());
+            doc.LoadXml(this.GetXml());
             // Adjust download URL
             XmlNodeList downloadUrlElements = doc.GetElementsByTagName("FixedDownloadUrl");
             if (downloadUrlElements.Count > 0)
@@ -1094,8 +1069,7 @@ namespace Ketarin
         public static string GetXml(IEnumerable<ApplicationJob> jobs, bool isTemplate, Encoding encoding)
         {
             XmlSerializer serializer = new XmlSerializer(typeof(ApplicationJob));
-            XmlWriterSettings settings = new XmlWriterSettings();
-            settings.Indent = true;
+            XmlWriterSettings settings = new XmlWriterSettings {Indent = true};
 
             StringBuilder output = new StringBuilder();
 
@@ -1118,8 +1092,7 @@ namespace Ketarin
             // Guid, DownloadDate, LastUpdated, PreviousLocation
             if (isTemplate)
             {
-                XmlDocument doc = new XmlDocument();
-                doc.PreserveWhitespace = true;
+                XmlDocument doc = new XmlDocument {PreserveWhitespace = true};
                 doc.LoadXml(xmlResult);
 
                 XmlNodeList nodes = doc.GetElementsByTagName("ApplicationJob");
@@ -1271,10 +1244,7 @@ namespace Ketarin
                     }
                     else
                     {
-                        foreach (XmlElement optionElem in element.GetElementsByTagName("option"))
-                        {
-                            options.Add(optionElem.InnerText);
-                        }
+                        options.AddRange(element.GetElementsByTagName("option").OfType<XmlElement>().Select(optionElem => optionElem.InnerText));
                     }
 
                     dialog.AddPlaceHolder(name, options.ToArray(), element.GetAttribute("value"), element.GetAttribute("variable"));
@@ -1315,10 +1285,8 @@ namespace Ketarin
 
                 return jobs[0];
             }
-            else
-            {
-                return null;
-            }
+            
+            return null;
         }
 
         /// <summary>
@@ -1447,17 +1415,17 @@ namespace Ketarin
                 {
                     using (SQLiteTransaction transaction = conn.BeginTransaction())
                     {
-                        if (!DbManager.ApplicationExists(conn, m_Guid))
+                        if (!DbManager.ApplicationExists(conn, this.m_Guid))
                         {
-                            if (m_Guid == Guid.Empty) m_Guid = Guid.NewGuid();
+                            if (this.m_Guid == Guid.Empty) this.m_Guid = Guid.NewGuid();
 
                             // Insert stub, update afterwards.
                             using (IDbCommand command = conn.CreateCommand())
                             {
                                 command.Transaction = transaction;
                                 command.CommandText = @"INSERT INTO jobs (JobGuid, CanBeShared) VALUES (@JobGuid, @CanBeShared)";
-                                command.Parameters.Add(new SQLiteParameter("@JobGuid", DbManager.FormatGuid(m_Guid)));
-                                command.Parameters.Add(new SQLiteParameter("@CanBeShared", m_CanBeShared));
+                                command.Parameters.Add(new SQLiteParameter("@JobGuid", DbManager.FormatGuid(this.m_Guid)));
+                                command.Parameters.Add(new SQLiteParameter("@CanBeShared", this.m_CanBeShared));
                                 command.ExecuteNonQuery();
                             }
                         }
@@ -1468,11 +1436,11 @@ namespace Ketarin
                         {
                             command.Transaction = transaction;
                             command.CommandText = "SELECT CanBeShared FROM jobs WHERE JobGuid = @JobGuid";
-                            command.Parameters.Add(new SQLiteParameter("@JobGuid", DbManager.FormatGuid(m_Guid)));
+                            command.Parameters.Add(new SQLiteParameter("@JobGuid", DbManager.FormatGuid(this.m_Guid)));
                             bool canBeShared = Convert.ToBoolean(command.ExecuteScalar());
                             if (!canBeShared)
                             {
-                                m_CanBeShared = false;
+                                this.m_CanBeShared = false;
                             }
                         }
 
@@ -1518,47 +1486,47 @@ namespace Ketarin
                                                    HashType = @HashType
                                              WHERE JobGuid = @JobGuid";
 
-                            command.Parameters.Add(new SQLiteParameter("@ApplicationName", Name));
-                            command.Parameters.Add(new SQLiteParameter("@FixedDownloadUrl", m_FixedDownloadUrl));
-                            command.Parameters.Add(new SQLiteParameter("@TargetPath", m_TargetPath));
-                            command.Parameters.Add(new SQLiteParameter("@LastUpdated", m_LastUpdated));
-                            command.Parameters.Add(new SQLiteParameter("@IsEnabled", m_Enabled));
-                            command.Parameters.Add(new SQLiteParameter("@FileHippoId", m_FileHippoId));
-                            command.Parameters.Add(new SQLiteParameter("@DeletePreviousFile", DeletePreviousFile));
-                            command.Parameters.Add(new SQLiteParameter("@PreviousLocation", PreviousLocation));
-                            command.Parameters.Add(new SQLiteParameter("@SourceType", m_SourceType));
-                            command.Parameters.Add(new SQLiteParameter("@ExecuteCommand", ExecuteCommand));
-                            command.Parameters.Add(new SQLiteParameter("@ExecutePreCommand", ExecutePreCommand));
-                            command.Parameters.Add(new SQLiteParameter("@Category", Category));
-                            command.Parameters.Add(new SQLiteParameter("@CanBeShared", m_CanBeShared));
-                            command.Parameters.Add(new SQLiteParameter("@ShareApplication", m_ShareApplication));
-                            command.Parameters.Add(new SQLiteParameter("@HttpReferer", m_HttpReferer));
-                            command.Parameters.Add(new SQLiteParameter("@FileHippoVersion", m_FileHippoVersion));
-                            command.Parameters.Add(new SQLiteParameter("@DownloadBeta", (int)DownloadBeta));
-                            command.Parameters.Add(new SQLiteParameter("@VariableChangeIndicator", m_VariableChangeIndicator));
-                            command.Parameters.Add(new SQLiteParameter("@VariableChangeIndicatorLastContent", m_VariableChangeIndicatorLastContent));
-                            command.Parameters.Add(new SQLiteParameter("@ExclusiveDownload", ExclusiveDownload));
-                            command.Parameters.Add(new SQLiteParameter("@CheckForUpdateOnly", CheckForUpdatesOnly));
-                            command.Parameters.Add(new SQLiteParameter("@CachedPadFileVersion", CachedPadFileVersion));
-                            command.Parameters.Add(new SQLiteParameter("@LastFileDate", LastFileDate));
-                            command.Parameters.Add(new SQLiteParameter("@LastFileSize", LastFileSize));
-                            command.Parameters.Add(new SQLiteParameter("@IgnoreFileInformation", IgnoreFileInformation));
-                            command.Parameters.Add(new SQLiteParameter("@UserNotes", UserNotes));
-                            command.Parameters.Add(new SQLiteParameter("@WebsiteUrl", WebsiteUrl));
-                            command.Parameters.Add(new SQLiteParameter("@UserAgent", UserAgent));
-                            command.Parameters.Add(new SQLiteParameter("@ExecuteCommandType", ExecuteCommandType));
-                            command.Parameters.Add(new SQLiteParameter("@ExecutePreCommandType", ExecutePreCommandType));
-                            command.Parameters.Add(new SQLiteParameter("@SourceTemplate", SourceTemplate));
+                            command.Parameters.Add(new SQLiteParameter("@ApplicationName", this.Name));
+                            command.Parameters.Add(new SQLiteParameter("@FixedDownloadUrl", this.m_FixedDownloadUrl));
+                            command.Parameters.Add(new SQLiteParameter("@TargetPath", this.m_TargetPath));
+                            command.Parameters.Add(new SQLiteParameter("@LastUpdated", this.m_LastUpdated));
+                            command.Parameters.Add(new SQLiteParameter("@IsEnabled", this.Enabled));
+                            command.Parameters.Add(new SQLiteParameter("@FileHippoId", this.FileHippoId));
+                            command.Parameters.Add(new SQLiteParameter("@DeletePreviousFile", this.DeletePreviousFile));
+                            command.Parameters.Add(new SQLiteParameter("@PreviousLocation", this.PreviousLocation));
+                            command.Parameters.Add(new SQLiteParameter("@SourceType", this.m_SourceType));
+                            command.Parameters.Add(new SQLiteParameter("@ExecuteCommand", this.ExecuteCommand));
+                            command.Parameters.Add(new SQLiteParameter("@ExecutePreCommand", this.ExecutePreCommand));
+                            command.Parameters.Add(new SQLiteParameter("@Category", this.Category));
+                            command.Parameters.Add(new SQLiteParameter("@CanBeShared", this.m_CanBeShared));
+                            command.Parameters.Add(new SQLiteParameter("@ShareApplication", this.m_ShareApplication));
+                            command.Parameters.Add(new SQLiteParameter("@HttpReferer", this.m_HttpReferer));
+                            command.Parameters.Add(new SQLiteParameter("@FileHippoVersion", this.FileHippoVersion));
+                            command.Parameters.Add(new SQLiteParameter("@DownloadBeta", (int) this.DownloadBeta));
+                            command.Parameters.Add(new SQLiteParameter("@VariableChangeIndicator", this.m_VariableChangeIndicator));
+                            command.Parameters.Add(new SQLiteParameter("@VariableChangeIndicatorLastContent", this.m_VariableChangeIndicatorLastContent));
+                            command.Parameters.Add(new SQLiteParameter("@ExclusiveDownload", this.ExclusiveDownload));
+                            command.Parameters.Add(new SQLiteParameter("@CheckForUpdateOnly", this.CheckForUpdatesOnly));
+                            command.Parameters.Add(new SQLiteParameter("@CachedPadFileVersion", this.CachedPadFileVersion));
+                            command.Parameters.Add(new SQLiteParameter("@LastFileDate", this.LastFileDate));
+                            command.Parameters.Add(new SQLiteParameter("@LastFileSize", this.LastFileSize));
+                            command.Parameters.Add(new SQLiteParameter("@IgnoreFileInformation", this.IgnoreFileInformation));
+                            command.Parameters.Add(new SQLiteParameter("@UserNotes", this.UserNotes));
+                            command.Parameters.Add(new SQLiteParameter("@WebsiteUrl", this.WebsiteUrl));
+                            command.Parameters.Add(new SQLiteParameter("@UserAgent", this.UserAgent));
+                            command.Parameters.Add(new SQLiteParameter("@ExecuteCommandType", this.ExecuteCommandType));
+                            command.Parameters.Add(new SQLiteParameter("@ExecutePreCommandType", this.ExecutePreCommandType));
+                            command.Parameters.Add(new SQLiteParameter("@SourceTemplate", this.SourceTemplate));
                             command.Parameters.Add(new SQLiteParameter("@HashVariable", this.hashVariable));
                             command.Parameters.Add(new SQLiteParameter("@HashType", (int)this.HashType));
 
                             // In order to find files if the drive letter has changed (portable USB stick), also remember the 
                             // last relative location.
-                            if (!string.IsNullOrEmpty(PreviousLocation))
+                            if (!string.IsNullOrEmpty(this.PreviousLocation))
                             {
                                 try
                                 {
-                                    Uri uri1 = new Uri(PreviousLocation);
+                                    Uri uri1 = new Uri(this.PreviousLocation);
                                     Uri uri2 = new Uri(Application.StartupPath + "\\");
 
                                     Uri relativeUri = uri2.MakeRelativeUri(uri1);
@@ -1566,7 +1534,7 @@ namespace Ketarin
                                     // If result returns out to be not relative, no need to save
                                     if (!Path.IsPathRooted(relativePath))
                                     {
-                                        m_PreviousRelativeLocation = relativePath;
+                                        this.m_PreviousRelativeLocation = relativePath;
                                     }
                                 }
                                 catch (Exception)
@@ -1575,36 +1543,36 @@ namespace Ketarin
                                 }
                             }
 
-                            command.Parameters.Add(new SQLiteParameter("@PreviousRelativeLocation", m_PreviousRelativeLocation));
+                            command.Parameters.Add(new SQLiteParameter("@PreviousRelativeLocation", this.m_PreviousRelativeLocation));
 
-                            if (DownloadDate.HasValue)
+                            if (this.DownloadDate.HasValue)
                             {
-                                command.Parameters.Add(new SQLiteParameter("@DownloadDate", DownloadDate.Value));
+                                command.Parameters.Add(new SQLiteParameter("@DownloadDate", this.DownloadDate.Value));
                             }
                             else
                             {
                                 command.Parameters.Add(new SQLiteParameter("@DownloadDate", DBNull.Value));
                             }
 
-                            command.Parameters.Add(new SQLiteParameter("@JobGuid", DbManager.FormatGuid(m_Guid)));
+                            command.Parameters.Add(new SQLiteParameter("@JobGuid", DbManager.FormatGuid(this.m_Guid)));
 
                             command.ExecuteNonQuery();
                         }
 
-                        Dictionary<string, UrlVariable> variables = Variables;
+                        Dictionary<string, UrlVariable> variables = this.Variables;
 
                         // Save variables
                         using (IDbCommand command = conn.CreateCommand())
                         {
                             command.Transaction = transaction;
                             command.CommandText = "DELETE FROM variables WHERE JobGuid = @JobGuid";
-                            command.Parameters.Add(new SQLiteParameter("@JobGuid", DbManager.FormatGuid(m_Guid)));
+                            command.Parameters.Add(new SQLiteParameter("@JobGuid", DbManager.FormatGuid(this.m_Guid)));
                             command.ExecuteNonQuery();
                         }
 
                         foreach (KeyValuePair<string, UrlVariable> pair in variables)
                         {
-                            pair.Value.Save(transaction, m_Guid);
+                            pair.Value.Save(transaction, this.m_Guid);
                         }
 
                         if (this.setupInstructions != null)
@@ -1613,7 +1581,7 @@ namespace Ketarin
                             {
                                 command.Transaction = transaction;
                                 command.CommandText = "DELETE FROM setupinstructions WHERE JobGuid = @JobGuid";
-                                command.Parameters.Add(new SQLiteParameter("@JobGuid", DbManager.FormatGuid(m_Guid)));
+                                command.Parameters.Add(new SQLiteParameter("@JobGuid", DbManager.FormatGuid(this.m_Guid)));
                                 command.ExecuteNonQuery();
                             }
 
@@ -1633,67 +1601,67 @@ namespace Ketarin
 
         public void Hydrate(IDataReader reader)
         {
-            m_Name = reader["ApplicationName"] as string;
-            m_FixedDownloadUrl = reader["FixedDownloadUrl"] as string;
-            m_TargetPath = reader["TargetPath"] as string;
-            m_LastUpdated = reader["LastUpdated"] as DateTime?;
-            m_Enabled = Convert.ToBoolean(reader["IsEnabled"]);
-            m_FileHippoId = reader["FileHippoId"] as string;
-            DeletePreviousFile = Convert.ToBoolean(reader["DeletePreviousFile"]);
-            PreviousLocation = reader["PreviousLocation"] as string;
-            m_SourceType = (SourceType)Convert.ToByte(reader["SourceType"]);
-            ExecuteCommand = reader["ExecuteCommand"] as string;
-            ExecutePreCommand = reader["ExecutePreCommand"] as string;
-            Category = reader["Category"] as string;
-            m_CanBeShared = Convert.ToBoolean(reader["CanBeShared"]);
-            m_ShareApplication = Convert.ToBoolean(reader["ShareApplication"]);
-            m_FileHippoVersion = reader["FileHippoVersion"] as string;
-            m_HttpReferer = reader["HttpReferer"] as string;
-            m_VariableChangeIndicator = reader["VariableChangeIndicator"] as string;
+            this.m_Name = reader["ApplicationName"] as string;
+            this.m_FixedDownloadUrl = reader["FixedDownloadUrl"] as string;
+            this.m_TargetPath = reader["TargetPath"] as string;
+            this.m_LastUpdated = reader["LastUpdated"] as DateTime?;
+            this.Enabled = Convert.ToBoolean(reader["IsEnabled"]);
+            this.FileHippoId = reader["FileHippoId"] as string;
+            this.DeletePreviousFile = Convert.ToBoolean(reader["DeletePreviousFile"]);
+            this.PreviousLocation = reader["PreviousLocation"] as string;
+            this.m_SourceType = (SourceType)Convert.ToByte(reader["SourceType"]);
+            this.ExecuteCommand = reader["ExecuteCommand"] as string;
+            this.ExecutePreCommand = reader["ExecutePreCommand"] as string;
+            this.Category = reader["Category"] as string;
+            this.m_CanBeShared = Convert.ToBoolean(reader["CanBeShared"]);
+            this.m_ShareApplication = Convert.ToBoolean(reader["ShareApplication"]);
+            this.FileHippoVersion = reader["FileHippoVersion"] as string;
+            this.m_HttpReferer = reader["HttpReferer"] as string;
+            this.m_VariableChangeIndicator = reader["VariableChangeIndicator"] as string;
             this.hashVariable = reader["HashVariable"] as string;
             this.HashType = (HashType)Convert.ToByte(reader["HashType"]);
-            m_VariableChangeIndicatorLastContent = reader["VariableChangeIndicatorLastContent"] as string;
-            ExclusiveDownload = Convert.ToBoolean(reader["ExclusiveDownload"]);
-            CheckForUpdatesOnly = Convert.ToBoolean(reader["CheckForUpdateOnly"]);
-            CachedPadFileVersion = reader["CachedPadFileVersion"] as string;
-            LastFileSize = Convert.ToInt64(reader["LastFileSize"]);
-            LastFileDate = reader["LastUpdated"] as DateTime?;
-            IgnoreFileInformation = Convert.ToBoolean(reader["IgnoreFileInformation"]);
-            UserNotes = reader["UserNotes"] as string;
-            WebsiteUrl = reader["WebsiteUrl"] as string;
-            UserAgent = reader["UserAgent"] as string;
-            SourceTemplate = reader["SourceTemplate"] as string;
-            m_PreviousRelativeLocation = reader["PreviousRelativeLocation"] as string;
+            this.m_VariableChangeIndicatorLastContent = reader["VariableChangeIndicatorLastContent"] as string;
+            this.ExclusiveDownload = Convert.ToBoolean(reader["ExclusiveDownload"]);
+            this.CheckForUpdatesOnly = Convert.ToBoolean(reader["CheckForUpdateOnly"]);
+            this.CachedPadFileVersion = reader["CachedPadFileVersion"] as string;
+            this.LastFileSize = Convert.ToInt64(reader["LastFileSize"]);
+            this.LastFileDate = reader["LastUpdated"] as DateTime?;
+            this.IgnoreFileInformation = Convert.ToBoolean(reader["IgnoreFileInformation"]);
+            this.UserNotes = reader["UserNotes"] as string;
+            this.WebsiteUrl = reader["WebsiteUrl"] as string;
+            this.UserAgent = reader["UserAgent"] as string;
+            this.SourceTemplate = reader["SourceTemplate"] as string;
+            this.m_PreviousRelativeLocation = reader["PreviousRelativeLocation"] as string;
 
             string executeCommandType = reader["ExecuteCommandType"] as string;
             if (executeCommandType != null)
             {
-                ExecuteCommandType = Command.ConvertToScriptType(executeCommandType);
+                this.ExecuteCommandType = Command.ConvertToScriptType(executeCommandType);
             }
 
             string executePreCommandType = reader["ExecutePreCommandType"] as string;
             if (executePreCommandType != null)
             {
-                ExecutePreCommandType = Command.ConvertToScriptType(executePreCommandType);
+                this.ExecutePreCommandType = Command.ConvertToScriptType(executePreCommandType);
             }
 
             if (reader["DownloadBeta"] != DBNull.Value)
             {
-                DownloadBeta = (DownloadBetaType)Convert.ToInt32(reader["DownloadBeta"]);
+                this.DownloadBeta = (DownloadBetaType)Convert.ToInt32(reader["DownloadBeta"]);
             }
             // An application has not been downloaded necessarily
-            DownloadDate = (reader["DownloadDate"] != DBNull.Value) ? reader["DownloadDate"] as DateTime? : null;
+            this.DownloadDate = (reader["DownloadDate"] != DBNull.Value) ? reader["DownloadDate"] as DateTime? : null;
             
             string guid = reader["JobGuid"] as string;
-            m_Guid = new Guid(guid);
+            this.m_Guid = new Guid(guid);
         }
 
         public string GetTargetFile(WebResponse netResponse, string alternateFileName)
         {
-            string targetLocation = Environment.ExpandEnvironmentVariables(TargetPath);
+            string targetLocation = Environment.ExpandEnvironmentVariables(this.TargetPath);
 
             // Allow variables in target locations as well
-            targetLocation = Variables.ReplaceAllInString(targetLocation, GetLastModified(netResponse), GetFileNameFromWebResponse(netResponse, alternateFileName), false);
+            targetLocation = this.Variables.ReplaceAllInString(targetLocation, GetLastModified(netResponse), GetFileNameFromWebResponse(netResponse, alternateFileName), false);
 
             // If carried on a USB stick, allow using the drive name
             try
@@ -1702,7 +1670,7 @@ namespace Ketarin
             }
             catch (ArgumentException) { }
 
-            if (TargetIsFolder || Directory.Exists(targetLocation))
+            if (this.TargetIsFolder || Directory.Exists(targetLocation))
             {
                 string fileName = GetFileNameFromWebResponse(netResponse, alternateFileName);
                 targetLocation = Path.Combine(targetLocation, fileName);
@@ -1771,7 +1739,7 @@ namespace Ketarin
                 StringBuilder result = new StringBuilder(32);
                 for (int i = 0; i < localMd5.Length; i++)
                 {
-                    result.Append(localMd5[i].ToString("X2"));
+                    result.Append(i.ToString("X2"));
                 }
                 return result.ToString();
             }
@@ -1818,14 +1786,14 @@ namespace Ketarin
                     throw new TargetPathInvalidException(targetFile);
                 }
 
-                if (!current.Exists && !string.IsNullOrEmpty(CurrentLocation) && DeletePreviousFile)
+                if (!current.Exists && !string.IsNullOrEmpty(this.CurrentLocation) && this.DeletePreviousFile)
                 {
                     // The file does not exist at the target location.
                     // Check if the previously downloaded file still matches.
-                    current = new FileInfo(CurrentLocation);
+                    current = new FileInfo(this.CurrentLocation);
                 }
 
-                if (!IgnoreFileInformation && !current.Exists)
+                if (!this.IgnoreFileInformation && !current.Exists)
                 {
                     LogDialog.Log(this, string.Format("Update required, '{0}' does not yet exist", targetFile));
                     return true;
@@ -1833,33 +1801,33 @@ namespace Ketarin
             }
 
             // Check a variable's contents?
-            if (!string.IsNullOrEmpty(m_VariableChangeIndicator))
+            if (!string.IsNullOrEmpty(this.m_VariableChangeIndicator))
             {
-                string varName = m_VariableChangeIndicator.Trim('{', '}');
-                string content = Variables.ReplaceAllInString("{" + varName + "}");
+                string varName = this.m_VariableChangeIndicator.Trim('{', '}');
+                string content = this.Variables.ReplaceAllInString("{" + varName + "}");
                 // Only return a result, if the variable has already been checked before,
                 // that is, if there is an actual difference.
-                if (m_VariableChangeIndicatorLastContent != null)
+                if (this.m_VariableChangeIndicatorLastContent != null)
                 {
-                    bool update = (content != m_VariableChangeIndicatorLastContent);
+                    bool update = (content != this.m_VariableChangeIndicatorLastContent);
                     if (update)
                     {
-                        LogDialog.Log(this, string.Format("Update required, {0} has changed from '{1}' to '{2}'", "{" + varName + "}", m_VariableChangeIndicatorLastContent, content));
+                        LogDialog.Log(this, string.Format("Update required, {0} has changed from '{1}' to '{2}'", "{" + varName + "}", this.m_VariableChangeIndicatorLastContent, content));
                     }
                     else
                     {
                         LogDialog.Log(this, string.Format("Update not required, {0} has not changed", "{" + varName + "}"));
                     }
 
-                    m_VariableChangeIndicatorLastContent = content;
-                    if (update) Save();
+                    this.m_VariableChangeIndicatorLastContent = content;
+                    if (update) this.Save();
                     return update;
                 }
                 else
                 {
                     LogDialog.Log(this, string.Format("No previous value for {0} available, ignoring this variable as indicator for changes", "{" + varName + "}"));
-                    m_VariableChangeIndicatorLastContent = content;
-                    Save();
+                    this.m_VariableChangeIndicatorLastContent = content;
+                    this.Save();
                 }
             }
 
@@ -1893,13 +1861,13 @@ namespace Ketarin
             }
 
             // If using FileHippo, and previous file is available, check MD5
-            if (!string.IsNullOrEmpty(m_FileHippoId) && m_SourceType == SourceType.FileHippo && FileExists)
+            if (!string.IsNullOrEmpty(this.FileHippoId) && this.m_SourceType == SourceType.FileHippo && this.FileExists)
             {
-                string serverMd5 = ExternalServices.FileHippoMd5(m_FileHippoId, AvoidDownloadBeta);
+                string serverMd5 = ExternalServices.FileHippoMd5(this.FileHippoId, this.AvoidDownloadBeta);
                 // It may happen, that the MD5 is not calculated
                 if (serverMd5 != null)
                 {
-                    bool md5Result = string.Compare(serverMd5, GetMd5OfFile(CurrentLocation), true) != 0;
+                    bool md5Result = string.Compare(serverMd5, GetMd5OfFile(this.CurrentLocation), true) != 0;
                     LogDialog.Log(this, md5Result ? "Update required, MD5 does not match" : "Update not required");
                     return md5Result;
                 }
@@ -1914,16 +1882,16 @@ namespace Ketarin
 
             bool fileSizeMismatch = false, dateMismatch = false;
 
-            if (IgnoreFileInformation)
+            if (this.IgnoreFileInformation)
             {
-                if (LastFileDate.HasValue)
+                if (this.LastFileDate.HasValue)
                 {
-                    TimeSpan diff = GetLastModified(netResponse) - LastFileDate.Value;
+                    TimeSpan diff = GetLastModified(netResponse) - this.LastFileDate.Value;
                     dateMismatch = (!disregardDate && diff > TimeSpan.Zero);
                 }
-                if (LastFileSize > 0)
+                if (this.LastFileSize > 0)
                 {
-                    fileSizeMismatch = (LastFileSize != netResponse.ContentLength && netResponse.ContentLength >= 0);
+                    fileSizeMismatch = (this.LastFileSize != netResponse.ContentLength && netResponse.ContentLength >= 0);
                 }
             }
             else
@@ -1993,7 +1961,7 @@ namespace Ketarin
 
         public override string ToString()
         {
-            return Name;
+            return this.Name;
         }
 
         /// <summary>
@@ -2008,28 +1976,20 @@ namespace Ketarin
                 return true;
             }
 
-            StringBuilder fulltext = new StringBuilder(Name);
-            fulltext.Append(Category);
-            fulltext.Append(TargetPath);
+            StringBuilder fulltext = new StringBuilder(this.Name);
+            fulltext.Append(this.Category);
+            fulltext.Append(this.TargetPath);
 
             foreach (KeyValuePair<string, string> column in customColumns)
             {
-                string value = Variables.ReplaceAllInString(column.Value, DateTime.MinValue, null, true);
+                string value = this.Variables.ReplaceAllInString(column.Value, DateTime.MinValue, null, true);
                 fulltext.Append(value);
             }
 
             string fulltextToLower = fulltext.ToString().ToLower();
 
             // Boolean search: All subjects must be matched
-            foreach (string subject in subjects)
-            {
-                if (!MatchesSubject(subject, fulltextToLower))
-                {
-                    return false;
-                }
-            }
-
-            return true;
+            return subjects.All(subject => this.MatchesSubject(subject, fulltextToLower));
         }
 
         /// <summary>

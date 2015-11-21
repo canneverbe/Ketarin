@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 
 namespace CodeProject.ReiMiyasaka
@@ -106,11 +105,10 @@ namespace CodeProject.ReiMiyasaka
 			{
 				uint[] table = new uint[256];
 
-				uint crc;
-				const uint poly = 0xEDB88320;
+			    const uint poly = 0xEDB88320;
 				for (uint i = 0; i < table.Length; i++)
 				{
-					crc = i;
+					uint crc = i;
 					for (int j = 8; j > 0; j--)
 					{
 						if ((crc & 1) == 1)
@@ -162,8 +160,10 @@ namespace CodeProject.ReiMiyasaka
 	            CrcStream crcStream = new CrcStream(stream);
 	            
                 byte[] buffer = new byte[1024];
-	            while (crcStream.Read(buffer, 0, buffer.Length) > 0) ;
-                
+	            while (crcStream.Read(buffer, 0, buffer.Length) > 0)
+	            {
+	            }
+
 	            return crcStream.ReadCrc;
 	        }
 	    }

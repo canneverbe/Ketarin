@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data.SQLite;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Threading;
 using CDBurnerXP;
@@ -102,7 +103,7 @@ namespace Ketarin
         /// </summary>
         public class JobProgressChangedEventArgs : ProgressChangedEventArgs
         {
-            private ApplicationJob m_Job = null;
+            private readonly ApplicationJob m_Job;
 
             #region Properties
 
@@ -136,8 +137,8 @@ namespace Ketarin
         /// </summary>
         public class JobStatusChangedEventArgs : EventArgs
         {
-            private ApplicationJob m_Job = null;
-            private Status m_NewStatus = Status.Idle;
+            private readonly ApplicationJob m_Job;
+            private readonly Status m_NewStatus;
 
             #region Properties
 
@@ -287,7 +288,6 @@ namespace Ketarin
             foreach (ApplicationJob job in m_Jobs)
             {
                 m_Progress[job] = (short)((ForceDownload || job.Enabled) ? 0 : -1);
-                bool res = m_Progress.ContainsKey(job);
                 m_Status[job] = Status.Idle;
                 m_Size[job] = -2;
             }
@@ -311,8 +311,7 @@ namespace Ketarin
             }
 
             Settings.SetValue("LastUpdateCheck", DateTime.Now);
-            Thread thread = new Thread(new ParameterizedThreadStart(CheckForOnlineUpdates));
-            thread.IsBackground = true;
+            Thread thread = new Thread(this.CheckForOnlineUpdates) {IsBackground = true};
             thread.Start(jobs);
         }
 
@@ -326,12 +325,9 @@ namespace Ketarin
 
             // Build an array containing all GUIDs and dates
             List<RpcAppGuidAndDate> sendInfo = new List<RpcAppGuidAndDate>();
-            foreach (ApplicationJob job in jobs)
+            foreach (ApplicationJob job in jobs.Where(job => !job.CanBeShared))
             {
-                if (!job.CanBeShared)
-                {
-                    sendInfo.Add(new RpcAppGuidAndDate(job.Guid, job.DownloadDate));
-                }
+                sendInfo.Add(new RpcAppGuidAndDate(job.Guid, job.DownloadDate));
             }
 
             if (sendInfo.Count == 0)
@@ -625,7 +621,7 @@ namespace Ketarin
         /// <returns>true, if a new update has been found and downloaded, false otherwise</returns>
         protected Status DoDownload(ApplicationJob job, out string requestedUrl)
         {
-            string downloadUrl = string.Empty;
+            string downloadUrl;
             if (job.DownloadSourceType == ApplicationJob.SourceType.FileHippo)
             {
                 downloadUrl = ExternalServices.FileHippoDownloadUrl(job.FileHippoId, job.AvoidDownloadBeta);

@@ -1,9 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Windows.Forms;
-using System.Runtime.InteropServices;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
+using System.Windows.Forms;
 using Microsoft.Win32;
 
 namespace Ketarin.Forms
@@ -13,9 +12,8 @@ namespace Ketarin.Forms
     /// </summary>
     public class ContextMenuCustomiser : NativeWindow
     {
-        private IntPtr m_ControlHandle = IntPtr.Zero;
         private IntPtr m_PopupMenu = IntPtr.Zero;
-        private List<ContextMenuItem> m_Items = new List<ContextMenuItem>();
+        private readonly List<ContextMenuItem> m_Items = new List<ContextMenuItem>();
         private static short m_LastId = 111;
 
         /// <summary>
@@ -26,8 +24,6 @@ namespace Ketarin.Forms
 
         #region WinAPI
 
-        [DllImport("kernel32.dll")]
-        static extern uint GetCurrentThreadId();
         [DllImport("user32.dll", SetLastError = true)]
         static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
         [DllImport("user32.dll")]

@@ -1,11 +1,14 @@
-﻿namespace Ketarin.Forms
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace Ketarin.Forms
 {
     partial class ImportFromDatabaseDialog
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -106,7 +109,7 @@
         #endregion
 
         private System.Windows.Forms.TextBox txtSearchSubject;
-        private System.Windows.Forms.Button bSearch;
-        private System.Windows.Forms.Button bTop50;
+        private Button bSearch;
+        private Button bTop50;
     }
 }

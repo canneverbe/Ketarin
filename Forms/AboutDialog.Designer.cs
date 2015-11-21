@@ -1,11 +1,15 @@
-﻿namespace Ketarin.Forms
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+using CDBurnerXP.Controls;
+
+namespace Ketarin.Forms
 {
     partial class AboutDialog
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -250,20 +254,20 @@
 
         #endregion
 
-        private System.Windows.Forms.Button bClose;
-        private System.Windows.Forms.Label lblInfo;
-        private System.Windows.Forms.Label lblVersionDesc;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        private System.Windows.Forms.Label lblVersion;
-        private CDBurnerXP.Controls.WebLink lnkGPL;
-        private System.Windows.Forms.Label lblLicense;
-        private System.Windows.Forms.Label lblImagesExcluded;
-        private System.Windows.Forms.Label lblWebsite;
-        private CDBurnerXP.Controls.WebLink webLink1;
-        private System.Windows.Forms.PictureBox picIcon;
-        private CDBurnerXP.Controls.WebLink lblDatabasePath;
-        private System.Windows.Forms.Label lblDatabase;
-        private System.Windows.Forms.Label lblAuthor;
+        private Button bClose;
+        private Label lblInfo;
+        private Label lblVersionDesc;
+        private TableLayoutPanel tableLayoutPanel1;
+        private Label lblVersion;
+        private WebLink lnkGPL;
+        private Label lblLicense;
+        private Label lblImagesExcluded;
+        private Label lblWebsite;
+        private WebLink webLink1;
+        private PictureBox picIcon;
+        private WebLink lblDatabasePath;
+        private Label lblDatabase;
+        private Label lblAuthor;
         private System.Windows.Forms.TextBox txtAuthor;
     }
 }

@@ -1,4 +1,7 @@
-﻿using CDBurnerXP.Controls;
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+using CDBurnerXP.Controls;
+
 namespace Ketarin.Forms
 {
     partial class InstallingApplicationsDialog
@@ -6,7 +9,7 @@ namespace Ketarin.Forms
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -214,17 +217,17 @@ namespace Ketarin.Forms
 
         #endregion
 
-        private System.Windows.Forms.Button bCancel;
-        private System.Windows.Forms.Label lblSetupStatus;
+        private Button bCancel;
+        private Label lblSetupStatus;
         private MarqueeProgressBar progressBar;
-        private System.ComponentModel.BackgroundWorker bgwSetup;
-        private System.Windows.Forms.Label lbShowHideDetails;
-        private System.Windows.Forms.ImageList imageList;
-        private CDBurnerXP.Controls.ObjectListView olvLog;
-        private CDBurnerXP.Controls.OLVColumn colMessage;
-        private System.Windows.Forms.Label lblEvents;
-        private System.Windows.Forms.Panel pnlExpanded;
-        private System.Windows.Forms.ImageList imlListIcons;
-        private CDBurnerXP.Controls.OLVColumn colTime;
+        private BackgroundWorker bgwSetup;
+        private Label lbShowHideDetails;
+        private ImageList imageList;
+        private ObjectListView olvLog;
+        private OLVColumn colMessage;
+        private Label lblEvents;
+        private Panel pnlExpanded;
+        private ImageList imlListIcons;
+        private OLVColumn colTime;
     }
 }

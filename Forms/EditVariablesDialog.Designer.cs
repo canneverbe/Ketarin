@@ -1,11 +1,14 @@
-﻿namespace Ketarin.Forms
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace Ketarin.Forms
 {
     partial class EditVariablesDialog
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -440,37 +443,37 @@
 
         #endregion
 
-        private System.Windows.Forms.Label lblVariables;
+        private Label lblVariables;
         private VariableListBox lbVariables;
-        private System.Windows.Forms.Button bCancel;
-        private System.Windows.Forms.Button bOK;
-        private System.Windows.Forms.Label lblUrl;
+        private Button bCancel;
+        private Button bOK;
+        private Label lblUrl;
         private VariableTextBox txtUrl;
-        private System.Windows.Forms.RichTextBox rtfContent;
-        private System.Windows.Forms.Button bLoad;
-        private System.Windows.Forms.Button bUseAsStart;
-        private System.Windows.Forms.Button bUseAsEnd;
-        private System.Windows.Forms.Button bAdd;
-        private System.Windows.Forms.Button bRemove;
-        private System.Windows.Forms.Button bFind;
-        private System.Windows.Forms.Label lblFind;
+        private RichTextBox rtfContent;
+        private Button bLoad;
+        private Button bUseAsStart;
+        private Button bUseAsEnd;
+        private Button bAdd;
+        private Button bRemove;
+        private Button bFind;
+        private Label lblFind;
         private System.Windows.Forms.TextBox txtFind;
-        private System.Windows.Forms.Label lblDesc;
+        private Label lblDesc;
         private HintTextBox txtRegularExpression;
-        private System.Windows.Forms.Label lblRegex;
-        private System.Windows.Forms.RadioButton rbContentUrlStartEnd;
-        private System.Windows.Forms.RadioButton rbContentUrlRegex;
-        private System.Windows.Forms.RadioButton rbContentText;
-        private System.Windows.Forms.ContextMenu cmuRtf;
-        private System.Windows.Forms.MenuItem cmnuCopy;
-        private System.Windows.Forms.MenuItem cmnuCopyMatch;
-        private System.Windows.Forms.MenuItem cmnuGoToMatch;
-        private System.Windows.Forms.CheckBox chkRightToLeft;
-        private System.Windows.Forms.Button bPostData;
-        private System.Windows.Forms.MenuItem sepPreview;
-        private System.Windows.Forms.MenuItem cmnuBrowser;
-        private System.Windows.Forms.MenuItem cmnuPaste;
-        private System.Windows.Forms.MenuItem sepWrap;
-        private System.Windows.Forms.MenuItem cmnuWrap;
+        private Label lblRegex;
+        private RadioButton rbContentUrlStartEnd;
+        private RadioButton rbContentUrlRegex;
+        private RadioButton rbContentText;
+        private ContextMenu cmuRtf;
+        private MenuItem cmnuCopy;
+        private MenuItem cmnuCopyMatch;
+        private MenuItem cmnuGoToMatch;
+        private CheckBox chkRightToLeft;
+        private Button bPostData;
+        private MenuItem sepPreview;
+        private MenuItem cmnuBrowser;
+        private MenuItem cmnuPaste;
+        private MenuItem sepWrap;
+        private MenuItem cmnuWrap;
     }
 }

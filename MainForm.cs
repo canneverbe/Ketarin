@@ -39,7 +39,7 @@ namespace Ketarin
     public partial class MainForm : PersistentForm
     {
         private ApplicationJob[] m_Jobs;
-        private Updater m_Updater = new Updater();
+        private readonly Updater m_Updater = new Updater();
         // For caching purposes
         private Dictionary<string, string> customColumns = new Dictionary<string, string>();
         private FormWindowState m_PreviousState = FormWindowState.Normal;
@@ -57,11 +57,11 @@ namespace Ketarin
 
             //create the grayscale ColorMatrix
             ColorMatrix colorMatrix = new ColorMatrix(
-               new float[][]
-              {
-                 new float[] {.3f, .3f, .3f, 0, 0},
-                 new float[] {.59f, .59f, .59f, 0, 0},
-                 new float[] {.11f, .11f, .11f, 0, 0},
+               new[]
+               {
+                 new[] {.3f, .3f, .3f, 0, 0},
+                 new[] {.59f, .59f, .59f, 0, 0},
+                 new[] {.11f, .11f, .11f, 0, 0},
                  new float[] {0, 0, 0, 1, 0},
                  new float[] {0, 0, 0, 0, 1}
               });
@@ -99,14 +99,7 @@ namespace Ketarin
             // Gray out disabled jobs
             olvJobs.RowFormatter = delegate(OLVListItem item)
             {
-                if (!((ApplicationJob)item.RowObject).Enabled)
-                {
-                    item.ForeColor = Color.Gray;
-                }
-                else
-                {
-                    item.ForeColor = olvJobs.ForeColor;
-                }
+                item.ForeColor = !((ApplicationJob)item.RowObject).Enabled ? Color.Gray : olvJobs.ForeColor;
             };
             colName.ImageGetter = delegate(object x) {
                 ApplicationJob job = (ApplicationJob)x;
@@ -252,7 +245,8 @@ namespace Ketarin
 
         private void m_Updater_StatusChanged(object sender, Updater.JobStatusChangedEventArgs e)
         {
-            this.BeginInvoke((MethodInvoker)delegate() {
+            this.BeginInvoke((MethodInvoker)delegate
+            {
                 olvJobs.RefreshObject(e.ApplicationJob);
                 int index = olvJobs.IndexOf(e.ApplicationJob);
                 if (index >= 0 && mnuAutoScroll.Checked)
@@ -279,7 +273,7 @@ namespace Ketarin
 
         private void m_Updater_UpdatesFound(object sender, GenericEventArgs<string[]> e)
         {
-            this.BeginInvoke((MethodInvoker)delegate()
+            this.BeginInvoke((MethodInvoker)delegate
             {
                 List<string> appNames = new List<string>();
                 foreach (string xml in e.Value)
@@ -429,9 +423,11 @@ namespace Ketarin
             // Add custom columns to list
             foreach (KeyValuePair<string, string> column in this.customColumns)
             {
-                OLVColumn newCol = new OLVColumn(column.Key, "");
-                newCol.Name = column.Key;
-                newCol.Tag = column.Value;
+                OLVColumn newCol = new OLVColumn(column.Key, "")
+                {
+                    Name = column.Key,
+                    Tag = column.Value
+                };
                 this.olvJobs.AllColumns.Add(newCol);
                 newCol.AspectGetter = delegate(object x)
                 {
@@ -566,11 +562,10 @@ namespace Ketarin
             {
                 if (dialog.ShowDialog(this) == DialogResult.OK && dialog.ImportedApplication != null)
                 {
-                    ApplicationJob existing = Array.Find<ApplicationJob>(m_Jobs, delegate(ApplicationJob x) { return x.Guid == dialog.ImportedApplication.Guid; });
+                    ApplicationJob existing = Array.Find(m_Jobs, x => x.Guid == dialog.ImportedApplication.Guid);
                     if (existing == null) {
                         existing = dialog.ImportedApplication;
-                        List<ApplicationJob> newJobs = new List<ApplicationJob>(m_Jobs);
-                        newJobs.Add(existing);
+                        List<ApplicationJob> newJobs = new List<ApplicationJob>(m_Jobs) {existing};
                         m_Jobs = newJobs.ToArray();
                         olvJobs.AddObject(existing);
                         UpdateStatusbar();
@@ -842,11 +837,7 @@ namespace Ketarin
 
         private void cmnuCopy_Click(object sender, EventArgs e)
         {
-            List<ApplicationJob> jobs = new List<ApplicationJob>();
-            foreach (ApplicationJob job in olvJobs.SelectedObjects)
-            {
-                jobs.Add(job);
-            }
+            List<ApplicationJob> jobs = this.olvJobs.SelectedObjects.OfType<ApplicationJob>().ToList();
 
             SafeClipboard.SetData(ApplicationJob.GetXml(jobs, false, Encoding.UTF8), false);
         }
@@ -860,14 +851,14 @@ namespace Ketarin
         {
             try
             {
-                ApplicationJob[] jobs = null;
+                ApplicationJob[] jobs;
                 try
                 {
                     jobs = ApplicationJob.LoadFromXml(SafeClipboard.GetData(DataFormats.Text) as string);
                 }
                 catch (Exception)
                 {
-                    jobs = new ApplicationJob[] { ApplicationJob.ImportFromTemplateOrXml(this, SafeClipboard.GetData(DataFormats.Text) as string, m_Jobs, true) };
+                    jobs = new[] { ApplicationJob.ImportFromTemplateOrXml(this, SafeClipboard.GetData(DataFormats.Text) as string, m_Jobs, true) };
                 }
                 if (jobs == null || jobs.Length == 0) return;
 
@@ -1004,12 +995,11 @@ namespace Ketarin
             }
             else
             {
-                ApplicationJobDialog dialog = new ApplicationJobDialog();
+                ApplicationJobDialog dialog = new ApplicationJobDialog {ApplicationJob = job};
 
-                dialog.ApplicationJob = job;
                 this.openApps[job] = dialog;
                 dialog.Show(this);
-                dialog.FormClosed += new FormClosedEventHandler(delegate(object sender, FormClosedEventArgs e)
+                dialog.FormClosed += delegate
                 {
                     if (dialog.DialogResult == DialogResult.OK)
                     {
@@ -1019,7 +1009,7 @@ namespace Ketarin
                     }
                     this.openApps.Remove(job);
                     dialog.Dispose();
-                });
+                };
             }
         }
 

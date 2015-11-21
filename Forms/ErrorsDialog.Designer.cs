@@ -1,11 +1,15 @@
-﻿namespace Ketarin.Forms
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+using CDBurnerXP.Controls;
+
+namespace Ketarin.Forms
 {
     partial class ErrorsDialog
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -134,11 +138,11 @@
 
         #endregion
 
-        private System.Windows.Forms.Label lblDesc;
-        private System.Windows.Forms.Button bClose;
-        private CDBurnerXP.Controls.FastObjectListView olvErrors;
-        private CDBurnerXP.Controls.OLVColumn colAppName;
-        private CDBurnerXP.Controls.OLVColumn colError;
-        private System.Windows.Forms.Button bCopyToClipboard;
+        private Label lblDesc;
+        private Button bClose;
+        private FastObjectListView olvErrors;
+        private OLVColumn colAppName;
+        private OLVColumn colError;
+        private Button bCopyToClipboard;
     }
 }

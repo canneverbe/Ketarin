@@ -1,22 +1,27 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Text;
-using System.Windows.Forms;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
+using System.Linq;
+using System.Windows.Forms;
+using System.Windows.Forms.VisualStyles;
 using CDBurnerXP.Controls;
 using CDBurnerXP.IO;
-using System.Windows.Forms.VisualStyles;
 using Ketarin.Forms;
-using System.ComponentModel;
+using Ketarin.Properties;
+using ContentAlignment = System.Drawing.ContentAlignment;
+using TextBox = Ketarin.Forms.TextBox;
 
 namespace Ketarin
 {
     public class ApplicationJobsListView : ObjectListView
     {
-        private SearchPanel searchPanel = new SearchPanel();
-        private Ketarin.Forms.TextBox searchTextBox = new Ketarin.Forms.TextBox();
-        private List<ApplicationJob> preSearchList = null;
-        private CheckBox enabledJobsCheckbox = new CheckBox();
+        private readonly SearchPanel searchPanel = new SearchPanel();
+        private readonly TextBox searchTextBox = new TextBox();
+        private List<ApplicationJob> preSearchList;
+        private readonly CheckBox enabledJobsCheckbox = new CheckBox();
         public const string DefaultEmptyMessage = "No applications have been added yet.";
 
         /// <summary>
@@ -46,12 +51,7 @@ namespace Ketarin
         {
             get
             {
-                List<ApplicationJob> jobs = new List<ApplicationJob>();
-                foreach (ApplicationJob job in SelectedObjects)
-                {
-                    jobs.Add(job);
-                }
-                return jobs.ToArray();
+                return this.SelectedObjects.Cast<ApplicationJob>().ToArray();
             }
         }
 
@@ -61,7 +61,7 @@ namespace Ketarin
 
         public class ProgressRenderer : BarRenderer
         {
-            private Updater m_Updater = null;
+            private readonly Updater m_Updater;
 
             public ProgressRenderer(Updater updater, int min, int max)
                 : base(min, max)
@@ -75,7 +75,7 @@ namespace Ketarin
                 // Do not draw anything if the updater is not currently working
                 if (m_Updater.GetProgress(job) == -1)
                 {
-                    base.DrawBackground(g, r);
+                    this.DrawBackground(g, r);
                     return;
                 }
 
@@ -87,9 +87,11 @@ namespace Ketarin
 
                 using (Brush fontBrush = new SolidBrush(SystemColors.WindowText))
                 {
-                    StringFormat format = new StringFormat();
-                    format.Alignment = StringAlignment.Center;
-                    format.LineAlignment = StringAlignment.Center;
+                    StringFormat format = new StringFormat
+                    {
+                        Alignment = StringAlignment.Center,
+                        LineAlignment = StringAlignment.Center
+                    };
 
                     string text = FormatFileSize.Format(fileSize);
                     if (fileSize < 0)
@@ -121,7 +123,7 @@ namespace Ketarin
 
         private class CloseButton : Panel
         {
-            private Bitmap drawImage = Properties.Resources.CloseSearch;
+            private Bitmap drawImage = Resources.CloseSearch;
 
             protected override void OnPaint(PaintEventArgs e)
             {
@@ -134,7 +136,7 @@ namespace Ketarin
             {
                 base.OnMouseMove(e);
 
-                drawImage = Properties.Resources.CloseSearchHover;
+                drawImage = Resources.CloseSearchHover;
                 Invalidate();
             }
 
@@ -142,7 +144,7 @@ namespace Ketarin
             {
                 base.OnMouseDown(e);
 
-                drawImage = Properties.Resources.CloseSearchDown;
+                drawImage = Resources.CloseSearchDown;
                 Invalidate();
             }
 
@@ -150,7 +152,7 @@ namespace Ketarin
             {
                 base.OnMouseLeave(e);
 
-                drawImage = Properties.Resources.CloseSearch;
+                drawImage = Resources.CloseSearch;
                 Invalidate();
             }
         }
@@ -165,28 +167,31 @@ namespace Ketarin
             searchPanel.Visible = false;
             searchPanel.BackColor = SystemColors.Control;
 
-            Label searchLabel = new Label();
-            searchLabel.Text = "&Search: ";
-            searchLabel.Location = new Point(25, 7);
-            searchLabel.AutoSize = true;
+            Label searchLabel = new Label
+            {
+                Text = "&Search: ",
+                Location = new Point(25, 7),
+                AutoSize = true
+            };
 
             searchTextBox.Width = 200;
             searchTextBox.Location = new Point(searchLabel.GetPreferredSize(searchLabel.Size).Width + 25, 4);
-            searchTextBox.TextChanged += new EventHandler(searchTextBox_TextChanged);
+            searchTextBox.TextChanged += this.searchTextBox_TextChanged;
 
-
-            CloseButton closeButton = new CloseButton();
-            closeButton.Size = new Size(16, 16);
-            closeButton.Location = new Point(3, 6);
-            closeButton.Click += new EventHandler(closeButton_Click);
+            CloseButton closeButton = new CloseButton
+            {
+                Size = new Size(16, 16),
+                Location = new Point(3, 6)
+            };
+            closeButton.Click += this.closeButton_Click;
 
             enabledJobsCheckbox.Text = "Show &enabled applications";
             enabledJobsCheckbox.ThreeState = true;
             enabledJobsCheckbox.Location = new Point(searchTextBox.Right + 6, 6);
-            enabledJobsCheckbox.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            enabledJobsCheckbox.TextAlign = ContentAlignment.MiddleLeft;
             enabledJobsCheckbox.AutoSize = true;
             enabledJobsCheckbox.CheckState = CheckState.Indeterminate;
-            enabledJobsCheckbox.CheckStateChanged += new EventHandler(enabledJobsCheckbox_CheckStateChanged);
+            enabledJobsCheckbox.CheckStateChanged += this.enabledJobsCheckbox_CheckStateChanged;
 
             searchPanel.Controls.Add(closeButton);
             searchPanel.Controls.Add(searchLabel);
@@ -196,7 +201,7 @@ namespace Ketarin
             this.Controls.Add(searchPanel);
         }
 
-        public override void SetObjects(System.Collections.IEnumerable collection)
+        public override void SetObjects(IEnumerable collection)
         {
             base.SetObjects(collection);
 
@@ -236,12 +241,7 @@ namespace Ketarin
 
             if (preSearchList == null)
             {
-                List <ApplicationJob> applications = new List<ApplicationJob>();
-                foreach (ApplicationJob job in this.Objects)
-                {
-                    applications.Add(job);
-                }
-                preSearchList = applications;
+                preSearchList = this.Objects.Cast<ApplicationJob>().ToList();
             }
 
             // Nothing to do if empty
@@ -330,14 +330,9 @@ namespace Ketarin
                         {
                             try
                             {
-                                if (variable.VariableType == UrlVariable.Type.Textual)
-                                {
-                                    System.Diagnostics.Process.Start(variable.GetExpandedTextualContent(DateTime.MinValue));
-                                }
-                                else
-                                {
-                                    System.Diagnostics.Process.Start(variable.ExpandedUrl);
-                                }
+                                Process.Start(variable.VariableType == UrlVariable.Type.Textual
+                                    ? variable.GetExpandedTextualContent(DateTime.MinValue)
+                                    : variable.ExpandedUrl);
                             }
                             catch (Exception) { }
                             break;

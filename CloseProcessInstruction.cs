@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
 using System.Threading;
-using System.Runtime.InteropServices;
 using Microsoft.Win32;
 
 namespace Ketarin
@@ -15,12 +12,6 @@ namespace Ketarin
     [Serializable()]
     public class CloseProcessInstruction : SetupInstruction
     {
-        /// <summary>
-        /// In opposite to Process.Kill(), tries a "soft exit" of the process.
-        /// </summary>
-        [DllImport("kernel32.dll")]
-        private static extern void ExitProcess(uint uExitCode);
-
         /// <summary>
         /// Specifies the name of the process to close.
         /// </summary>
@@ -71,7 +62,7 @@ namespace Ketarin
         /// <remarks>http://www.drdobbs.com/184416547;?pgno=3</remarks>
         private bool SafeTerminateProcess(IntPtr hProcess, uint uExitCode)
         {
-            uint dwTID, dwCode;
+            uint dwCode;
             IntPtr hProcessDup;
             IntPtr hRT = IntPtr.Zero;
             IntPtr hKernel = Kernel32.GetModuleHandle("Kernel32");
@@ -84,6 +75,7 @@ namespace Ketarin
             if (Kernel32.GetExitCodeProcess(bDup ? hProcessDup : hProcess, out dwCode) && dwCode == Kernel32.STILL_ACTIVE)
             {
                 IntPtr pfnExitProc = Kernel32.GetProcAddress(hKernel, "ExitProcess");
+                uint dwTID;
                 hRT = Kernel32.CreateRemoteThread(bDup ? hProcessDup : hProcess, IntPtr.Zero, 0, pfnExitProc, new IntPtr(uExitCode), 0, out dwTID);
             }
 

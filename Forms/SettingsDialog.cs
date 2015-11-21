@@ -1,14 +1,11 @@
 ﻿using System;
-using System.IO;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
+using System.IO;
+using System.Linq;
 using System.Net;
+using System.Windows.Forms;
 using System.Xml.Serialization;
-using System.Data.SQLite;
 using CDBurnerXP;
 
 namespace Ketarin.Forms
@@ -44,14 +41,11 @@ namespace Ketarin.Forms
 
             protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
             {
-                foreach (Keys key in Hotkey.EndKeys)
+                if (Hotkey.EndKeys.Any(key => (keyData & key) == key))
                 {
-                    if ((keyData & key) == key)
-                    {
-                        this.Text = Hotkey.GetShortcutString(keyData);
-                        this.resultKeys = keyData;
-                        return true;
-                    }
+                    this.Text = Hotkey.GetShortcutString(keyData);
+                    this.resultKeys = keyData;
+                    return true;
                 }
 
                 return base.ProcessCmdKey(ref msg, keyData);
@@ -61,11 +55,11 @@ namespace Ketarin.Forms
         #endregion
 
         private int currentSelectedCommandEvent = -1;
-        private DataTable globalVarsTable = new DataTable();
+        private readonly DataTable globalVarsTable = new DataTable();
         private SerializableDictionary<string, string> cachedCustomColumns = new SerializableDictionary<string, string>();
-        private bool customColumnsChanged = false;
-        private List<Hotkey> hotkeys = new List<Hotkey>();
-        private Hotkey currentSelectedHotkey = null;
+        private bool customColumnsChanged;
+        private readonly List<Hotkey> hotkeys = new List<Hotkey>();
+        private Hotkey currentSelectedHotkey;
 
         #region Properties
 
@@ -268,7 +262,7 @@ namespace Ketarin.Forms
 
             foreach (UrlVariable var in UrlVariable.GlobalVariables.Values)
             {
-                this.globalVarsTable.Rows.Add(new string[] { var.Name, var.CachedContent });
+                this.globalVarsTable.Rows.Add(var.Name, var.CachedContent);
             }
         }
 
@@ -282,8 +276,7 @@ namespace Ketarin.Forms
                 // Skip variables without name
                 if (string.IsNullOrEmpty(varName)) continue;
 
-                UrlVariable newVariable = new UrlVariable(varName, null);
-                newVariable.CachedContent = row[1] as string;
+                UrlVariable newVariable = new UrlVariable(varName, null) {CachedContent = row[1] as string};
                 UrlVariable.GlobalVariables[varName] = newVariable;
             }
 
@@ -429,7 +422,7 @@ namespace Ketarin.Forms
         {
             if (this.currentSelectedHotkey != null)
             {
-                this.currentSelectedHotkey.SetDoubleclickShortcut(Control.ModifierKeys);
+                this.currentSelectedHotkey.SetDoubleclickShortcut(ModifierKeys);
                 this.txtHotkeyKeys.Text = this.currentSelectedHotkey.Shortcut;
             }
         }

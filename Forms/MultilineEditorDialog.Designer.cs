@@ -1,11 +1,14 @@
-﻿namespace Ketarin.Forms
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace Ketarin.Forms
 {
     partial class MultilineEditorDialog
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -106,9 +109,9 @@
 
         #endregion
 
-        private System.Windows.Forms.Button bCancel;
-        private System.Windows.Forms.Button bOK;
-        private System.Windows.Forms.CheckBox chkWordWrap;
+        private Button bCancel;
+        private Button bOK;
+        private CheckBox chkWordWrap;
         private VariableTextBox txtValue;
     }
 }

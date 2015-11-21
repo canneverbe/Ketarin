@@ -1,11 +1,15 @@
-﻿namespace Ketarin.Forms
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+using CDBurnerXP.Controls;
+
+namespace Ketarin.Forms
 {
     partial class SelectApplicationDialog
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -128,10 +132,10 @@
 
         #endregion
 
-        protected System.Windows.Forms.Button bCancel;
-        protected System.Windows.Forms.Button bOK;
+        protected Button bCancel;
+        protected Button bOK;
         private ApplicationJobsListView olvApplications;
-        private System.Windows.Forms.Label label1;
-        private CDBurnerXP.Controls.OLVColumn colAppName;
+        private Label label1;
+        private OLVColumn colAppName;
     }
 }

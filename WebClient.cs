@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Net;
-using System.Windows.Forms;
-using CDBurnerXP;
-using System.Web;
 using System.IO;
+using System.Net;
 using System.Reflection;
-using System.Security.Cryptography.X509Certificates;
-using System.Net.Security;
+using System.Text;
+using System.Web;
+using CDBurnerXP;
 
 namespace Ketarin
 {
@@ -20,8 +17,8 @@ namespace Ketarin
     {
         private string m_PostData = string.Empty;
         private string m_ReplacementString = string.Empty;
-        private static string m_UserAgent = null;
-        private Uri m_ResponseUri = null;
+        private static string m_UserAgent;
+        private Uri m_ResponseUri;
 
         #region Properties
 
@@ -53,14 +50,16 @@ namespace Ketarin
             {
                 if (m_UserAgent == null)
                 {
-                    List<string> userAgents = new List<string>();
-                    userAgents.Add("Mozilla/5.0 (Windows; U; MSIE 7.0; Windows NT 6.0; en-US)");
-                    userAgents.Add("Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0;)");
-                    userAgents.Add("Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1)");
-                    userAgents.Add("Mozilla/4.0 (Windows; MSIE 6.0; Windows NT 6.0)");
-                    userAgents.Add("Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.6pre) Gecko/2009011606 Firefox/3.1");
-                    userAgents.Add("Mozilla/5.0 (Windows; U; Windows NT 7.0; en-US; rv:1.9.0.6) Gecko/2009011913 Firefox/3.0.6");
-                    userAgents.Add("Mozilla/5.0 (Windows; U; Windows NT 6.0; de; rv:1.9.0.6) Gecko/2009011913 Firefox/3.0.6 (.NET CLR 3.5.30729)");
+                    List<string> userAgents = new List<string>
+                    {
+                        "Mozilla/5.0 (Windows; U; MSIE 7.0; Windows NT 6.0; en-US)",
+                        "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0;)",
+                        "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1)",
+                        "Mozilla/4.0 (Windows; MSIE 6.0; Windows NT 6.0)",
+                        "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.6pre) Gecko/2009011606 Firefox/3.1",
+                        "Mozilla/5.0 (Windows; U; Windows NT 7.0; en-US; rv:1.9.0.6) Gecko/2009011913 Firefox/3.0.6",
+                        "Mozilla/5.0 (Windows; U; Windows NT 6.0; de; rv:1.9.0.6) Gecko/2009011913 Firefox/3.0.6 (.NET CLR 3.5.30729)"
+                    };
 
                     Random rand = new Random();
                     int index = rand.Next() % userAgents.Count;
@@ -76,20 +75,18 @@ namespace Ketarin
         public WebClient()
             : this(null)
         {
-            ServicePointManager.ServerCertificateValidationCallback = delegate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
-            {
-                return true;
-            };
+            ServicePointManager.ServerCertificateValidationCallback =
+                (sender, certificate, chain, sslPolicyErrors) => true;
         }
 
         public WebClient(string userAgent)
             : base()
         {
-            Headers.Add("User-Agent", userAgent ?? WebClient.UserAgent);
+            Headers.Add("User-Agent", userAgent ?? UserAgent);
 
             // MS Bugfix - https://connect.microsoft.com/VisualStudio/feedback/details/386695/system-uri-incorrectly-strips-trailing-dots?wa=wsignin1.0#
-            MethodInfo getSyntax = typeof(UriParser).GetMethod("GetSyntax", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic);
-            FieldInfo flagsField = typeof(UriParser).GetField("m_Flags", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+            MethodInfo getSyntax = typeof(UriParser).GetMethod("GetSyntax", BindingFlags.Static | BindingFlags.NonPublic);
+            FieldInfo flagsField = typeof(UriParser).GetField("m_Flags", BindingFlags.Instance | BindingFlags.NonPublic);
             if (getSyntax != null && flagsField != null)
             {
                 foreach (string scheme in new[] { "http", "https" })

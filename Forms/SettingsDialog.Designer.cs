@@ -1,11 +1,15 @@
-﻿namespace Ketarin.Forms
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+using CDBurnerXP.Controls;
+
+namespace Ketarin.Forms
 {
     partial class SettingsDialog
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -722,53 +726,53 @@
 
         #endregion
 
-        private System.Windows.Forms.Button bCancel;
-        private System.Windows.Forms.Button bOK;
-        private System.Windows.Forms.CheckBox chkUpdateAtStartup;
-        private System.Windows.Forms.CheckBox chkAvoidBeta;
-        private System.Windows.Forms.Label lblConnectionTimeout;
-        private System.Windows.Forms.NumericUpDown nConnectionTimeout;
-        private System.Windows.Forms.Label lblSeconds;
-        private CDBurnerXP.Controls.Separator sepProxy;
-        private System.Windows.Forms.Label lblServer;
+        private Button bCancel;
+        private Button bOK;
+        private CheckBox chkUpdateAtStartup;
+        private CheckBox chkAvoidBeta;
+        private Label lblConnectionTimeout;
+        private NumericUpDown nConnectionTimeout;
+        private Label lblSeconds;
+        private Separator sepProxy;
+        private Label lblServer;
         private System.Windows.Forms.TextBox txtProxyServer;
-        private System.Windows.Forms.NumericUpDown nProxyPort;
-        private System.Windows.Forms.Label lblProxyUser;
+        private NumericUpDown nProxyPort;
+        private Label lblProxyUser;
         private System.Windows.Forms.TextBox txtProxyUser;
-        private System.Windows.Forms.Label lblProxyPassword;
+        private Label lblProxyPassword;
         private System.Windows.Forms.TextBox txtProxyPassword;
-        private System.Windows.Forms.Label lblNumThreads;
-        private System.Windows.Forms.NumericUpDown nNumThreads;
-        private System.Windows.Forms.NumericUpDown nNumRetries;
-        private System.Windows.Forms.Label lblNumRetries;
-        private System.Windows.Forms.TabControl tcSettings;
-        private System.Windows.Forms.TabPage tpGeneral;
-        private System.Windows.Forms.TabPage tpConnection;
-        private System.Windows.Forms.CheckBox chkUpdateOnlineDatabase;
-        private System.Windows.Forms.CheckBox chkMinToTray;
-        private System.Windows.Forms.TabPage tpCommands;
-        private System.Windows.Forms.Button bExport;
-        private System.Windows.Forms.Button bImport;
-        private System.Windows.Forms.CheckBox chkBackups;
-        private System.Windows.Forms.CheckBox chkOpenWebsite;
-        private System.Windows.Forms.Label lblCommandEvent;
-        private System.Windows.Forms.ComboBox cboCommandEvent;
+        private Label lblNumThreads;
+        private NumericUpDown nNumThreads;
+        private NumericUpDown nNumRetries;
+        private Label lblNumRetries;
+        private TabControl tcSettings;
+        private TabPage tpGeneral;
+        private TabPage tpConnection;
+        private CheckBox chkUpdateOnlineDatabase;
+        private CheckBox chkMinToTray;
+        private TabPage tpCommands;
+        private Button bExport;
+        private Button bImport;
+        private CheckBox chkBackups;
+        private CheckBox chkOpenWebsite;
+        private Label lblCommandEvent;
+        private ComboBox cboCommandEvent;
         private CommandControl commandControl;
-        private System.Windows.Forms.TabPage tabPage1;
-        private System.Windows.Forms.Label lblGlobalVariables;
-        private System.Windows.Forms.DataGridView gridGlobalVariables;
-        private CDBurnerXP.Controls.ObjectListView olvCustomColumns;
-        private CDBurnerXP.Controls.OLVColumn colName;
-        private CDBurnerXP.Controls.OLVColumn colValue;
-        private System.Windows.Forms.Button bAddCustomColumn;
-        private System.Windows.Forms.Button bRemove;
-        private CDBurnerXP.Controls.Separator separator1;
-        private System.Windows.Forms.Button bEdit;
-        private System.Windows.Forms.TabPage tpHotkeys;
-        private System.Windows.Forms.Label lblActions;
-        private System.Windows.Forms.ListBox lbActions;
-        private System.Windows.Forms.Button bDoubleClick;
+        private TabPage tabPage1;
+        private Label lblGlobalVariables;
+        private DataGridView gridGlobalVariables;
+        private ObjectListView olvCustomColumns;
+        private OLVColumn colName;
+        private OLVColumn colValue;
+        private Button bAddCustomColumn;
+        private Button bRemove;
+        private Separator separator1;
+        private Button bEdit;
+        private TabPage tpHotkeys;
+        private Label lblActions;
+        private ListBox lbActions;
+        private Button bDoubleClick;
         private HotkeyTextBox txtHotkeyKeys;
-        private System.Windows.Forms.Label lblHotkey;
+        private Label lblHotkey;
     }
 }

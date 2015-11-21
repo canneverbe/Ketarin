@@ -1,11 +1,9 @@
 ﻿using System;
+using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-using System.Text;
 using System.Windows.Forms;
-using System.CodeDom.Compiler;
 
 namespace Ketarin.Forms
 {
@@ -257,20 +255,17 @@ namespace Ketarin.Forms
                 }
 
                 txtCode.Snippets.List.Add(sciteSnippet);
-                
-                MenuItem newItem = new MenuItem(snippet.Name);
-                newItem.Tag = snippet;
-                newItem.Click += new EventHandler(OnInsertSnippetClick);
+
+                MenuItem newItem = new MenuItem(snippet.Name) {Tag = snippet};
+                newItem.Click += this.OnInsertSnippetClick;
                 mnuInsertSnippet.MenuItems.Add(newItem);
 
-                newItem = new MenuItem(snippet.Name);
-                newItem.Tag = snippet;
-                newItem.Click += new EventHandler(OnDeleteSnippetClick);
+                newItem = new MenuItem(snippet.Name) {Tag = snippet};
+                newItem.Click += this.OnDeleteSnippetClick;
                 mnuDeleteSnippet.MenuItems.Add(newItem);
 
-                newItem = new MenuItem(snippet.Name);
-                newItem.Tag = snippet;
-                newItem.Click += new EventHandler(OnSaveSnippetAs);
+                newItem = new MenuItem(snippet.Name) {Tag = snippet};
+                newItem.Click += this.OnSaveSnippetAs;
                 mnuSaveAs.MenuItems.Add(newItem);
             }
 

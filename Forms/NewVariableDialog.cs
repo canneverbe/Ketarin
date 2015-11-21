@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 
 namespace Ketarin.Forms
@@ -13,7 +8,7 @@ namespace Ketarin.Forms
     /// </summary>
     public partial class NewVariableDialog : Form
     {
-        private ApplicationJob.UrlVariableCollection m_ExistingVariables = null;
+        private readonly ApplicationJob.UrlVariableCollection m_ExistingVariables;
 
         #region Properties
 
@@ -34,7 +29,7 @@ namespace Ketarin.Forms
 
         #endregion
 
-        private bool m_Updating = false;
+        private bool m_Updating;
 
         public NewVariableDialog(ApplicationJob.UrlVariableCollection variables)
         {

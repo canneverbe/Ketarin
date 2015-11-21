@@ -28,7 +28,7 @@ namespace Ketarin
 {
     static class Program
     {
-        private static NotifyIcon m_Icon = null;
+        private static NotifyIcon m_Icon;
 
         [STAThread]
         static void Main(string[] args)
@@ -37,7 +37,7 @@ namespace Ketarin
             Application.SetCompatibleTextRenderingDefault(false);
 
             // Set an error handler (just a message box) for unexpected exceptions in threads
-            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 
             // Parse command line arguments
             CommandlineArguments arguments = new CommandlineArguments(args);
@@ -76,16 +76,18 @@ namespace Ketarin
 
                 ApplicationJob[] jobs = DbManager.GetJobs();
                 Updater updater = new Updater();
-                updater.StatusChanged += new EventHandler<Updater.JobStatusChangedEventArgs>(updater_StatusChanged);
-                updater.ProgressChanged += new EventHandler<Updater.JobProgressChangedEventArgs>(updater_ProgressChanged);
+                updater.StatusChanged += updater_StatusChanged;
+                updater.ProgressChanged += updater_ProgressChanged;
                 updater.BeginUpdate(jobs, false, false);
 
                 if (arguments["notify"] != null)
                 {
-                    m_Icon = new NotifyIcon();
-                    m_Icon.Icon = System.Drawing.Icon.FromHandle(Properties.Resources.Restart.GetHicon());
-                    m_Icon.Text = "Ketarin is working...";
-                    m_Icon.Visible = true;
+                    m_Icon = new NotifyIcon
+                    {
+                        Icon = System.Drawing.Icon.FromHandle(Properties.Resources.Restart.GetHicon()),
+                        Text = "Ketarin is working...",
+                        Visible = true
+                    };
                 }
 
                 while (updater.IsBusy)
@@ -120,7 +122,7 @@ namespace Ketarin
                 string exportedXml = ApplicationJob.GetXml(jobs, false, System.Text.Encoding.UTF8);
                 try
                 {
-                    File.WriteAllText(arguments["export"] as string, exportedXml, System.Text.Encoding.UTF8); 
+                    File.WriteAllText(arguments["export"], exportedXml, System.Text.Encoding.UTF8); 
                 }
                 catch (Exception ex)
                 {
@@ -129,7 +131,7 @@ namespace Ketarin
             }
             else if (arguments["import"] != null)
             {
-                string sourceFile = arguments["import"] as string;
+                string sourceFile = arguments["import"];
                 try
                 {
                     if (arguments["clear"] != null)
@@ -149,8 +151,8 @@ namespace Ketarin
                 try
                 {
                     // Install all applications in the given XML
-                    ApplicationJob[] appsToInstall = null;
-                    string path = arguments["install"] as string;
+                    ApplicationJob[] appsToInstall;
+                    string path = arguments["install"];
                     if (Uri.IsWellFormedUriString(path, UriKind.Absolute))
                     {
                         using (WebClient client = new WebClient())
@@ -163,11 +165,13 @@ namespace Ketarin
                         appsToInstall = ApplicationJob.ImportFromXml(path);
                     }
 
-                    InstallingApplicationsDialog dialog = new InstallingApplicationsDialog();
-                    dialog.Applications = appsToInstall;
-                    dialog.ShowIcon = true;
-                    dialog.ShowInTaskbar = true;
-                    dialog.AutoClose = (arguments["exit"] != null);
+                    InstallingApplicationsDialog dialog = new InstallingApplicationsDialog
+                    {
+                        Applications = appsToInstall,
+                        ShowIcon = true,
+                        ShowInTaskbar = true,
+                        AutoClose = (arguments["exit"] != null)
+                    };
                     Application.Run(dialog);
                 }
                 catch (Exception ex)

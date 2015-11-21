@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Windows.Forms;
 using System.ComponentModel;
+using System.Windows.Forms;
 
 namespace Ketarin.Forms
 {
@@ -12,7 +11,7 @@ namespace Ketarin.Forms
     class VariableTextBox : TextBox
     {
         private string[] m_VariableNames = new string[0];
-        private ContextMenuCustomiser m_Customiser = null;
+        private ContextMenuCustomiser m_Customiser;
         private bool m_EnableEditor = true;
 
         #region Properties
@@ -97,8 +96,10 @@ namespace Ketarin.Forms
 
                 foreach (string var in vars)
                 {
-                    ContextMenuItem newItem = new ContextMenuItem("{" + var + "}", 0);
-                    newItem.EventHandler = OnVariableSelected;
+                    ContextMenuItem newItem = new ContextMenuItem("{" + var + "}", 0)
+                    {
+                        EventHandler = this.OnVariableSelected
+                    };
                     m_Customiser.MenuItems.Add(newItem);
                 }
             }
@@ -109,17 +110,19 @@ namespace Ketarin.Forms
                 // Add final separator
                 m_Customiser.MenuItems.Add(new ContextMenuItem(string.Empty, 0));
 
-                ContextMenuItem newItem = new ContextMenuItem("Editor...", 0);
-                newItem.EventHandler = delegate(ContextMenuItem item)
+                ContextMenuItem newItem = new ContextMenuItem("Editor...", 0)
                 {
-                    using (MultilineEditorDialog dialog = new MultilineEditorDialog())
+                    EventHandler = delegate
                     {
-                        dialog.Value = this.Text;
-                        dialog.SetVariableNames(m_VariableNames);
-
-                        if (dialog.ShowDialog(this) == DialogResult.OK)
+                        using (MultilineEditorDialog dialog = new MultilineEditorDialog())
                         {
-                            this.Text = dialog.Value;
+                            dialog.Value = this.Text;
+                            dialog.SetVariableNames(m_VariableNames);
+
+                            if (dialog.ShowDialog(this) == DialogResult.OK)
+                            {
+                                this.Text = dialog.Value;
+                            }
                         }
                     }
                 };

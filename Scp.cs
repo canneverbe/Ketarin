@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Tamir.SharpSsh.jsch;
 using System.IO;
-using Tamir.SharpSsh.java.util;
 using System.Net;
+using System.Text;
+using Tamir.SharpSsh.java.util;
+using Tamir.SharpSsh.jsch;
 
 namespace Ketarin
 {
@@ -29,9 +28,9 @@ namespace Ketarin
     /// </summary>
     public class ScpWebRequest : WebRequest
     {
-        private Uri requestUri = null;
-        private int timeout = 0;
-        private ScpWebResponse responseToAbort = null;
+        private readonly Uri requestUri;
+        private int timeout;
+        private ScpWebResponse responseToAbort;
 
         #region Properties
 
@@ -95,11 +94,11 @@ namespace Ketarin
     /// </summary>
     public class ScpWebResponse : WebResponse
     {
-        private Stream responseStream = null;
-        private int contentLength = 0;
-        private Uri responseUri = null;
-        private Session session = null;
-        private DateTime lastModified = DateTime.MinValue;
+        private readonly Stream responseStream;
+        private readonly int contentLength;
+        private readonly Uri responseUri;
+        private readonly Session session;
+        private readonly DateTime lastModified;
 
         #region Properties
 
@@ -249,13 +248,12 @@ namespace Ketarin
                 this.contentLength = this.contentLength * 10 + (buf[0] - '0');
             }
 
-            String file = null;
             for (int i = 0; ; i++)
             {
                 ins.Read(buf, i, 1);
                 if (buf[i] == (byte)0x0a)
                 {
-                    file = Util.getString(buf, 0, i);
+                    Util.getString(buf, 0, i);
                     break;
                 }
             }

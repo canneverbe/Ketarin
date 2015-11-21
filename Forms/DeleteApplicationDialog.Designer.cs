@@ -1,11 +1,14 @@
-﻿namespace Ketarin.Forms
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace Ketarin.Forms
 {
     partial class DeleteApplicationDialog
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -113,10 +116,10 @@
 
         #endregion
 
-        private System.Windows.Forms.Label lblQuestion;
-        private System.Windows.Forms.Button bDeleteApplication;
-        private System.Windows.Forms.Button bDeleteApplicationAndFile;
-        private System.Windows.Forms.Button bCancel;
-        private System.Windows.Forms.PictureBox picIcon;
+        private Label lblQuestion;
+        private Button bDeleteApplication;
+        private Button bDeleteApplicationAndFile;
+        private Button bCancel;
+        private PictureBox picIcon;
     }
 }

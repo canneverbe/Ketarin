@@ -1,17 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
 using System.Diagnostics;
+using System.Windows.Forms;
 
 namespace Ketarin.Forms
 {
     public partial class CloseProcessInstructionDialog : InstructionBaseDialog
     {
-        private CloseProcessInstruction instruction = null;
+        private CloseProcessInstruction instruction;
 
         public override SetupInstruction SetupInstruction
         {

@@ -1,11 +1,14 @@
-﻿namespace Ketarin.Forms
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace Ketarin.Forms
 {
     partial class InstructionBaseDialog
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -74,8 +77,8 @@
 
         #endregion
 
-        protected System.Windows.Forms.Button bCancel;
-        protected System.Windows.Forms.Button bOK;
+        protected Button bCancel;
+        protected Button bOK;
 
     }
 }

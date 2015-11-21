@@ -1,11 +1,18 @@
-﻿namespace Ketarin.Forms
+﻿using System;
+using System.ComponentModel;
+using System.Drawing;
+using System.Windows.Forms;
+using ScintillaNet;
+using wyDay.Controls;
+
+namespace Ketarin.Forms
 {
     partial class CommandControl
     {
         /// <summary> 
         /// Erforderliche Designervariable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary> 
         /// Verwendete Ressourcen bereinigen.
@@ -28,37 +35,37 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.cmnuCommand = new System.Windows.Forms.ContextMenu();
-            this.mnuBatchScript = new System.Windows.Forms.MenuItem();
-            this.mnuCSScript = new System.Windows.Forms.MenuItem();
-            this.sepRun = new System.Windows.Forms.MenuItem();
-            this.mnuValidate = new System.Windows.Forms.MenuItem();
-            this.mnuRun = new System.Windows.Forms.MenuItem();
-            this.sepSnippets = new System.Windows.Forms.MenuItem();
-            this.mnuInsertSnippet = new System.Windows.Forms.MenuItem();
-            this.mnuSaveAs = new System.Windows.Forms.MenuItem();
-            this.mnuNewScript = new System.Windows.Forms.MenuItem();
-            this.sepSaveAs = new System.Windows.Forms.MenuItem();
-            this.mnuDeleteSnippet = new System.Windows.Forms.MenuItem();
-            this.sepDefaultCommands = new System.Windows.Forms.MenuItem();
-            this.mnuUndo = new System.Windows.Forms.MenuItem();
-            this.mnuRedo = new System.Windows.Forms.MenuItem();
-            this.sepClipboard = new System.Windows.Forms.MenuItem();
-            this.mnuCut = new System.Windows.Forms.MenuItem();
-            this.mnuCopy = new System.Windows.Forms.MenuItem();
-            this.mnuPaste = new System.Windows.Forms.MenuItem();
-            this.mnuClear = new System.Windows.Forms.MenuItem();
-            this.sepSelection = new System.Windows.Forms.MenuItem();
-            this.mnuSelectAll = new System.Windows.Forms.MenuItem();
+            this.cmnuCommand = new ContextMenu();
+            this.mnuBatchScript = new MenuItem();
+            this.mnuCSScript = new MenuItem();
+            this.sepRun = new MenuItem();
+            this.mnuValidate = new MenuItem();
+            this.mnuRun = new MenuItem();
+            this.sepSnippets = new MenuItem();
+            this.mnuInsertSnippet = new MenuItem();
+            this.mnuSaveAs = new MenuItem();
+            this.mnuNewScript = new MenuItem();
+            this.sepSaveAs = new MenuItem();
+            this.mnuDeleteSnippet = new MenuItem();
+            this.sepDefaultCommands = new MenuItem();
+            this.mnuUndo = new MenuItem();
+            this.mnuRedo = new MenuItem();
+            this.sepClipboard = new MenuItem();
+            this.mnuCut = new MenuItem();
+            this.mnuCopy = new MenuItem();
+            this.mnuPaste = new MenuItem();
+            this.mnuClear = new MenuItem();
+            this.sepSelection = new MenuItem();
+            this.mnuSelectAll = new MenuItem();
             this.txtBorder = new System.Windows.Forms.TextBox();
-            this.txtCode = new ScintillaNet.Scintilla();
-            this.bCommand = new wyDay.Controls.SplitButton();
-            ((System.ComponentModel.ISupportInitialize)(this.txtCode)).BeginInit();
+            this.txtCode = new Scintilla();
+            this.bCommand = new SplitButton();
+            ((ISupportInitialize)(this.txtCode)).BeginInit();
             this.SuspendLayout();
             // 
             // cmnuCommand
             // 
-            this.cmnuCommand.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.cmnuCommand.MenuItems.AddRange(new MenuItem[] {
             this.mnuBatchScript,
             this.mnuCSScript,
             this.sepRun,
@@ -78,7 +85,7 @@
             this.mnuClear,
             this.sepSelection,
             this.mnuSelectAll});
-            this.cmnuCommand.Popup += new System.EventHandler(this.cmnuCommand_Popup);
+            this.cmnuCommand.Popup += new EventHandler(this.cmnuCommand_Popup);
             // 
             // mnuBatchScript
             // 
@@ -86,14 +93,14 @@
             this.mnuBatchScript.Index = 0;
             this.mnuBatchScript.RadioCheck = true;
             this.mnuBatchScript.Text = "&Batch script";
-            this.mnuBatchScript.Click += new System.EventHandler(this.mnuBatchScript_Click);
+            this.mnuBatchScript.Click += new EventHandler(this.mnuBatchScript_Click);
             // 
             // mnuCSScript
             // 
             this.mnuCSScript.Index = 1;
             this.mnuCSScript.RadioCheck = true;
             this.mnuCSScript.Text = "C&# script";
-            this.mnuCSScript.Click += new System.EventHandler(this.mnuCSScript_Click);
+            this.mnuCSScript.Click += new EventHandler(this.mnuCSScript_Click);
             // 
             // sepRun
             // 
@@ -103,16 +110,16 @@
             // mnuValidate
             // 
             this.mnuValidate.Index = 3;
-            this.mnuValidate.Shortcut = System.Windows.Forms.Shortcut.CtrlB;
+            this.mnuValidate.Shortcut = Shortcut.CtrlB;
             this.mnuValidate.Text = "&Validate";
-            this.mnuValidate.Click += new System.EventHandler(this.mnuValidate_Click);
+            this.mnuValidate.Click += new EventHandler(this.mnuValidate_Click);
             // 
             // mnuRun
             // 
             this.mnuRun.Index = 4;
-            this.mnuRun.Shortcut = System.Windows.Forms.Shortcut.CtrlR;
+            this.mnuRun.Shortcut = Shortcut.CtrlR;
             this.mnuRun.Text = "&Run";
-            this.mnuRun.Click += new System.EventHandler(this.mnuRun_Click);
+            this.mnuRun.Click += new EventHandler(this.mnuRun_Click);
             // 
             // sepSnippets
             // 
@@ -127,7 +134,7 @@
             // mnuSaveAs
             // 
             this.mnuSaveAs.Index = 7;
-            this.mnuSaveAs.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.mnuSaveAs.MenuItems.AddRange(new MenuItem[] {
             this.mnuNewScript,
             this.sepSaveAs});
             this.mnuSaveAs.Text = "&Save as";
@@ -136,7 +143,7 @@
             // 
             this.mnuNewScript.Index = 0;
             this.mnuNewScript.Text = "&New...";
-            this.mnuNewScript.Click += new System.EventHandler(this.mnuNewScript_Click);
+            this.mnuNewScript.Click += new EventHandler(this.mnuNewScript_Click);
             // 
             // sepSaveAs
             // 
@@ -156,16 +163,16 @@
             // mnuUndo
             // 
             this.mnuUndo.Index = 10;
-            this.mnuUndo.Shortcut = System.Windows.Forms.Shortcut.CtrlZ;
+            this.mnuUndo.Shortcut = Shortcut.CtrlZ;
             this.mnuUndo.Text = "&Undo";
-            this.mnuUndo.Click += new System.EventHandler(this.mnuUndo_Click);
+            this.mnuUndo.Click += new EventHandler(this.mnuUndo_Click);
             // 
             // mnuRedo
             // 
             this.mnuRedo.Index = 11;
-            this.mnuRedo.Shortcut = System.Windows.Forms.Shortcut.CtrlY;
+            this.mnuRedo.Shortcut = Shortcut.CtrlY;
             this.mnuRedo.Text = "R&edo";
-            this.mnuRedo.Click += new System.EventHandler(this.mnuRedo_Click);
+            this.mnuRedo.Click += new EventHandler(this.mnuRedo_Click);
             // 
             // sepClipboard
             // 
@@ -175,29 +182,29 @@
             // mnuCut
             // 
             this.mnuCut.Index = 13;
-            this.mnuCut.Shortcut = System.Windows.Forms.Shortcut.CtrlX;
+            this.mnuCut.Shortcut = Shortcut.CtrlX;
             this.mnuCut.Text = "Cu&t";
-            this.mnuCut.Click += new System.EventHandler(this.mnuCut_Click);
+            this.mnuCut.Click += new EventHandler(this.mnuCut_Click);
             // 
             // mnuCopy
             // 
             this.mnuCopy.Index = 14;
-            this.mnuCopy.Shortcut = System.Windows.Forms.Shortcut.CtrlC;
+            this.mnuCopy.Shortcut = Shortcut.CtrlC;
             this.mnuCopy.Text = "&Copy";
-            this.mnuCopy.Click += new System.EventHandler(this.mnuCopy_Click);
+            this.mnuCopy.Click += new EventHandler(this.mnuCopy_Click);
             // 
             // mnuPaste
             // 
             this.mnuPaste.Index = 15;
-            this.mnuPaste.Shortcut = System.Windows.Forms.Shortcut.CtrlV;
+            this.mnuPaste.Shortcut = Shortcut.CtrlV;
             this.mnuPaste.Text = "&Paste";
-            this.mnuPaste.Click += new System.EventHandler(this.mnuPaste_Click);
+            this.mnuPaste.Click += new EventHandler(this.mnuPaste_Click);
             // 
             // mnuClear
             // 
             this.mnuClear.Index = 16;
             this.mnuClear.Text = "Cle&ar";
-            this.mnuClear.Click += new System.EventHandler(this.mnuClear_Click);
+            this.mnuClear.Click += new EventHandler(this.mnuClear_Click);
             // 
             // sepSelection
             // 
@@ -208,32 +215,32 @@
             // 
             this.mnuSelectAll.Index = 18;
             this.mnuSelectAll.Text = "Se&lect all";
-            this.mnuSelectAll.Click += new System.EventHandler(this.mnuSelectAll_Click);
+            this.mnuSelectAll.Click += new EventHandler(this.mnuSelectAll_Click);
             // 
             // txtBorder
             // 
-            this.txtBorder.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtBorder.Location = new System.Drawing.Point(0, 0);
+            this.txtBorder.Anchor = ((AnchorStyles)((((AnchorStyles.Top | AnchorStyles.Bottom)
+                        | AnchorStyles.Left)
+                        | AnchorStyles.Right)));
+            this.txtBorder.Location = new Point(0, 0);
             this.txtBorder.Multiline = true;
             this.txtBorder.Name = "txtBorder";
             this.txtBorder.ReadOnly = true;
-            this.txtBorder.Size = new System.Drawing.Size(517, 194);
+            this.txtBorder.Size = new Size(517, 194);
             this.txtBorder.TabIndex = 2;
             this.txtBorder.TabStop = false;
             // 
             // txtCode
             // 
-            this.txtCode.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtCode.Location = new System.Drawing.Point(1, 1);
+            this.txtCode.Anchor = ((AnchorStyles)((((AnchorStyles.Top | AnchorStyles.Bottom)
+                        | AnchorStyles.Left)
+                        | AnchorStyles.Right)));
+            this.txtCode.Location = new Point(1, 1);
             this.txtCode.Margins.Margin0.Width = 25;
             this.txtCode.Margins.Margin1.Width = 0;
             this.txtCode.Margins.Right = 0;
             this.txtCode.Name = "txtCode";
-            this.txtCode.Size = new System.Drawing.Size(514, 192);
+            this.txtCode.Size = new Size(514, 192);
             this.txtCode.Styles.BraceBad.FontName = "Verdana";
             this.txtCode.Styles.BraceLight.FontName = "Verdana";
             this.txtCode.Styles.ControlChar.FontName = "Verdana";
@@ -246,12 +253,12 @@
             // 
             // bCommand
             // 
-            this.bCommand.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.bCommand.Anchor = ((AnchorStyles)((AnchorStyles.Bottom | AnchorStyles.Left)));
             this.bCommand.AutoSize = true;
-            this.bCommand.Location = new System.Drawing.Point(0, 200);
+            this.bCommand.Location = new Point(0, 200);
             this.bCommand.Name = "bCommand";
             this.bCommand.SeparateDropdownButton = false;
-            this.bCommand.Size = new System.Drawing.Size(82, 23);
+            this.bCommand.Size = new Size(82, 23);
             this.bCommand.SplitMenu = this.cmnuCommand;
             this.bCommand.TabIndex = 1;
             this.bCommand.Text = "&Command";
@@ -259,15 +266,15 @@
             // 
             // CommandControl
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleDimensions = new SizeF(6F, 13F);
+            this.AutoScaleMode = AutoScaleMode.Font;
             this.Controls.Add(this.txtCode);
             this.Controls.Add(this.bCommand);
             this.Controls.Add(this.txtBorder);
-            this.Margin = new System.Windows.Forms.Padding(0);
+            this.Margin = new Padding(0);
             this.Name = "CommandControl";
-            this.Size = new System.Drawing.Size(517, 223);
-            ((System.ComponentModel.ISupportInitialize)(this.txtCode)).EndInit();
+            this.Size = new Size(517, 223);
+            ((ISupportInitialize)(this.txtCode)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -275,30 +282,30 @@
 
         #endregion
 
-        private wyDay.Controls.SplitButton bCommand;
-        private System.Windows.Forms.ContextMenu cmnuCommand;
-        private System.Windows.Forms.MenuItem mnuBatchScript;
-        private System.Windows.Forms.MenuItem mnuCSScript;
-        private System.Windows.Forms.MenuItem sepRun;
-        private System.Windows.Forms.MenuItem mnuValidate;
-        private System.Windows.Forms.MenuItem mnuRun;
-        private System.Windows.Forms.MenuItem sepSnippets;
-        private System.Windows.Forms.MenuItem mnuInsertSnippet;
-        private System.Windows.Forms.MenuItem mnuSaveAs;
-        private System.Windows.Forms.MenuItem mnuNewScript;
-        private System.Windows.Forms.MenuItem sepSaveAs;
-        private System.Windows.Forms.MenuItem mnuDeleteSnippet;
-        private ScintillaNet.Scintilla txtCode;
-        private System.Windows.Forms.MenuItem sepDefaultCommands;
-        private System.Windows.Forms.MenuItem mnuUndo;
-        private System.Windows.Forms.MenuItem mnuRedo;
-        private System.Windows.Forms.MenuItem sepClipboard;
-        private System.Windows.Forms.MenuItem mnuCut;
-        private System.Windows.Forms.MenuItem mnuCopy;
-        private System.Windows.Forms.MenuItem mnuPaste;
-        private System.Windows.Forms.MenuItem mnuClear;
-        private System.Windows.Forms.MenuItem sepSelection;
-        private System.Windows.Forms.MenuItem mnuSelectAll;
+        private SplitButton bCommand;
+        private ContextMenu cmnuCommand;
+        private MenuItem mnuBatchScript;
+        private MenuItem mnuCSScript;
+        private MenuItem sepRun;
+        private MenuItem mnuValidate;
+        private MenuItem mnuRun;
+        private MenuItem sepSnippets;
+        private MenuItem mnuInsertSnippet;
+        private MenuItem mnuSaveAs;
+        private MenuItem mnuNewScript;
+        private MenuItem sepSaveAs;
+        private MenuItem mnuDeleteSnippet;
+        private Scintilla txtCode;
+        private MenuItem sepDefaultCommands;
+        private MenuItem mnuUndo;
+        private MenuItem mnuRedo;
+        private MenuItem sepClipboard;
+        private MenuItem mnuCut;
+        private MenuItem mnuCopy;
+        private MenuItem mnuPaste;
+        private MenuItem mnuClear;
+        private MenuItem sepSelection;
+        private MenuItem mnuSelectAll;
         private System.Windows.Forms.TextBox txtBorder;
     }
 }

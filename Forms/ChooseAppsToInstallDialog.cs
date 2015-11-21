@@ -1,16 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
-using CDBurnerXP.Forms;
-using Microsoft.Win32;
-using CDBurnerXP.IO;
-using CDBurnerXP.Controls;
-using System.Data.SQLite;
 using CDBurnerXP;
+using CDBurnerXP.Controls;
+using CDBurnerXP.Forms;
 
 namespace Ketarin.Forms
 {
@@ -19,11 +13,11 @@ namespace Ketarin.Forms
     /// </summary>
     public partial class ChooseAppsToInstallDialog : PersistentForm
     {
-        private List<ApplicationList> lists = new List<ApplicationList>();
-        private Dictionary<ApplicationJob, bool> checkedApps = new Dictionary<ApplicationJob, bool>();
-        private List<ApplicationJob> selectedApplications = new List<ApplicationJob>();
-        private ApplicationList lastDeletedList = null;
-        private bool shouldUpdateApplications = false;
+        private readonly List<ApplicationList> lists = new List<ApplicationList>();
+        private readonly Dictionary<ApplicationJob, bool> checkedApps = new Dictionary<ApplicationJob, bool>();
+        private readonly List<ApplicationJob> selectedApplications = new List<ApplicationJob>();
+        private ApplicationList lastDeletedList;
+        private bool shouldUpdateApplications;
 
         #region Properties
 
@@ -54,14 +48,8 @@ namespace Ketarin.Forms
 
             olvLists.ContextMenu = cmnuView;
 
-            colListName.ImageGetter = delegate(object x)
-            {
-                return this.lists.IndexOf(x as ApplicationList);
-            };
-            olvApps.CheckStateGetter = delegate(object x)
-            {
-                return this.checkedApps.ContainsKey(x as ApplicationJob) && this.checkedApps[x as ApplicationJob];
-            };
+            colListName.ImageGetter = x => this.lists.IndexOf(x as ApplicationList);
+            olvApps.CheckStateGetter = x => this.checkedApps.ContainsKey(x as ApplicationJob) && this.checkedApps[x as ApplicationJob];
             olvApps.CheckStatePutter = delegate(object x, CheckState value)
             {
                 this.checkedApps[x as ApplicationJob] = (value == CheckState.Checked);
@@ -193,7 +181,7 @@ namespace Ketarin.Forms
             // No applications selected -> not OK
             if (selectedApplications.Count == 0)
             {
-                MessageBox.Show(this, "You did not select any applications to install.\r\n\r\nPlease select at least one application in order to proceed.", System.Windows.Forms.Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.None);
+                MessageBox.Show(this, "You did not select any applications to install.\r\n\r\nPlease select at least one application in order to proceed.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.None);
                 DialogResult = DialogResult.None;
                 return;
             }
@@ -275,14 +263,7 @@ namespace Ketarin.Forms
         {
             EnableDisableButtons();
 
-            if (olvLists.SelectedObjects.Count == 0)
-            {
-                olvApps.EmptyListMsg = "Select a list in order to select applications.";
-            }
-            else
-            {
-                olvApps.EmptyListMsg = "No applications in list.";
-            }
+            this.olvApps.EmptyListMsg = this.olvLists.SelectedObjects.Count == 0 ? "Select a list in order to select applications." : "No applications in list.";
 
             // Show all selected apps in the app list
             List<ApplicationJob> apps = new List<ApplicationJob>();

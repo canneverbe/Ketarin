@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
+using System.Windows.Forms;
 
 namespace Ketarin.Forms
 {
@@ -25,8 +21,8 @@ namespace Ketarin.Forms
 
         #endregion
 
-        private StartProcessInstruction instruction = null;
-        private List<VariableInfo> variables = new List<VariableInfo>();
+        private StartProcessInstruction instruction;
+        private readonly List<VariableInfo> variables = new List<VariableInfo>();
 
         public override SetupInstruction SetupInstruction
         {
@@ -61,7 +57,7 @@ namespace Ketarin.Forms
 
             foreach (MenuItem item in this.argumentsMenu.MenuItems)
             {
-                item.Click += new EventHandler(OnArgumentMenuItemClick);
+                item.Click += this.OnArgumentMenuItemClick;
             }
 
             // Fill list with overridable environment variables
@@ -70,7 +66,7 @@ namespace Ketarin.Forms
                 string key = (string)var.Key;
                 if (this.instruction.EnvironmentVariables.ContainsKey(key))
                 {
-                    variables.Add(new VariableInfo() { Name = key, Value = this.instruction.EnvironmentVariables[key] });
+                    variables.Add(new VariableInfo { Name = key, Value = this.instruction.EnvironmentVariables[key] });
                 }
                 else
                 {
