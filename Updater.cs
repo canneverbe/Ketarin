@@ -793,7 +793,7 @@ namespace Ketarin
                 // Execute: Default pre-update command
                 string defaultPreCommand = Settings.GetValue("PreUpdateCommand", "") as string;
                 // For starting external download managers: {preupdate-url}
-                defaultPreCommand = UrlVariable.Replace(defaultPreCommand, "preupdate-url", urlToRequest.ToString());
+                defaultPreCommand = UrlVariable.Replace(defaultPreCommand, "preupdate-url", urlToRequest.ToString(), job);
                 ScriptType defaultPreCommandType = Command.ConvertToScriptType(Settings.GetValue("PreUpdateCommandType", ScriptType.Batch.ToString()) as string);
 
                 int exitCode = new Command(defaultPreCommand, defaultPreCommandType).Execute(job, targetFileName);
@@ -809,7 +809,7 @@ namespace Ketarin
                 }
 
                 // Execute: Application pre-update command
-                exitCode = new Command(UrlVariable.Replace(job.ExecutePreCommand, "preupdate-url", urlToRequest.ToString()), job.ExecutePreCommandType).Execute(job, targetFileName);
+                exitCode = new Command(UrlVariable.Replace(job.ExecutePreCommand, "preupdate-url", urlToRequest.ToString(), job), job.ExecutePreCommandType).Execute(job, targetFileName);
                 if (exitCode == 1)
                 {
                     LogDialog.Log(job, "Pre-update command returned '1', download aborted");

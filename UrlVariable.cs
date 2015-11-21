@@ -490,9 +490,9 @@ namespace Ketarin
         /// Replaces this variable within a string with the given content.
         /// Applies functions if necessary.
         /// </summary>
-        private string Replace(string formatString, string content)
+        private string Replace(string formatString, string content, ApplicationJob context = null)
         {
-            return Replace(formatString, m_Name, content);
+            return Replace(formatString, m_Name, content, context);
         }
 
         /// <summary>
@@ -500,7 +500,7 @@ namespace Ketarin
         /// with the given content.
         /// Applies functions if necessary.
         /// </summary>
-        public static string Replace(string formatString, string varname, string content)
+        public static string Replace(string formatString, string varname, string content, ApplicationJob context = null)
         {
             if (content == null)
             {
@@ -520,7 +520,7 @@ namespace Ketarin
             while (GetVariablePosition(formatString, varname, startAt, out pos, out length, out functionPart))
             {
                 formatString = formatString.Remove(pos, length);
-                string replaceValue = ReplaceFunction(functionPart, content);
+                string replaceValue = ReplaceFunction(functionPart, content, context);
                 startAt = pos + replaceValue.Length;
                 formatString = formatString.Insert(pos, replaceValue);
             } 
@@ -534,7 +534,7 @@ namespace Ketarin
         /// </summary>
         /// <param name="function">A function specification, for example "replace:a:b"</param>
         /// <param name="content">The usual variable content</param>
-        private static string ReplaceFunction(string function, string content)
+        private static string ReplaceFunction(string function, string content, ApplicationJob context = null)
         {
             function = function.TrimStart(':');
             if (string.IsNullOrEmpty(function)) return content;
@@ -547,6 +547,15 @@ namespace Ketarin
                 case "empty":
                     // Useful, if you want to load, but not use a variable
                     return string.Empty;
+
+                case "ifempty":
+                    if (string.IsNullOrEmpty(content) && context != null && parts.Length > 1)
+                    {
+                        return context.Variables.ReplaceAllInString("{" + parts[1] + "}");
+                    }
+
+                    return content;
+
                 case "regexreplace":
                     try
                     {
@@ -897,9 +906,7 @@ namespace Ketarin
             // Global variable only has static content
             if (onlyCached)
             {
-                // We don't want to spam the log with chached only screen updates
-                if (!onlyCached) LogDialog.Log(this, value, m_CachedContent);
-                return (m_CachedContent == null) ? value : Replace(value, m_CachedContent);
+                return (m_CachedContent == null) ? value : Replace(value, m_CachedContent, this.Parent == null ? null : this.Parent.Parent);
             }
 
             // Ignore missing URLs etc.
@@ -910,7 +917,7 @@ namespace Ketarin
             {
                 m_CachedContent = GetExpandedTextualContent(fileDate);
                 LogDialog.Log(this, value, m_CachedContent);
-                return Replace(value, m_CachedContent);
+                return Replace(value, m_CachedContent, this.Parent == null ? null : this.Parent.Parent);
             }
 
             string page = string.Empty;

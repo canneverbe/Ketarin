@@ -87,7 +87,7 @@ namespace Ketarin
             // Replace variable: root
             try
             {
-                commandText = UrlVariable.Replace(commandText, "root", Path.GetPathRoot(Application.StartupPath));
+                commandText = UrlVariable.Replace(commandText, "root", Path.GetPathRoot(Application.StartupPath), job);
             }
             catch (ArgumentException) { }
 
