@@ -341,7 +341,7 @@ namespace Ketarin
 
         public class UrlVariableCollection : SerializableDictionary<string, UrlVariable>
         {
-            private ApplicationJob m_Parent;
+            private ApplicationJob parent;
             private bool m_VersionDownloaded = false;
             private FileInfo cachedInfo = null;
 
@@ -353,8 +353,8 @@ namespace Ketarin
             [XmlIgnore()]
             public ApplicationJob Parent
             {
-                get { return m_Parent; }
-                set { m_Parent = value; }
+                get { return this.parent; }
+                set { this.parent = value; }
             }
 
             #endregion
@@ -365,7 +365,7 @@ namespace Ketarin
             
             public UrlVariableCollection(ApplicationJob parent)
             {
-                m_Parent = parent;
+                this.parent = parent;
             }
 
             /// <summary>
@@ -404,18 +404,18 @@ namespace Ketarin
             {
                 if (value == null) return value;
 
-                if (m_Parent != null && !string.IsNullOrEmpty(m_Parent.CurrentLocation))
+                if (this.parent != null && !string.IsNullOrEmpty(this.parent.CurrentLocation))
                 {
                     try
                     {
                         if (!ContainsKey("file"))
                         {
-                            value = UrlVariable.Replace(value, "file", m_Parent.CurrentLocation);
+                            value = UrlVariable.Replace(value, "file", this.parent.CurrentLocation, this.parent);
                         }
 
-                        if (cachedInfo == null || cachedInfo.FullName != m_Parent.CurrentLocation)
+                        if (cachedInfo == null || cachedInfo.FullName != this.parent.CurrentLocation)
                         {
-                            cachedInfo = new FileInfo(m_Parent.CurrentLocation);
+                            cachedInfo = new FileInfo(this.parent.CurrentLocation);
                         }
                         // Try to provide file date if missing
                         if (fileDate == DateTime.MinValue)
@@ -425,7 +425,7 @@ namespace Ketarin
                         // Provide file size
                         if (cachedInfo.Exists)
                         {
-                            value = UrlVariable.Replace(value, "filesize", cachedInfo.Length.ToString());
+                            value = UrlVariable.Replace(value, "filesize", cachedInfo.Length.ToString(), this.parent);
                         }
                     }
                     catch (Exception)
@@ -464,7 +464,7 @@ namespace Ketarin
                     LogDialog.Log("Could not determine {url:*} variables", ex);
                 }
 
-                value = UrlVariable.Replace(value, "startuppath", PathEx.QualifyPath(Application.StartupPath));
+                value = UrlVariable.Replace(value, "startuppath", PathEx.QualifyPath(Application.StartupPath), this.parent);
 
                 // Some date/time variables, only if they were not user defined
                 string[] dateTimeVariables = new string[] { "dd", "ddd", "dddd", "hh", "HH", "mm", "MM", "MMM", "MMMM", "ss", "tt", "yy", "yyyy", "zz", "zzz" };
@@ -477,26 +477,26 @@ namespace Ketarin
                 }
 
                 // Unix timestamp
-                value = UrlVariable.Replace(value, "time", RpcApplication.DotNetToUnix(DateTime.Now).ToString());
+                value = UrlVariable.Replace(value, "time", RpcApplication.DotNetToUnix(DateTime.Now).ToString(), this.parent);
                 for (int i = 1; i <= 12; i++)
                 {
-                    value = UrlVariable.Replace(value, "time-" + i, RpcApplication.DotNetToUnix(DateTime.Now.AddHours(-i)).ToString());
+                    value = UrlVariable.Replace(value, "time-" + i, RpcApplication.DotNetToUnix(DateTime.Now.AddHours(-i)).ToString(), this.parent);
                 }
                 for (int i = 1; i <= 12; i++)
                 {
-                    value = UrlVariable.Replace(value, "time+" + i, RpcApplication.DotNetToUnix(DateTime.Now.AddHours(+i)).ToString());
+                    value = UrlVariable.Replace(value, "time+" + i, RpcApplication.DotNetToUnix(DateTime.Now.AddHours(+i)).ToString(), this.parent);
                 }
 
                 // Job-specific data / non global variables
-                if (m_Parent != null)
+                if (this.parent != null)
                 {
-                    if (!string.IsNullOrEmpty(m_Parent.Category))
+                    if (!string.IsNullOrEmpty(this.parent.Category))
                     {
-                        value = UrlVariable.Replace(value, "category", m_Parent.Category);
+                        value = UrlVariable.Replace(value, "category", this.parent.Category, this.parent);
                     }
 
-                    value = UrlVariable.Replace(value, "appname", m_Parent.Name);
-                    value = UrlVariable.Replace(value, "appguid", DbManager.FormatGuid(m_Parent.Guid));
+                    value = UrlVariable.Replace(value, "appname", this.parent.Name, this.parent);
+                    value = UrlVariable.Replace(value, "appguid", DbManager.FormatGuid(this.parent.Guid), this.parent);
                     
                    
                     // Allow to access all public properties of the object per "property:X" variable.
@@ -508,7 +508,7 @@ namespace Ketarin
                         {
                             if (!typeof(IEnumerable).IsAssignableFrom(property.PropertyType) || property.PropertyType == typeof(string))
                             {
-                                value = UrlVariable.Replace(value, varname, Convert.ToString(property.GetValue(m_Parent, null)));
+                                value = UrlVariable.Replace(value, varname, Convert.ToString(property.GetValue(this.parent, null)), this.parent);
                             }
                         }
                     }
@@ -516,19 +516,19 @@ namespace Ketarin
                     if (!ContainsKey("version"))
                     {
                         // FileHippo version
-                        if (m_Parent.DownloadSourceType == SourceType.FileHippo && UrlVariable.IsVariableUsedInString("version", value))
+                        if (this.parent.DownloadSourceType == SourceType.FileHippo && UrlVariable.IsVariableUsedInString("version", value))
                         {
                             if (!onlyCachedContent)
                             {
-                                m_Parent.FileHippoVersion = ExternalServices.FileHippoVersion(m_Parent.FileHippoId, m_Parent.AvoidDownloadBeta);
+                                this.parent.FileHippoVersion = ExternalServices.FileHippoVersion(this.parent.FileHippoId, this.parent.AvoidDownloadBeta);
                                 m_VersionDownloaded = true;
                             }
-                            value = UrlVariable.Replace(value, "version", m_Parent.FileHippoVersion);
+                            value = UrlVariable.Replace(value, "version", this.parent.FileHippoVersion, this.parent);
                         }
-                        else if (!string.IsNullOrEmpty(m_Parent.CachedPadFileVersion))
+                        else if (!string.IsNullOrEmpty(this.parent.CachedPadFileVersion))
                         {
                             // or PAD file version as alternative
-                            value = UrlVariable.Replace(value, "version", m_Parent.CachedPadFileVersion);
+                            value = UrlVariable.Replace(value, "version", this.parent.CachedPadFileVersion, this.parent);
                         }
                     }
                 }
@@ -1698,7 +1698,7 @@ namespace Ketarin
             // If carried on a USB stick, allow using the drive name
             try
             {
-                targetLocation = UrlVariable.Replace(targetLocation, "root", Path.GetPathRoot(Application.StartupPath));
+                targetLocation = UrlVariable.Replace(targetLocation, "root", Path.GetPathRoot(Application.StartupPath), this);
             }
             catch (ArgumentException) { }
 
