@@ -1,5 +1,0 @@
-Primary keywords and identifiers
-Secondary keywords and identifiers
-Documentation comment keywords
-Unused
-Global classes and typedefs

@@ -1,6 +1,0 @@
-control keywords
-keywords
-definition words
-prewords with one argument
-prewords with two arguments
-string definition keywords

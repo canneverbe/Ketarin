@@ -1,4 +1,0 @@
-Keywords
-Attributes
-Descriptors
-Types

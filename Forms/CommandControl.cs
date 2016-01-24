@@ -33,6 +33,8 @@ namespace Ketarin.Forms
     Exits the script with a given error.
 */";
 
+        private const string psSample = "write-host $app.Name";
+
         private string[] variableNames = new string[0];
 
         #region Properties
@@ -88,12 +90,12 @@ namespace Ketarin.Forms
         {
             set
             {
-                txtCode.IsReadOnly = value;
+                txtCode.ReadOnly = value;
                 bCommand.Enabled = !value;
             }
             get
             {
-                return txtCode.IsReadOnly;
+                return txtCode.ReadOnly;
             }
         }
 
@@ -127,7 +129,7 @@ namespace Ketarin.Forms
                     {
                         MenuItem varItem = new MenuItem("{" + VariableNames[i] + "}", delegate(object sender, EventArgs ev)
                         {
-                            txtCode.InsertText(((MenuItem)sender).Text);
+                            txtCode.InsertText(txtCode.CurrentPosition, ((MenuItem)sender).Text);
                         });
                         varItem.Tag = VariableNames[i];
                         cmnuCommand.MenuItems.Add(0, varItem);
@@ -164,18 +166,39 @@ namespace Ketarin.Forms
         {
             get
             {
-                if (mnuCSScript.Checked) return ScriptType.CS;
+                if (mnuCSScript.Checked)
+                {
+                    return ScriptType.CS;
+                }
+                else if (mnuPowerShell.Checked)
+                {
+                    return ScriptType.PowerShell;
+                }
+
                 return ScriptType.Batch;
             }
             set
             {
                 switch (value)
                 {
+                    case ScriptType.PowerShell:
+                        mnuBatchScript.Checked = false;
+                        mnuCSScript.Checked = false;
+                        mnuPowerShell.Checked = true;
+                        mnuValidate.Enabled = false;
+                        txtCode.LexerLanguage = "powershell";
+                        if (string.IsNullOrEmpty(txtCode.Text))
+                        {
+                            txtCode.Text = psSample;
+                        }
+                        break;
+
                     case ScriptType.CS:
                         mnuBatchScript.Checked = false;
                         mnuCSScript.Checked = true;
                         mnuValidate.Enabled = true;
-                        txtCode.ConfigurationManager.Language = "cs";
+                        mnuPowerShell.Checked = false;
+                        txtCode.LexerLanguage = "cs";
                         if (string.IsNullOrEmpty(txtCode.Text))
                         {
                             txtCode.Text = csSample;
@@ -186,7 +209,8 @@ namespace Ketarin.Forms
                         mnuBatchScript.Checked = true;
                         mnuCSScript.Checked = false;
                         mnuValidate.Enabled = false;
-                        txtCode.ConfigurationManager.Language = "batch";
+                        mnuPowerShell.Checked = false;
+                        txtCode.LexerLanguage = "batch";
 
                         if (txtCode.Text == csSample)
                         {
@@ -237,7 +261,6 @@ namespace Ketarin.Forms
         {
             mnuInsertSnippet.MenuItems.Clear();
             mnuDeleteSnippet.MenuItems.Clear();
-            txtCode.Snippets.List.Clear();
 
             while (mnuSaveAs.MenuItems.Count > 2)
             {
@@ -247,15 +270,6 @@ namespace Ketarin.Forms
             Snippet[] snippets = DbManager.GetSnippets();
             foreach (Snippet snippet in snippets)
             {
-                ScintillaNet.Snippet sciteSnippet = new ScintillaNet.Snippet(snippet.Name.Replace(" ", "-"), snippet.Text);
-                sciteSnippet.Languages.Add(snippet.Type == ScriptType.Batch ? "batch" : "cs");
-                if (txtCode.Snippets.List.Contains(sciteSnippet.Shortcut))
-                {
-                    continue;
-                }
-
-                txtCode.Snippets.List.Add(sciteSnippet);
-
                 MenuItem newItem = new MenuItem(snippet.Name) {Tag = snippet};
                 newItem.Click += this.OnInsertSnippetClick;
                 mnuInsertSnippet.MenuItems.Add(newItem);
@@ -299,7 +313,12 @@ namespace Ketarin.Forms
                 CompilerErrorCollection errors;
                 testInstruction.Compile(out errors);
 
-                txtCode.ClearAllAnnotations();
+                txtCode.AnnotationClearAll();
+                txtCode.AnnotationVisible = ScintillaNET.Annotation.Boxed;
+                txtCode.Styles[1].BackColor = Color.FromArgb(0xFFF0F0);
+                txtCode.Styles[1].ForeColor = Color.FromArgb(0x800000);
+                txtCode.Styles[2].BackColor = Color.FromArgb(0xFFFFF0);
+                txtCode.Styles[2].ForeColor = Color.FromArgb(0x808000);
 
                 if (errors.HasErrors)
                 {
@@ -311,10 +330,15 @@ namespace Ketarin.Forms
                         if (!hasScrolled)
                         {
                             hasScrolled = true;
-                            txtCode.ScrollToLine(lineNum);
+                            txtCode.LineScroll(lineNum, 0);
                         }
 
-                        txtCode.SetAnnotation(lineNum, error.ErrorText, error.IsWarning);
+                        txtCode.Lines[lineNum].AnnotationText = error.ErrorText;
+                        txtCode.Lines[lineNum].AnnotationStyle = 1;
+                        if (error.IsWarning)
+                        {
+                            txtCode.Lines[lineNum].AnnotationStyle = 2;
+                        }
                     }
                 }
                 else
@@ -335,6 +359,11 @@ namespace Ketarin.Forms
         }
 
         #region Command menu
+
+        private void mnuPowerShell_Click(object sender, EventArgs e)
+        {
+            CommandType = ScriptType.PowerShell;
+        }
 
         private void mnuBatchScript_Click(object sender, EventArgs e)
         {
@@ -363,27 +392,27 @@ namespace Ketarin.Forms
 
         private void mnuPaste_Click(object sender, EventArgs e)
         {
-            txtCode.Clipboard.Paste();
+            txtCode.Paste();
         }
 
         private void mnuCopy_Click(object sender, EventArgs e)
         {
-            txtCode.Clipboard.Copy();
+            txtCode.Copy();
         }
 
         private void mnuCut_Click(object sender, EventArgs e)
         {
-            txtCode.Clipboard.Cut();
+            txtCode.Cut();
         }
 
         private void mnuRedo_Click(object sender, EventArgs e)
         {
-            txtCode.UndoRedo.Redo();
+            txtCode.Redo();
         }
 
         private void mnuUndo_Click(object sender, EventArgs e)
         {
-            txtCode.UndoRedo.Undo();
+            txtCode.Undo();
         }
 
         private void mnuRun_Click(object sender, EventArgs e)
@@ -406,7 +435,7 @@ namespace Ketarin.Forms
             {
                 if (dialog.ShowDialog(this) == DialogResult.OK)
                 {
-                    string text = string.IsNullOrEmpty(txtCode.Selection.Text) ? txtCode.Text : txtCode.Selection.Text;
+                    string text = string.IsNullOrEmpty(txtCode.SelectedText) ? txtCode.Text : txtCode.SelectedText;
                     Snippet script = new Snippet()
                     {
                         Name = dialog.ScriptName,
@@ -424,7 +453,7 @@ namespace Ketarin.Forms
             Snippet snippet = ((MenuItem)sender).Tag as Snippet;
             if (snippet != null)
             {
-                txtCode.InsertText(snippet.Text);
+                txtCode.InsertText(txtCode.CurrentPosition, snippet.Text);
             }
         }
 
@@ -443,7 +472,7 @@ namespace Ketarin.Forms
             Snippet snippet = ((MenuItem)sender).Tag as Snippet;
             if (snippet != null)
             {
-                string text = string.IsNullOrEmpty(txtCode.Selection.Text) ? txtCode.Text : txtCode.Selection.Text;
+                string text = string.IsNullOrEmpty(txtCode.SelectedText) ? txtCode.Text : txtCode.SelectedText;
                 snippet.Text = text;
                 snippet.Type = CommandType;
                 snippet.Save();
@@ -459,11 +488,11 @@ namespace Ketarin.Forms
             mnuCut.Visible = isEditControl;
             mnuCopy.Visible = isEditControl;
             mnuPaste.Visible = isEditControl;
-            mnuPaste.Enabled = txtCode.Clipboard.CanPaste;
+            mnuPaste.Enabled = txtCode.CanPaste;
             mnuRedo.Visible = isEditControl;
-            mnuRedo.Enabled = txtCode.UndoRedo.CanRedo;
+            mnuRedo.Enabled = txtCode.CanRedo;
             mnuUndo.Visible = isEditControl;
-            mnuUndo.Enabled = txtCode.UndoRedo.CanUndo;
+            mnuUndo.Enabled = txtCode.CanUndo;
             mnuClear.Visible = isEditControl;
             mnuSelectAll.Visible = isEditControl;
             sepClipboard.Visible = isEditControl;

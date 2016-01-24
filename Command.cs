@@ -55,6 +55,11 @@ namespace Ketarin
                     script.Execute(application);
                     break;
 
+                case ScriptType.PowerShell:
+                    PowerShellScript psScript = new PowerShellScript(this.Text);
+                    psScript.Execute(application);
+                    break;
+
                 default:
                     return ExecuteBatchCommand(application, this.Text, targetFileName);
             }
