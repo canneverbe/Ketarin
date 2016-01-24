@@ -1,5 +1,0 @@
-Globals
-Events
-Attributes
-Control
-Commands

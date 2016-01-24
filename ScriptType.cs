@@ -9,9 +9,15 @@
         /// C# script
         /// </summary>
         CS,
+
         /// <summary>
         /// Batch file
         /// </summary>
-        Batch
+        Batch,
+
+        /// <summary>
+        /// PowerShell script.
+        /// </summary>
+        PowerShell
     }
 }
