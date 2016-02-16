@@ -25,18 +25,11 @@ namespace Ketarin
                 powerShell.Runspace.SessionStateProxy.SetVariable("app", application);
                 powerShell.Runspace.SessionStateProxy.SetVariable("globalvars", UrlVariable.GlobalVariables);
 
+                // Output all information we can get.
+                powerShell.Streams.Debug.DataAdded += this.DebugDataAdded;
+                powerShell.Streams.Warning.DataAdded += this.WarningDataAdded;
+                powerShell.Streams.Information.DataAdded += this.InfoDataAdded;
                 Collection<PSObject> psOutput = powerShell.Invoke();
-
-                if (powerShell.HadErrors)
-                {
-                    StringBuilder sb = new StringBuilder();
-                    foreach (ErrorRecord error in powerShell.Streams.Error)
-                    {
-                        sb.AppendLine(error.Exception.Message);
-                    }
-
-                    throw new ApplicationException(sb.ToString());
-                }
 
                 foreach (PSObject outputItem in psOutput)
                 {
@@ -48,22 +41,32 @@ namespace Ketarin
                     }
                 }
 
-                // Output all information we can get.
-                foreach (ErrorRecord warning in powerShell.Streams.Error)
+                if (powerShell.HadErrors)
                 {
-                    LogDialog.Log("PowerShell (error): " + warning.ErrorDetails.Message);
-                }
+                    StringBuilder sb = new StringBuilder();
+                    foreach (ErrorRecord error in powerShell.Streams.Error)
+                    {
+                        sb.AppendLine(error.Exception.Message);
+                    }
 
-                foreach (WarningRecord warning in powerShell.Streams.Warning)
-                {
-                    LogDialog.Log("PowerShell (warning): " + warning.Message);
-                }
-
-                foreach (InformationRecord info in powerShell.Streams.Information)
-                {
-                    LogDialog.Log("PowerShell (info): " + info.MessageData);
+                    throw new ApplicationException(sb.ToString());
                 }
             }
+        }
+
+        private void InfoDataAdded(object sender, DataAddedEventArgs e)
+        {
+            LogDialog.Log("PowerShell (info): " + ((PSDataCollection<InformationRecord>) sender)[e.Index].MessageData);
+        }
+
+        private void WarningDataAdded(object sender, DataAddedEventArgs e)
+        {
+            LogDialog.Log("PowerShell (warning): " + ((PSDataCollection<WarningRecord>) sender)[e.Index].Message);
+        }
+
+        private void DebugDataAdded(object sender, DataAddedEventArgs e)
+        {
+            LogDialog.Log("PowerShell (debug): " + ((PSDataCollection<DebugRecord>) sender)[e.Index].Message);
         }
     }
 }
