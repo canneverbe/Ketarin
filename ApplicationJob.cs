@@ -1739,7 +1739,7 @@ namespace Ketarin
                 StringBuilder result = new StringBuilder(32);
                 for (int i = 0; i < localMd5.Length; i++)
                 {
-                    result.Append(i.ToString("X2"));
+                    result.Append(localMd5[i].ToString("X2"));
                 }
                 return result.ToString();
             }
