@@ -520,6 +520,7 @@
     <Compile Include="Updater.cs" />
     <Compile Include="UrlVariable.cs" />
     <Compile Include="UserCSScript.cs" />
+    <Compile Include="VariableIsEmptyException.cs" />
     <Compile Include="WebClient.cs">
       <SubType>Component</SubType>
     </Compile>
