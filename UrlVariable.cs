@@ -523,9 +523,16 @@ namespace Ketarin
             while (GetVariablePosition(formatString, varname, startAt, out pos, out length, out functionPart))
             {
                 formatString = formatString.Remove(pos, length);
-                string replaceValue = ReplaceFunction(functionPart, content, context);
-                startAt = pos + replaceValue.Length;
-                formatString = formatString.Insert(pos, replaceValue);
+                try
+                {
+                    string replaceValue = ReplaceFunction(functionPart, content, context);
+                    startAt = pos + replaceValue.Length;
+                    formatString = formatString.Insert(pos, replaceValue);
+                }
+                catch (VariableIsEmptyException ex)
+                {
+                    throw new VariableIsEmptyException(string.Format("Variable \"{0}\" is empty.", varname));
+                }
             } 
 
             return formatString;
@@ -558,6 +565,13 @@ namespace Ketarin
                         return context.Variables.ReplaceAllInString("{" + parts[1] + "}");
                     }
 
+                    return content;
+
+                case "ifemptythenerror":
+                    if (string.IsNullOrEmpty(content))
+                    {
+                        throw new VariableIsEmptyException();
+                    }
                     return content;
 
                 case "regexreplace":
