@@ -28,7 +28,15 @@ namespace Ketarin
                 // Output all information we can get.
                 powerShell.Streams.Debug.DataAdded += this.DebugDataAdded;
                 powerShell.Streams.Warning.DataAdded += this.WarningDataAdded;
-                powerShell.Streams.Information.DataAdded += this.InfoDataAdded;
+                try
+                {
+                    powerShell.Streams.Information.DataAdded += this.InfoDataAdded;
+                }
+                catch (MissingMethodException)
+                {
+                    // Only supported in PS 5.0 and higher
+                }
+
                 Collection<PSObject> psOutput = powerShell.Invoke();
 
                 foreach (PSObject outputItem in psOutput)
