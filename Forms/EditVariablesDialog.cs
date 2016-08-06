@@ -718,14 +718,7 @@ namespace Ketarin.Forms
 
                     this.BeginInvoke((MethodInvoker)delegate
                     {
-                        txtRegularExpression.HintText = string.Empty;
-                        RefreshRtfFormatting(match);
-
-                        if (match.Success && this.gotoMatch)
-                        {
-                            this.gotoMatch = false;
-                            GoToMatch();
-                        }
+                        this.SetRegexResult(regex, match);
                     });
                 }
                 catch (UriFormatException ex)
@@ -750,6 +743,25 @@ namespace Ketarin.Forms
             catch (InvalidOperationException)
             {
                 /* Ignore error if form is closed */ 
+            }
+        }
+
+        private void SetRegexResult(Regex regex, Match match)
+        {
+            // Called from thread. Only execute if current regex matches
+            // the just returned result.
+            if (this.CurrentVariable.Regex != regex.ToString())
+            {
+                return;
+            }
+
+            txtRegularExpression.HintText = string.Empty;
+            RefreshRtfFormatting(match);
+
+            if (match.Success && this.gotoMatch)
+            {
+                this.gotoMatch = false;
+                GoToMatch();
             }
         }
 
