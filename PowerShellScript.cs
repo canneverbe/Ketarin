@@ -15,6 +15,8 @@ namespace Ketarin
             this.scriptText = scriptText;
         }
 
+        public string LastOutput { get; private set; } = string.Empty;
+
         internal void Execute(ApplicationJob application)
         {
             using (PowerShell powerShell = PowerShell.Create())
@@ -22,7 +24,11 @@ namespace Ketarin
                 powerShell.AddScript(this.scriptText);
 
                 // Make application object available to the script.
-                powerShell.Runspace.SessionStateProxy.SetVariable("app", application);
+                if (application != null)
+                {
+                    powerShell.Runspace.SessionStateProxy.SetVariable("app", application);
+                }
+
                 powerShell.Runspace.SessionStateProxy.SetVariable("globalvars", UrlVariable.GlobalVariables);
 
                 // Output all information we can get.
@@ -45,6 +51,8 @@ namespace Ketarin
                     // object may be present here. check for null to prevent potential NRE.
                     if (outputItem != null)
                     {
+                        this.LastOutput = outputItem.ToString();
+
                         LogDialog.Log("PowerShell: " + outputItem);
                     }
                 }

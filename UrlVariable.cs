@@ -555,6 +555,21 @@ namespace Ketarin
 
             switch (parts[0])
             {
+                case "runpowershell":
+                case "ps":
+                    try
+                    {
+                        PowerShellScript psScript = new PowerShellScript(content);
+                        psScript.Execute(context);
+                        return psScript.LastOutput;
+                    }
+                    catch
+                    {
+                        return string.Empty;
+                    }
+
+                    return string.Empty;
+
                 case "empty":
                     // Useful, if you want to load, but not use a variable
                     return string.Empty;
