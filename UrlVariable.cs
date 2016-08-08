@@ -109,7 +109,6 @@ namespace Ketarin
         private string m_Regex = string.Empty;
         private string m_CachedContent;
         private ApplicationJob.UrlVariableCollection m_Parent;
-        private Guid m_JobGuid = Guid.Empty;
         private int m_DownloadCount;
         private bool m_RegexRightToLeft;
         private string m_PostData;
@@ -360,14 +359,10 @@ namespace Ketarin
         /// <summary>
         /// Creates a new variable for a given application.
         /// </summary>
-        internal UrlVariable(string name, ApplicationJob.UrlVariableCollection collection)
+        public UrlVariable(string name, ApplicationJob.UrlVariableCollection collection)
         {
             m_Name = name;
             m_Parent = collection;
-            if (collection != null && collection.Parent != null)
-            {
-                m_JobGuid = collection.Parent.Guid;
-            }
         }
 
         public void Hydrate(IDataReader reader)
@@ -378,7 +373,6 @@ namespace Ketarin
             m_Url = reader["Url"] as string;
             Regex = reader["RegularExpression"] as string;
             m_CachedContent = reader["CachedContent"] as string;
-            m_JobGuid = new Guid(reader["JobGuid"] as string);
             m_VariableType = (Type)Convert.ToInt32(reader["VariableType"]);
             m_TextualContent = reader["TextualContent"] as string;
             m_RegexRightToLeft = Conversion.ToBoolean(reader["RegexRightToLeft"]);
@@ -407,7 +401,6 @@ namespace Ketarin
                 command.Parameters.Add(new SQLiteParameter("@PostData", m_PostData));
                 
                 command.ExecuteNonQuery();
-                m_JobGuid = parentJobGuid;
             }
         }
 
