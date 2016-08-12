@@ -212,6 +212,38 @@
     <Compile Include="CloseProcessInstruction.cs" />
     <Compile Include="Command.cs" />
     <Compile Include="CrcStream.cs" />
+    <Compile Include="Downloader\CalculatedSegment.cs" />
+    <Compile Include="Downloader\Common\BoolFormatter.cs" />
+    <Compile Include="Downloader\Common\ByteFormatter.cs" />
+    <Compile Include="Downloader\Common\PathHelper.cs" />
+    <Compile Include="Downloader\Common\TimeSpanFormatter.cs" />
+    <Compile Include="Downloader\Concurrency\ObjectLocker.cs" />
+    <Compile Include="Downloader\Concurrency\ReaderWriterObjectLocker.cs" />
+    <Compile Include="Downloader\Downloader.cs" />
+    <Compile Include="Downloader\DownloaderState.cs" />
+    <Compile Include="Downloader\EventArgs.cs" />
+    <Compile Include="Downloader\Extensions\IExtension.cs" />
+    <Compile Include="Downloader\Extensions\IExtensionParameters.cs" />
+    <Compile Include="Downloader\Extensions\IInitializable.cs" />
+    <Compile Include="Downloader\Extensions\IUIExtension.cs" />
+    <Compile Include="Downloader\IMirrorSelector.cs" />
+    <Compile Include="Downloader\IProtocolProvider.cs" />
+    <Compile Include="Downloader\ISegmentCalculator.cs" />
+    <Compile Include="Downloader\MinSizeSegmentCalculator.cs" />
+    <Compile Include="Downloader\ProtocolProviderFactory.cs" />
+    <Compile Include="Downloader\Protocols\BaseProtocolProvider.cs" />
+    <Compile Include="Downloader\Protocols\FtpProtocolProvider.cs" />
+    <Compile Include="Downloader\Protocols\HttpFtpProtocolExtension.cs" />
+    <Compile Include="Downloader\Protocols\HttpFtpProtocolParametersSettingsProxy.cs" />
+    <Compile Include="Downloader\Protocols\HttpProtocolProvider.cs" />
+    <Compile Include="Downloader\Protocols\IHttpFtpProtocolParameters.cs" />
+    <Compile Include="Downloader\Protocols\KetarinProtocolProvider.cs" />
+    <Compile Include="Downloader\RemoteFileInfo.cs" />
+    <Compile Include="Downloader\ResourceLocation.cs" />
+    <Compile Include="Downloader\Segment.cs" />
+    <Compile Include="Downloader\SegmentState.cs" />
+    <Compile Include="Downloader\SequentialMirrorSelector.cs" />
+    <Compile Include="Downloader\Settings.cs" />
     <Compile Include="Forms\AddCustomColumnDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -667,6 +699,7 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

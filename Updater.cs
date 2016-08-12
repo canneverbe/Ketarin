@@ -11,6 +11,9 @@ using CDBurnerXP.IO;
 using CookComputing.XmlRpc;
 using FTPLib;
 using Ketarin.Forms;
+using MyDownloader.Core;
+using MyDownloader.Extension.Protocols;
+using Settings = CDBurnerXP.Settings;
 
 namespace Ketarin
 {
@@ -32,7 +35,6 @@ namespace Ketarin
         private bool m_OnlyCheck;
         private int m_ThreadLimit = 2;
         private readonly List<Thread> m_Threads = new List<Thread>();
-        private readonly List<string> m_NoAutoReferer = new List<string>(new[] { "sourceforge.net" });
         private readonly CookieContainer m_Cookies = new CookieContainer();
         private static readonly List<WebRequest> m_Requests = new List<WebRequest>();
         private bool m_InstallUpdated;
@@ -598,21 +600,6 @@ namespace Ketarin
         }
 
         /// <summary>
-        /// Determines the base host (TLD + server name) of an URI.
-        /// </summary>
-        /// <returns>Example: sourceforge.net</returns>
-        private static string GetBaseHost(Uri uri)
-        {
-            string[] parts = uri.Host.Split('.');
-            if (parts.Length <= 2)
-            {
-                return uri.Host;
-            }
-
-            return parts[parts.Length - 2] + "." + parts[parts.Length - 1];
-        }
-
-        /// <summary>
         /// Executes the actual download (determines the URL to download from). Does not handle exceptions,
         /// but takes care of proper cleanup.
         /// </summary>
@@ -680,53 +667,14 @@ namespace Ketarin
             // from the same server, we need to "remove" the connection limit.
             ServicePointManager.DefaultConnectionLimit = 50;
 
+            // Determine number of segments to create
+            int segmentCount = Convert.ToInt32(Settings.GetValue("SegmentCount", 1));
+
             job.Variables.ResetDownloadCount();
 
-            WebRequest req = WebRequest.CreateDefault(WebClient.FixNoProtocolUri(urlToRequest));
+            WebRequest req = KetarinProtocolProvider.CreateRequest(urlToRequest, job, this.m_Cookies);
             AddRequestToCancel(req);
-            req.Timeout = Convert.ToInt32(Settings.GetValue("ConnectionTimeout", 10)) * 1000; // 10 seconds by default
 
-            HttpWebRequest httpRequest = req as HttpWebRequest;
-            if (httpRequest != null)
-            {
-                // Store cookies for future requests. Some sites
-                // check for previously stored cookies before allowing to download.
-                if (httpRequest.CookieContainer == null)
-                {
-                    httpRequest.CookieContainer = m_Cookies;
-                }
-                else
-                {
-                    httpRequest.CookieContainer.Add(m_Cookies.GetCookies(httpRequest.RequestUri));
-                }
-
-                // If we have an HTTP request, some sites may require a correct referer
-                // for the download.
-                // If there are variables defined (from which most likely the download link
-                // or version is being extracted), we'll just use the first variable's URL as referer.
-                // The user still has the option to set a custom referer.
-                // Note: Some websites don't "like" certain referers
-                if (!m_NoAutoReferer.Contains(GetBaseHost(req.RequestUri)))
-                {
-                    foreach (UrlVariable urlVar in job.Variables.Values)
-                    {
-                        httpRequest.Referer = urlVar.Url;
-                        break;
-                    }
-                }
-
-                if (!string.IsNullOrEmpty(job.HttpReferer))
-                {
-                    httpRequest.Referer = job.Variables.ReplaceAllInString(job.HttpReferer);
-                }
-
-                LogDialog.Log(job, "Using referer: " + (string.IsNullOrEmpty(httpRequest.Referer) ? "(none)" : httpRequest.Referer));
-                httpRequest.UserAgent = (string.IsNullOrEmpty(job.UserAgent) ? WebClient.UserAgent : job.Variables.ReplaceAllInString(job.UserAgent));
-
-                // PAD files may be compressed
-                httpRequest.AutomaticDecompression = (DecompressionMethods.GZip | DecompressionMethods.Deflate);
-            }
-            
             using (WebResponse response = WebClient.GetResponse(req))
             {
                 LogDialog.Log(job, "Server source file: " + req.RequestUri.AbsolutePath);
@@ -826,31 +774,67 @@ namespace Ketarin
 
                 // Read all file contents to a temporary location
                 string tmpLocation = Path.GetTempFileName();
+                DateTime lastWriteTime = ApplicationJob.GetLastModified(response);
 
-                // Read contents from the web and put into file
-                using (Stream sourceFile = response.GetResponseStream())
+                // Only use segmented downloader with more than one segment.
+                if (segmentCount > 1)
                 {
-                    using (FileStream targetFile = File.Create(tmpLocation))
+                    // Response can be closed now, new one will be created.
+                    response.Dispose();
+
+                    m_Size[job] = fileSize;
+
+                    Downloader d = new Downloader(new ResourceLocation { Url = urlToRequest.AbsoluteUri, ProtocolProvider = new KetarinProtocolProvider(job, m_Cookies) }, null, tmpLocation, segmentCount);
+                    d.Start();
+                    
+                    while (d.State < DownloaderState.Ended)
                     {
-                        long byteCount = 0;
-                        int readBytes;
-                        m_Size[job] = fileSize;
-
-                        do
+                        if (m_CancelUpdates)
                         {
-                            if (m_CancelUpdates) break;
+                            d.Pause();
+                            break;
+                        }
 
-                            // Some adjustment for SCP download: Read only up to the max known bytes
-                            int maxRead = (fileSize > 0) ? (int)Math.Min(fileSize - byteCount, 1024) : 1024 * 1024;
-                            if (maxRead == 0) break;
+                        this.OnProgressChanged(d.Segments.Sum(x => x.Transfered), fileSize, job);
+                        Thread.Sleep(250);
+                    }
 
-                            byte[] buffer = new byte[maxRead];
-                            readBytes = sourceFile.Read(buffer, 0, maxRead);
-                            if (readBytes > 0) targetFile.Write(buffer, 0, readBytes);
-                            byteCount += readBytes;
-                            OnProgressChanged(byteCount, fileSize, job);
+                    if (d.State == DownloaderState.EndedWithError)
+                    {
+                        throw d.LastError;
+                    }
+                }
+                else
+                {
+                    // Read contents from the web and put into file
+                    using (Stream sourceFile = response.GetResponseStream())
+                    {
+                        using (FileStream targetFile = File.Create(tmpLocation))
+                        {
+                            long byteCount = 0;
+                            int readBytes;
+                            m_Size[job] = fileSize;
+                            
+                            // Only create buffer once and re-use.
+                            const int bufferSize = 1024 * 1024;
+                            byte[] buffer = new byte[bufferSize];
 
-                        } while (readBytes > 0);
+                            do
+                            {
+                                if (m_CancelUpdates) break;
+
+                                // Some adjustment for SCP download: Read only up to the max known bytes
+                                int maxRead = (fileSize > 0) ? (int) Math.Min(fileSize - byteCount, bufferSize) : bufferSize;
+                                if (maxRead == 0) break;
+
+                                readBytes = sourceFile.Read(buffer, 0, maxRead);
+                                if (readBytes > 0) targetFile.Write(buffer, 0, readBytes);
+                                byteCount += readBytes;
+
+                                this.OnProgressChanged(byteCount, fileSize, job);
+
+                            } while (readBytes > 0);
+                        }
                     }
                 }
 
@@ -871,7 +855,7 @@ namespace Ketarin
 
                 try
                 {
-                    File.SetLastWriteTime(tmpLocation, ApplicationJob.GetLastModified(response));
+                    File.SetLastWriteTime(tmpLocation, lastWriteTime);
                 }
                 catch (ArgumentException)
                 {

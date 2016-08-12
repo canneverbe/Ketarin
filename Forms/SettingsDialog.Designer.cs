@@ -57,8 +57,8 @@ namespace Ketarin.Forms
             this.bRemove = new System.Windows.Forms.Button();
             this.bAddCustomColumn = new System.Windows.Forms.Button();
             this.olvCustomColumns = new CDBurnerXP.Controls.ObjectListView();
-            this.colName = new CDBurnerXP.Controls.OLVColumn();
-            this.colValue = new CDBurnerXP.Controls.OLVColumn();
+            this.colName = ((CDBurnerXP.Controls.OLVColumn)(new CDBurnerXP.Controls.OLVColumn()));
+            this.colValue = ((CDBurnerXP.Controls.OLVColumn)(new CDBurnerXP.Controls.OLVColumn()));
             this.chkOpenWebsite = new System.Windows.Forms.CheckBox();
             this.chkBackups = new System.Windows.Forms.CheckBox();
             this.chkMinToTray = new System.Windows.Forms.CheckBox();
@@ -80,6 +80,8 @@ namespace Ketarin.Forms
             this.lbActions = new System.Windows.Forms.ListBox();
             this.bExport = new System.Windows.Forms.Button();
             this.bImport = new System.Windows.Forms.Button();
+            this.nNumSegments = new System.Windows.Forms.NumericUpDown();
+            this.lblSegments = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.nConnectionTimeout)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nProxyPort)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nNumThreads)).BeginInit();
@@ -92,6 +94,7 @@ namespace Ketarin.Forms
             ((System.ComponentModel.ISupportInitialize)(this.gridGlobalVariables)).BeginInit();
             this.tpCommands.SuspendLayout();
             this.tpHotkeys.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nNumSegments)).BeginInit();
             this.SuspendLayout();
             // 
             // bCancel
@@ -148,9 +151,9 @@ namespace Ketarin.Forms
             // 
             // nConnectionTimeout
             // 
-            this.nConnectionTimeout.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.nConnectionTimeout.Location = new System.Drawing.Point(114, 9);
+            this.nConnectionTimeout.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.nConnectionTimeout.Location = new System.Drawing.Point(187, 9);
             this.nConnectionTimeout.Maximum = new decimal(new int[] {
             999,
             0,
@@ -174,7 +177,7 @@ namespace Ketarin.Forms
             // 
             this.lblSeconds.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lblSeconds.AutoSize = true;
-            this.lblSeconds.Location = new System.Drawing.Point(166, 11);
+            this.lblSeconds.Location = new System.Drawing.Point(239, 11);
             this.lblSeconds.Name = "lblSeconds";
             this.lblSeconds.Size = new System.Drawing.Size(47, 13);
             this.lblSeconds.TabIndex = 2;
@@ -183,25 +186,25 @@ namespace Ketarin.Forms
             // lblServer
             // 
             this.lblServer.AutoSize = true;
-            this.lblServer.Location = new System.Drawing.Point(15, 124);
+            this.lblServer.Location = new System.Drawing.Point(15, 148);
             this.lblServer.Name = "lblServer";
             this.lblServer.Size = new System.Drawing.Size(41, 13);
-            this.lblServer.TabIndex = 8;
+            this.lblServer.TabIndex = 10;
             this.lblServer.Text = "&Server:";
             // 
             // txtProxyServer
             // 
-            this.txtProxyServer.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtProxyServer.Location = new System.Drawing.Point(82, 121);
+            this.txtProxyServer.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtProxyServer.Location = new System.Drawing.Point(82, 145);
             this.txtProxyServer.Name = "txtProxyServer";
             this.txtProxyServer.Size = new System.Drawing.Size(242, 20);
-            this.txtProxyServer.TabIndex = 9;
+            this.txtProxyServer.TabIndex = 11;
             // 
             // nProxyPort
             // 
             this.nProxyPort.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.nProxyPort.Location = new System.Drawing.Point(330, 121);
+            this.nProxyPort.Location = new System.Drawing.Point(330, 145);
             this.nProxyPort.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -209,43 +212,43 @@ namespace Ketarin.Forms
             0});
             this.nProxyPort.Name = "nProxyPort";
             this.nProxyPort.Size = new System.Drawing.Size(48, 20);
-            this.nProxyPort.TabIndex = 10;
+            this.nProxyPort.TabIndex = 12;
             // 
             // lblProxyUser
             // 
             this.lblProxyUser.AutoSize = true;
-            this.lblProxyUser.Location = new System.Drawing.Point(15, 150);
+            this.lblProxyUser.Location = new System.Drawing.Point(15, 174);
             this.lblProxyUser.Name = "lblProxyUser";
             this.lblProxyUser.Size = new System.Drawing.Size(61, 13);
-            this.lblProxyUser.TabIndex = 11;
+            this.lblProxyUser.TabIndex = 13;
             this.lblProxyUser.Text = "Us&er name:";
             // 
             // txtProxyUser
             // 
-            this.txtProxyUser.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtProxyUser.Location = new System.Drawing.Point(82, 147);
+            this.txtProxyUser.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtProxyUser.Location = new System.Drawing.Point(82, 171);
             this.txtProxyUser.Name = "txtProxyUser";
             this.txtProxyUser.Size = new System.Drawing.Size(296, 20);
-            this.txtProxyUser.TabIndex = 12;
+            this.txtProxyUser.TabIndex = 14;
             // 
             // lblProxyPassword
             // 
             this.lblProxyPassword.AutoSize = true;
-            this.lblProxyPassword.Location = new System.Drawing.Point(15, 176);
+            this.lblProxyPassword.Location = new System.Drawing.Point(15, 200);
             this.lblProxyPassword.Name = "lblProxyPassword";
             this.lblProxyPassword.Size = new System.Drawing.Size(56, 13);
-            this.lblProxyPassword.TabIndex = 13;
+            this.lblProxyPassword.TabIndex = 15;
             this.lblProxyPassword.Text = "&Password:";
             // 
             // txtProxyPassword
             // 
-            this.txtProxyPassword.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtProxyPassword.Location = new System.Drawing.Point(82, 173);
+            this.txtProxyPassword.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtProxyPassword.Location = new System.Drawing.Point(82, 197);
             this.txtProxyPassword.Name = "txtProxyPassword";
             this.txtProxyPassword.Size = new System.Drawing.Size(296, 20);
-            this.txtProxyPassword.TabIndex = 14;
+            this.txtProxyPassword.TabIndex = 16;
             this.txtProxyPassword.UseSystemPasswordChar = true;
             // 
             // lblNumThreads
@@ -253,15 +256,15 @@ namespace Ketarin.Forms
             this.lblNumThreads.AutoSize = true;
             this.lblNumThreads.Location = new System.Drawing.Point(7, 37);
             this.lblNumThreads.Name = "lblNumThreads";
-            this.lblNumThreads.Size = new System.Drawing.Size(97, 13);
+            this.lblNumThreads.Size = new System.Drawing.Size(149, 13);
             this.lblNumThreads.TabIndex = 3;
-            this.lblNumThreads.Text = "&Number of threads:";
+            this.lblNumThreads.Text = "&Number of parallel downloads:";
             // 
             // nNumThreads
             // 
-            this.nNumThreads.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.nNumThreads.Location = new System.Drawing.Point(114, 35);
+            this.nNumThreads.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.nNumThreads.Location = new System.Drawing.Point(187, 35);
             this.nNumThreads.Maximum = new decimal(new int[] {
             20,
             0,
@@ -283,9 +286,9 @@ namespace Ketarin.Forms
             // 
             // nNumRetries
             // 
-            this.nNumRetries.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.nNumRetries.Location = new System.Drawing.Point(114, 61);
+            this.nNumRetries.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.nNumRetries.Location = new System.Drawing.Point(187, 61);
             this.nNumRetries.Maximum = new decimal(new int[] {
             20,
             0,
@@ -310,15 +313,15 @@ namespace Ketarin.Forms
             this.lblNumRetries.AutoSize = true;
             this.lblNumRetries.Location = new System.Drawing.Point(7, 63);
             this.lblNumRetries.Name = "lblNumRetries";
-            this.lblNumRetries.Size = new System.Drawing.Size(90, 13);
+            this.lblNumRetries.Size = new System.Drawing.Size(157, 13);
             this.lblNumRetries.TabIndex = 5;
-            this.lblNumRetries.Text = "Number of retrie&s:";
+            this.lblNumRetries.Text = "Number of retrie&s per download:";
             // 
             // tcSettings
             // 
-            this.tcSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.tcSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.tcSettings.Controls.Add(this.tpGeneral);
             this.tcSettings.Controls.Add(this.tpConnection);
             this.tcSettings.Controls.Add(this.tabPage1);
@@ -365,8 +368,8 @@ namespace Ketarin.Forms
             // 
             // separator1
             // 
-            this.separator1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.separator1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.separator1.Location = new System.Drawing.Point(6, 153);
             this.separator1.Name = "separator1";
             this.separator1.Size = new System.Drawing.Size(382, 23);
@@ -403,9 +406,9 @@ namespace Ketarin.Forms
             this.olvCustomColumns.AlternateRowBackColor = System.Drawing.Color.Empty;
             this.olvCustomColumns.AlwaysGroupByColumn = null;
             this.olvCustomColumns.AlwaysGroupBySortOrder = System.Windows.Forms.SortOrder.None;
-            this.olvCustomColumns.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.olvCustomColumns.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.olvCustomColumns.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.colName,
             this.colValue});
@@ -479,6 +482,8 @@ namespace Ketarin.Forms
             // 
             // tpConnection
             // 
+            this.tpConnection.Controls.Add(this.nNumSegments);
+            this.tpConnection.Controls.Add(this.lblSegments);
             this.tpConnection.Controls.Add(this.nConnectionTimeout);
             this.tpConnection.Controls.Add(this.txtProxyPassword);
             this.tpConnection.Controls.Add(this.lblNumRetries);
@@ -504,12 +509,12 @@ namespace Ketarin.Forms
             // 
             // sepProxy
             // 
-            this.sepProxy.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.sepProxy.Location = new System.Drawing.Point(3, 93);
+            this.sepProxy.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.sepProxy.Location = new System.Drawing.Point(3, 117);
             this.sepProxy.Name = "sepProxy";
             this.sepProxy.Size = new System.Drawing.Size(375, 23);
-            this.sepProxy.TabIndex = 7;
+            this.sepProxy.TabIndex = 9;
             this.sepProxy.Text = "HTTP proxy settings";
             // 
             // tabPage1
@@ -527,9 +532,9 @@ namespace Ketarin.Forms
             // gridGlobalVariables
             // 
             this.gridGlobalVariables.AllowUserToResizeRows = false;
-            this.gridGlobalVariables.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.gridGlobalVariables.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.gridGlobalVariables.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.gridGlobalVariables.BackgroundColor = System.Drawing.SystemColors.Window;
             this.gridGlobalVariables.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
@@ -563,9 +568,9 @@ namespace Ketarin.Forms
             // 
             // commandControl
             // 
-            this.commandControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.commandControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.commandControl.Application = null;
             this.commandControl.Location = new System.Drawing.Point(6, 36);
             this.commandControl.Margin = new System.Windows.Forms.Padding(0);
@@ -586,8 +591,8 @@ namespace Ketarin.Forms
             // 
             // cboCommandEvent
             // 
-            this.cboCommandEvent.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.cboCommandEvent.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.cboCommandEvent.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboCommandEvent.FormattingEnabled = true;
             this.cboCommandEvent.Items.AddRange(new object[] {
@@ -652,8 +657,8 @@ namespace Ketarin.Forms
             // 
             // lbActions
             // 
-            this.lbActions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.lbActions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.lbActions.DisplayMember = "DisplayName";
             this.lbActions.FormattingEnabled = true;
             this.lbActions.Location = new System.Drawing.Point(7, 27);
@@ -684,6 +689,39 @@ namespace Ketarin.Forms
             this.bImport.Text = "Import...";
             this.bImport.UseVisualStyleBackColor = true;
             this.bImport.Click += new System.EventHandler(this.bImport_Click);
+            // 
+            // nNumSegments
+            // 
+            this.nNumSegments.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.nNumSegments.Location = new System.Drawing.Point(187, 87);
+            this.nNumSegments.Maximum = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            this.nNumSegments.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nNumSegments.Name = "nNumSegments";
+            this.nNumSegments.Size = new System.Drawing.Size(46, 20);
+            this.nNumSegments.TabIndex = 8;
+            this.nNumSegments.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // lblSegments
+            // 
+            this.lblSegments.AutoSize = true;
+            this.lblSegments.Location = new System.Drawing.Point(7, 89);
+            this.lblSegments.Name = "lblSegments";
+            this.lblSegments.Size = new System.Drawing.Size(174, 13);
+            this.lblSegments.TabIndex = 7;
+            this.lblSegments.Text = "Number &of segments per download:";
             // 
             // SettingsDialog
             // 
@@ -720,6 +758,7 @@ namespace Ketarin.Forms
             this.tpCommands.PerformLayout();
             this.tpHotkeys.ResumeLayout(false);
             this.tpHotkeys.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nNumSegments)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -774,5 +813,7 @@ namespace Ketarin.Forms
         private Button bDoubleClick;
         private HotkeyTextBox txtHotkeyKeys;
         private Label lblHotkey;
+        private NumericUpDown nNumSegments;
+        private Label lblSegments;
     }
 }
