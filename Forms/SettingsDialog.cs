@@ -166,6 +166,7 @@ namespace Ketarin.Forms
             nConnectionTimeout.Value = Convert.ToDecimal(Settings.GetValue("ConnectionTimeout", 10.0));
             nNumThreads.Value = Convert.ToDecimal(Settings.GetValue("ThreadCount", 2));
             nNumRetries.Value = Convert.ToDecimal(Settings.GetValue("RetryCount", 1));
+            nNumSegments.Value = Convert.ToDecimal(Settings.GetValue("SegmentCount", 1));
             chkMinToTray.Checked = (bool)Settings.GetValue("MinimizeToTray", false);
             chkOpenWebsite.Checked = (bool)Settings.GetValue("OpenWebsiteOnDoubleClick", false);
 
@@ -195,6 +196,7 @@ namespace Ketarin.Forms
             Settings.SetValue("ConnectionTimeout", nConnectionTimeout.Value);
             Settings.SetValue("ThreadCount", Convert.ToInt32(nNumThreads.Value));
             Settings.SetValue("RetryCount", Convert.ToInt32(nNumRetries.Value));
+            Settings.SetValue("SegmentCount", Convert.ToInt32(nNumSegments.Value));
             Settings.SetValue("UpdateOnlineDatabase", chkUpdateOnlineDatabase.Checked);
             Settings.SetValue("MinimizeToTray", chkMinToTray.Checked);
             Settings.SetValue("CreateDatabaseBackups", chkBackups.Checked);
