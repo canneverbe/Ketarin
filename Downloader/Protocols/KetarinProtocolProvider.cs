@@ -24,23 +24,83 @@ namespace MyDownloader.Extension.Protocols
 
         public override RemoteFileInfo GetFileInfo(ResourceLocation rl, out Stream stream)
         {
-            HttpWebRequest request = (HttpWebRequest) this.GetRequest(rl);
+            WebRequest request = this.GetRequest(rl);
 
-            HttpWebResponse response = (HttpWebResponse) request.GetResponse();
             RemoteFileInfo result = new RemoteFileInfo();
-            result.MimeType = response.ContentType;
-            result.LastModified = response.LastModified;
-            result.FileSize = response.ContentLength;
-            result.AcceptRanges = string.Compare(response.Headers["Accept-Ranges"], "bytes", StringComparison.OrdinalIgnoreCase) == 0;
-            
-            if (!result.AcceptRanges)
+            WebResponse response = null;
+
+            HttpWebRequest httpRequest = request as HttpWebRequest;
+            if (httpRequest != null)
+            {
+                response = request.GetResponse();
+                result.MimeType = response.ContentType;
+                result.LastModified = ((HttpWebResponse)response).LastModified;
+                result.FileSize = response.ContentLength;
+                result.AcceptRanges = string.Compare(response.Headers["Accept-Ranges"], "bytes", StringComparison.OrdinalIgnoreCase) == 0;
+            }
+
+            FtpWebRequest ftpRequest = request as FtpWebRequest;
+            if (ftpRequest != null)
+            {
+                result.AcceptRanges = true;
+                ftpRequest.Method = WebRequestMethods.Ftp.GetFileSize;
+                
+                using (FtpWebResponse sizeResponse = (FtpWebResponse)ftpRequest.GetResponse())
+                {
+                    result.FileSize = sizeResponse.ContentLength;
+                }
+
+                ftpRequest = (FtpWebRequest)this.GetRequest(rl);
+
+                ftpRequest.Method = WebRequestMethods.Ftp.GetDateTimestamp;
+                using (FtpWebResponse dateResponse = (FtpWebResponse)ftpRequest.GetResponse())
+                {
+                    result.LastModified = dateResponse.LastModified;
+                }
+
+                // For FTP: Don't create download stream yet.
+            }
+
+            if (!result.AcceptRanges || response == null)
             {
                 LogDialog.Log(this.job, $"Server for {rl.Url} does not support segmented transfer");
             }
 
-            stream = response.GetResponseStream();
+            stream = response?.GetResponseStream();
 
             return result;
+        }
+
+        public override Stream CreateStream(ResourceLocation rl, long initialPosition, long endPosition)
+        {
+            WebRequest request = this.GetRequest(rl);
+
+            HttpWebRequest httpRequest = request as HttpWebRequest;
+            if (httpRequest != null)
+            {
+                if (initialPosition != 0)
+                {
+                    if (endPosition == 0)
+                    {
+                        httpRequest.AddRange((int) initialPosition);
+                    }
+                    else
+                    {
+                        httpRequest.AddRange((int) initialPosition, (int) endPosition);
+                    }
+                }
+            }
+
+            FtpWebRequest ftpRequest = request as FtpWebRequest;
+            if (ftpRequest != null)
+            {
+                ftpRequest.Method = WebRequestMethods.Ftp.DownloadFile;
+                ftpRequest.ContentOffset = initialPosition;
+            }
+
+            WebResponse response = request.GetResponse();
+
+            return response.GetResponseStream();
         }
 
         protected override WebRequest GetRequest(ResourceLocation location)
