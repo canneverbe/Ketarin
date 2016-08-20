@@ -176,12 +176,12 @@ namespace Ketarin
                 overviewPage = GetNonBetaPageContent(overviewPage, fileId, false);
             }
 
-            // Extract version from title like: <title>Download Firefox 3.0.4 - FileHippo.com</title>
-            Regex regex = new Regex(@"<meta property=""og:title"" content="".+?\s(([\d]+\.|[\d]+\s).*)""", RegexOptions.IgnoreCase);
+            // Extract version from page like: <span style="font-weight: normal">&nbsp12.4.3</span>
+            Regex regex = new Regex(@"<span style=""font-weight: normal"">\s+&nbsp(([\d]+\.|[\d]+\s).*)", RegexOptions.IgnoreCase);
             Match match = regex.Match(overviewPage);
             if (!match.Success) return null;
 
-            return match.Groups[1].Value;
+            return match.Groups[1].Value.Trim();
         }
 
         /// <summary>
