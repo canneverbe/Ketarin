@@ -10,7 +10,7 @@ using WebClient = Ketarin.WebClient;
 
 namespace MyDownloader.Extension.Protocols
 {
-    internal class KetarinProtocolProvider : HttpProtocolProvider, IProtocolProvider
+    internal class KetarinProtocolProvider : HttpProtocolProvider
     {
         private static readonly string[] NoAutoReferer = {"sourceforge.net"};
         private readonly CookieContainer cookies;

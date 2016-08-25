@@ -1,6 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
+// <copyright>
+// The Code Project Open License (CPOL) 1.02
+// </copyright>
+// <author>Guilherme Labigalini</author>
 
 namespace MyDownloader.Extension.Protocols
 {
