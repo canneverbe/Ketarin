@@ -1840,19 +1840,26 @@ namespace Ketarin
                 // Compare online hash with actual current hash.
                 if (!string.IsNullOrEmpty(content))
                 {
-                    string currentHash = this.GetFileHash(targetFile);
-                    bool update = string.Compare(content, currentHash, StringComparison.OrdinalIgnoreCase) != 0;
-                    if (update)
+                    if (string.IsNullOrEmpty(targetFile))
                     {
-                        LogDialog.Log(this, string.Format("Update required, hash in {0} has changed from '{1}' to '{2}'", "{" + varName + "}", currentHash, content));
+                        LogDialog.Log(this, "Unknown target file location, cannot compare hash value.");
                     }
                     else
                     {
-                        LogDialog.Log(this, string.Format("Update not required, hash in {0} has not changed", "{" + varName + "}"));
-                    }
+                        string currentHash = this.GetFileHash(targetFile);
+                        bool update = string.Compare(content, currentHash, StringComparison.OrdinalIgnoreCase) != 0;
+                        if (update)
+                        {
+                            LogDialog.Log(this, string.Format("Update required, hash in {0} has changed from '{1}' to '{2}'", "{" + varName + "}", currentHash, content));
+                        }
+                        else
+                        {
+                            LogDialog.Log(this, string.Format("Update not required, hash in {0} has not changed", "{" + varName + "}"));
+                        }
 
-                    if (update) this.Save();
-                    return update;
+                        if (update) this.Save();
+                        return update;
+                    }
                 }
                 else
                 {

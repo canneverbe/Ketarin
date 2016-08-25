@@ -99,6 +99,7 @@ namespace Ketarin.Forms
                     {
                         resultJob.DownloadDate = app.UpdatedAtDate;
                         resultJob.ExecuteCommand = string.Empty;
+                        resultJob.ExecutePreCommand = string.Empty;
                         resultJob.TargetPath = string.Empty;
                         resultJob.PreviousLocation = string.Empty;
 
