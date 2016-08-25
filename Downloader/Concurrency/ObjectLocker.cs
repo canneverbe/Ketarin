@@ -1,6 +1,9 @@
+// <copyright>
+// The Code Project Open License (CPOL) 1.02
+// </copyright>
+// <author>Guilherme Labigalini</author>
+
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 
 namespace MyDownloader.Core.Concurrency

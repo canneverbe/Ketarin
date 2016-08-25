@@ -152,6 +152,7 @@
     </Compile>
     <Compile Include="..\CDBurnerXP\trunk\CsLib\CDBurnerXP\Controls\VistaMenu.cs">
       <Link>CDBurnerXP\VistaMenu.cs</Link>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="..\CDBurnerXP\trunk\CsLib\CDBurnerXP\Controls\WebLink.cs">
       <Link>CDBurnerXP\WebLink.cs</Link>
