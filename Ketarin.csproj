@@ -152,7 +152,6 @@
     </Compile>
     <Compile Include="..\CDBurnerXP\trunk\CsLib\CDBurnerXP\Controls\VistaMenu.cs">
       <Link>CDBurnerXP\VistaMenu.cs</Link>
-      <SubType>Component</SubType>
     </Compile>
     <Compile Include="..\CDBurnerXP\trunk\CsLib\CDBurnerXP\Controls\WebLink.cs">
       <Link>CDBurnerXP\WebLink.cs</Link>
@@ -215,7 +214,6 @@
     <Compile Include="CrcStream.cs" />
     <Compile Include="Downloader\CalculatedSegment.cs" />
     <Compile Include="Downloader\Common\BoolFormatter.cs" />
-    <Compile Include="Downloader\Common\ByteFormatter.cs" />
     <Compile Include="Downloader\Common\PathHelper.cs" />
     <Compile Include="Downloader\Common\TimeSpanFormatter.cs" />
     <Compile Include="Downloader\Concurrency\ObjectLocker.cs" />

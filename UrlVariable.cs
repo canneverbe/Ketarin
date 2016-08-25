@@ -552,6 +552,12 @@ namespace Ketarin
                 case "ps":
                     try
                     {
+                        if (context != null && !context.CanBeShared)
+                        {
+                            LogDialog.Log(context, "PowerShell command of downloaded application is not executed for security reasons.");
+                            return string.Empty;
+                        }
+
                         PowerShellScript psScript = new PowerShellScript(content);
                         psScript.Execute(context);
                         return psScript.LastOutput;
@@ -560,8 +566,6 @@ namespace Ketarin
                     {
                         return string.Empty;
                     }
-
-                    return string.Empty;
 
                 case "empty":
                     // Useful, if you want to load, but not use a variable
