@@ -746,6 +746,30 @@ namespace Ketarin
                     {
                         return content.Trim();
                     }
+                case "padleft":
+                    if (parts.Length == 3)
+                    {
+                        return content.PadLeft(Conversion.ToInt(parts[1]), parts[2][0]);
+                    }
+                    else if (parts.Length == 2)
+                    {
+                        return content.PadLeft(Conversion.ToInt(parts[1]), ' ');
+                    }
+
+                    return content;
+
+                case "padright":
+                    if (parts.Length == 3)
+                    {
+                        return content.PadRight(Conversion.ToInt(parts[1]), parts[2][0]);
+                    }
+                    else if (parts.Length == 2)
+                    {
+                        return content.PadRight(Conversion.ToInt(parts[1]), ' ');
+                    }
+
+                    return content;
+
                 case "trimend":
                     if (parts.Length >= 2)
                     {
