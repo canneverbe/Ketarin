@@ -560,18 +560,23 @@ namespace Ketarin
         {
             using (ImportFromDatabaseDialog dialog = new ImportFromDatabaseDialog())
             {
-                if (dialog.ShowDialog(this) == DialogResult.OK && dialog.ImportedApplication != null)
+                if (dialog.ShowDialog(this) == DialogResult.OK && dialog.ImportedApplications != null)
                 {
-                    ApplicationJob existing = Array.Find(m_Jobs, x => x.Guid == dialog.ImportedApplication.Guid);
-                    if (existing == null) {
-                        existing = dialog.ImportedApplication;
-                        List<ApplicationJob> newJobs = new List<ApplicationJob>(m_Jobs) {existing};
-                        m_Jobs = newJobs.ToArray();
-                        olvJobs.AddObject(existing);
-                        UpdateStatusbar();
+                    foreach (ApplicationJob app in dialog.ImportedApplications)
+                    {
+                        ApplicationJob existing = Array.Find(m_Jobs, x => x.Guid == app.Guid);
+                        if (existing == null)
+                        {
+                            existing = app;
+                            List<ApplicationJob> newJobs = new List<ApplicationJob>(m_Jobs) {existing};
+                            m_Jobs = newJobs.ToArray();
+                            olvJobs.AddObject(existing);
+                            UpdateStatusbar();
+                        }
+
+                        olvJobs.SelectedObject = existing;
+                        olvJobs.SelectedItem.EnsureVisible();
                     }
-                    olvJobs.SelectedObject = existing;
-                    olvJobs.SelectedItem.EnsureVisible();
                 }
             }
         }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Windows.Forms;
 using CDBurnerXP;
@@ -8,25 +9,18 @@ namespace Ketarin.Forms
 {
     public partial class ImportFromDatabaseDialog : ApplicationDatabaseBaseDialog
     {
-        private ApplicationJob m_ImportedApplication;
         private static RpcApplication[] m_LastLoadedApplications;
         private static string m_LastSearchText = string.Empty;
 
         #region Properties
 
-        public ApplicationJob ImportedApplication
-        {
-            get
-            {
-                return m_ImportedApplication;
-            }
-        }
+        public List<ApplicationJob> ImportedApplications { get; } = new List<ApplicationJob>();
 
         #endregion
 
         public ImportFromDatabaseDialog()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
 
         protected override void OnLoad(EventArgs e)
@@ -35,22 +29,22 @@ namespace Ketarin.Forms
 
             if (m_LastLoadedApplications != null)
             {
-                Applications = m_LastLoadedApplications;
-                txtSearchSubject.Text = m_LastSearchText;
+                this.Applications = m_LastLoadedApplications;
+                this.txtSearchSubject.Text = m_LastSearchText;
             }
         }
 
         private void bSearch_Click(object sender, EventArgs e)
         {
-            Cursor = Cursors.WaitCursor;
+            this.Cursor = Cursors.WaitCursor;
 
             try
             {
                 IKetarinRpc proxy = XmlRpcProxyGen.Create<IKetarinRpc>();
-                m_LastLoadedApplications = proxy.GetApplications(txtSearchSubject.Text);
-                m_LastSearchText = txtSearchSubject.Text;
-                Applications = m_LastLoadedApplications;
-                olvApplications.EmptyListMsg = "No applications found";
+                m_LastLoadedApplications = proxy.GetApplications(this.txtSearchSubject.Text);
+                m_LastSearchText = this.txtSearchSubject.Text;
+                this.Applications = m_LastLoadedApplications;
+                this.olvApplications.EmptyListMsg = "No applications found";
             }
             catch (XmlRpcException ex)
             {
@@ -62,7 +56,7 @@ namespace Ketarin.Forms
             }
             finally
             {
-                Cursor = Cursors.Default;
+                this.Cursor = Cursors.Default;
             }
         }
 
@@ -70,16 +64,16 @@ namespace Ketarin.Forms
         {
             base.OnSelectedApplicationChanged(sender, e);
 
-            AcceptButton = bOK.Enabled ? bOK : bSearch;
+            this.AcceptButton = this.bOK.Enabled ? this.bOK : this.bSearch;
         }
 
         private void bOK_Click(object sender, EventArgs e)
         {
-            Cursor = Cursors.WaitCursor;
+            this.Cursor = Cursors.WaitCursor;
 
             try
             {
-                foreach (RpcApplication app in olvApplications.SelectedObjects)
+                foreach (RpcApplication app in this.olvApplications.SelectedObjects)
                 {
                     IKetarinRpc proxy = XmlRpcProxyGen.Create<IKetarinRpc>();
                     string xml = proxy.GetApplication(app.ShareId);
@@ -92,7 +86,7 @@ namespace Ketarin.Forms
                     }
 
                     resultJob.Save();
-                    m_ImportedApplication = resultJob;
+                    this.ImportedApplications.Add(resultJob);
 
                     // Real value is determined while saving
                     if (!resultJob.CanBeShared)
@@ -124,35 +118,35 @@ namespace Ketarin.Forms
             catch (XmlRpcException ex)
             {
                 MessageBox.Show(this, "An error occured while importing applications: " + ex.Message, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                DialogResult = DialogResult.None;
+                this.DialogResult = DialogResult.None;
             }
             catch (WebException ex)
             {
                 MessageBox.Show(this, "Could not connect to the online database: " + ex.Message, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                DialogResult = DialogResult.None;
+                this.DialogResult = DialogResult.None;
             }
             finally
             {
-                Cursor = Cursors.Default;
+                this.Cursor = Cursors.Default;
             }
         }
 
         private void txtSearchSubject_TextChanged(object sender, EventArgs e)
         {
-            AcceptButton = bSearch;
+            this.AcceptButton = this.bSearch;
         }
 
         private void bTop50_Click(object sender, EventArgs e)
         {
-            Cursor = Cursors.WaitCursor;
+            this.Cursor = Cursors.WaitCursor;
 
             try
             {
                 IKetarinRpc proxy = XmlRpcProxyGen.Create<IKetarinRpc>();
                 m_LastLoadedApplications = proxy.GetMostDownloadedApplications();
                 m_LastSearchText = string.Empty;
-                olvApplications.Sort(colUseCount);
-                Applications = m_LastLoadedApplications;
+                this.olvApplications.Sort(this.colUseCount);
+                this.Applications = m_LastLoadedApplications;
             }
             catch (XmlRpcException ex)
             {
@@ -164,7 +158,7 @@ namespace Ketarin.Forms
             }
             finally
             {
-                Cursor = Cursors.Default;
+                this.Cursor = Cursors.Default;
             }
         }
 
