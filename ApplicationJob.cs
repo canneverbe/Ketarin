@@ -1903,9 +1903,18 @@ namespace Ketarin
             }
             else
             {
-                TimeSpan diff = GetLastModified(netResponse) - current.LastWriteTime;
-                fileSizeMismatch = (current.Length != netResponse.ContentLength && netResponse.ContentLength >= 0);
-                dateMismatch = (!disregardDate && diff > TimeSpan.Zero);
+                try
+                {
+                    fileSizeMismatch = (current.Length != netResponse.ContentLength && netResponse.ContentLength >= 0);
+
+                    TimeSpan diff = GetLastModified(netResponse) - current.LastWriteTime;
+                    dateMismatch = (!disregardDate && diff > TimeSpan.Zero);
+                }
+                catch (ArgumentOutOfRangeException)
+                {
+                    // Potential exception in LastWriteTime.
+                    dateMismatch = true;
+                }
             }
 
             bool result = (fileSizeMismatch || dateMismatch);
