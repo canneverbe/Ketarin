@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Text;
 using System.Text.RegularExpressions;
 using Ketarin.Forms;
 
@@ -44,10 +45,10 @@ namespace Ketarin
             if (fileId.Contains(":"))
             {
                 string[] splitData = fileId.Split(':');
-                return string.Format("http://www.filehippo.com/{0}/download_{1}/", splitData);
+                return string.Format("http://filehippo.com/{0}/download_{1}/", splitData);
             }
             
-            return string.Format("http://www.filehippo.com/download_{0}/", fileId);
+            return string.Format("http://filehippo.com/download_{0}/", fileId);
         }
 
         /// <summary>
@@ -177,7 +178,7 @@ namespace Ketarin
             }
 
             // Extract version from page like: <span style="font-weight: normal">&nbsp12.4.3</span>
-            Regex regex = new Regex(@"<span style=""font-weight: normal"">\s+&nbsp(([\d]+\.|[\d]+\s).*)", RegexOptions.IgnoreCase);
+            Regex regex = new Regex(@"<span style=""font-weight: normal"">(([\d]+\.|[\d]+\s).*)</", RegexOptions.IgnoreCase);
             Match match = regex.Match(overviewPage);
             if (!match.Success) return null;
 
