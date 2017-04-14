@@ -56,12 +56,12 @@ namespace Ketarin.Forms
         /// </summary>
         public string MatchSelection
         {
-            get { return m_MatchSelection; }
+            get { return this.m_MatchSelection; }
             set
             {
-                m_MatchSelection = value;
-                cmnuCopyMatch.Enabled = !string.IsNullOrEmpty(m_MatchSelection);
-                cmnuGoToMatch.Enabled = cmnuCopyMatch.Enabled;
+                this.m_MatchSelection = value;
+                this.cmnuCopyMatch.Enabled = !string.IsNullOrEmpty(this.m_MatchSelection);
+                this.cmnuGoToMatch.Enabled = this.cmnuCopyMatch.Enabled;
             }
         }
 
@@ -80,12 +80,12 @@ namespace Ketarin.Forms
         {
             get
             {
-                if (InvokeRequired)
+                if (this.InvokeRequired)
                 {
-                    return this.Invoke(new VariableResultDelegate(delegate() { return CurrentVariable; })) as UrlVariable;
+                    return this.Invoke(new VariableResultDelegate(delegate() { return this.CurrentVariable; })) as UrlVariable;
                 }
 
-                return lbVariables.SelectedItem as UrlVariable;
+                return this.lbVariables.SelectedItem as UrlVariable;
             }
         }
 
@@ -97,19 +97,19 @@ namespace Ketarin.Forms
         {
             get
             {
-                return txtUrl.ReadOnly;
+                return this.txtUrl.ReadOnly;
             }
             set
             {
                 bool enable = !value;
-                txtUrl.ReadOnly = value;
-                txtFind.ReadOnly = value;
-                txtRegularExpression.ReadOnly = value;
-                chkRightToLeft.Enabled = enable;
-                bAdd.Enabled = enable;
-                bRemove.Enabled = enable;
-                bOK.Enabled = enable;
-                bOK.Visible = enable;
+                this.txtUrl.ReadOnly = value;
+                this.txtFind.ReadOnly = value;
+                this.txtRegularExpression.ReadOnly = value;
+                this.chkRightToLeft.Enabled = enable;
+                this.bAdd.Enabled = enable;
+                this.bRemove.Enabled = enable;
+                this.bOK.Enabled = enable;
+                this.bOK.Visible = enable;
             }
         }
 
@@ -117,18 +117,18 @@ namespace Ketarin.Forms
 
         public EditVariablesDialog(ApplicationJob job) : base()
         {
-            InitializeComponent();
-            AcceptButton = bOK;
-            CancelButton = bCancel;
+            this.InitializeComponent();
+            this.AcceptButton = this.bOK;
+            this.CancelButton = this.bCancel;
 
-            m_Job = job;
-            m_Variables = new ApplicationJob.UrlVariableCollection(job);
+            this.m_Job = job;
+            this.m_Variables = new ApplicationJob.UrlVariableCollection(job);
             // Get a copy of all variables
             foreach (KeyValuePair<string, UrlVariable> pair in job.Variables)
             {
                 UrlVariable clonedVariable = pair.Value.Clone() as UrlVariable;
-                m_Variables.Add(pair.Key, clonedVariable);
-                clonedVariable.Parent = m_Variables;
+                this.m_Variables.Add(pair.Key, clonedVariable);
+                clonedVariable.Parent = this.m_Variables;
             }
         }
 
@@ -143,11 +143,11 @@ namespace Ketarin.Forms
             this.rtfContent.AutoWordSelection = true;
             this.rtfContent.AutoWordSelection = false;
 
-            ReloadVariables(true);
+            this.ReloadVariables(true);
 
-            if (m_Job != null && !string.IsNullOrEmpty(m_Job.Name))
+            if (this.m_Job != null && !string.IsNullOrEmpty(this.m_Job.Name))
             {
-                this.Text = "Edit Variables - " + m_Job.Name;
+                this.Text = "Edit Variables - " + this.m_Job.Name;
             }
         }
 
@@ -156,7 +156,7 @@ namespace Ketarin.Forms
             base.OnClosed(e);
 
             // Prevent an invalid operation exception because of automcomplete
-            txtUrl.Dispose();
+            this.txtUrl.Dispose();
         }
 
         /// <summary>
@@ -165,16 +165,16 @@ namespace Ketarin.Forms
         private void ReloadVariables(bool updateList)
         {
             List<string> appVarNames = new List<string>();
-            if (updateList) lbVariables.Items.Clear();
+            if (updateList) this.lbVariables.Items.Clear();
 
-            foreach (KeyValuePair<string, UrlVariable> pair in m_Variables)
+            foreach (KeyValuePair<string, UrlVariable> pair in this.m_Variables)
             {
-                if (updateList) lbVariables.Items.Add(pair.Value);
+                if (updateList) this.lbVariables.Items.Add(pair.Value);
                 appVarNames.Add(pair.Value.Name);
             }
 
             // Adjust context menus
-            txtUrl.SetVariableNames(new[] { "category", "appname" }, appVarNames.ToArray());
+            this.txtUrl.SetVariableNames(new[] { "category", "appname" }, appVarNames.ToArray());
         }
 
         /// <summary>
@@ -183,28 +183,28 @@ namespace Ketarin.Forms
         private void UpdateInterface()
         {
             // Enable or disable controls if variables exist
-            bool enable = (lbVariables.SelectedIndex >= 0);
-            bRemove.Enabled = enable;
-            lblUrl.Enabled = enable;
-            txtUrl.Enabled = enable;
-            bLoad.Enabled = enable;
-            bPostData.Enabled = enable;
-            lblFind.Enabled = enable;
-            txtFind.Enabled = enable;
-            bFind.Enabled = enable;
-            rtfContent.Enabled = enable;
-            bUseAsStart.Enabled = enable;
-            bUseAsEnd.Enabled = enable;
-            lblRegex.Enabled = enable;
-            txtRegularExpression.Enabled = enable;
-            chkRightToLeft.Enabled = enable;
-            rbContentUrlStartEnd.Enabled = enable;
-            rbContentText.Enabled = enable;
-            rbContentUrlRegex.Enabled = enable;
+            bool enable = (this.lbVariables.SelectedIndex >= 0);
+            this.bRemove.Enabled = enable;
+            this.lblUrl.Enabled = enable;
+            this.txtUrl.Enabled = enable;
+            this.bLoad.Enabled = enable;
+            this.bPostData.Enabled = enable;
+            this.lblFind.Enabled = enable;
+            this.txtFind.Enabled = enable;
+            this.bFind.Enabled = enable;
+            this.rtfContent.Enabled = enable;
+            this.bUseAsStart.Enabled = enable;
+            this.bUseAsEnd.Enabled = enable;
+            this.lblRegex.Enabled = enable;
+            this.txtRegularExpression.Enabled = enable;
+            this.chkRightToLeft.Enabled = enable;
+            this.rbContentUrlStartEnd.Enabled = enable;
+            this.rbContentText.Enabled = enable;
+            this.rbContentUrlRegex.Enabled = enable;
 
             if (!enable) return;
 
-            m_Updating = true;
+            this.m_Updating = true;
 
             try
             {
@@ -212,59 +212,59 @@ namespace Ketarin.Forms
                 using (new ControlRedrawLock(this))
                 {
                     // Set the auto complete of the URL text box
-                    txtUrl.AutoCompleteMode = AutoCompleteMode.Suggest;
-                    txtUrl.AutoCompleteSource = AutoCompleteSource.CustomSource;
+                    this.txtUrl.AutoCompleteMode = AutoCompleteMode.Suggest;
+                    this.txtUrl.AutoCompleteSource = AutoCompleteSource.CustomSource;
                     AutoCompleteStringCollection urls = new AutoCompleteStringCollection();
                     urls.AddRange(DbManager.GetVariableUrls());
-                    txtUrl.AutoCompleteCustomSource = urls;
+                    this.txtUrl.AutoCompleteCustomSource = urls;
 
                     // Set remaining controls
-                    txtUrl.Text = CurrentVariable.Url;
-                    chkRightToLeft.Checked = CurrentVariable.RegexRightToLeft;
-                    txtRegularExpression.Text = CurrentVariable.Regex;
+                    this.txtUrl.Text = this.CurrentVariable.Url;
+                    this.chkRightToLeft.Checked = this.CurrentVariable.RegexRightToLeft;
+                    this.txtRegularExpression.Text = this.CurrentVariable.Regex;
 
-                    switch (CurrentVariable.VariableType)
+                    switch (this.CurrentVariable.VariableType)
                     {
                         case UrlVariable.Type.Textual:
-                            rbContentText.Checked = true;
-                            SetLayout(false, false, false);
+                            this.rbContentText.Checked = true;
+                            this.SetLayout(false, false, false);
 
-                            rtfContent.Top = rbContentText.Bottom + rbContentText.Margin.Bottom + rtfContent.Margin.Top;
-                            rtfContent.Height = lbVariables.Bottom - rtfContent.Top;
+                            this.rtfContent.Top = this.rbContentText.Bottom + this.rbContentText.Margin.Bottom + this.rtfContent.Margin.Top;
+                            this.rtfContent.Height = this.lbVariables.Bottom - this.rtfContent.Top;
                             break;
 
                         case UrlVariable.Type.StartEnd:
-                            rbContentUrlStartEnd.Checked = true;
-                            SetLayout(true, false, true);
+                            this.rbContentUrlStartEnd.Checked = true;
+                            this.SetLayout(true, false, true);
 
-                            rtfContent.Top = txtFind.Bottom + txtFind.Margin.Bottom + rtfContent.Margin.Top;
-                            rtfContent.Height = lbVariables.Bottom - rtfContent.Top;
+                            this.rtfContent.Top = this.txtFind.Bottom + this.txtFind.Margin.Bottom + this.rtfContent.Margin.Top;
+                            this.rtfContent.Height = this.lbVariables.Bottom - this.rtfContent.Top;
                             break;
 
                         case UrlVariable.Type.RegularExpression:
-                            rbContentUrlRegex.Checked = true;
-                            SetLayout(false, true, true);
+                            this.rbContentUrlRegex.Checked = true;
+                            this.SetLayout(false, true, true);
 
-                            rtfContent.Top = txtRegularExpression.Bottom + txtRegularExpression.Margin.Bottom + rtfContent.Margin.Top;
-                            rtfContent.Height = lbVariables.Bottom - rtfContent.Top;
+                            this.rtfContent.Top = this.txtRegularExpression.Bottom + this.txtRegularExpression.Margin.Bottom + this.rtfContent.Margin.Top;
+                            this.rtfContent.Height = this.lbVariables.Bottom - this.rtfContent.Top;
                             break;
                     }
                 }
 
-                SetRtfContent();
-                UpdateRegexMatches();
+                this.SetRtfContent();
+                this.UpdateRegexMatches();
             }
             finally
             {
-                m_Updating = false;
+                this.m_Updating = false;
             }
         }
 
         private void lbVariables_SelectedIndexChanged(object sender, EventArgs e)
         {
             this.gotoMatch = true;
-            UpdateInterface();
-            txtUrl.Focus();
+            this.UpdateInterface();
+            this.txtUrl.Focus();
         }
 
         /// <summary>
@@ -273,13 +273,13 @@ namespace Ketarin.Forms
         /// </summary>
         private void GoToMatch()
         {
-            if (!string.IsNullOrEmpty(m_MatchSelection))
+            if (!string.IsNullOrEmpty(this.m_MatchSelection))
             {
-                if (m_MatchPosition >= 0)
+                if (this.m_MatchPosition >= 0)
                 {
-                    rtfContent.SelectionStart = m_MatchPosition;
-                    rtfContent.SelectionLength = m_MatchSelection.Length;
-                    rtfContent.SelectionLength = 0;
+                    this.rtfContent.SelectionStart = this.m_MatchPosition;
+                    this.rtfContent.SelectionLength = this.m_MatchSelection.Length;
+                    this.rtfContent.SelectionLength = 0;
                 }
             }
         }
@@ -290,22 +290,22 @@ namespace Ketarin.Forms
         /// </summary>
         private void SetRtfContent()
         {
-            if (CurrentVariable.VariableType == UrlVariable.Type.Textual)
+            if (this.CurrentVariable.VariableType == UrlVariable.Type.Textual)
             {
-                rtfContent.Text = CurrentVariable.TextualContent;
+                this.rtfContent.Text = this.CurrentVariable.TextualContent;
             }
             else
             {
-                if (string.IsNullOrEmpty(CurrentVariable.TempContent) && !string.IsNullOrEmpty(txtUrl.Text))
+                if (string.IsNullOrEmpty(this.CurrentVariable.TempContent) && !string.IsNullOrEmpty(this.txtUrl.Text))
                 {
-                    rtfContent.Text = string.Empty;
-                    bLoad.PerformClick();
+                    this.rtfContent.Text = string.Empty;
+                    this.bLoad.PerformClick();
                 }
                 else
                 {
-                    rtfContent.Text = CurrentVariable.TempContent;
+                    this.rtfContent.Text = this.CurrentVariable.TempContent;
                 }
-                RefreshRtfFormatting();
+                this.RefreshRtfFormatting();
             }
         }
 
@@ -319,58 +319,58 @@ namespace Ketarin.Forms
         /// <param name="find">Hide or show the search box and URL field</param>
         private void SetLayout(bool startEnd, bool regex, bool findAndUrl)
         {
-            txtRegularExpression.Visible = regex;
-            chkRightToLeft.Visible = regex;
-            lblRegex.Visible = regex;
-            bUseAsEnd.Visible = startEnd;
-            bUseAsStart.Visible = startEnd;
-            txtFind.Visible = findAndUrl;
-            lblFind.Visible = findAndUrl;
-            bFind.Visible = findAndUrl;
-            lblUrl.Visible = findAndUrl;
-            txtUrl.Visible = findAndUrl;
-            bLoad.Visible = findAndUrl;
-            bPostData.Visible = findAndUrl;
-            rtfContent.ReadOnly = findAndUrl || ReadOnly;
+            this.txtRegularExpression.Visible = regex;
+            this.chkRightToLeft.Visible = regex;
+            this.lblRegex.Visible = regex;
+            this.bUseAsEnd.Visible = startEnd;
+            this.bUseAsStart.Visible = startEnd;
+            this.txtFind.Visible = findAndUrl;
+            this.lblFind.Visible = findAndUrl;
+            this.bFind.Visible = findAndUrl;
+            this.lblUrl.Visible = findAndUrl;
+            this.txtUrl.Visible = findAndUrl;
+            this.bLoad.Visible = findAndUrl;
+            this.bPostData.Visible = findAndUrl;
+            this.rtfContent.ReadOnly = findAndUrl || this.ReadOnly;
         }
 
         private void rbContentUrlStartEnd_CheckedChanged(object sender, EventArgs e)
         {
-            if (m_Updating || !rbContentUrlStartEnd.Checked) return;
+            if (this.m_Updating || !this.rbContentUrlStartEnd.Checked) return;
 
-            CurrentVariable.VariableType = UrlVariable.Type.StartEnd;
-            UpdateInterface();
+            this.CurrentVariable.VariableType = UrlVariable.Type.StartEnd;
+            this.UpdateInterface();
         }
 
         private void rbContentUrlRegex_CheckedChanged(object sender, EventArgs e)
         {
-            if (m_Updating || !rbContentUrlRegex.Checked) return;
+            if (this.m_Updating || !this.rbContentUrlRegex.Checked) return;
 
-            CurrentVariable.VariableType = UrlVariable.Type.RegularExpression;
-            UpdateInterface();
+            this.CurrentVariable.VariableType = UrlVariable.Type.RegularExpression;
+            this.UpdateInterface();
         }
 
         private void rbContentText_CheckedChanged(object sender, EventArgs e)
         {
-            if (m_Updating || !rbContentText.Checked) return;
+            if (this.m_Updating || !this.rbContentText.Checked) return;
 
-            CurrentVariable.VariableType = UrlVariable.Type.Textual;
-            MatchSelection = null;
-            m_MatchPosition = -1;
-            UpdateInterface();
+            this.CurrentVariable.VariableType = UrlVariable.Type.Textual;
+            this.MatchSelection = null;
+            this.m_MatchPosition = -1;
+            this.UpdateInterface();
         }
 
         #endregion
 
         private void bAdd_Click(object sender, EventArgs e)
         {
-            using (NewVariableDialog dialog = new NewVariableDialog(m_Variables))
+            using (NewVariableDialog dialog = new NewVariableDialog(this.m_Variables))
             {
                 if (dialog.ShowDialog(this) == DialogResult.OK)
                 {
-                    m_Variables.Add(dialog.VariableName, new UrlVariable(dialog.VariableName, m_Variables));
-                    ReloadVariables(true);
-                    lbVariables.SelectedItem = m_Variables[dialog.VariableName];
+                    this.m_Variables.Add(dialog.VariableName, new UrlVariable(dialog.VariableName, this.m_Variables));
+                    this.ReloadVariables(true);
+                    this.lbVariables.SelectedItem = this.m_Variables[dialog.VariableName];
                 }
             }
         }
@@ -378,7 +378,7 @@ namespace Ketarin.Forms
         private void bLoad_Click(object sender, EventArgs e)
         {
             // Load URL contents and show a wait cursor in the meantime
-            Cursor = Cursors.WaitCursor;
+            this.Cursor = Cursors.WaitCursor;
 
             try
             {
@@ -392,11 +392,11 @@ namespace Ketarin.Forms
                     {
                         dialog.OnDoWork = delegate
                         {
-                            expandedUrl = CurrentVariable.ExpandedUrl;
+                            expandedUrl = this.CurrentVariable.ExpandedUrl;
                             if (dialog.Cancelled) return false;
-                            client.SetPostData(CurrentVariable);
+                            client.SetPostData(this.CurrentVariable);
                             postData = client.PostData;
-                            CurrentVariable.TempContent = client.DownloadString(new Uri(expandedUrl));
+                            this.CurrentVariable.TempContent = client.DownloadString(new Uri(expandedUrl));
                             return true;
                         };
                         dialog.OnCancel = delegate {
@@ -425,19 +425,19 @@ namespace Ketarin.Forms
                         }
                     }
 
-                    rtfContent.Text = CurrentVariable.TempContent;
+                    this.rtfContent.Text = this.CurrentVariable.TempContent;
                     // For Regex: Go to match after thread finish
                     this.gotoMatch = true;
-                    UpdateRegexMatches();
+                    this.UpdateRegexMatches();
                     // For Start/End: Go to match now
-                    RefreshRtfFormatting();
+                    this.RefreshRtfFormatting();
 
                     this.GoToMatch();
 
                     // Show page preview if desired
-                    if (cmnuBrowser.Checked)
+                    if (this.cmnuBrowser.Checked)
                     {
-                        PreviewDialog.ShowPreview(this, expandedUrl, postData);
+                        this.PreviewDialog.ShowPreview(this, expandedUrl, postData);
                     }
                 }
             }
@@ -447,27 +447,27 @@ namespace Ketarin.Forms
             }
             finally
             {
-                Cursor = Cursors.Default;
+                this.Cursor = Cursors.Default;
             }
         }
 
         private void bFind_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(txtFind.Text)) return;
+            if (string.IsNullOrEmpty(this.txtFind.Text)) return;
 
             // Do not find the same string again...
-            int searchPos = rtfContent.SelectionStart + 1;
+            int searchPos = this.rtfContent.SelectionStart + 1;
             // ... and start from the beginning if necessary
-            if (searchPos >= rtfContent.Text.Length)
+            if (searchPos >= this.rtfContent.Text.Length)
             {
                 searchPos = 0;
             }
-            int pos = rtfContent.Find(txtFind.Text, searchPos , RichTextBoxFinds.None);
+            int pos = this.rtfContent.Find(this.txtFind.Text, searchPos , RichTextBoxFinds.None);
 
             if (pos < 0) return;
             // If a match has been found, highlight it
-            rtfContent.SelectionStart = pos;
-            rtfContent.SelectionLength = txtFind.Text.Length;
+            this.rtfContent.SelectionStart = pos;
+            this.rtfContent.SelectionLength = this.txtFind.Text.Length;
         }
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
@@ -475,45 +475,45 @@ namespace Ketarin.Forms
             switch (keyData)
             {
                 case Keys.F2:
-                    if (CurrentVariable != null)
+                    if (this.CurrentVariable != null)
                     {
-                        NewVariableDialog dialog = new NewVariableDialog(m_Variables)
+                        NewVariableDialog dialog = new NewVariableDialog(this.m_Variables)
                         {
                             VariableName = this.CurrentVariable.Name,
                             Text = "Rename variable"
                         };
                         if (dialog.ShowDialog(this) == DialogResult.OK)
                         {
-                            m_Variables.Remove(CurrentVariable.Name);
-                            CurrentVariable.Name = dialog.VariableName;
-                            m_Variables.Add(CurrentVariable.Name, CurrentVariable);
-                            lbVariables.RefreshItems();
-                            ReloadVariables(false);
+                            this.m_Variables.Remove(this.CurrentVariable.Name);
+                            this.CurrentVariable.Name = dialog.VariableName;
+                            this.m_Variables.Add(this.CurrentVariable.Name, this.CurrentVariable);
+                            this.lbVariables.RefreshItems();
+                            this.ReloadVariables(false);
                         }
                     }
                     break;
 
                 case Keys.Enter:
                     // Do not push the OK button in certain occasions
-                    if (lbVariables.Items.Count == 0)
+                    if (this.lbVariables.Items.Count == 0)
                     {
-                        bAdd.PerformClick();
+                        this.bAdd.PerformClick();
                         return true;
                     }
-                    else if (txtUrl.Focused)
+                    else if (this.txtUrl.Focused)
                     {
-                        bLoad.PerformClick();
+                        this.bLoad.PerformClick();
                         return true;
                     }
-                    else if (txtFind.Focus())
+                    else if (this.txtFind.Focus())
                     {
-                        bFind.PerformClick();
+                        this.bFind.PerformClick();
                         return true;
                     }
                     break;
 
                 case Keys.Control | Keys.G:
-                    GoToMatch();
+                    this.GoToMatch();
                     return true;
             }
 
@@ -522,19 +522,19 @@ namespace Ketarin.Forms
 
         private void txtUrl_TextChanged(object sender, EventArgs e)
         {
-            CurrentVariable.Url = txtUrl.Text;
+            this.CurrentVariable.Url = this.txtUrl.Text;
         }
 
         private void bUseAsStart_Click(object sender, EventArgs e)
         {
-            CurrentVariable.StartText = rtfContent.SelectedText;
-            RefreshRtfFormatting();
+            this.CurrentVariable.StartText = this.rtfContent.SelectedText;
+            this.RefreshRtfFormatting();
         }
 
         private void bUseAsEnd_Click(object sender, EventArgs e)
         {
-            CurrentVariable.EndText = rtfContent.SelectedText;
-            RefreshRtfFormatting();
+            this.CurrentVariable.EndText = this.rtfContent.SelectedText;
+            this.RefreshRtfFormatting();
         }
 
         /// <summary>
@@ -543,166 +543,166 @@ namespace Ketarin.Forms
         /// </summary>
         private void RefreshRtfFormatting(Match match = null)
         {
-            if (string.IsNullOrEmpty(rtfContent.Text) || CurrentVariable.VariableType == UrlVariable.Type.Textual) return;
+            if (string.IsNullOrEmpty(this.rtfContent.Text) || this.CurrentVariable.VariableType == UrlVariable.Type.Textual) return;
 
             using (new ControlRedrawLock(this))
             {
                 // Determine scroll position
                 User32.POINT scrollPos = new User32.POINT();
-                User32.SendMessage(rtfContent.Handle, User32.EM_GETSCROLLPOS, IntPtr.Zero, ref scrollPos);
+                User32.SendMessage(this.rtfContent.Handle, User32.EM_GETSCROLLPOS, IntPtr.Zero, ref scrollPos);
 
                 // Reset text area
-                MatchSelection = string.Empty;
-                m_MatchPosition = -1;
-                rtfContent.SelectionStart = 0;
-                rtfContent.SelectionLength = rtfContent.Text.Length;
-                rtfContent.SelectionColor = SystemColors.WindowText;
-                rtfContent.SelectionFont = rtfContent.Font;
-                rtfContent.SelectionBackColor = SystemColors.Window;
-                rtfContent.SelectionLength = 0;
+                this.MatchSelection = string.Empty;
+                this.m_MatchPosition = -1;
+                this.rtfContent.SelectionStart = 0;
+                this.rtfContent.SelectionLength = this.rtfContent.Text.Length;
+                this.rtfContent.SelectionColor = SystemColors.WindowText;
+                this.rtfContent.SelectionFont = this.rtfContent.Font;
+                this.rtfContent.SelectionBackColor = SystemColors.Window;
+                this.rtfContent.SelectionLength = 0;
 
                 if (match != null)
                 {
-                    m_MatchPosition = match.Index;
-                    rtfContent.SelectionStart = match.Index;
-                    rtfContent.SelectionLength = match.Length;
-                    rtfContent.SelectionColor = Color.White;
-                    rtfContent.SelectionBackColor = Color.Blue;
+                    this.m_MatchPosition = match.Index;
+                    this.rtfContent.SelectionStart = match.Index;
+                    this.rtfContent.SelectionLength = match.Length;
+                    this.rtfContent.SelectionColor = Color.White;
+                    this.rtfContent.SelectionBackColor = Color.Blue;
 
                     if (match.Groups.Count > 1)
                     {
-                        m_MatchPosition = match.Groups[1].Index;
-                        rtfContent.SelectionStart = match.Groups[1].Index;
-                        rtfContent.SelectionLength = match.Groups[1].Length;
-                        rtfContent.SelectionColor = Color.White;
-                        rtfContent.SelectionBackColor = Color.Red;
+                        this.m_MatchPosition = match.Groups[1].Index;
+                        this.rtfContent.SelectionStart = match.Groups[1].Index;
+                        this.rtfContent.SelectionLength = match.Groups[1].Length;
+                        this.rtfContent.SelectionColor = Color.White;
+                        this.rtfContent.SelectionBackColor = Color.Red;
                     }
 
-                    MatchSelection = rtfContent.SelectedText;
-                    rtfContent.SelectionLength = 0;
+                    this.MatchSelection = this.rtfContent.SelectedText;
+                    this.rtfContent.SelectionLength = 0;
                 }
-                else if (CurrentVariable.VariableType == UrlVariable.Type.StartEnd && !string.IsNullOrEmpty(CurrentVariable.StartText))
+                else if (this.CurrentVariable.VariableType == UrlVariable.Type.StartEnd && !string.IsNullOrEmpty(this.CurrentVariable.StartText))
                 {
                     // Highlight StartText with blue background
-                    int pos = rtfContent.Text.IndexOf(CurrentVariable.StartText);
+                    int pos = this.rtfContent.Text.IndexOf(this.CurrentVariable.StartText);
                     if (pos == -1)
                     {
                         pos = 0;
                     }
                     else
                     {
-                        rtfContent.SelectionStart = pos;
-                        rtfContent.SelectionLength = CurrentVariable.StartText.Length;
-                        rtfContent.SelectionColor = Color.White;
-                        rtfContent.SelectionBackColor = Color.Blue;
+                        this.rtfContent.SelectionStart = pos;
+                        this.rtfContent.SelectionLength = this.CurrentVariable.StartText.Length;
+                        this.rtfContent.SelectionColor = Color.White;
+                        this.rtfContent.SelectionBackColor = Color.Blue;
                     }
 
-                    int matchStart = pos + CurrentVariable.StartText.Length;
+                    int matchStart = pos + this.CurrentVariable.StartText.Length;
 
-                    if (!string.IsNullOrEmpty(CurrentVariable.EndText) && matchStart <= rtfContent.Text.Length)
+                    if (!string.IsNullOrEmpty(this.CurrentVariable.EndText) && matchStart <= this.rtfContent.Text.Length)
                     {
-                        pos = rtfContent.Text.IndexOf(CurrentVariable.EndText, matchStart);
+                        pos = this.rtfContent.Text.IndexOf(this.CurrentVariable.EndText, matchStart);
                         if (pos >= 0)
                         {
                             // Highlight EndText with blue background if specified
-                            m_MatchPosition = pos;
-                            rtfContent.SelectionStart = pos;
-                            rtfContent.SelectionLength = CurrentVariable.EndText.Length;
-                            rtfContent.SelectionColor = Color.White;
-                            rtfContent.SelectionBackColor = Color.Blue;
+                            this.m_MatchPosition = pos;
+                            this.rtfContent.SelectionStart = pos;
+                            this.rtfContent.SelectionLength = this.CurrentVariable.EndText.Length;
+                            this.rtfContent.SelectionColor = Color.White;
+                            this.rtfContent.SelectionBackColor = Color.Blue;
 
                             // Highlight match with red background
-                            rtfContent.SelectionStart = matchStart;
-                            rtfContent.SelectionLength = pos - matchStart;
-                            MatchSelection = rtfContent.SelectedText;
-                            rtfContent.SelectionColor = Color.White;
-                            rtfContent.SelectionBackColor = Color.Red;
-                            rtfContent.SelectionLength = 0;
+                            this.rtfContent.SelectionStart = matchStart;
+                            this.rtfContent.SelectionLength = pos - matchStart;
+                            this.MatchSelection = this.rtfContent.SelectedText;
+                            this.rtfContent.SelectionColor = Color.White;
+                            this.rtfContent.SelectionBackColor = Color.Red;
+                            this.rtfContent.SelectionLength = 0;
                         }
                     }
                 }
 
                 // Restore scroll position
-                User32.SendMessage(rtfContent.Handle, User32.EM_SETSCROLLPOS, IntPtr.Zero, ref scrollPos);
+                User32.SendMessage(this.rtfContent.Handle, User32.EM_SETSCROLLPOS, IntPtr.Zero, ref scrollPos);
             }
         }
 
         private void rtfContent_SelectionChanged(object sender, EventArgs e)
         {
-            bool enable = (rtfContent.SelectionLength > 0);
-            cmnuCopy.Enabled = enable;
-            bUseAsEnd.Enabled = bUseAsStart.Enabled = enable;
+            bool enable = (this.rtfContent.SelectionLength > 0);
+            this.cmnuCopy.Enabled = enable;
+            this.bUseAsEnd.Enabled = this.bUseAsStart.Enabled = enable;
         }
 
         private void bRemove_Click(object sender, EventArgs e)
         {
-            if (CurrentVariable == null) return;
+            if (this.CurrentVariable == null) return;
 
-            m_Variables.Remove(CurrentVariable.Name);
-            ReloadVariables(true);
+            this.m_Variables.Remove(this.CurrentVariable.Name);
+            this.ReloadVariables(true);
 
-            if (lbVariables.Items.Count > 0)
+            if (this.lbVariables.Items.Count > 0)
             {
-                lbVariables.SelectedIndex = 0;
+                this.lbVariables.SelectedIndex = 0;
             }
             else
             {
-                lbVariables.SelectedIndex = -1;
+                this.lbVariables.SelectedIndex = -1;
             }
-            lbVariables_SelectedIndexChanged(this, null);
+            this.lbVariables_SelectedIndexChanged(this, null);
         }
 
         private void rtfContent_TextChanged(object sender, EventArgs e)
         {
-            if (CurrentVariable != null && CurrentVariable.VariableType == UrlVariable.Type.Textual)
+            if (this.CurrentVariable != null && this.CurrentVariable.VariableType == UrlVariable.Type.Textual)
             {
-                CurrentVariable.TextualContent = rtfContent.Text;
+                this.CurrentVariable.TextualContent = this.rtfContent.Text;
             }
         }
 
         private void txtRegularExpression_TextChanged(object sender, EventArgs e)
         {
-            UpdateRegexMatches();
+            this.UpdateRegexMatches();
         }
 
         private void UpdateRegexMatches()
         {
             // "Disable" regex if empty
-            if (string.IsNullOrEmpty(txtRegularExpression.Text))
+            if (string.IsNullOrEmpty(this.txtRegularExpression.Text))
             {
-                CurrentVariable.Regex = string.Empty;
-                RefreshRtfFormatting();
+                this.CurrentVariable.Regex = string.Empty;
+                this.RefreshRtfFormatting();
                 return;
             }
 
             try
             {
                 // Check if Regex is valid
-                new Regex(txtRegularExpression.Text);
+                new Regex(this.txtRegularExpression.Text);
 
                 // Set value
-                CurrentVariable.Regex = txtRegularExpression.Text;
+                this.CurrentVariable.Regex = this.txtRegularExpression.Text;
             }
             catch (ArgumentException)
             {
                 // Make sure that user notices an error. Just showing error 
                 // messages will be annoying.
-                txtRegularExpression.BackColor = Color.Tomato;
+                this.txtRegularExpression.BackColor = Color.Tomato;
                 return;
             }
 
-            txtRegularExpression.BackColor = SystemColors.Window;
+            this.txtRegularExpression.BackColor = SystemColors.Window;
 
-            txtRegularExpression.HintText = "Evaluating...";
+            this.txtRegularExpression.HintText = "Evaluating...";
 
             // Cancel current evaluation and start new
-            if (regexThread != null)
+            if (this.regexThread != null)
             {
-                regexThread.Abort();
-                regexThread = null;
+                this.regexThread.Abort();
+                this.regexThread = null;
             }
-            regexThread = new Thread(this.EvaluateRegex);
-            regexThread.Start(rtfContent.Text);
+            this.regexThread = new Thread(this.EvaluateRegex);
+            this.regexThread.Start(this.rtfContent.Text);
         }
 
         private void EvaluateRegex(object text)
@@ -711,14 +711,18 @@ namespace Ketarin.Forms
             {
                 try
                 {
-                    Regex regex = CurrentVariable.CreateRegex();
+                    UrlVariable currenVar = this.CurrentVariable;
+
+                    string compareRegex = currenVar.Regex;
+                    Regex regex = currenVar.CreateRegex();
+
                     if (regex == null) return;
 
                     Match match = regex.Match(text as string);
 
                     this.BeginInvoke((MethodInvoker)delegate
                     {
-                        this.SetRegexResult(regex, match);
+                        this.SetRegexResult(compareRegex, match);
                     });
                 }
                 catch (UriFormatException ex)
@@ -736,7 +740,7 @@ namespace Ketarin.Forms
                 {
                     this.BeginInvoke((MethodInvoker)delegate
                     {
-                        txtRegularExpression.HintText = string.Empty;
+                        this.txtRegularExpression.HintText = string.Empty;
                     });
                 }
             }
@@ -746,49 +750,53 @@ namespace Ketarin.Forms
             }
         }
 
-        private void SetRegexResult(Regex regex, Match match)
+        private void SetRegexResult(string regex, Match match)
         {
             // Called from thread. Only execute if current regex matches
             // the just returned result.
-            if (this.CurrentVariable.Regex != regex.ToString())
+            if (this.CurrentVariable.Regex != regex)
             {
                 return;
             }
 
-            txtRegularExpression.HintText = string.Empty;
-            RefreshRtfFormatting(match);
+            this.txtRegularExpression.HintText = string.Empty;
+            this.RefreshRtfFormatting(match);
 
             if (match.Success && this.gotoMatch)
             {
                 this.gotoMatch = false;
-                GoToMatch();
+                this.GoToMatch();
             }
         }
 
         private void chkRightToLeft_CheckedChanged(object sender, EventArgs e)
         {
-            CurrentVariable.RegexRightToLeft = chkRightToLeft.Checked;
-            RefreshRtfFormatting();
+            this.CurrentVariable.RegexRightToLeft = this.chkRightToLeft.Checked;
+            this.RefreshRtfFormatting();
         }
 
         private void bOK_Click(object sender, EventArgs e)
         {
             // Delete empty variables
             List<string> toDelete = this.m_Variables.Where(pair => pair.Value.IsEmpty).Select(pair => pair.Key).ToList();
-            while (toDelete.Count > 0) { m_Variables.Remove(toDelete[0]); toDelete.RemoveAt(0); }
+            while (toDelete.Count > 0)
+            {
+                this.m_Variables.Remove(toDelete[0]);
+                toDelete.RemoveAt(0);
+            }
 
             // Save results
-            m_Job.Variables = m_Variables;
+            this.m_Job.Variables = this.m_Variables;
         }
 
         private void bPostData_Click(object sender, EventArgs e)
         {
             using (PostDataEditor editor = new PostDataEditor())
             {
-                editor.PostData = CurrentVariable.PostData;
+                editor.PostData = this.CurrentVariable.PostData;
                 if (editor.ShowDialog(this) == DialogResult.OK)
                 {
-                    CurrentVariable.PostData = editor.PostData;
+                    this.CurrentVariable.PostData = editor.PostData;
                 }
             }
         }
@@ -797,50 +805,50 @@ namespace Ketarin.Forms
 
         private void cmnuCopy_Click(object sender, EventArgs e)
         {
-            SafeClipboard.SetData(rtfContent.SelectedText, true);
+            SafeClipboard.SetData(this.rtfContent.SelectedText, true);
         }
 
         private void cmnuPaste_Click(object sender, EventArgs e)
         {
-            rtfContent.Paste();
+            this.rtfContent.Paste();
         }
 
         private void cmnuCopyMatch_Click(object sender, EventArgs e)
         {
-            SafeClipboard.SetData(MatchSelection, true);
+            SafeClipboard.SetData(this.MatchSelection, true);
         }
 
         private void cmnuGoToMatch_Click(object sender, EventArgs e)
         {
-            GoToMatch();
+            this.GoToMatch();
         }
 
         private void cmnuWrap_Click(object sender, EventArgs e)
         {
-            rtfContent.WordWrap = !cmnuWrap.Checked;
-            cmnuWrap.Checked = rtfContent.WordWrap;
+            this.rtfContent.WordWrap = !this.cmnuWrap.Checked;
+            this.cmnuWrap.Checked = this.rtfContent.WordWrap;
         }
 
         private void cmnuBrowser_Click(object sender, EventArgs e)
         {
-            cmnuBrowser.Checked = !cmnuBrowser.Checked;
-            if (cmnuBrowser.Checked)
+            this.cmnuBrowser.Checked = !this.cmnuBrowser.Checked;
+            if (this.cmnuBrowser.Checked)
             {
-                if (m_Preview == null)
+                if (this.m_Preview == null)
                 {
-                    PreviewDialog.VisibleChanged += this.PreviewDialog_VisibleChanged;
+                    this.PreviewDialog.VisibleChanged += this.PreviewDialog_VisibleChanged;
                 }
-                bLoad.PerformClick(); // Reload browser contents
+                this.bLoad.PerformClick(); // Reload browser contents
             }
             else
             {
-                PreviewDialog.Hide();
+                this.PreviewDialog.Hide();
             }
         }
 
         private void PreviewDialog_VisibleChanged(object sender, EventArgs e)
         {
-            cmnuBrowser.Checked = PreviewDialog.Visible;
+            this.cmnuBrowser.Checked = this.PreviewDialog.Visible;
         }
 
         #endregion
