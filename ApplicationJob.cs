@@ -1760,6 +1760,39 @@ namespace Ketarin
             }
         }
 
+        private static string GetSha256OfFile(string filename)
+        {
+            SHA256 hash = new SHA256CryptoServiceProvider();
+            using (FileStream stream = File.OpenRead(filename))
+            {
+                byte[] localSha256 = hash.ComputeHash(stream);
+                StringBuilder result = new StringBuilder(64);
+                for (int i = 0; i < localSha256.Length; i++)
+                {
+                    result.Append(localSha256[i].ToString("X2"));
+                }
+                return result.ToString();
+            }
+        }
+
+        private static string GetSha512OfFile(string filename)
+        {
+            using (FileStream stream = File.OpenRead(filename))
+            {
+                using (SHA512 shaM = new SHA512Managed())
+                {
+                    byte[] hash = shaM.ComputeHash(stream);
+
+                    StringBuilder result = new StringBuilder(128);
+                    for (int i = 0; i < hash.Length; i++)
+                    {
+                        result.Append(hash[i].ToString("X2"));
+                    }
+                    return result.ToString();
+                }
+            }
+        }
+
         /// <summary>
         /// Determines whether or not it is required to (re-)download the file.
         /// </summary>
@@ -1935,6 +1968,12 @@ namespace Ketarin
 
                 case HashType.Sha1:
                     return GetSha1OfFile(targetFile);
+
+                case HashType.Sha256:
+                    return GetSha256OfFile(targetFile);
+
+                case HashType.Sha512:
+                    return GetSha512OfFile(targetFile);
 
                 case HashType.Crc:
                     return CrcStream.GetCrcFromFile(targetFile).ToString("X2");

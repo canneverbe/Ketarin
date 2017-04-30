@@ -8,6 +8,8 @@
         None = 0,
         Md5 = 1,
         Crc = 2,
-        Sha1 = 3
+        Sha1 = 3,
+        Sha256 = 4,
+        Sha512 = 5
     }
 }
