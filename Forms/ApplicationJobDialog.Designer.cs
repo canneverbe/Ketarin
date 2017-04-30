@@ -501,7 +501,7 @@ namespace Ketarin.Forms
             // lblHashVariable
             // 
             this.lblHashVariable.AutoSize = true;
-            this.lblHashVariable.Location = new System.Drawing.Point(205, 203);
+            this.lblHashVariable.Location = new System.Drawing.Point(209, 203);
             this.lblHashVariable.Name = "lblHashVariable";
             this.lblHashVariable.Size = new System.Drawing.Size(48, 13);
             this.lblHashVariable.TabIndex = 13;
@@ -515,19 +515,21 @@ namespace Ketarin.Forms
             "(None)",
             "MD5",
             "CRC32",
-            "SHA1"});
-            this.cboHashType.Location = new System.Drawing.Point(141, 200);
+            "SHA1",
+            "SHA256",
+            "SHA512"});
+            this.cboHashType.Location = new System.Drawing.Point(138, 200);
             this.cboHashType.Name = "cboHashType";
-            this.cboHashType.Size = new System.Drawing.Size(58, 21);
+            this.cboHashType.Size = new System.Drawing.Size(65, 21);
             this.cboHashType.TabIndex = 12;
             // 
             // cboHashVariable
             // 
             this.cboHashVariable.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.cboHashVariable.Location = new System.Drawing.Point(259, 200);
+            this.cboHashVariable.Location = new System.Drawing.Point(263, 200);
             this.cboHashVariable.Name = "cboHashVariable";
-            this.cboHashVariable.Size = new System.Drawing.Size(109, 21);
+            this.cboHashVariable.Size = new System.Drawing.Size(105, 21);
             this.cboHashVariable.TabIndex = 14;
             // 
             // lblCompareWithHash
@@ -621,9 +623,9 @@ namespace Ketarin.Forms
             // 
             this.txtUseVariablesForChanges.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtUseVariablesForChanges.Location = new System.Drawing.Point(259, 173);
+            this.txtUseVariablesForChanges.Location = new System.Drawing.Point(263, 173);
             this.txtUseVariablesForChanges.Name = "txtUseVariablesForChanges";
-            this.txtUseVariablesForChanges.Size = new System.Drawing.Size(109, 21);
+            this.txtUseVariablesForChanges.Size = new System.Drawing.Size(105, 21);
             this.txtUseVariablesForChanges.TabIndex = 10;
             // 
             // lblUseVariableForChanges
