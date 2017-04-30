@@ -99,19 +99,7 @@ namespace Ketarin
             Textual
         }
 
-        private Type m_VariableType;
-        private string m_Url;
-        private string m_StartText;
-        private string m_EndText;
-        private string m_TextualContent;
-        private string m_Name;
-        private string m_TempContent = string.Empty;
         private string m_Regex = string.Empty;
-        private string m_CachedContent;
-        private ApplicationJob.UrlVariableCollection m_Parent;
-        private int m_DownloadCount;
-        private bool m_RegexRightToLeft;
-        private string m_PostData;
         private static GlobalUrlVariableCollection m_GlobalVariables;
         /// <summary>
         /// Prevent recursion with the ExpandedUrl property.
@@ -125,40 +113,24 @@ namespace Ketarin
         /// Stores how often the variable has been downloaded.
         /// This value is per session and is not stored in the database.
         /// </summary>
-        internal int DownloadCount
-        {
-            get { return m_DownloadCount; }
-            set { m_DownloadCount = value; }
-        }
+        internal int DownloadCount { get; set; }
 
         /// <summary>
         /// Gets or sets whether the regex has the 
         /// right-to-left match option.
         /// </summary>
-        public bool RegexRightToLeft
-        {
-            get { return m_RegexRightToLeft; }
-            set { m_RegexRightToLeft = value; }
-        }
+        public bool RegexRightToLeft { get; set; }
 
         /// <summary>
         /// Gets or sets the UrlVariableCollection this variable belongs to.
         /// </summary>
         [XmlIgnore()]
-        public ApplicationJob.UrlVariableCollection Parent
-        {
-            get { return m_Parent; }
-            set { m_Parent = value; }
-        }
+        public ApplicationJob.UrlVariableCollection Parent { get; set; }
 
         /// <summary>
         /// Gets or sets the type of the variable.
         /// </summary>
-        public Type VariableType
-        {
-            get { return m_VariableType; }
-            set { m_VariableType = value; }
-        }
+        public Type VariableType { get; set; }
 
         /// <summary>
         /// Collection of all global variables.
@@ -197,20 +169,14 @@ namespace Ketarin
         public string Regex
         {
             get { return m_Regex; }
-            set {
-                m_Regex = value ?? string.Empty;
-            }
+            set { m_Regex = value ?? string.Empty; }
         }
 
         /// <summary>
         /// Gets or sets the POST data which is
         /// submitted along with the URL request.
         /// </summary>
-        public string PostData
-        {
-            get { return m_PostData; }
-            set { m_PostData = value; }
-        }
+        public string PostData { get; set; }
 
         /// <summary>
         /// Returns the regular expression for this
@@ -221,7 +187,7 @@ namespace Ketarin
         {
             get
             {
-                if (m_Parent == null || m_Expanding || string.IsNullOrEmpty(m_Regex))
+                if (this.Parent == null || m_Expanding || string.IsNullOrEmpty(m_Regex))
                 {
                     return m_Regex;
                 }
@@ -229,7 +195,7 @@ namespace Ketarin
                 m_Expanding = true;
                 try
                 {
-                    return m_Parent.ReplaceAllInString(m_Regex);
+                    return this.Parent.ReplaceAllInString(m_Regex);
                 }
                 finally
                 {
@@ -239,11 +205,7 @@ namespace Ketarin
         }
 
         [XmlElement("Url")]
-        public string Url
-        {
-            get { return m_Url; }
-            set { m_Url = value; }
-        }
+        public string Url { get; set; }
 
         /// <summary>
         /// If the URL contains variables, this property
@@ -254,15 +216,15 @@ namespace Ketarin
         {
             get
             {
-                if (m_Parent == null || m_Expanding || string.IsNullOrEmpty(m_Url))
+                if (this.Parent == null || m_Expanding || string.IsNullOrEmpty(this.Url))
                 {
-                    return m_Url;
+                    return this.Url;
                 }
 
                 m_Expanding = true;
                 try
                 {
-                    return m_Parent.ReplaceAllInString(m_Url);
+                    return this.Parent.ReplaceAllInString(this.Url);
                 }
                 finally
                 {
@@ -272,18 +234,10 @@ namespace Ketarin
         }
 
         [XmlElement("StartText")]
-        public string StartText
-        {
-            get { return m_StartText; }
-            set { m_StartText = value; }
-        }
+        public string StartText { get; set; }
 
         [XmlElement("EndText")]
-        public string EndText
-        {
-            get { return m_EndText; }
-            set { m_EndText = value; }
-        }
+        public string EndText { get; set; }
 
         /// <summary>
         /// For type 'Textual', this text represents the
@@ -291,29 +245,17 @@ namespace Ketarin
         /// Note: Variables are not replaced here.
         /// </summary>
         [XmlElement("TextualContent")]
-        public string TextualContent
-        {
-            get { return m_TextualContent; }
-            set { m_TextualContent = value; }
-        }
+        public string TextualContent { get; set; }
 
         [XmlElement("Name")]
-        public string Name
-        {
-            get { return m_Name; }
-            set { m_Name = value; }
-        }
+        public string Name { get; set; }
 
         /// <summary>
         /// Temporarily store content related to this
         /// variable for short term caching purposes.
         /// </summary>
         [XmlIgnore()]
-        internal string TempContent
-        {
-            get { return m_TempContent; }
-            set { m_TempContent = value; }
-        }
+        internal string TempContent { get; set; } = string.Empty;
 
         /// <summary>
         /// Stores the content of the variable
@@ -321,11 +263,7 @@ namespace Ketarin
         /// custom column, without the need for web requests.
         /// </summary>
         [XmlIgnore()]
-        public string CachedContent
-        {
-            get { return m_CachedContent; }
-            set { m_CachedContent = value; }
-        }
+        public string CachedContent { get; set; }
 
         /// <summary>
         /// Gets whether or not the variable is properly defined.
@@ -334,7 +272,7 @@ namespace Ketarin
         {
             get
             {
-                return (string.IsNullOrEmpty(m_Url) && m_VariableType != Type.Textual);
+                return (string.IsNullOrEmpty(this.Url) && this.VariableType != Type.Textual);
             }
         }
 
@@ -361,22 +299,22 @@ namespace Ketarin
         /// </summary>
         public UrlVariable(string name, ApplicationJob.UrlVariableCollection collection)
         {
-            m_Name = name;
-            m_Parent = collection;
+            this.Name = name;
+            this.Parent = collection;
         }
 
         public void Hydrate(IDataReader reader)
         {
-            m_Name = reader["VariableName"] as string;
-            m_StartText = reader["StartText"] as string;
-            m_EndText = reader["EndText"] as string;
-            m_Url = reader["Url"] as string;
-            Regex = reader["RegularExpression"] as string;
-            m_CachedContent = reader["CachedContent"] as string;
-            m_VariableType = (Type)Convert.ToInt32(reader["VariableType"]);
-            m_TextualContent = reader["TextualContent"] as string;
-            m_RegexRightToLeft = Conversion.ToBoolean(reader["RegexRightToLeft"]);
-            m_PostData = reader["PostData"] as string;
+            this.Name = reader["VariableName"] as string;
+            this.StartText = reader["StartText"] as string;
+            this.EndText = reader["EndText"] as string;
+            this.Url = reader["Url"] as string;
+            this.Regex = reader["RegularExpression"] as string;
+            this.CachedContent = reader["CachedContent"] as string;
+            this.VariableType = (Type)Convert.ToInt32(reader["VariableType"]);
+            this.TextualContent = reader["TextualContent"] as string;
+            this.RegexRightToLeft = Conversion.ToBoolean(reader["RegexRightToLeft"]);
+            this.PostData = reader["PostData"] as string;
         }
 
         public void Save(IDbTransaction transaction, Guid parentJobGuid)
@@ -389,16 +327,16 @@ namespace Ketarin
                                              VALUES (@JobGuid, @VariableName, @Url, @StartText, @EndText, @RegularExpression, @CachedContent, @VariableType, @TextualContent, @RegexRightToLeft, @PostData)";
 
                 command.Parameters.Add(new SQLiteParameter("@JobGuid", DbManager.FormatGuid(parentJobGuid)));
-                command.Parameters.Add(new SQLiteParameter("@VariableName", m_Name));
-                command.Parameters.Add(new SQLiteParameter("@Url", m_Url));
-                command.Parameters.Add(new SQLiteParameter("@StartText", m_StartText));
-                command.Parameters.Add(new SQLiteParameter("@EndText", m_EndText));
+                command.Parameters.Add(new SQLiteParameter("@VariableName", this.Name));
+                command.Parameters.Add(new SQLiteParameter("@Url", this.Url));
+                command.Parameters.Add(new SQLiteParameter("@StartText", this.StartText));
+                command.Parameters.Add(new SQLiteParameter("@EndText", this.EndText));
                 command.Parameters.Add(new SQLiteParameter("@RegularExpression", m_Regex));
-                command.Parameters.Add(new SQLiteParameter("@RegexRightToLeft", m_RegexRightToLeft));
-                command.Parameters.Add(new SQLiteParameter("@CachedContent", m_CachedContent));
-                command.Parameters.Add(new SQLiteParameter("@VariableType", m_VariableType));
-                command.Parameters.Add(new SQLiteParameter("@TextualContent", m_TextualContent));
-                command.Parameters.Add(new SQLiteParameter("@PostData", m_PostData));
+                command.Parameters.Add(new SQLiteParameter("@RegexRightToLeft", this.RegexRightToLeft));
+                command.Parameters.Add(new SQLiteParameter("@CachedContent", this.CachedContent));
+                command.Parameters.Add(new SQLiteParameter("@VariableType", this.VariableType));
+                command.Parameters.Add(new SQLiteParameter("@TextualContent", this.TextualContent));
+                command.Parameters.Add(new SQLiteParameter("@PostData", this.PostData));
                 
                 command.ExecuteNonQuery();
             }
@@ -488,7 +426,7 @@ namespace Ketarin
         /// </summary>
         private string Replace(string formatString, string content, ApplicationJob context = null)
         {
-            return Replace(formatString, m_Name, content, context);
+            return Replace(formatString, this.Name, content, context);
         }
 
         /// <summary>
@@ -899,15 +837,15 @@ namespace Ketarin
         /// </summary>
         public string GetExpandedTextualContent(DateTime fileDate)
         {
-            if (m_Parent == null || m_Expanding || string.IsNullOrEmpty(m_TextualContent))
+            if (this.Parent == null || m_Expanding || string.IsNullOrEmpty(this.TextualContent))
             {
-                return m_TextualContent;
+                return this.TextualContent;
             }
 
             m_Expanding = true;
             try
             {
-                return m_Parent.ReplaceAllInString(this.m_TextualContent, fileDate, string.Empty, false);
+                return this.Parent.ReplaceAllInString(this.TextualContent, fileDate, string.Empty, false);
             }
             finally
             {
@@ -921,7 +859,7 @@ namespace Ketarin
         /// <returns></returns>
         public Regex CreateRegex()
         {
-            if (m_VariableType != Type.RegularExpression || string.IsNullOrEmpty(m_Regex))
+            if (this.VariableType != Type.RegularExpression || string.IsNullOrEmpty(m_Regex))
             {
                 return null;
             }
@@ -929,7 +867,7 @@ namespace Ketarin
             try
             {
                 RegexOptions options = RegexOptions.Singleline | RegexOptions.IgnoreCase;
-                if (m_RegexRightToLeft)
+                if (this.RegexRightToLeft)
                 {
                     options |= RegexOptions.RightToLeft;
                 }
@@ -948,23 +886,23 @@ namespace Ketarin
         /// <param name="fileDate">Current file date, when downloading the modification date of the file being downloaded</param>
         public virtual string ReplaceInString(string value, DateTime fileDate, bool onlyCached)
         {
-            if (!IsVariableUsedInString(m_Name, value)) return value;
+            if (!IsVariableUsedInString(this.Name, value)) return value;
 
             // Global variable only has static content
             if (onlyCached)
             {
-                return (m_CachedContent == null) ? value : Replace(value, m_CachedContent, this.Parent == null ? null : this.Parent.Parent);
+                return (this.CachedContent == null) ? value : Replace(value, this.CachedContent, this.Parent == null ? null : this.Parent.Parent);
             }
 
             // Ignore missing URLs etc.
             if (IsEmpty) return value;
 
             // Using textual content?
-            if (m_VariableType == Type.Textual)
+            if (this.VariableType == Type.Textual)
             {
-                m_CachedContent = GetExpandedTextualContent(fileDate);
-                LogDialog.Log(this, value, m_CachedContent);
-                return Replace(value, m_CachedContent, this.Parent == null ? null : this.Parent.Parent);
+                this.CachedContent = GetExpandedTextualContent(fileDate);
+                LogDialog.Log(this, value, this.CachedContent);
+                return Replace(value, this.CachedContent, this.Parent == null ? null : this.Parent.Parent);
             }
 
             string page = string.Empty;
@@ -980,9 +918,9 @@ namespace Ketarin
                 }
                 catch (ArgumentException)
                 {
-                    throw new UriFormatException("The URL '" + Url + "' of variable '" + m_Name + "' is not valid.");
+                    throw new UriFormatException("The URL '" + Url + "' of variable '" + this.Name + "' is not valid.");
                 }
-                m_DownloadCount++;
+                this.DownloadCount++;
             }
 
             // Normalise line-breaks
@@ -990,7 +928,7 @@ namespace Ketarin
             page = page.Replace("\r", "\n");
 
             // Using a regular expression?
-            if (m_VariableType == Type.RegularExpression)
+            if (this.VariableType == Type.RegularExpression)
             {
                 Regex regex = CreateRegex();
                 if (regex == null) return value;
@@ -1000,8 +938,8 @@ namespace Ketarin
                 {
                     if (match.Groups.Count == 1)
                     {
-                        m_CachedContent = match.Value;
-                        LogDialog.Log(this, value, m_CachedContent);
+                        this.CachedContent = match.Value;
+                        LogDialog.Log(this, value, this.CachedContent);
                         return Replace(value, match.Value);
                     }
                     else if (match.Groups.Count >= 2)
@@ -1011,15 +949,15 @@ namespace Ketarin
                         {
                             if (match.Groups[i].Success)
                             {
-                                m_CachedContent = match.Groups[i].Value;
-                                LogDialog.Log(this, value, m_CachedContent);
+                                this.CachedContent = match.Groups[i].Value;
+                                LogDialog.Log(this, value, this.CachedContent);
                                 return Replace(value, match.Groups[i].Value);
                             }
                         }
 
                         // No group matches, use complete match
-                        m_CachedContent = match.Groups[0].Value;
-                        LogDialog.Log(this, value, m_CachedContent);
+                        this.CachedContent = match.Groups[0].Value;
+                        LogDialog.Log(this, value, this.CachedContent);
                         return Replace(value, match.Groups[0].Value);
                     }
                 }
@@ -1031,25 +969,25 @@ namespace Ketarin
             }
 
             // Use whole page if either start or end is missing
-            if (string.IsNullOrEmpty(m_StartText) || string.IsNullOrEmpty(m_EndText))
+            if (string.IsNullOrEmpty(this.StartText) || string.IsNullOrEmpty(this.EndText))
             {
-                m_CachedContent = page;
-                LogDialog.Log(this, value, m_CachedContent);
+                this.CachedContent = page;
+                LogDialog.Log(this, value, this.CachedContent);
                 return Replace(value, page);
             }
 
-            int startPos = page.IndexOf(m_StartText);
+            int startPos = page.IndexOf(this.StartText);
             if (startPos < 0) return value;
 
-            int endOfStart = startPos + m_StartText.Length;
+            int endOfStart = startPos + this.StartText.Length;
 
-            int endPos = page.IndexOf(m_EndText, endOfStart);
+            int endPos = page.IndexOf(this.EndText, endOfStart);
             if (endPos < 0) return value;
 
             string result = page.Substring(endOfStart, endPos - endOfStart);
 
-            m_CachedContent = result;
-            LogDialog.Log(this, value, m_CachedContent);
+            this.CachedContent = result;
+            LogDialog.Log(this, value, this.CachedContent);
             value = Replace(value, result);
 
             return value;
@@ -1066,7 +1004,7 @@ namespace Ketarin
 
         public override string ToString()
         {
-            return m_Name;
+            return this.Name;
         }
     }
 }

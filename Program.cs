@@ -17,11 +17,13 @@
 
 using System;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Windows.Forms;
 using CDBurnerXP;
 using Ketarin.Forms;
+using Microsoft.VisualBasic.CompilerServices;
 using Microsoft.Win32;
 
 namespace Ketarin
@@ -75,6 +77,20 @@ namespace Ketarin
                 Kernel32.ManagedAttachConsole(Kernel32.ATTACH_PARENT_PROCESS);
 
                 ApplicationJob[] jobs = DbManager.GetJobs();
+                
+                // Filter by application name and category.
+                string categoryFilter = arguments["category"];
+                if (!string.IsNullOrEmpty(categoryFilter))
+                {
+                    jobs = jobs.Where(x => string.Equals(x.Category, categoryFilter, StringComparison.OrdinalIgnoreCase)).ToArray();
+                }
+                
+                string appFilter = arguments["appname"];
+                if (!string.IsNullOrEmpty(appFilter))
+                {
+                    jobs = jobs.Where(x => LikeOperator.LikeString(x.Name, appFilter, Microsoft.VisualBasic.CompareMethod.Text)).ToArray();
+                }
+
                 Updater updater = new Updater();
                 updater.StatusChanged += updater_StatusChanged;
                 updater.ProgressChanged += updater_ProgressChanged;
@@ -95,10 +111,7 @@ namespace Ketarin
                     Thread.Sleep(1000);
                 }
 
-                if (m_Icon != null)
-                {
-                    m_Icon.Dispose();
-                }
+                m_Icon?.Dispose();
 
                 Kernel32.FreeConsole();
             }
