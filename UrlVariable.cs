@@ -735,7 +735,7 @@ namespace Ketarin
                     break;
 
                 case "formatfilesize":
-                    return FormatFileSize.Format(Conversion.ToInt(content));
+                    return FormatFileSize.Format(Conversion.ToLong(content));
 
                 case "startuppath":
                     return Application.StartupPath;
