@@ -166,7 +166,7 @@ namespace Ketarin
                     }
                     finally
                     {
-                        ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls;
+                        ServicePointManager.SecurityProtocol = Updater.DefaultHttpProtocols;
                     }
                 }
 
@@ -211,6 +211,21 @@ namespace Ketarin
             }
             catch (WebException ex)
             {
+                // If only SSL3 is supported, use this temporarily.
+                if (ex.Status == WebExceptionStatus.SecureChannelFailure && ServicePointManager.SecurityProtocol != SecurityProtocolType.Ssl3)
+                {
+                    ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3;
+
+                    try
+                    {
+                        return GetResponse(request);
+                    }
+                    finally
+                    {
+                        ServicePointManager.SecurityProtocol = Updater.DefaultHttpProtocols;
+                    }
+                }
+
                 if (ex.Response == null || ex.Status != WebExceptionStatus.ProtocolError)
                 {
                     throw;
