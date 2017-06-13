@@ -23,6 +23,8 @@ namespace Ketarin
     /// </summary>
     public class Updater
     {
+        public const SecurityProtocolType DefaultHttpProtocols = SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
+
         private ApplicationJob[] m_Jobs;
         private Dictionary<ApplicationJob, short> m_Progress;
         private readonly Dictionary<ApplicationJob, Status> m_Status = new Dictionary<ApplicationJob,Status>();
@@ -662,6 +664,8 @@ namespace Ketarin
             ServicePointManager.ServerCertificateValidationCallback = delegate {
                 return true;
             };
+
+            ServicePointManager.SecurityProtocol = DefaultHttpProtocols;
 
             // If we want to download multiple files simultaneously
             // from the same server, we need to "remove" the connection limit.
