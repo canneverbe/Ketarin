@@ -701,6 +701,11 @@ namespace MyDownloader.Core
             {
                 if (Segments[i].State == SegmentState.Error)
                 {
+                    if (Segments[i].LastError != null)
+                    {
+                        this.LastError = Segments[i].LastError;
+                    }
+
                     SetState(DownloaderState.EndedWithError);
                     return;
                 }
