@@ -1824,6 +1824,11 @@ namespace Ketarin
                     // The file does not exist at the target location.
                     // Check if the previously downloaded file still matches.
                     current = new FileInfo(this.CurrentLocation);
+
+                    if (current.Exists)
+                    {
+                        LogDialog.Log(this, $"Target file missing, comparing to previously downloaded file at {this.CurrentLocation}");
+                    }
                 }
 
                 if (!this.IgnoreFileInformation && !current.Exists)
