@@ -113,6 +113,8 @@ namespace Ketarin
             {
                 // DownloadString will not decompress automatically
                 httpReq.AutomaticDecompression = (DecompressionMethods.GZip | DecompressionMethods.Deflate);
+
+                httpReq.Accept = "*/*";
             }
 
             // Make sure that the user defined timeout is used for all web requests!
