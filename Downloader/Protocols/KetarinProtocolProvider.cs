@@ -133,6 +133,8 @@ namespace MyDownloader.Extension.Protocols
             HttpWebRequest httpRequest = req as HttpWebRequest;
             if (httpRequest != null)
             {
+                httpRequest.Accept = "*/*";
+
                 // Store cookies for future requests. Some sites
                 // check for previously stored cookies before allowing to download.
                 if (httpRequest.CookieContainer == null)
