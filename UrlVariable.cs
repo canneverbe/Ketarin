@@ -105,7 +105,7 @@ namespace Ketarin
         /// Prevent recursion with the ExpandedUrl property.
         /// </summary>
         private bool m_Expanding;
-        private static Random random = new Random();
+        private static readonly Random random = new Random();
 
         #region Properties
 
@@ -168,8 +168,8 @@ namespace Ketarin
         [XmlElement("Regex")]
         public string Regex
         {
-            get { return m_Regex; }
-            set { m_Regex = value ?? string.Empty; }
+            get { return this.m_Regex; }
+            set { this.m_Regex = value ?? string.Empty; }
         }
 
         /// <summary>
@@ -187,19 +187,19 @@ namespace Ketarin
         {
             get
             {
-                if (this.Parent == null || m_Expanding || string.IsNullOrEmpty(m_Regex))
+                if (this.Parent == null || this.m_Expanding || string.IsNullOrEmpty(this.m_Regex))
                 {
-                    return m_Regex;
+                    return this.m_Regex;
                 }
 
-                m_Expanding = true;
+                this.m_Expanding = true;
                 try
                 {
-                    return this.Parent.ReplaceAllInString(m_Regex);
+                    return this.Parent.ReplaceAllInString(this.m_Regex);
                 }
                 finally
                 {
-                    m_Expanding = false;
+                    this.m_Expanding = false;
                 }
             }
         }
@@ -216,19 +216,19 @@ namespace Ketarin
         {
             get
             {
-                if (this.Parent == null || m_Expanding || string.IsNullOrEmpty(this.Url))
+                if (this.Parent == null || this.m_Expanding || string.IsNullOrEmpty(this.Url))
                 {
                     return this.Url;
                 }
 
-                m_Expanding = true;
+                this.m_Expanding = true;
                 try
                 {
                     return this.Parent.ReplaceAllInString(this.Url);
                 }
                 finally
                 {
-                    m_Expanding = false;
+                    this.m_Expanding = false;
                 }
             }
         }
@@ -268,13 +268,7 @@ namespace Ketarin
         /// <summary>
         /// Gets whether or not the variable is properly defined.
         /// </summary>
-        public bool IsEmpty
-        {
-            get
-            {
-                return (string.IsNullOrEmpty(this.Url) && this.VariableType != Type.Textual);
-            }
-        }
+        public bool IsEmpty => string.IsNullOrEmpty(this.Url) && this.VariableType != Type.Textual;
 
         #endregion
 
@@ -331,7 +325,7 @@ namespace Ketarin
                 command.Parameters.Add(new SQLiteParameter("@Url", this.Url));
                 command.Parameters.Add(new SQLiteParameter("@StartText", this.StartText));
                 command.Parameters.Add(new SQLiteParameter("@EndText", this.EndText));
-                command.Parameters.Add(new SQLiteParameter("@RegularExpression", m_Regex));
+                command.Parameters.Add(new SQLiteParameter("@RegularExpression", this.m_Regex));
                 command.Parameters.Add(new SQLiteParameter("@RegexRightToLeft", this.RegexRightToLeft));
                 command.Parameters.Add(new SQLiteParameter("@CachedContent", this.CachedContent));
                 command.Parameters.Add(new SQLiteParameter("@VariableType", this.VariableType));
@@ -426,7 +420,7 @@ namespace Ketarin
         /// </summary>
         private string Replace(string formatString, string content, ApplicationJob context = null)
         {
-            return Replace(formatString, this.Name, content, context);
+            return Replace(formatString, this.Name, content, context ?? this.Parent?.Parent);
         }
 
         /// <summary>
@@ -828,7 +822,7 @@ namespace Ketarin
         /// </summary>
         public virtual string ReplaceInString(string value)
         {
-            return ReplaceInString(value, DateTime.MinValue, false);
+            return this.ReplaceInString(value, DateTime.MinValue, false);
         }
 
         /// <summary>
@@ -837,19 +831,19 @@ namespace Ketarin
         /// </summary>
         public string GetExpandedTextualContent(DateTime fileDate)
         {
-            if (this.Parent == null || m_Expanding || string.IsNullOrEmpty(this.TextualContent))
+            if (this.Parent == null || this.m_Expanding || string.IsNullOrEmpty(this.TextualContent))
             {
                 return this.TextualContent;
             }
 
-            m_Expanding = true;
+            this.m_Expanding = true;
             try
             {
                 return this.Parent.ReplaceAllInString(this.TextualContent, fileDate, string.Empty, false);
             }
             finally
             {
-                m_Expanding = false;
+                this.m_Expanding = false;
             }
         }
 
@@ -859,7 +853,7 @@ namespace Ketarin
         /// <returns></returns>
         public Regex CreateRegex()
         {
-            if (this.VariableType != Type.RegularExpression || string.IsNullOrEmpty(m_Regex))
+            if (this.VariableType != Type.RegularExpression || string.IsNullOrEmpty(this.m_Regex))
             {
                 return null;
             }
@@ -871,7 +865,7 @@ namespace Ketarin
                 {
                     options |= RegexOptions.RightToLeft;
                 }
-                return new Regex(ExpandedRegex, options);
+                return new Regex(this.ExpandedRegex, options);
             }
             catch (ArgumentException)
             {
@@ -891,34 +885,34 @@ namespace Ketarin
             // Global variable only has static content
             if (onlyCached)
             {
-                return (this.CachedContent == null) ? value : Replace(value, this.CachedContent, this.Parent == null ? null : this.Parent.Parent);
+                return (this.CachedContent == null) ? value : this.Replace(value, this.CachedContent, this.Parent?.Parent);
             }
 
             // Ignore missing URLs etc.
-            if (IsEmpty) return value;
+            if (this.IsEmpty) return value;
 
             // Using textual content?
             if (this.VariableType == Type.Textual)
             {
-                this.CachedContent = GetExpandedTextualContent(fileDate);
+                this.CachedContent = this.GetExpandedTextualContent(fileDate);
                 LogDialog.Log(this, value, this.CachedContent);
-                return Replace(value, this.CachedContent, this.Parent == null ? null : this.Parent.Parent);
+                return this.Replace(value, this.CachedContent, this.Parent?.Parent);
             }
 
             string page = string.Empty;
             // Get the content we need to put in
-            string userAgent = (this.Parent == null) ? null : this.Parent.Parent.Variables.ReplaceAllInString(this.Parent.Parent.UserAgent);
+            string userAgent = this.Parent?.Parent.Variables.ReplaceAllInString(this.Parent.Parent.UserAgent);
             using (WebClient client = new WebClient(userAgent))
             {
                 try
                 {
-                    string url = ExpandedUrl;
+                    string url = this.ExpandedUrl;
                     client.SetPostData(this);
                     page = client.DownloadString(url);
                 }
                 catch (ArgumentException)
                 {
-                    throw new UriFormatException("The URL '" + Url + "' of variable '" + this.Name + "' is not valid.");
+                    throw new UriFormatException("The URL '" + this.Url + "' of variable '" + this.Name + "' is not valid.");
                 }
                 this.DownloadCount++;
             }
@@ -930,7 +924,7 @@ namespace Ketarin
             // Using a regular expression?
             if (this.VariableType == Type.RegularExpression)
             {
-                Regex regex = CreateRegex();
+                Regex regex = this.CreateRegex();
                 if (regex == null) return value;
 
                 Match match = regex.Match(page);
@@ -940,7 +934,7 @@ namespace Ketarin
                     {
                         this.CachedContent = match.Value;
                         LogDialog.Log(this, value, this.CachedContent);
-                        return Replace(value, match.Value);
+                        return this.Replace(value, match.Value);
                     }
                     else if (match.Groups.Count >= 2)
                     {
@@ -951,20 +945,20 @@ namespace Ketarin
                             {
                                 this.CachedContent = match.Groups[i].Value;
                                 LogDialog.Log(this, value, this.CachedContent);
-                                return Replace(value, match.Groups[i].Value);
+                                return this.Replace(value, match.Groups[i].Value);
                             }
                         }
 
                         // No group matches, use complete match
                         this.CachedContent = match.Groups[0].Value;
                         LogDialog.Log(this, value, this.CachedContent);
-                        return Replace(value, match.Groups[0].Value);
+                        return this.Replace(value, match.Groups[0].Value);
                     }
                 }
                 else
                 {
                     // No regex match should yield an empty result
-                    return Replace(value, string.Empty);
+                    return this.Replace(value, string.Empty);
                 }
             }
 
@@ -973,7 +967,7 @@ namespace Ketarin
             {
                 this.CachedContent = page;
                 LogDialog.Log(this, value, this.CachedContent);
-                return Replace(value, page);
+                return this.Replace(value, page);
             }
 
             int startPos = page.IndexOf(this.StartText);
@@ -988,7 +982,7 @@ namespace Ketarin
 
             this.CachedContent = result;
             LogDialog.Log(this, value, this.CachedContent);
-            value = Replace(value, result);
+            value = this.Replace(value, result);
 
             return value;
         }
