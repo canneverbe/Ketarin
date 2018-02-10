@@ -610,6 +610,26 @@ namespace Ketarin
         /// <returns>true, if a new update has been found and downloaded, false otherwise</returns>
         protected Status DoDownload(ApplicationJob job, out string requestedUrl)
         {
+            // Lower security policies
+            try
+            {
+                ServicePointManager.CheckCertificateRevocationList = false;
+            }
+            catch (PlatformNotSupportedException)
+            {
+                // .NET bug under special circumstances
+            }
+
+            ServicePointManager.ServerCertificateValidationCallback = delegate {
+                return true;
+            };
+
+            ServicePointManager.SecurityProtocol = DefaultHttpProtocols;
+
+            // If we want to download multiple files simultaneously
+            // from the same server, we need to "remove" the connection limit.
+            ServicePointManager.DefaultConnectionLimit = 50;
+
             string downloadUrl;
             if (job.DownloadSourceType == ApplicationJob.SourceType.FileHippo)
             {
@@ -651,26 +671,6 @@ namespace Ketarin
         /// <returns>true, if a new update has been found and downloaded, false otherwise</returns>
         protected Status DoDownload(ApplicationJob job, Uri urlToRequest)
         {
-            // Lower security policies
-            try
-            {
-                ServicePointManager.CheckCertificateRevocationList = false;
-            }
-            catch (PlatformNotSupportedException)
-            {
-                // .NET bug under special circumstances
-            }
-
-            ServicePointManager.ServerCertificateValidationCallback = delegate {
-                return true;
-            };
-
-            ServicePointManager.SecurityProtocol = DefaultHttpProtocols;
-
-            // If we want to download multiple files simultaneously
-            // from the same server, we need to "remove" the connection limit.
-            ServicePointManager.DefaultConnectionLimit = 50;
-
             // Determine number of segments to create
             int segmentCount = Convert.ToInt32(Settings.GetValue("SegmentCount", 1));
 
