@@ -866,6 +866,5 @@ namespace Ketarin
                 transaction.Commit();
             }
         }
-
     }
 }

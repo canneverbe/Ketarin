@@ -13,61 +13,31 @@ namespace Ketarin
     /// The modified WebClient used by Ketarin for 
     /// downloads. Submits a valid user agent by default.
     /// </summary>
-    class WebClient : System.Net.WebClient
+    internal class WebClient : System.Net.WebClient
     {
-        private string m_PostData = string.Empty;
-        private string m_ReplacementString = string.Empty;
-        private static string m_UserAgent;
-        private Uri m_ResponseUri;
-
+        private static string defaultUserAgent;
+        private string replacementString = string.Empty;
+        
         #region Properties
 
         /// <summary>
         /// If the WebClient has been redirected after a request,
         /// this specifies the new URL.
         /// </summary>
-        public Uri ResponseUri
-        {
-            get { return m_ResponseUri; }
-        }
+        public Uri ResponseUri { get; private set; }
 
         /// <summary>
         /// Gets the plain POST data which is being ursed for a request.
         /// </summary>
-        public string PostData
-        {
-            get { return m_PostData; }
-        }
+        public string PostData { get; private set; } = string.Empty;
 
         /// <summary>
-        /// Gets a user agent. To prevent websites from
-        /// blocking Ketarin, we'll just use some random
-        /// Internet Explorer / Firefox user agents.
+        /// Default user agent for all requests.
         /// </summary>
-        public static string UserAgent
+        public static string DefaultUserAgent
         {
-            get
-            {
-                if (m_UserAgent == null)
-                {
-                    List<string> userAgents = new List<string>
-                    {
-                        "Mozilla/5.0 (Windows; U; MSIE 7.0; Windows NT 6.0; en-US)",
-                        "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0;)",
-                        "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1)",
-                        "Mozilla/4.0 (Windows; MSIE 6.0; Windows NT 6.0)",
-                        "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.6pre) Gecko/2009011606 Firefox/3.1",
-                        "Mozilla/5.0 (Windows; U; Windows NT 7.0; en-US; rv:1.9.0.6) Gecko/2009011913 Firefox/3.0.6",
-                        "Mozilla/5.0 (Windows; U; Windows NT 6.0; de; rv:1.9.0.6) Gecko/2009011913 Firefox/3.0.6 (.NET CLR 3.5.30729)"
-                    };
-
-                    Random rand = new Random();
-                    int index = rand.Next() % userAgents.Count;
-                    m_UserAgent = userAgents[index];
-                }
-
-                return m_UserAgent;
-            }
+            get { return defaultUserAgent ?? (defaultUserAgent = Settings.GetValue("DefaultUserAgent", "Mozilla/4.0 (compatible; Ketarin; +https://ketarin.org/)") as string); }
+            set { defaultUserAgent = value; }
         }
 
         #endregion
@@ -80,9 +50,8 @@ namespace Ketarin
         }
 
         public WebClient(string userAgent)
-            : base()
         {
-            Headers.Add("User-Agent", userAgent ?? UserAgent);
+            this.Headers.Add("User-Agent", string.IsNullOrEmpty(userAgent) ? DefaultUserAgent : userAgent);
 
             // MS Bugfix - https://connect.microsoft.com/VisualStudio/feedback/details/386695/system-uri-incorrectly-strips-trailing-dots?wa=wsignin1.0#
             MethodInfo getSyntax = typeof(UriParser).GetMethod("GetSyntax", BindingFlags.Static | BindingFlags.NonPublic);
@@ -122,13 +91,13 @@ namespace Ketarin
             Updater.AddRequestToCancel(request);
 
             // Need to append POST data?
-            if (!string.IsNullOrEmpty(m_PostData))
+            if (!string.IsNullOrEmpty(this.PostData))
             {
                 request.Method = "POST";
                 request.ContentType = "application/x-www-form-urlencoded";
 
                 Stream newStream = request.GetRequestStream();
-                byte[] bytes = Encoding.ASCII.GetBytes(m_PostData);
+                byte[] bytes = Encoding.ASCII.GetBytes(this.PostData);
                 newStream.Write(bytes, 0, bytes.Length);
                 newStream.Close();
             }
@@ -140,7 +109,7 @@ namespace Ketarin
         {
             try
             {
-                return DownloadString(new Uri(address));
+                return this.DownloadString(new Uri(address));
             }
             catch (UriFormatException)
             {
@@ -150,7 +119,7 @@ namespace Ketarin
 
         public new string DownloadString(Uri address)
         {
-            m_ReplacementString = string.Empty;
+            this.replacementString = string.Empty;
 
             try
             {
@@ -172,9 +141,9 @@ namespace Ketarin
                     }
                 }
 
-                if (!string.IsNullOrEmpty(m_ReplacementString))
+                if (!string.IsNullOrEmpty(this.replacementString))
                 {
-                    return m_ReplacementString;
+                    return this.replacementString;
                 }
 
                 throw;
@@ -189,14 +158,14 @@ namespace Ketarin
 
             if (httpResponse != null)
             {
-                m_ResponseUri = httpResponse.ResponseUri;
+                this.ResponseUri = httpResponse.ResponseUri;
             }
 
             // If binary contents are sent, output information about the download
             if (httpResponse != null && response.ContentType == "application/octet-stream" && response.ContentLength > 100000)
             {
-                m_ReplacementString = "ResponseUri: " + httpResponse.ResponseUri + "\r\n";
-                m_ReplacementString += httpResponse.Headers.ToString();
+                this.replacementString = "ResponseUri: " + httpResponse.ResponseUri + "\r\n";
+                this.replacementString += httpResponse.Headers.ToString();
                 return null;
             }
             return response;
@@ -275,7 +244,7 @@ namespace Ketarin
                 sb.Append(HttpUtility.UrlEncode(keyValue[0]) + "=" + HttpUtility.UrlEncode(keyValue[1]) + "&");
             }
 
-            m_PostData = sb.ToString().TrimEnd('&');
+            this.PostData = sb.ToString().TrimEnd('&');
         }
 
         /// <summary>
