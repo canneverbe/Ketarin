@@ -169,7 +169,7 @@ namespace MyDownloader.Extension.Protocols
                 LogDialog.Log(job,
                     "Using referer: " + (string.IsNullOrEmpty(httpRequest.Referer) ? "(none)" : httpRequest.Referer));
                 httpRequest.UserAgent = string.IsNullOrEmpty(job.UserAgent)
-                    ? WebClient.UserAgent
+                    ? WebClient.DefaultUserAgent
                     : job.Variables.ReplaceAllInString(job.UserAgent);
 
                 // PAD files may be compressed

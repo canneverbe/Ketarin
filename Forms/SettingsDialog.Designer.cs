@@ -64,6 +64,10 @@ namespace Ketarin.Forms
             this.chkMinToTray = new System.Windows.Forms.CheckBox();
             this.chkUpdateOnlineDatabase = new System.Windows.Forms.CheckBox();
             this.tpConnection = new System.Windows.Forms.TabPage();
+            this.txtUserAgent = new Ketarin.Forms.TextBox();
+            this.nNumSegments = new System.Windows.Forms.NumericUpDown();
+            this.lblUserAgent = new System.Windows.Forms.Label();
+            this.lblSegments = new System.Windows.Forms.Label();
             this.sepProxy = new CDBurnerXP.Controls.Separator();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.gridGlobalVariables = new System.Windows.Forms.DataGridView();
@@ -80,8 +84,6 @@ namespace Ketarin.Forms
             this.lbActions = new System.Windows.Forms.ListBox();
             this.bExport = new System.Windows.Forms.Button();
             this.bImport = new System.Windows.Forms.Button();
-            this.nNumSegments = new System.Windows.Forms.NumericUpDown();
-            this.lblSegments = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.nConnectionTimeout)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nProxyPort)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nNumThreads)).BeginInit();
@@ -90,11 +92,11 @@ namespace Ketarin.Forms
             this.tpGeneral.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.olvCustomColumns)).BeginInit();
             this.tpConnection.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nNumSegments)).BeginInit();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridGlobalVariables)).BeginInit();
             this.tpCommands.SuspendLayout();
             this.tpHotkeys.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nNumSegments)).BeginInit();
             this.SuspendLayout();
             // 
             // bCancel
@@ -186,25 +188,25 @@ namespace Ketarin.Forms
             // lblServer
             // 
             this.lblServer.AutoSize = true;
-            this.lblServer.Location = new System.Drawing.Point(15, 148);
+            this.lblServer.Location = new System.Drawing.Point(15, 172);
             this.lblServer.Name = "lblServer";
             this.lblServer.Size = new System.Drawing.Size(41, 13);
-            this.lblServer.TabIndex = 10;
+            this.lblServer.TabIndex = 12;
             this.lblServer.Text = "&Server:";
             // 
             // txtProxyServer
             // 
             this.txtProxyServer.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtProxyServer.Location = new System.Drawing.Point(82, 145);
+            this.txtProxyServer.Location = new System.Drawing.Point(82, 169);
             this.txtProxyServer.Name = "txtProxyServer";
             this.txtProxyServer.Size = new System.Drawing.Size(242, 20);
-            this.txtProxyServer.TabIndex = 11;
+            this.txtProxyServer.TabIndex = 13;
             // 
             // nProxyPort
             // 
             this.nProxyPort.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.nProxyPort.Location = new System.Drawing.Point(330, 145);
+            this.nProxyPort.Location = new System.Drawing.Point(330, 169);
             this.nProxyPort.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -212,43 +214,43 @@ namespace Ketarin.Forms
             0});
             this.nProxyPort.Name = "nProxyPort";
             this.nProxyPort.Size = new System.Drawing.Size(48, 20);
-            this.nProxyPort.TabIndex = 12;
+            this.nProxyPort.TabIndex = 14;
             // 
             // lblProxyUser
             // 
             this.lblProxyUser.AutoSize = true;
-            this.lblProxyUser.Location = new System.Drawing.Point(15, 174);
+            this.lblProxyUser.Location = new System.Drawing.Point(15, 198);
             this.lblProxyUser.Name = "lblProxyUser";
             this.lblProxyUser.Size = new System.Drawing.Size(61, 13);
-            this.lblProxyUser.TabIndex = 13;
+            this.lblProxyUser.TabIndex = 15;
             this.lblProxyUser.Text = "Us&er name:";
             // 
             // txtProxyUser
             // 
             this.txtProxyUser.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtProxyUser.Location = new System.Drawing.Point(82, 171);
+            this.txtProxyUser.Location = new System.Drawing.Point(82, 195);
             this.txtProxyUser.Name = "txtProxyUser";
             this.txtProxyUser.Size = new System.Drawing.Size(296, 20);
-            this.txtProxyUser.TabIndex = 14;
+            this.txtProxyUser.TabIndex = 16;
             // 
             // lblProxyPassword
             // 
             this.lblProxyPassword.AutoSize = true;
-            this.lblProxyPassword.Location = new System.Drawing.Point(15, 200);
+            this.lblProxyPassword.Location = new System.Drawing.Point(15, 224);
             this.lblProxyPassword.Name = "lblProxyPassword";
             this.lblProxyPassword.Size = new System.Drawing.Size(56, 13);
-            this.lblProxyPassword.TabIndex = 15;
+            this.lblProxyPassword.TabIndex = 17;
             this.lblProxyPassword.Text = "&Password:";
             // 
             // txtProxyPassword
             // 
             this.txtProxyPassword.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtProxyPassword.Location = new System.Drawing.Point(82, 197);
+            this.txtProxyPassword.Location = new System.Drawing.Point(82, 221);
             this.txtProxyPassword.Name = "txtProxyPassword";
             this.txtProxyPassword.Size = new System.Drawing.Size(296, 20);
-            this.txtProxyPassword.TabIndex = 16;
+            this.txtProxyPassword.TabIndex = 18;
             this.txtProxyPassword.UseSystemPasswordChar = true;
             // 
             // lblNumThreads
@@ -445,9 +447,9 @@ namespace Ketarin.Forms
             this.chkOpenWebsite.AutoSize = true;
             this.chkOpenWebsite.Location = new System.Drawing.Point(8, 126);
             this.chkOpenWebsite.Name = "chkOpenWebsite";
-            this.chkOpenWebsite.Size = new System.Drawing.Size(337, 17);
+            this.chkOpenWebsite.Size = new System.Drawing.Size(322, 17);
             this.chkOpenWebsite.TabIndex = 5;
-            this.chkOpenWebsite.Text = "Ope&n website when double-clicking on an application (if specified)";
+            this.chkOpenWebsite.Text = "Ope&n website when double-clicking an application (if specified)";
             this.chkOpenWebsite.UseVisualStyleBackColor = true;
             // 
             // chkBackups
@@ -482,7 +484,9 @@ namespace Ketarin.Forms
             // 
             // tpConnection
             // 
+            this.tpConnection.Controls.Add(this.txtUserAgent);
             this.tpConnection.Controls.Add(this.nNumSegments);
+            this.tpConnection.Controls.Add(this.lblUserAgent);
             this.tpConnection.Controls.Add(this.lblSegments);
             this.tpConnection.Controls.Add(this.nConnectionTimeout);
             this.tpConnection.Controls.Add(this.txtProxyPassword);
@@ -507,14 +511,65 @@ namespace Ketarin.Forms
             this.tpConnection.Text = "Connection";
             this.tpConnection.UseVisualStyleBackColor = true;
             // 
+            // txtUserAgent
+            // 
+            this.txtUserAgent.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtUserAgent.Location = new System.Drawing.Point(187, 113);
+            this.txtUserAgent.Name = "txtUserAgent";
+            this.txtUserAgent.Size = new System.Drawing.Size(191, 20);
+            this.txtUserAgent.TabIndex = 10;
+            // 
+            // nNumSegments
+            // 
+            this.nNumSegments.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.nNumSegments.Location = new System.Drawing.Point(187, 87);
+            this.nNumSegments.Maximum = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            this.nNumSegments.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nNumSegments.Name = "nNumSegments";
+            this.nNumSegments.Size = new System.Drawing.Size(46, 20);
+            this.nNumSegments.TabIndex = 8;
+            this.nNumSegments.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // lblUserAgent
+            // 
+            this.lblUserAgent.AutoSize = true;
+            this.lblUserAgent.Location = new System.Drawing.Point(7, 116);
+            this.lblUserAgent.Name = "lblUserAgent";
+            this.lblUserAgent.Size = new System.Drawing.Size(97, 13);
+            this.lblUserAgent.TabIndex = 9;
+            this.lblUserAgent.Text = "&Default user agent:";
+            // 
+            // lblSegments
+            // 
+            this.lblSegments.AutoSize = true;
+            this.lblSegments.Location = new System.Drawing.Point(7, 89);
+            this.lblSegments.Name = "lblSegments";
+            this.lblSegments.Size = new System.Drawing.Size(174, 13);
+            this.lblSegments.TabIndex = 7;
+            this.lblSegments.Text = "Number &of segments per download:";
+            // 
             // sepProxy
             // 
             this.sepProxy.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.sepProxy.Location = new System.Drawing.Point(3, 117);
+            this.sepProxy.Location = new System.Drawing.Point(3, 141);
             this.sepProxy.Name = "sepProxy";
             this.sepProxy.Size = new System.Drawing.Size(375, 23);
-            this.sepProxy.TabIndex = 9;
+            this.sepProxy.TabIndex = 11;
             this.sepProxy.Text = "HTTP proxy settings";
             // 
             // tabPage1
@@ -690,39 +745,6 @@ namespace Ketarin.Forms
             this.bImport.UseVisualStyleBackColor = true;
             this.bImport.Click += new System.EventHandler(this.bImport_Click);
             // 
-            // nNumSegments
-            // 
-            this.nNumSegments.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.nNumSegments.Location = new System.Drawing.Point(187, 87);
-            this.nNumSegments.Maximum = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
-            this.nNumSegments.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.nNumSegments.Name = "nNumSegments";
-            this.nNumSegments.Size = new System.Drawing.Size(46, 20);
-            this.nNumSegments.TabIndex = 8;
-            this.nNumSegments.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            // 
-            // lblSegments
-            // 
-            this.lblSegments.AutoSize = true;
-            this.lblSegments.Location = new System.Drawing.Point(7, 89);
-            this.lblSegments.Name = "lblSegments";
-            this.lblSegments.Size = new System.Drawing.Size(174, 13);
-            this.lblSegments.TabIndex = 7;
-            this.lblSegments.Text = "Number &of segments per download:";
-            // 
             // SettingsDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -751,6 +773,7 @@ namespace Ketarin.Forms
             ((System.ComponentModel.ISupportInitialize)(this.olvCustomColumns)).EndInit();
             this.tpConnection.ResumeLayout(false);
             this.tpConnection.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nNumSegments)).EndInit();
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridGlobalVariables)).EndInit();
@@ -758,7 +781,6 @@ namespace Ketarin.Forms
             this.tpCommands.PerformLayout();
             this.tpHotkeys.ResumeLayout(false);
             this.tpHotkeys.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nNumSegments)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -815,5 +837,7 @@ namespace Ketarin.Forms
         private Label lblHotkey;
         private NumericUpDown nNumSegments;
         private Label lblSegments;
+        private TextBox txtUserAgent;
+        private Label lblUserAgent;
     }
 }
