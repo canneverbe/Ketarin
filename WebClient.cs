@@ -152,6 +152,15 @@ namespace Ketarin
 
         protected override WebResponse GetWebResponse(WebRequest request)
         {
+            FtpWebRequest ftpRequest = request as FtpWebRequest;
+            if (ftpRequest != null)
+            {
+                if (request.RequestUri.LocalPath.EndsWith("/"))
+                {
+                    ftpRequest.Method = "LIST";
+                }
+            }
+
             WebResponse response = base.GetWebResponse(request);
             
             HttpWebResponse httpResponse = response as HttpWebResponse;
