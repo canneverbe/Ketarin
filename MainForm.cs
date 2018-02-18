@@ -433,9 +433,11 @@ namespace Ketarin
                 {
                     if (string.IsNullOrEmpty(newCol.Tag as string)) return null;
 
+                    bool forceEval = newCol.Name.StartsWith("!");
                     string varFind = "{" + ((string)newCol.Tag).TrimStart('{').TrimEnd('}') + "}";
-                    string value = ((ApplicationJob)x).Variables.ReplaceAllInString(varFind, DateTime.MinValue, null, true);
-                    return (varFind == value) ? string.Empty : value;
+
+                    string value = ((ApplicationJob)x).Variables.ReplaceAllInString(varFind, DateTime.MinValue, null, !forceEval);
+                    return varFind == value ? string.Empty : value;
                 };
             }
 
