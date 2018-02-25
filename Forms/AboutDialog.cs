@@ -22,7 +22,7 @@ namespace Ketarin.Forms
             base.OnLoad(e);
 
             lblVersion.Text = Application.ProductVersion;
-            lblDatabasePath.Text = Utility.CompactString(DbManager.DatabasePath, Width - 150, Font, "");
+            lblDatabasePath.Text = Utility.CompactString(DbManager.DatabasePath, Width - 170, Font, "");
             lblDatabasePath.Url = Path.GetDirectoryName(DbManager.DatabasePath);
             txtAuthor.Text = Settings.GetValue("AuthorGuid").ToString().ToUpper();
         }

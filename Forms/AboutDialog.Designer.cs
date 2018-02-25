@@ -37,14 +37,14 @@ namespace Ketarin.Forms
             this.lblInfo = new System.Windows.Forms.Label();
             this.lblVersionDesc = new System.Windows.Forms.Label();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.lblAuthor = new System.Windows.Forms.Label();
             this.lblDatabase = new System.Windows.Forms.Label();
             this.lblVersion = new System.Windows.Forms.Label();
             this.lblLicense = new System.Windows.Forms.Label();
             this.lblImagesExcluded = new System.Windows.Forms.Label();
             this.lblWebsite = new System.Windows.Forms.Label();
-            this.picIcon = new System.Windows.Forms.PictureBox();
-            this.lblAuthor = new System.Windows.Forms.Label();
             this.txtAuthor = new System.Windows.Forms.TextBox();
+            this.picIcon = new System.Windows.Forms.PictureBox();
             this.lblDatabasePath = new CDBurnerXP.Controls.WebLink();
             this.webLink1 = new CDBurnerXP.Controls.WebLink();
             this.lnkGPL = new CDBurnerXP.Controls.WebLink();
@@ -55,7 +55,7 @@ namespace Ketarin.Forms
             // bClose
             // 
             this.bClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.bClose.Location = new System.Drawing.Point(304, 165);
+            this.bClose.Location = new System.Drawing.Point(319, 165);
             this.bClose.Name = "bClose";
             this.bClose.Size = new System.Drawing.Size(75, 23);
             this.bClose.TabIndex = 0;
@@ -65,7 +65,7 @@ namespace Ketarin.Forms
             // lblInfo
             // 
             this.lblInfo.AutoSize = true;
-            this.lblInfo.Location = new System.Drawing.Point(70, 9);
+            this.lblInfo.Location = new System.Drawing.Point(67, 9);
             this.lblInfo.Name = "lblInfo";
             this.lblInfo.Size = new System.Drawing.Size(227, 13);
             this.lblInfo.TabIndex = 1;
@@ -83,11 +83,11 @@ namespace Ketarin.Forms
             // 
             // tableLayoutPanel1
             // 
-            this.tableLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.tableLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.tableLayoutPanel1.ColumnCount = 2;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.Controls.Add(this.lblAuthor, 0, 5);
             this.tableLayoutPanel1.Controls.Add(this.lblDatabasePath, 1, 4);
             this.tableLayoutPanel1.Controls.Add(this.lblDatabase, 0, 4);
@@ -99,7 +99,7 @@ namespace Ketarin.Forms
             this.tableLayoutPanel1.Controls.Add(this.lblImagesExcluded, 1, 2);
             this.tableLayoutPanel1.Controls.Add(this.lblWebsite, 0, 3);
             this.tableLayoutPanel1.Controls.Add(this.txtAuthor, 1, 5);
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(67, 27);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(64, 27);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 6;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -108,8 +108,18 @@ namespace Ketarin.Forms
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(312, 132);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(330, 132);
             this.tableLayoutPanel1.TabIndex = 6;
+            // 
+            // lblAuthor
+            // 
+            this.lblAuthor.AutoSize = true;
+            this.lblAuthor.Location = new System.Drawing.Point(3, 104);
+            this.lblAuthor.Name = "lblAuthor";
+            this.lblAuthor.Padding = new System.Windows.Forms.Padding(0, 2, 2, 2);
+            this.lblAuthor.Size = new System.Drawing.Size(43, 17);
+            this.lblAuthor.TabIndex = 10;
+            this.lblAuthor.Text = "&Author:";
             // 
             // lblDatabase
             // 
@@ -142,12 +152,12 @@ namespace Ketarin.Forms
             // 
             // lblImagesExcluded
             // 
-            this.lblImagesExcluded.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblImagesExcluded.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.lblImagesExcluded.Location = new System.Drawing.Point(67, 38);
             this.lblImagesExcluded.Name = "lblImagesExcluded";
-            this.lblImagesExcluded.Size = new System.Drawing.Size(242, 32);
+            this.lblImagesExcluded.Size = new System.Drawing.Size(260, 32);
             this.lblImagesExcluded.TabIndex = 5;
             this.lblImagesExcluded.Text = "This excludes the used icons, which are copyrighted by  VirtualLNK, LLC.";
             // 
@@ -161,6 +171,17 @@ namespace Ketarin.Forms
             this.lblWebsite.TabIndex = 6;
             this.lblWebsite.Text = "Website:";
             // 
+            // txtAuthor
+            // 
+            this.txtAuthor.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtAuthor.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtAuthor.Location = new System.Drawing.Point(67, 107);
+            this.txtAuthor.Name = "txtAuthor";
+            this.txtAuthor.ReadOnly = true;
+            this.txtAuthor.Size = new System.Drawing.Size(260, 13);
+            this.txtAuthor.TabIndex = 11;
+            // 
             // picIcon
             // 
             this.picIcon.Image = ((System.Drawing.Image)(resources.GetObject("picIcon.Image")));
@@ -170,31 +191,11 @@ namespace Ketarin.Forms
             this.picIcon.TabIndex = 7;
             this.picIcon.TabStop = false;
             // 
-            // lblAuthor
-            // 
-            this.lblAuthor.AutoSize = true;
-            this.lblAuthor.Location = new System.Drawing.Point(3, 104);
-            this.lblAuthor.Name = "lblAuthor";
-            this.lblAuthor.Padding = new System.Windows.Forms.Padding(0, 2, 2, 2);
-            this.lblAuthor.Size = new System.Drawing.Size(43, 17);
-            this.lblAuthor.TabIndex = 10;
-            this.lblAuthor.Text = "&Author:";
-            // 
-            // txtAuthor
-            // 
-            this.txtAuthor.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtAuthor.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.txtAuthor.Location = new System.Drawing.Point(67, 107);
-            this.txtAuthor.Name = "txtAuthor";
-            this.txtAuthor.ReadOnly = true;
-            this.txtAuthor.Size = new System.Drawing.Size(242, 13);
-            this.txtAuthor.TabIndex = 11;
-            // 
             // lblDatabasePath
             // 
             this.lblDatabasePath.AutoSize = true;
             this.lblDatabasePath.Location = new System.Drawing.Point(67, 87);
+            this.lblDatabasePath.Margin = new System.Windows.Forms.Padding(3, 0, 6, 0);
             this.lblDatabasePath.Name = "lblDatabasePath";
             this.lblDatabasePath.Padding = new System.Windows.Forms.Padding(0, 2, 0, 0);
             this.lblDatabasePath.Size = new System.Drawing.Size(0, 15);
@@ -231,7 +232,7 @@ namespace Ketarin.Forms
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(391, 200);
+            this.ClientSize = new System.Drawing.Size(406, 200);
             this.Controls.Add(this.picIcon);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.lblInfo);
