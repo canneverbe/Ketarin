@@ -31,8 +31,9 @@ namespace Ketarin.Forms
 
         private LogDialog()
         {
-            InitializeComponent();
+            this.InitializeComponent();
             m_Instance = this;
+            this.txtLog.ContextMenu = this.contextMenu;
         }
 
         protected override void OnClosing(CancelEventArgs e)
@@ -40,18 +41,18 @@ namespace Ketarin.Forms
             base.OnClosing(e);
 
             e.Cancel = true;
-            Hide();
+            this.Hide();
         }
 
         protected override void OnVisibleChanged(EventArgs e)
         {
             base.OnVisibleChanged(e);
 
-            if (Visible)
+            if (this.Visible)
             {
                 while (m_Log.Count > 0)
                 {
-                    AppendText(m_Log.Dequeue());
+                    this.AppendText(m_Log.Dequeue());
                 }
 
                 m_Instance.txtLog.SelectionStart = m_Instance.txtLog.Text.Length;
@@ -89,7 +90,7 @@ namespace Ketarin.Forms
 
         public static void Log(UrlVariable var, string url, string replacement)
         {
-            string prepend = (var.Parent == null || var.Parent.Parent == null) ? "" : var.Parent.Parent.Name + ": ";
+            string prepend = (var.Parent?.Parent == null) ? "" : var.Parent.Parent.Name + ": ";
             Log(prepend + "Replacing {" + var.Name + "} in '" + url + "' with '" + replacement + "'");
         }
 
@@ -118,7 +119,7 @@ namespace Ketarin.Forms
 
             lock (m_Log)
             {
-                text = DateTime.Now.ToString() + ": " + text;
+                text = DateTime.Now + ": " + text;
                 m_Log.Enqueue(text);
                 m_FullLog.Add(text);
 
@@ -133,21 +134,23 @@ namespace Ketarin.Forms
             }
         }
 
+        #endregion
+
         private void AddToTextBox(string text)
         {
-            if (InvokeRequired)
+            if (this.InvokeRequired)
             {
-                BeginInvoke((MethodInvoker)delegate()
+                this.BeginInvoke((MethodInvoker)delegate
                 {
-                    AddToTextBox(text);
+                    this.AddToTextBox(text);
                 });
             }
             else
             {
-                if (Visible) {
-                    AppendText(text);
+                if (this.Visible) {
+                    this.AppendText(text);
 
-                    txtLog.SelectionStart = m_Instance.txtLog.Text.Length;
+                    this.txtLog.SelectionStart = m_Instance.txtLog.Text.Length;
                 }
             }
         }
@@ -156,11 +159,19 @@ namespace Ketarin.Forms
         {
             if (text != null)
             {
-                txtLog.AppendText(text);
-                txtLog.AppendText(Environment.NewLine);
+                this.txtLog.AppendText(text);
+                this.txtLog.AppendText(Environment.NewLine);
             }
         }
 
-        #endregion
+        private void mnuClearLog_Click(object sender, EventArgs e)
+        {
+            lock (m_Log)
+            {
+                m_Log.Clear();
+                m_FullLog.Clear();
+                this.txtLog.Clear();
+            }
+        }
     }
 }
