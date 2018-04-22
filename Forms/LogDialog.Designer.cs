@@ -30,7 +30,9 @@ namespace Ketarin.Forms
         /// </summary>
         private void InitializeComponent()
         {
-            this.txtLog = new TextBox();
+            this.txtLog = new Ketarin.Forms.TextBox();
+            this.contextMenu = new System.Windows.Forms.ContextMenu();
+            this.mnuClearLog = new System.Windows.Forms.MenuItem();
             this.SuspendLayout();
             // 
             // txtLog
@@ -47,6 +49,18 @@ namespace Ketarin.Forms
             this.txtLog.Size = new System.Drawing.Size(464, 264);
             this.txtLog.TabIndex = 1;
             this.txtLog.WordWrap = false;
+            // 
+            // contextMenu
+            // 
+            this.contextMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.mnuClearLog});
+            // 
+            // mnuClearLog
+            // 
+            this.mnuClearLog.Index = 0;
+            this.mnuClearLog.Shortcut = System.Windows.Forms.Shortcut.CtrlQ;
+            this.mnuClearLog.Text = "&Clear log";
+            this.mnuClearLog.Click += new System.EventHandler(this.mnuClearLog_Click);
             // 
             // LogDialog
             // 
@@ -68,5 +82,7 @@ namespace Ketarin.Forms
         #endregion
 
         private TextBox txtLog;
+        private System.Windows.Forms.ContextMenu contextMenu;
+        private System.Windows.Forms.MenuItem mnuClearLog;
     }
 }
