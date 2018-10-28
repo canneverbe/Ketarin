@@ -454,7 +454,7 @@ namespace Ketarin
                     startAt = pos + replaceValue.Length;
                     formatString = formatString.Insert(pos, replaceValue);
                 }
-                catch (VariableIsEmptyException ex)
+                catch (VariableIsEmptyException)
                 {
                     throw new VariableIsEmptyException(string.Format("Variable \"{0}\" is empty.", varname));
                 }

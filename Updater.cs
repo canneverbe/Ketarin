@@ -30,7 +30,6 @@ namespace Ketarin
         private readonly Dictionary<ApplicationJob, Status> m_Status = new Dictionary<ApplicationJob,Status>();
         private readonly Dictionary<ApplicationJob, long> m_Size = new Dictionary<ApplicationJob, long>();
         private bool m_CancelUpdates;
-        private bool m_IsBusy;
         protected int m_LastProgress = -1;
         private List<ApplicationJobError> m_Errors;
         private byte m_NoProgressCounter;
@@ -76,13 +75,7 @@ namespace Ketarin
         /// <summary>
         /// Gets whether or not the updating process is still ongoing.
         /// </summary>
-        public bool IsBusy
-        {
-            get
-            {
-                return m_IsBusy;
-            }
-        }
+        public bool IsBusy { get; private set; }
 
         #endregion
 
@@ -279,7 +272,7 @@ namespace Ketarin
         /// <param name="onlyCheck">Specifies whether or not to download the updates</param>
         public void BeginUpdate(ApplicationJob[] jobs, bool onlyCheck, bool installUpdated)
         {
-            m_IsBusy = true;
+            IsBusy = true;
             m_Jobs = jobs;
             m_ThreadLimit = Convert.ToInt32(Settings.GetValue("ThreadCount", 2));
             m_OnlyCheck = onlyCheck;
@@ -433,7 +426,7 @@ namespace Ketarin
             }
             finally
             {
-                m_IsBusy = false;
+                IsBusy = false;
                 m_Progress.Clear();
                 m_Size.Clear();
                 OnUpdateCompleted();
@@ -698,9 +691,14 @@ namespace Ketarin
                             return this.DoDownload(job, new Uri(padJob.FixedDownloadUrl));
                         }
                     }
+
                     if (response.ContentType.StartsWith("text/html"))
                     {
-                        throw NonBinaryFileException.Create(response.ContentType, httpResponse.StatusCode);
+                        bool avoidNonBinary = (bool)Settings.GetValue("AvoidDownloadingNonBinaryFiles", true);
+                        if (httpResponse.StatusCode != HttpStatusCode.OK || avoidNonBinary)
+                        {
+                            throw NonBinaryFileException.Create(response.ContentType, httpResponse.StatusCode);
+                        }
                     }
                 }
 

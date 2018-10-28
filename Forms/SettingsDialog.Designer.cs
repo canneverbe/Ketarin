@@ -84,6 +84,7 @@ namespace Ketarin.Forms
             this.lbActions = new System.Windows.Forms.ListBox();
             this.bExport = new System.Windows.Forms.Button();
             this.bImport = new System.Windows.Forms.Button();
+            this.chkAvoidNonBinary = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.nConnectionTimeout)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nProxyPort)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nNumThreads)).BeginInit();
@@ -103,7 +104,7 @@ namespace Ketarin.Forms
             // 
             this.bCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.bCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.bCancel.Location = new System.Drawing.Point(339, 402);
+            this.bCancel.Location = new System.Drawing.Point(339, 417);
             this.bCancel.Name = "bCancel";
             this.bCancel.Size = new System.Drawing.Size(75, 23);
             this.bCancel.TabIndex = 4;
@@ -114,7 +115,7 @@ namespace Ketarin.Forms
             // 
             this.bOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.bOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.bOK.Location = new System.Drawing.Point(258, 402);
+            this.bOK.Location = new System.Drawing.Point(258, 417);
             this.bOK.Name = "bOK";
             this.bOK.Size = new System.Drawing.Size(75, 23);
             this.bOK.TabIndex = 3;
@@ -332,11 +333,12 @@ namespace Ketarin.Forms
             this.tcSettings.Location = new System.Drawing.Point(12, 12);
             this.tcSettings.Name = "tcSettings";
             this.tcSettings.SelectedIndex = 0;
-            this.tcSettings.Size = new System.Drawing.Size(402, 375);
+            this.tcSettings.Size = new System.Drawing.Size(402, 390);
             this.tcSettings.TabIndex = 0;
             // 
             // tpGeneral
             // 
+            this.tpGeneral.Controls.Add(this.chkAvoidNonBinary);
             this.tpGeneral.Controls.Add(this.bEdit);
             this.tpGeneral.Controls.Add(this.separator1);
             this.tpGeneral.Controls.Add(this.bRemove);
@@ -351,7 +353,7 @@ namespace Ketarin.Forms
             this.tpGeneral.Location = new System.Drawing.Point(4, 22);
             this.tpGeneral.Name = "tpGeneral";
             this.tpGeneral.Padding = new System.Windows.Forms.Padding(3);
-            this.tpGeneral.Size = new System.Drawing.Size(394, 349);
+            this.tpGeneral.Size = new System.Drawing.Size(394, 364);
             this.tpGeneral.TabIndex = 0;
             this.tpGeneral.Text = "General";
             this.tpGeneral.UseVisualStyleBackColor = true;
@@ -360,10 +362,10 @@ namespace Ketarin.Forms
             // 
             this.bEdit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.bEdit.Enabled = false;
-            this.bEdit.Location = new System.Drawing.Point(89, 317);
+            this.bEdit.Location = new System.Drawing.Point(89, 332);
             this.bEdit.Name = "bEdit";
             this.bEdit.Size = new System.Drawing.Size(75, 23);
-            this.bEdit.TabIndex = 9;
+            this.bEdit.TabIndex = 10;
             this.bEdit.Text = "&Edit";
             this.bEdit.UseVisualStyleBackColor = true;
             this.bEdit.Click += new System.EventHandler(this.bEdit_Click);
@@ -372,20 +374,20 @@ namespace Ketarin.Forms
             // 
             this.separator1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.separator1.Location = new System.Drawing.Point(6, 153);
+            this.separator1.Location = new System.Drawing.Point(6, 170);
             this.separator1.Name = "separator1";
             this.separator1.Size = new System.Drawing.Size(382, 23);
-            this.separator1.TabIndex = 6;
+            this.separator1.TabIndex = 7;
             this.separator1.Text = "Custom columns";
             // 
             // bRemove
             // 
             this.bRemove.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.bRemove.Enabled = false;
-            this.bRemove.Location = new System.Drawing.Point(170, 317);
+            this.bRemove.Location = new System.Drawing.Point(170, 332);
             this.bRemove.Name = "bRemove";
             this.bRemove.Size = new System.Drawing.Size(75, 23);
-            this.bRemove.TabIndex = 10;
+            this.bRemove.TabIndex = 11;
             this.bRemove.Text = "&Remove";
             this.bRemove.UseVisualStyleBackColor = true;
             this.bRemove.Click += new System.EventHandler(this.bRemove_Click);
@@ -393,10 +395,10 @@ namespace Ketarin.Forms
             // bAddCustomColumn
             // 
             this.bAddCustomColumn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bAddCustomColumn.Location = new System.Drawing.Point(8, 317);
+            this.bAddCustomColumn.Location = new System.Drawing.Point(8, 332);
             this.bAddCustomColumn.Name = "bAddCustomColumn";
             this.bAddCustomColumn.Size = new System.Drawing.Size(75, 23);
-            this.bAddCustomColumn.TabIndex = 8;
+            this.bAddCustomColumn.TabIndex = 9;
             this.bAddCustomColumn.Text = "A&dd...";
             this.bAddCustomColumn.UseVisualStyleBackColor = true;
             this.bAddCustomColumn.Click += new System.EventHandler(this.bAddCustomColumn_Click);
@@ -420,11 +422,11 @@ namespace Ketarin.Forms
             this.olvCustomColumns.HighlightForegroundColor = System.Drawing.Color.Empty;
             this.olvCustomColumns.LastSortColumn = null;
             this.olvCustomColumns.LastSortOrder = System.Windows.Forms.SortOrder.None;
-            this.olvCustomColumns.Location = new System.Drawing.Point(9, 179);
+            this.olvCustomColumns.Location = new System.Drawing.Point(9, 196);
             this.olvCustomColumns.Name = "olvCustomColumns";
             this.olvCustomColumns.ShowGroups = false;
-            this.olvCustomColumns.Size = new System.Drawing.Size(379, 132);
-            this.olvCustomColumns.TabIndex = 7;
+            this.olvCustomColumns.Size = new System.Drawing.Size(379, 130);
+            this.olvCustomColumns.TabIndex = 8;
             this.olvCustomColumns.UseCompatibleStateImageBehavior = false;
             this.olvCustomColumns.View = System.Windows.Forms.View.Details;
             this.olvCustomColumns.SelectedIndexChanged += new System.EventHandler(this.olvCustomColumns_SelectedIndexChanged);
@@ -433,52 +435,54 @@ namespace Ketarin.Forms
             // colName
             // 
             this.colName.AspectName = "Key";
+            this.colName.IntendedAlignment = System.Windows.Forms.HorizontalAlignment.Left;
             this.colName.Text = "Name";
             this.colName.Width = 125;
             // 
             // colValue
             // 
             this.colValue.AspectName = "Value";
+            this.colValue.IntendedAlignment = System.Windows.Forms.HorizontalAlignment.Left;
             this.colValue.Text = "Value";
             this.colValue.Width = 216;
             // 
             // chkOpenWebsite
             // 
             this.chkOpenWebsite.AutoSize = true;
-            this.chkOpenWebsite.Location = new System.Drawing.Point(8, 126);
+            this.chkOpenWebsite.Location = new System.Drawing.Point(8, 149);
             this.chkOpenWebsite.Name = "chkOpenWebsite";
             this.chkOpenWebsite.Size = new System.Drawing.Size(322, 17);
-            this.chkOpenWebsite.TabIndex = 5;
+            this.chkOpenWebsite.TabIndex = 6;
             this.chkOpenWebsite.Text = "Ope&n website when double-clicking an application (if specified)";
             this.chkOpenWebsite.UseVisualStyleBackColor = true;
             // 
             // chkBackups
             // 
             this.chkBackups.AutoSize = true;
-            this.chkBackups.Location = new System.Drawing.Point(8, 103);
+            this.chkBackups.Location = new System.Drawing.Point(8, 126);
             this.chkBackups.Name = "chkBackups";
             this.chkBackups.Size = new System.Drawing.Size(212, 17);
-            this.chkBackups.TabIndex = 4;
+            this.chkBackups.TabIndex = 5;
             this.chkBackups.Text = "A&utomatically create database backups";
             this.chkBackups.UseVisualStyleBackColor = true;
             // 
             // chkMinToTray
             // 
             this.chkMinToTray.AutoSize = true;
-            this.chkMinToTray.Location = new System.Drawing.Point(8, 80);
+            this.chkMinToTray.Location = new System.Drawing.Point(8, 103);
             this.chkMinToTray.Name = "chkMinToTray";
             this.chkMinToTray.Size = new System.Drawing.Size(98, 17);
-            this.chkMinToTray.TabIndex = 3;
+            this.chkMinToTray.TabIndex = 4;
             this.chkMinToTray.Text = "&Minimize to tray";
             this.chkMinToTray.UseVisualStyleBackColor = true;
             // 
             // chkUpdateOnlineDatabase
             // 
             this.chkUpdateOnlineDatabase.AutoSize = true;
-            this.chkUpdateOnlineDatabase.Location = new System.Drawing.Point(8, 57);
+            this.chkUpdateOnlineDatabase.Location = new System.Drawing.Point(8, 80);
             this.chkUpdateOnlineDatabase.Name = "chkUpdateOnlineDatabase";
             this.chkUpdateOnlineDatabase.Size = new System.Drawing.Size(220, 17);
-            this.chkUpdateOnlineDatabase.TabIndex = 2;
+            this.chkUpdateOnlineDatabase.TabIndex = 3;
             this.chkUpdateOnlineDatabase.Text = "&Check for updates in the online database";
             this.chkUpdateOnlineDatabase.UseVisualStyleBackColor = true;
             // 
@@ -726,7 +730,7 @@ namespace Ketarin.Forms
             // bExport
             // 
             this.bExport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bExport.Location = new System.Drawing.Point(12, 402);
+            this.bExport.Location = new System.Drawing.Point(12, 417);
             this.bExport.Name = "bExport";
             this.bExport.Size = new System.Drawing.Size(75, 23);
             this.bExport.TabIndex = 1;
@@ -737,7 +741,7 @@ namespace Ketarin.Forms
             // bImport
             // 
             this.bImport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bImport.Location = new System.Drawing.Point(93, 402);
+            this.bImport.Location = new System.Drawing.Point(93, 417);
             this.bImport.Name = "bImport";
             this.bImport.Size = new System.Drawing.Size(75, 23);
             this.bImport.TabIndex = 2;
@@ -745,11 +749,23 @@ namespace Ketarin.Forms
             this.bImport.UseVisualStyleBackColor = true;
             this.bImport.Click += new System.EventHandler(this.bImport_Click);
             // 
+            // chkAvoidNonBinary
+            // 
+            this.chkAvoidNonBinary.AutoSize = true;
+            this.chkAvoidNonBinary.Checked = true;
+            this.chkAvoidNonBinary.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkAvoidNonBinary.Location = new System.Drawing.Point(8, 57);
+            this.chkAvoidNonBinary.Name = "chkAvoidNonBinary";
+            this.chkAvoidNonBinary.Size = new System.Drawing.Size(296, 17);
+            this.chkAvoidNonBinary.TabIndex = 2;
+            this.chkAvoidNonBinary.Text = "A&void downloading non-binary files (potentiall error pages)";
+            this.chkAvoidNonBinary.UseVisualStyleBackColor = true;
+            // 
             // SettingsDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(426, 437);
+            this.ClientSize = new System.Drawing.Size(426, 452);
             this.Controls.Add(this.bImport);
             this.Controls.Add(this.bExport);
             this.Controls.Add(this.tcSettings);
@@ -839,5 +855,6 @@ namespace Ketarin.Forms
         private Label lblSegments;
         private TextBox txtUserAgent;
         private Label lblUserAgent;
+        private CheckBox chkAvoidNonBinary;
     }
 }
