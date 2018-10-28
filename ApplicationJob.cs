@@ -29,15 +29,9 @@ namespace Ketarin
     public class ApplicationJob
     {
         private string m_Name;
-        private string m_FixedDownloadUrl = string.Empty;
-        private string m_TargetPath = string.Empty;
         private DateTime? m_LastUpdated;
-        private SourceType m_SourceType = SourceType.FixedUrl;
         private UrlVariableCollection m_Variables;
-        private Guid m_Guid = Guid.Empty;
-        private bool m_CanBeShared = true;
         private bool m_ShareApplication;
-        private string m_HttpReferer = string.Empty;
         private string m_VariableChangeIndicator = string.Empty;
         private string m_VariableChangeIndicatorLastContent;
         private string m_PreviousRelativeLocation = string.Empty;
@@ -45,7 +39,6 @@ namespace Ketarin
         private static PropertyInfo[] applicationJobProperties;
         private string cachedCurrentLocation;
         private string previousLocation = string.Empty;
-        private string hashVariable;
 
         /// <summary>
         /// Cached list of public properties of the type ApplicationJob.
@@ -215,11 +208,7 @@ namespace Ketarin
         /// <summary>
         /// Gets or sets the variable which contains the hash value.
         /// </summary>
-        public string HashVariable
-        {
-            get { return this.hashVariable; }
-            set { this.hashVariable = value; }
-        }
+        public string HashVariable { get; set; }
 
         /// <summary>
         /// Gets or sets the kind of hash used for change detection.
@@ -234,11 +223,7 @@ namespace Ketarin
         /// </summary>
         /// <remarks>The actual permission check is done on the
         /// remote server, so this is not a security measure.</remarks>
-        public bool CanBeShared
-        {
-            get { return this.m_CanBeShared; }
-            set { this.m_CanBeShared = value; }
-        }
+        public bool CanBeShared { get; set; } = true;
 
         public bool ShareApplication
         {
@@ -261,28 +246,14 @@ namespace Ketarin
         /// for HTTP requests when downloading
         /// the application.
         /// </summary>
-        public string HttpReferer
-        {
-            get { return this.m_HttpReferer; }
-            set { this.m_HttpReferer = value; }
-        }
+        public string HttpReferer { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets the globally unique identifier
         /// of this application.
         /// </summary>
         [XmlAttribute("Guid")]
-        public Guid Guid
-        {
-            get
-            {
-                return this.m_Guid;
-            }
-            set
-            {
-                this.m_Guid = value;
-            }
-        }
+        public Guid Guid { get; set; } = Guid.Empty;
 
         /// <summary>
         /// Gets the list of setup instructions that need to be executed in order to install the application.
@@ -335,7 +306,6 @@ namespace Ketarin
 
         public class UrlVariableCollection : SerializableDictionary<string, UrlVariable>
         {
-            private ApplicationJob parent;
             private bool m_VersionDownloaded;
             private FileInfo cachedInfo;
 
@@ -345,11 +315,7 @@ namespace Ketarin
             /// Gets or sets the application to which the collection belongs.
             /// </summary>
             [XmlIgnore()]
-            public ApplicationJob Parent
-            {
-                get { return this.parent; }
-                set { this.parent = value; }
-            }
+            public ApplicationJob Parent { get; set; }
 
             #endregion
 
@@ -359,7 +325,7 @@ namespace Ketarin
             
             public UrlVariableCollection(ApplicationJob parent)
             {
-                this.parent = parent;
+                this.Parent = parent;
             }
 
             /// <summary>
@@ -398,18 +364,18 @@ namespace Ketarin
             {
                 if (value == null) return null;
 
-                if (this.parent != null && !string.IsNullOrEmpty(this.parent.CurrentLocation))
+                if (this.Parent != null && !string.IsNullOrEmpty(this.Parent.CurrentLocation))
                 {
                     try
                     {
                         if (!this.ContainsKey("file"))
                         {
-                            value = UrlVariable.Replace(value, "file", this.parent.CurrentLocation, this.parent);
+                            value = UrlVariable.Replace(value, "file", this.Parent.CurrentLocation, this.Parent);
                         }
 
-                        if (this.cachedInfo == null || this.cachedInfo.FullName != this.parent.CurrentLocation)
+                        if (this.cachedInfo == null || this.cachedInfo.FullName != this.Parent.CurrentLocation)
                         {
-                            this.cachedInfo = new FileInfo(this.parent.CurrentLocation);
+                            this.cachedInfo = new FileInfo(this.Parent.CurrentLocation);
                         }
                         // Try to provide file date if missing
                         if (fileDate == DateTime.MinValue)
@@ -419,7 +385,7 @@ namespace Ketarin
                         // Provide file size
                         if (this.cachedInfo.Exists)
                         {
-                            value = UrlVariable.Replace(value, "filesize", this.cachedInfo.Length.ToString(), this.parent);
+                            value = UrlVariable.Replace(value, "filesize", this.cachedInfo.Length.ToString(), this.Parent);
                         }
                     }
                     catch (Exception)
@@ -458,7 +424,7 @@ namespace Ketarin
                     LogDialog.Log("Could not determine {url:*} variables", ex);
                 }
 
-                value = UrlVariable.Replace(value, "startuppath", PathEx.QualifyPath(Application.StartupPath), this.parent);
+                value = UrlVariable.Replace(value, "startuppath", PathEx.QualifyPath(Application.StartupPath), this.Parent);
 
                 // Some date/time variables, only if they were not user defined
                 string[] dateTimeVariables = { "dd", "ddd", "dddd", "hh", "HH", "mm", "MM", "MMM", "MMMM", "ss", "tt", "yy", "yyyy", "zz", "zzz" };
@@ -471,26 +437,26 @@ namespace Ketarin
                 }
 
                 // Unix timestamp
-                value = UrlVariable.Replace(value, "time", RpcApplication.DotNetToUnix(DateTime.Now).ToString(), this.parent);
+                value = UrlVariable.Replace(value, "time", RpcApplication.DotNetToUnix(DateTime.Now).ToString(), this.Parent);
                 for (int i = 1; i <= 12; i++)
                 {
-                    value = UrlVariable.Replace(value, "time-" + i, RpcApplication.DotNetToUnix(DateTime.Now.AddHours(-i)).ToString(), this.parent);
+                    value = UrlVariable.Replace(value, "time-" + i, RpcApplication.DotNetToUnix(DateTime.Now.AddHours(-i)).ToString(), this.Parent);
                 }
                 for (int i = 1; i <= 12; i++)
                 {
-                    value = UrlVariable.Replace(value, "time+" + i, RpcApplication.DotNetToUnix(DateTime.Now.AddHours(+i)).ToString(), this.parent);
+                    value = UrlVariable.Replace(value, "time+" + i, RpcApplication.DotNetToUnix(DateTime.Now.AddHours(+i)).ToString(), this.Parent);
                 }
 
                 // Job-specific data / non global variables
-                if (this.parent != null)
+                if (this.Parent != null)
                 {
-                    if (!string.IsNullOrEmpty(this.parent.Category))
+                    if (!string.IsNullOrEmpty(this.Parent.Category))
                     {
-                        value = UrlVariable.Replace(value, "category", this.parent.Category, this.parent);
+                        value = UrlVariable.Replace(value, "category", this.Parent.Category, this.Parent);
                     }
 
-                    value = UrlVariable.Replace(value, "appname", this.parent.Name, this.parent);
-                    value = UrlVariable.Replace(value, "appguid", DbManager.FormatGuid(this.parent.Guid), this.parent);
+                    value = UrlVariable.Replace(value, "appname", this.Parent.Name, this.Parent);
+                    value = UrlVariable.Replace(value, "appguid", DbManager.FormatGuid(this.Parent.Guid), this.Parent);
                     
                    
                     // Allow to access all public properties of the object per "property:X" variable.
@@ -502,7 +468,7 @@ namespace Ketarin
                         {
                             if (!typeof(IEnumerable).IsAssignableFrom(property.PropertyType) || property.PropertyType == typeof(string))
                             {
-                                value = UrlVariable.Replace(value, varname, Convert.ToString(property.GetValue(this.parent, null)), this.parent);
+                                value = UrlVariable.Replace(value, varname, Convert.ToString(property.GetValue(this.Parent, null)), this.Parent);
                             }
                         }
                     }
@@ -510,19 +476,19 @@ namespace Ketarin
                     if (!this.ContainsKey("version"))
                     {
                         // FileHippo version
-                        if (this.parent.DownloadSourceType == SourceType.FileHippo && UrlVariable.IsVariableUsedInString("version", value))
+                        if (this.Parent.DownloadSourceType == SourceType.FileHippo && UrlVariable.IsVariableUsedInString("version", value))
                         {
                             if (!onlyCachedContent)
                             {
-                                this.parent.FileHippoVersion = ExternalServices.FileHippoVersion(this.parent.FileHippoId, this.parent.AvoidDownloadBeta);
+                                this.Parent.FileHippoVersion = ExternalServices.FileHippoVersion(this.Parent.FileHippoId, this.Parent.AvoidDownloadBeta);
                                 this.m_VersionDownloaded = true;
                             }
-                            value = UrlVariable.Replace(value, "version", this.parent.FileHippoVersion, this.parent);
+                            value = UrlVariable.Replace(value, "version", this.Parent.FileHippoVersion, this.Parent);
                         }
-                        else if (!string.IsNullOrEmpty(this.parent.CachedPadFileVersion))
+                        else if (!string.IsNullOrEmpty(this.Parent.CachedPadFileVersion))
                         {
                             // or PAD file version as alternative
-                            value = UrlVariable.Replace(value, "version", this.parent.CachedPadFileVersion, this.parent);
+                            value = UrlVariable.Replace(value, "version", this.Parent.CachedPadFileVersion, this.Parent);
                         }
                     }
                 }
@@ -611,11 +577,7 @@ namespace Ketarin
         }
 
         [XmlElement("SourceType")]
-        public SourceType DownloadSourceType
-        {
-            get { return this.m_SourceType; }
-            set { this.m_SourceType = value; }
-        }
+        public SourceType DownloadSourceType { get; set; } = SourceType.FixedUrl;
 
         /// <summary>
         /// Gets or sets the last location the application has been downloaded to.
@@ -701,9 +663,9 @@ namespace Ketarin
         {
             get
             {
-                if (string.IsNullOrEmpty(this.m_TargetPath)) return false;
+                if (string.IsNullOrEmpty(this.TargetPath)) return false;
 
-                return this.TargetPath.EndsWith("\\") || Directory.Exists(this.m_TargetPath);
+                return this.TargetPath.EndsWith("\\") || Directory.Exists(this.TargetPath);
             }
         }
 
@@ -732,18 +694,10 @@ namespace Ketarin
         }
 
         [XmlElement("TargetPath")]
-        public string TargetPath
-        {
-            get { return this.m_TargetPath; }
-            set { this.m_TargetPath = value; }
-        }
+        public string TargetPath { get; set; } = string.Empty;
 
         [XmlElement("FixedDownloadUrl")]
-        public string FixedDownloadUrl
-        {
-            get { return this.m_FixedDownloadUrl; }
-            set { this.m_FixedDownloadUrl = value; }
-        }
+        public string FixedDownloadUrl { get; set; } = string.Empty;
 
         [XmlElement("Name")]
         public string Name
@@ -799,7 +753,7 @@ namespace Ketarin
             {
                 command.Transaction = transaction;
                 command.CommandText = @"DELETE FROM jobs WHERE JobGuid = @JobGuid";
-                command.Parameters.Add(new SQLiteParameter("@JobGuid", DbManager.FormatGuid(this.m_Guid)));
+                command.Parameters.Add(new SQLiteParameter("@JobGuid", DbManager.FormatGuid(this.Guid)));
                 command.ExecuteNonQuery();
             }
 
@@ -808,7 +762,7 @@ namespace Ketarin
             {
                 command.Transaction = transaction;
                 command.CommandText = "DELETE FROM variables WHERE JobGuid = @JobGuid";
-                command.Parameters.Add(new SQLiteParameter("@JobGuid", DbManager.FormatGuid(this.m_Guid)));
+                command.Parameters.Add(new SQLiteParameter("@JobGuid", DbManager.FormatGuid(this.Guid)));
                 command.ExecuteNonQuery();
             }
 
@@ -1415,17 +1369,17 @@ namespace Ketarin
                 {
                     using (SQLiteTransaction transaction = conn.BeginTransaction())
                     {
-                        if (!DbManager.ApplicationExists(conn, this.m_Guid))
+                        if (!DbManager.ApplicationExists(conn, this.Guid))
                         {
-                            if (this.m_Guid == Guid.Empty) this.m_Guid = Guid.NewGuid();
+                            if (this.Guid == Guid.Empty) this.Guid = Guid.NewGuid();
 
                             // Insert stub, update afterwards.
                             using (IDbCommand command = conn.CreateCommand())
                             {
                                 command.Transaction = transaction;
                                 command.CommandText = @"INSERT INTO jobs (JobGuid, CanBeShared) VALUES (@JobGuid, @CanBeShared)";
-                                command.Parameters.Add(new SQLiteParameter("@JobGuid", DbManager.FormatGuid(this.m_Guid)));
-                                command.Parameters.Add(new SQLiteParameter("@CanBeShared", this.m_CanBeShared));
+                                command.Parameters.Add(new SQLiteParameter("@JobGuid", DbManager.FormatGuid(this.Guid)));
+                                command.Parameters.Add(new SQLiteParameter("@CanBeShared", this.CanBeShared));
                                 command.ExecuteNonQuery();
                             }
                         }
@@ -1436,11 +1390,11 @@ namespace Ketarin
                         {
                             command.Transaction = transaction;
                             command.CommandText = "SELECT CanBeShared FROM jobs WHERE JobGuid = @JobGuid";
-                            command.Parameters.Add(new SQLiteParameter("@JobGuid", DbManager.FormatGuid(this.m_Guid)));
+                            command.Parameters.Add(new SQLiteParameter("@JobGuid", DbManager.FormatGuid(this.Guid)));
                             bool canBeShared = Convert.ToBoolean(command.ExecuteScalar());
                             if (!canBeShared)
                             {
-                                this.m_CanBeShared = false;
+                                this.CanBeShared = false;
                             }
                         }
 
@@ -1487,20 +1441,20 @@ namespace Ketarin
                                              WHERE JobGuid = @JobGuid";
 
                             command.Parameters.Add(new SQLiteParameter("@ApplicationName", this.Name));
-                            command.Parameters.Add(new SQLiteParameter("@FixedDownloadUrl", this.m_FixedDownloadUrl));
-                            command.Parameters.Add(new SQLiteParameter("@TargetPath", this.m_TargetPath));
+                            command.Parameters.Add(new SQLiteParameter("@FixedDownloadUrl", this.FixedDownloadUrl));
+                            command.Parameters.Add(new SQLiteParameter("@TargetPath", this.TargetPath));
                             command.Parameters.Add(new SQLiteParameter("@LastUpdated", this.m_LastUpdated));
                             command.Parameters.Add(new SQLiteParameter("@IsEnabled", this.Enabled));
                             command.Parameters.Add(new SQLiteParameter("@FileHippoId", this.FileHippoId));
                             command.Parameters.Add(new SQLiteParameter("@DeletePreviousFile", this.DeletePreviousFile));
                             command.Parameters.Add(new SQLiteParameter("@PreviousLocation", this.PreviousLocation));
-                            command.Parameters.Add(new SQLiteParameter("@SourceType", this.m_SourceType));
+                            command.Parameters.Add(new SQLiteParameter("@SourceType", this.DownloadSourceType));
                             command.Parameters.Add(new SQLiteParameter("@ExecuteCommand", this.ExecuteCommand));
                             command.Parameters.Add(new SQLiteParameter("@ExecutePreCommand", this.ExecutePreCommand));
                             command.Parameters.Add(new SQLiteParameter("@Category", this.Category));
-                            command.Parameters.Add(new SQLiteParameter("@CanBeShared", this.m_CanBeShared));
+                            command.Parameters.Add(new SQLiteParameter("@CanBeShared", this.CanBeShared));
                             command.Parameters.Add(new SQLiteParameter("@ShareApplication", this.m_ShareApplication));
-                            command.Parameters.Add(new SQLiteParameter("@HttpReferer", this.m_HttpReferer));
+                            command.Parameters.Add(new SQLiteParameter("@HttpReferer", this.HttpReferer));
                             command.Parameters.Add(new SQLiteParameter("@FileHippoVersion", this.FileHippoVersion));
                             command.Parameters.Add(new SQLiteParameter("@DownloadBeta", (int) this.DownloadBeta));
                             command.Parameters.Add(new SQLiteParameter("@VariableChangeIndicator", this.m_VariableChangeIndicator));
@@ -1517,7 +1471,7 @@ namespace Ketarin
                             command.Parameters.Add(new SQLiteParameter("@ExecuteCommandType", this.ExecuteCommandType));
                             command.Parameters.Add(new SQLiteParameter("@ExecutePreCommandType", this.ExecutePreCommandType));
                             command.Parameters.Add(new SQLiteParameter("@SourceTemplate", this.SourceTemplate));
-                            command.Parameters.Add(new SQLiteParameter("@HashVariable", this.hashVariable));
+                            command.Parameters.Add(new SQLiteParameter("@HashVariable", this.HashVariable));
                             command.Parameters.Add(new SQLiteParameter("@HashType", (int)this.HashType));
 
                             // In order to find files if the drive letter has changed (portable USB stick), also remember the 
@@ -1554,7 +1508,7 @@ namespace Ketarin
                                 command.Parameters.Add(new SQLiteParameter("@DownloadDate", DBNull.Value));
                             }
 
-                            command.Parameters.Add(new SQLiteParameter("@JobGuid", DbManager.FormatGuid(this.m_Guid)));
+                            command.Parameters.Add(new SQLiteParameter("@JobGuid", DbManager.FormatGuid(this.Guid)));
 
                             command.ExecuteNonQuery();
                         }
@@ -1566,13 +1520,13 @@ namespace Ketarin
                         {
                             command.Transaction = transaction;
                             command.CommandText = "DELETE FROM variables WHERE JobGuid = @JobGuid";
-                            command.Parameters.Add(new SQLiteParameter("@JobGuid", DbManager.FormatGuid(this.m_Guid)));
+                            command.Parameters.Add(new SQLiteParameter("@JobGuid", DbManager.FormatGuid(this.Guid)));
                             command.ExecuteNonQuery();
                         }
 
                         foreach (KeyValuePair<string, UrlVariable> pair in variables)
                         {
-                            pair.Value.Save(transaction, this.m_Guid);
+                            pair.Value.Save(transaction, this.Guid);
                         }
 
                         if (this.setupInstructions != null)
@@ -1581,7 +1535,7 @@ namespace Ketarin
                             {
                                 command.Transaction = transaction;
                                 command.CommandText = "DELETE FROM setupinstructions WHERE JobGuid = @JobGuid";
-                                command.Parameters.Add(new SQLiteParameter("@JobGuid", DbManager.FormatGuid(this.m_Guid)));
+                                command.Parameters.Add(new SQLiteParameter("@JobGuid", DbManager.FormatGuid(this.Guid)));
                                 command.ExecuteNonQuery();
                             }
 
@@ -1602,23 +1556,23 @@ namespace Ketarin
         public void Hydrate(IDataReader reader)
         {
             this.m_Name = reader["ApplicationName"] as string;
-            this.m_FixedDownloadUrl = reader["FixedDownloadUrl"] as string;
-            this.m_TargetPath = reader["TargetPath"] as string;
+            this.FixedDownloadUrl = reader["FixedDownloadUrl"] as string;
+            this.TargetPath = reader["TargetPath"] as string;
             this.m_LastUpdated = reader["LastUpdated"] as DateTime?;
             this.Enabled = Convert.ToBoolean(reader["IsEnabled"]);
             this.FileHippoId = reader["FileHippoId"] as string;
             this.DeletePreviousFile = Convert.ToBoolean(reader["DeletePreviousFile"]);
             this.PreviousLocation = reader["PreviousLocation"] as string;
-            this.m_SourceType = (SourceType)Convert.ToByte(reader["SourceType"]);
+            this.DownloadSourceType = (SourceType)Convert.ToByte(reader["SourceType"]);
             this.ExecuteCommand = reader["ExecuteCommand"] as string;
             this.ExecutePreCommand = reader["ExecutePreCommand"] as string;
             this.Category = reader["Category"] as string;
-            this.m_CanBeShared = Convert.ToBoolean(reader["CanBeShared"]);
+            this.CanBeShared = Convert.ToBoolean(reader["CanBeShared"]);
             this.m_ShareApplication = Convert.ToBoolean(reader["ShareApplication"]);
             this.FileHippoVersion = reader["FileHippoVersion"] as string;
-            this.m_HttpReferer = reader["HttpReferer"] as string;
+            this.HttpReferer = reader["HttpReferer"] as string;
             this.m_VariableChangeIndicator = reader["VariableChangeIndicator"] as string;
-            this.hashVariable = reader["HashVariable"] as string;
+            this.HashVariable = reader["HashVariable"] as string;
             this.HashType = (HashType)Convert.ToByte(reader["HashType"]);
             this.m_VariableChangeIndicatorLastContent = reader["VariableChangeIndicatorLastContent"] as string;
             this.ExclusiveDownload = Convert.ToBoolean(reader["ExclusiveDownload"]);
@@ -1653,7 +1607,7 @@ namespace Ketarin
             this.DownloadDate = (reader["DownloadDate"] != DBNull.Value) ? reader["DownloadDate"] as DateTime? : null;
             
             string guid = reader["JobGuid"] as string;
-            this.m_Guid = new Guid(guid);
+            this.Guid = new Guid(guid);
         }
 
         public string GetTargetFile(WebResponse netResponse, string alternateFileName)
@@ -1870,9 +1824,9 @@ namespace Ketarin
             }
 
             // Check hash value?
-            if (!string.IsNullOrEmpty(this.hashVariable))
+            if (!string.IsNullOrEmpty(this.HashVariable))
             {
-                string varName = this.hashVariable.Trim('{', '}');
+                string varName = this.HashVariable.Trim('{', '}');
                 string content = this.Variables.ReplaceAllInString("{" + varName + "}").Trim();
                 
                 // Compare online hash with actual current hash.
@@ -1906,7 +1860,7 @@ namespace Ketarin
             }
 
             // If using FileHippo, and previous file is available, check MD5
-            if (!string.IsNullOrEmpty(this.FileHippoId) && this.m_SourceType == SourceType.FileHippo && this.FileExists)
+            if (!string.IsNullOrEmpty(this.FileHippoId) && this.DownloadSourceType == SourceType.FileHippo && this.FileExists)
             {
                 string serverMd5 = ExternalServices.FileHippoMd5(this.FileHippoId, this.AvoidDownloadBeta);
                 // It may happen, that the MD5 is not calculated

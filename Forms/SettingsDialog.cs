@@ -165,6 +165,7 @@ namespace Ketarin.Forms
             this.nNumSegments.Value = Convert.ToDecimal(Settings.GetValue("SegmentCount", 1));
             this.chkMinToTray.Checked = (bool)Settings.GetValue("MinimizeToTray", false);
             this.chkOpenWebsite.Checked = (bool)Settings.GetValue("OpenWebsiteOnDoubleClick", false);
+            this.chkAvoidNonBinary.Checked = (bool)Settings.GetValue("AvoidDownloadingNonBinaryFiles", true);
 
             this.nProxyPort.Value = Convert.ToInt16(Settings.GetValue("ProxyPort", 0));
             this.txtProxyServer.Text = Settings.GetValue("ProxyServer", "") as string;
@@ -199,6 +200,7 @@ namespace Ketarin.Forms
             Settings.SetValue("MinimizeToTray", this.chkMinToTray.Checked);
             Settings.SetValue("CreateDatabaseBackups", this.chkBackups.Checked);
             Settings.SetValue("OpenWebsiteOnDoubleClick", this.chkOpenWebsite.Checked);
+            Settings.SetValue("AvoidDownloadingNonBinaryFiles", this.chkAvoidNonBinary.Checked);
 
             Settings.SetValue("ProxyPort", this.nProxyPort.Value);
             Settings.SetValue("ProxyServer", this.txtProxyServer.Text);
