@@ -20,6 +20,8 @@ after_build:
     7z a Ketarin.zip %APPVEYOR_BUILD_FOLDER%\bin\Release\*.exe
 
     7z a Ketarin.zip %APPVEYOR_BUILD_FOLDER%\bin\Release\*.config
+
+    7z a Ketarin.zip %APPVEYOR_BUILD_FOLDER%\Assemblies\DiffieHellman.dll
 artifacts:
 - path: bin\Release\Ketarin.exe
 - path: bin\Release\Ketarin.exe.config
