@@ -2,3 +2,4 @@
 /bin
 /.vs
 /packages
+*.csproj.user
