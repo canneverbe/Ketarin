@@ -28,3 +28,4 @@ artifacts:
 - path: bin\Release\System.Data.SQLite.DLL
 - path: bin\Release\System.Management.Automation.DLL
 - path: bin\Release\Tamir.SharpSSH.dll
+- path: Ketarin.zip
