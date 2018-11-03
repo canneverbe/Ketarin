@@ -29,3 +29,6 @@ artifacts:
 - path: bin\Release\System.Management.Automation.DLL
 - path: bin\Release\Tamir.SharpSSH.dll
 - path: Ketarin.zip
+deploy:
+- provider: Environment
+  name: Prerelease
