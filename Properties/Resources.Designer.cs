@@ -163,16 +163,6 @@ namespace Ketarin.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap GoToNextMessage___Copy {
-            get {
-                object obj = ResourceManager.GetObject("GoToNextMessage___Copy", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap GoToPreviousMessage {
             get {
                 object obj = ResourceManager.GetObject("GoToPreviousMessage", resourceCulture);
