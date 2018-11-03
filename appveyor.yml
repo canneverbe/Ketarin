@@ -1,0 +1,23 @@
+version: 1.8.10.{build}
+configuration: Release
+init:
+- cmd: ''
+assembly_info:
+  patch: true
+  file: '**\AssemblyInfo.*'
+  assembly_version: '{version}'
+  assembly_file_version: '{version}'
+  assembly_informational_version: '{version}'
+install:
+- cmd: nuget restore
+build:
+  project: Ketarin.csproj
+  verbosity: minimal
+artifacts:
+- path: 7z a Ketarin.zip bin\Release\Ketarin.exe
+- path: 7z a Ketarin.zip bin\Release\Ketarin.exe.config
+- path: 7z a Ketarin.zip bin\Release\Microsoft.Management.Infrastructure.dll
+- path: 7z a Ketarin.zip bin\Release\ScintillaNET.dll
+- path: 7z a Ketarin.zip bin\Release\System.Data.SQLite.DLL
+- path: 7z a Ketarin.zip bin\Release\System.Management.Automation.DLL
+- path: 7z a Ketarin.zip bin\Release\Tamir.SharpSSH.dll
