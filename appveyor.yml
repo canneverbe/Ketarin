@@ -13,11 +13,18 @@ install:
 build:
   project: Ketarin.csproj
   verbosity: minimal
+after_build:
+- cmd: >-
+    7z a Ketarin.zip %APPVEYOR_BUILD_FOLDER%\bin\Release\*.dll
+
+    7z a Ketarin.zip %APPVEYOR_BUILD_FOLDER%\bin\Release\*.exe
+
+    7z a Ketarin.zip %APPVEYOR_BUILD_FOLDER%\bin\Release\*.config
 artifacts:
-- path: 7z a Ketarin.zip bin\Release\Ketarin.exe
-- path: 7z a Ketarin.zip bin\Release\Ketarin.exe.config
-- path: 7z a Ketarin.zip bin\Release\Microsoft.Management.Infrastructure.dll
-- path: 7z a Ketarin.zip bin\Release\ScintillaNET.dll
-- path: 7z a Ketarin.zip bin\Release\System.Data.SQLite.DLL
-- path: 7z a Ketarin.zip bin\Release\System.Management.Automation.DLL
-- path: 7z a Ketarin.zip bin\Release\Tamir.SharpSSH.dll
+- path: bin\Release\Ketarin.exe
+- path: bin\Release\Ketarin.exe.config
+- path: bin\Release\Microsoft.Management.Infrastructure.dll
+- path: bin\Release\ScintillaNET.dll
+- path: bin\Release\System.Data.SQLite.DLL
+- path: bin\Release\System.Management.Automation.DLL
+- path: bin\Release\Tamir.SharpSSH.dll
