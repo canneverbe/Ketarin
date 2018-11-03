@@ -484,7 +484,7 @@ namespace Ketarin
                     catch (SQLiteException ex)
                     {
                         // If "locked" exception (slow USB device eg.) continue trying
-                        if (ex.ErrorCode == SQLiteErrorCode.Locked)
+                        if (ex.ErrorCode == (int)SQLiteErrorCode.Locked)
                         {
                             numTries--;
                             LogDialog.Log(job, ex);
