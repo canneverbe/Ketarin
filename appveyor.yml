@@ -17,6 +17,8 @@ after_build:
 - cmd: >-
     7z a Ketarin.zip %APPVEYOR_BUILD_FOLDER%\bin\Release\*.dll
 
+    7z a Ketarin.zip %APPVEYOR_BUILD_FOLDER%\bin\Release\x86\SQLite.Interop.dll
+
     7z a Ketarin.zip %APPVEYOR_BUILD_FOLDER%\bin\Release\*.exe
 
     7z a Ketarin.zip %APPVEYOR_BUILD_FOLDER%\bin\Release\*.config
