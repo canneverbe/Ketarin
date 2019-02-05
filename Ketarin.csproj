@@ -154,7 +154,7 @@
     <Compile Include="CDBurnerXP\ProgressDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="CDBurnerXP\ProgressDialog.designer.cs">
+    <Compile Include="CDBurnerXP\ProgressDialog.Designer.cs">
       <DependentUpon>ProgressDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="CDBurnerXP\SafeClipboard.cs" />
