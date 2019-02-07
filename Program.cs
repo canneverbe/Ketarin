@@ -37,6 +37,7 @@ namespace Ketarin
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+	    System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
 
             // Set an error handler (just a message box) for unexpected exceptions in threads
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
