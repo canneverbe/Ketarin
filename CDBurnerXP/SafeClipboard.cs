@@ -17,6 +17,10 @@ namespace CDBurnerXP.IO
             {
                 return Clipboard.GetDataObject().GetDataPresent(format);
             }
+            catch (NullReferenceException)
+	    {
+		return false;
+	    }
             catch (ExternalException)
             {
                 return false;
