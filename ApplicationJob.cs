@@ -697,7 +697,7 @@ namespace Ketarin
         [XmlElement("TargetPath")]
         public string TargetPath {
 	    get { return m_TargetPath; }
-	    set { m_targetPath = Path.FixDirectorySeparator(value); }
+	    set { m_TargetPath = PathEx.FixDirectorySeparator(value); }
        	}
 
         [XmlElement("FixedDownloadUrl")]
