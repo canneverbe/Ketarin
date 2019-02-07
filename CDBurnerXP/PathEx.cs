@@ -189,17 +189,17 @@ namespace CDBurnerXP.IO
         {
             if (Path.IsPathRooted(file))
             {
-                file = file.Replace("/", "\\");
+		file = PathEx.FixDirectorySeparator(file);
 
                 if (file.StartsWith("\\\\"))
                 {
                     // UNC path
                     return file;
                 }
-                else if (file.StartsWith("\\"))
+                else if (file.StartsWith(Path.DirectorySeparatorChar.ToString()))
                 {
                     // If path is rooted relatively, combine with playlist file location
-                    return Path.Combine(Path.GetPathRoot(basePath), file.TrimStart('\\'));
+                    return Path.Combine(Path.GetPathRoot(basePath), file.TrimStart(Path.DirectorySeparatorChar));
                 }
                 else
                 {
@@ -273,18 +273,27 @@ namespace CDBurnerXP.IO
 
         public static string GetLastPathItem(string strPath)
         {
-            return strPath.Substring(strPath.LastIndexOf("\\") + 1);
+            return Path.GetFileName(strPath);
+        }
+
+        public static string FixDirectorySeparator(string sPath)
+        {
+            if (Path.DirectorySeparatorChar == '/')
+                return sPath.Replace('\\', Path.DirectorySeparatorChar);
+
+            return sPath.Replace('/', Path.DirectorySeparatorChar);
         }
 
         public static string QualifyPath(string sPath)
         {
-            if (sPath.EndsWith("\\"))
+            sPath = FixDirectorySeparator(sPath);
+            if (sPath.EndsWith(Path.DirectorySeparatorChar.ToString(), StringComparison.CurrentCulture))
             {
                 return sPath;
             }
             else
             {
-                return sPath + "\\";
+                return sPath + Path.DirectorySeparatorChar;
             }
         }
 
@@ -457,7 +466,7 @@ namespace CDBurnerXP.IO
                     key = key.OpenSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\User Shell Folders");
                     if ((key != null) & (key.GetValue(folderName) != null))
                     {
-                        result = key.GetValue(folderName).ToString().TrimEnd('\\');
+                        result = key.GetValue(folderName).ToString().TrimEnd(Path.DirectorySeparatorChar);
                     }
                 }
                 catch (Exception)
