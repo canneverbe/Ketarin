@@ -1151,7 +1151,7 @@ namespace Ketarin
             using (SaveFileDialog dialog = new SaveFileDialog())
             {
                 dialog.Filter = "Application Definition|*.xml|Application Template|*.xml";
-                if (dialog.ShowDialog() != DialogResult.OK) return;
+                if (dialog.ShowDialog(this) != DialogResult.OK) return;
 
                 try
                 {
@@ -1174,7 +1174,7 @@ namespace Ketarin
             using (OpenFileDialog dialog = new OpenFileDialog())
             {
                 dialog.Filter = "XML file|*.xml";
-                if (dialog.ShowDialog() != DialogResult.OK) return;
+                if (dialog.ShowDialog(this) != DialogResult.OK) return;
 
                 try
                 {
