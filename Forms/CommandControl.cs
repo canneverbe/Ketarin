@@ -161,7 +161,7 @@ namespace Ketarin.Forms
         /// <summary>
         /// Gets or sets the type of command.
         /// </summary>
-        [DefaultValue(ScriptType.Batch)]
+        [DefaultValue(ScriptType.Batch), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public ScriptType CommandType
         {
             get
@@ -218,7 +218,11 @@ namespace Ketarin.Forms
                         }
                         break;
                 }
-                LoadSnippets();
+
+                if (this.IsHandleCreated)
+                {
+                    LoadSnippets();
+                }
             }
         }
 
