@@ -666,7 +666,7 @@ namespace Ketarin
             {
                 if (string.IsNullOrEmpty(this.TargetPath)) return false;
 
-                return this.TargetPath.EndsWith(Path.DirectorySeparatorChar.ToString(), StringComparison.CurrentCulture);
+                return this.TargetPath.EndsWith(Path.DirectorySeparatorChar.ToString(), StringComparison.Ordinal);
             }
         }
 

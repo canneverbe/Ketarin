@@ -287,7 +287,7 @@ namespace CDBurnerXP.IO
         public static string QualifyPath(string sPath)
         {
             sPath = FixDirectorySeparator(sPath);
-            if (sPath.EndsWith(Path.DirectorySeparatorChar.ToString(), StringComparison.CurrentCulture))
+            if (sPath.EndsWith(Path.DirectorySeparatorChar.ToString(), StringComparison.Ordinal))
             {
                 return sPath;
             }
