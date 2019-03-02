@@ -29,6 +29,7 @@ namespace Ketarin
     public class ApplicationJob
     {
         private string m_Name;
+        private string m_TargetPath = string.Empty;
         private DateTime? m_LastUpdated;
         private UrlVariableCollection m_Variables;
         private bool m_ShareApplication;
@@ -665,7 +666,7 @@ namespace Ketarin
             {
                 if (string.IsNullOrEmpty(this.TargetPath)) return false;
 
-                return this.TargetPath.EndsWith("\\") || Directory.Exists(this.TargetPath);
+                return this.TargetPath.EndsWith(Path.DirectorySeparatorChar.ToString(), StringComparison.Ordinal);
             }
         }
 
@@ -694,7 +695,10 @@ namespace Ketarin
         }
 
         [XmlElement("TargetPath")]
-        public string TargetPath { get; set; } = string.Empty;
+        public string TargetPath {
+	    get { return m_TargetPath; }
+	    set { m_TargetPath = PathEx.FixDirectorySeparator(value); }
+       	}
 
         [XmlElement("FixedDownloadUrl")]
         public string FixedDownloadUrl { get; set; } = string.Empty;
@@ -1481,10 +1485,10 @@ namespace Ketarin
                                 try
                                 {
                                     Uri uri1 = new Uri(this.PreviousLocation);
-                                    Uri uri2 = new Uri(Application.StartupPath + "\\");
+                                    Uri uri2 = new Uri(Application.StartupPath + Path.DirectorySeparatorChar);
 
                                     Uri relativeUri = uri2.MakeRelativeUri(uri1);
-                                    string relativePath = relativeUri.ToString().Replace("/", "\\");
+                                    string relativePath = PathEx.FixDirectorySeparator(relativeUri.ToString());
                                     // If result returns out to be not relative, no need to save
                                     if (!Path.IsPathRooted(relativePath))
                                     {

@@ -18,7 +18,7 @@ namespace CDBurnerXP.IO
         {
             get
             {
-                string dir = Path.Combine(PathEx.TryGetFolderPath(Environment.SpecialFolder.ApplicationData), "Canneverbe Limited\\CDBurnerXP");
+                string dir = Path.Combine(PathEx.TryGetFolderPath(Environment.SpecialFolder.ApplicationData), "Canneverbe Limited", "CDBurnerXP");
                 Directory.CreateDirectory(dir);
 
                 return Path.Combine(dir, "Errors.log");

@@ -169,7 +169,7 @@ namespace Ketarin
                 if (m_DatabasePath == null)
                 {
                     // Only determine the path once
-                    string path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Ketarin\\jobs.db";
+                    string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Ketarin", "jobs.db");
                     // Is a special path set in the registry?
                     string regPath = Settings.GetValue("Ketarin", "DatabasePath", "") as string;
                     if (!string.IsNullOrEmpty(regPath) && File.Exists(regPath))
