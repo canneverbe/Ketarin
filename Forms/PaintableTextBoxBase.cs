@@ -8,7 +8,7 @@ namespace Ketarin.Forms
     /// <summary>
     /// Allows custom drawing within a text box.
     /// </summary>
-    class PaintableTextBoxBase : TextBox
+    internal class PaintableTextBoxBase : TextBox
     {
         public new event PaintEventHandler Paint;
 

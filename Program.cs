@@ -28,12 +28,12 @@ using Microsoft.Win32;
 
 namespace Ketarin
 {
-    static class Program
+    internal static class Program
     {
         private static NotifyIcon m_Icon;
 
         [STAThread]
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
@@ -213,7 +213,7 @@ namespace Ketarin
             }
         }
 
-        static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
             Exception ex = e.ExceptionObject as Exception;
             MessageBox.Show("An unhandled exception occured and Ketarin needs to be closed.\n\n" + (ex == null ? "" : ex.ToString()), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -221,12 +221,12 @@ namespace Ketarin
 
         #region Command line updater
 
-        static void updater_ProgressChanged(object sender, Updater.JobProgressChangedEventArgs e)
+        private static void updater_ProgressChanged(object sender, Updater.JobProgressChangedEventArgs e)
         {
             Console.WriteLine(e.ApplicationJob.Name + ": " + e.ProgressPercentage + "%");
         }
 
-        static void updater_StatusChanged(object sender, Updater.JobStatusChangedEventArgs e)
+        private static void updater_StatusChanged(object sender, Updater.JobStatusChangedEventArgs e)
         {
             if (e.NewStatus == Updater.Status.Downloading)
             {

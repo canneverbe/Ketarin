@@ -519,8 +519,8 @@ namespace Ketarin
             catch (WebException ex)
             {
                 LogDialog.Log(job, ex);
-                m_Errors.Add(new ApplicationJobError(job, ex, (ex.Response != null) ? ex.Response.ResponseUri.ToString() : requestedUrl));
-                m_Status[job] = Status.Failure;
+
+                this.HandleUpdateFailed(job, new ApplicationJobError(job, ex, (ex.Response != null) ? ex.Response.ResponseUri.ToString() : requestedUrl));
             }
             catch (FileNotFoundException ex)
             {
@@ -537,45 +537,38 @@ namespace Ketarin
             catch (IOException ex)
             {
                 LogDialog.Log(job, ex);
-                m_Errors.Add(new ApplicationJobError(job, ex));
-                m_Status[job] = Status.Failure;
+                this.HandleUpdateFailed(job, new ApplicationJobError(job, ex));
             }
             catch (UnauthorizedAccessException ex)
             {
                 LogDialog.Log(job, ex);
-                m_Errors.Add(new ApplicationJobError(job, ex));
-                m_Status[job] = Status.Failure;
+                this.HandleUpdateFailed(job, new ApplicationJobError(job, ex));
             }
             catch (UriFormatException ex)
             {
                 LogDialog.Log(job, ex);
-                m_Errors.Add(new ApplicationJobError(job, ex, requestedUrl));
-                m_Status[job] = Status.Failure;
+                this.HandleUpdateFailed(job, new ApplicationJobError(job, ex, requestedUrl));
             }
             catch (NotSupportedException ex)
             {
                 // Invalid URI prefix
                 LogDialog.Log(job, ex);
-                m_Errors.Add(new ApplicationJobError(job, ex, requestedUrl));
-                m_Status[job] = Status.Failure;
+                this.HandleUpdateFailed(job, new ApplicationJobError(job, ex, requestedUrl));
             }
             catch (NonBinaryFileException ex)
             {
                 LogDialog.Log(job, ex);
-                m_Errors.Add(new ApplicationJobError(job, ex, requestedUrl));
-                m_Status[job] = Status.Failure;
+                this.HandleUpdateFailed(job, new ApplicationJobError(job, ex, requestedUrl));
             }
             catch (TargetPathInvalidException ex)
             {
                 LogDialog.Log(job, ex);
-                m_Errors.Add(new ApplicationJobError(job, ex));
-                m_Status[job] = Status.Failure;
+                this.HandleUpdateFailed(job, new ApplicationJobError(job, ex, requestedUrl));
             }
             catch (CommandErrorException ex)
             {
                 LogDialog.Log(job, ex);
-                m_Errors.Add(new ApplicationJobError(job, ex));
-                m_Status[job] = Status.Failure;
+                this.HandleUpdateFailed(job, new ApplicationJobError(job, ex, requestedUrl));
             }
             catch (ApplicationException ex)
             {
@@ -586,12 +579,38 @@ namespace Ketarin
             catch (SQLiteException ex)
             {
                 LogDialog.Log(job, ex);
-                m_Errors.Add(new ApplicationJobError(job, ex));
-                m_Status[job] = Status.Failure;
+                this.HandleUpdateFailed(job, new ApplicationJobError(job, ex, requestedUrl));
             }
 
             m_Progress[job] = 100;
             OnStatusChanged(job);
+        }
+
+        /// <summary>
+        /// Handles download failure (set failed state, add to errors) and executes the "update failed"
+        /// command for additional control.
+        /// </summary>
+        private void HandleUpdateFailed(ApplicationJob job, ApplicationJobError error)
+        {
+            // Execute: Default update failed command
+            string updateFailedCommand = Settings.GetValue("UpdateFailedCommand", "") as string;
+            ScriptType defaultPreCommandType = Command.ConvertToScriptType(Settings.GetValue("UpdateFailedCommandType", ScriptType.Batch.ToString()) as string);
+
+            m_Status[job] = Status.Failure;
+
+            if (!string.IsNullOrEmpty(updateFailedCommand))
+            {
+                int exitCode = new Command(updateFailedCommand, defaultPreCommandType).Execute(job, null, error);
+
+                // Do not show failure in error window.
+                if (exitCode == 1)
+                {
+                    LogDialog.Log(job, "Update failed command returned '1', ignoring error");
+                    return;
+                }
+            }
+
+            m_Errors.Add(error);
         }
 
         /// <summary>

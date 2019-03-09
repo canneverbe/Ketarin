@@ -312,6 +312,11 @@ namespace Ketarin.Forms
                     Settings.SetValue("PostUpdateCommand", this.commandControl.Text);
                     Settings.SetValue("PostUpdateCommandType", this.commandControl.CommandType.ToString());
                     break;
+
+                case 3:
+                    Settings.SetValue("UpdateFailedCommand", this.commandControl.Text);
+                    Settings.SetValue("UpdateFailedCommandType", this.commandControl.CommandType.ToString());
+                    break;
             }            
         }
 
@@ -343,6 +348,11 @@ namespace Ketarin.Forms
                 case 2:
                     this.commandControl.Text = Settings.GetValue("PostUpdateCommand", "") as string;
                     this.commandControl.CommandType = Command.ConvertToScriptType(Settings.GetValue("PostUpdateCommandType", ScriptType.Batch.ToString()) as string);
+                    break;
+
+                case 3:
+                    this.commandControl.Text = Settings.GetValue("UpdateFailedCommand", "") as string;
+                    this.commandControl.CommandType = Command.ConvertToScriptType(Settings.GetValue("UpdateFailedCommandType", ScriptType.Batch.ToString()) as string);
                     break;
             }
         }

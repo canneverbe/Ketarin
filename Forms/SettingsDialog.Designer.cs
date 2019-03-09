@@ -52,6 +52,7 @@ namespace Ketarin.Forms
             this.lblNumRetries = new System.Windows.Forms.Label();
             this.tcSettings = new System.Windows.Forms.TabControl();
             this.tpGeneral = new System.Windows.Forms.TabPage();
+            this.chkAvoidNonBinary = new System.Windows.Forms.CheckBox();
             this.bEdit = new System.Windows.Forms.Button();
             this.separator1 = new CDBurnerXP.Controls.Separator();
             this.bRemove = new System.Windows.Forms.Button();
@@ -84,7 +85,6 @@ namespace Ketarin.Forms
             this.lbActions = new System.Windows.Forms.ListBox();
             this.bExport = new System.Windows.Forms.Button();
             this.bImport = new System.Windows.Forms.Button();
-            this.chkAvoidNonBinary = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.nConnectionTimeout)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nProxyPort)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nNumThreads)).BeginInit();
@@ -358,6 +358,18 @@ namespace Ketarin.Forms
             this.tpGeneral.Text = "General";
             this.tpGeneral.UseVisualStyleBackColor = true;
             // 
+            // chkAvoidNonBinary
+            // 
+            this.chkAvoidNonBinary.AutoSize = true;
+            this.chkAvoidNonBinary.Checked = true;
+            this.chkAvoidNonBinary.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkAvoidNonBinary.Location = new System.Drawing.Point(8, 57);
+            this.chkAvoidNonBinary.Name = "chkAvoidNonBinary";
+            this.chkAvoidNonBinary.Size = new System.Drawing.Size(296, 17);
+            this.chkAvoidNonBinary.TabIndex = 2;
+            this.chkAvoidNonBinary.Text = "A&void downloading non-binary files (potentiall error pages)";
+            this.chkAvoidNonBinary.UseVisualStyleBackColor = true;
+            // 
             // bEdit
             // 
             this.bEdit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -510,7 +522,7 @@ namespace Ketarin.Forms
             this.tpConnection.Location = new System.Drawing.Point(4, 22);
             this.tpConnection.Name = "tpConnection";
             this.tpConnection.Padding = new System.Windows.Forms.Padding(3);
-            this.tpConnection.Size = new System.Drawing.Size(394, 349);
+            this.tpConnection.Size = new System.Drawing.Size(394, 364);
             this.tpConnection.TabIndex = 1;
             this.tpConnection.Text = "Connection";
             this.tpConnection.UseVisualStyleBackColor = true;
@@ -583,7 +595,7 @@ namespace Ketarin.Forms
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(394, 349);
+            this.tabPage1.Size = new System.Drawing.Size(394, 364);
             this.tabPage1.TabIndex = 3;
             this.tabPage1.Text = "Global variables";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -620,7 +632,7 @@ namespace Ketarin.Forms
             this.tpCommands.Location = new System.Drawing.Point(4, 22);
             this.tpCommands.Name = "tpCommands";
             this.tpCommands.Padding = new System.Windows.Forms.Padding(3);
-            this.tpCommands.Size = new System.Drawing.Size(394, 349);
+            this.tpCommands.Size = new System.Drawing.Size(394, 364);
             this.tpCommands.TabIndex = 2;
             this.tpCommands.Text = "Commands";
             this.tpCommands.UseVisualStyleBackColor = true;
@@ -657,7 +669,8 @@ namespace Ketarin.Forms
             this.cboCommandEvent.Items.AddRange(new object[] {
             "Before updating an application",
             "After updating an application",
-            "After updating all applications"});
+            "After updating all applications",
+            "When application update fails"});
             this.cboCommandEvent.Location = new System.Drawing.Point(131, 9);
             this.cboCommandEvent.Name = "cboCommandEvent";
             this.cboCommandEvent.Size = new System.Drawing.Size(257, 21);
@@ -674,7 +687,7 @@ namespace Ketarin.Forms
             this.tpHotkeys.Location = new System.Drawing.Point(4, 22);
             this.tpHotkeys.Name = "tpHotkeys";
             this.tpHotkeys.Padding = new System.Windows.Forms.Padding(3);
-            this.tpHotkeys.Size = new System.Drawing.Size(394, 349);
+            this.tpHotkeys.Size = new System.Drawing.Size(394, 364);
             this.tpHotkeys.TabIndex = 4;
             this.tpHotkeys.Text = "Hotkeys";
             this.tpHotkeys.UseVisualStyleBackColor = true;
@@ -748,18 +761,6 @@ namespace Ketarin.Forms
             this.bImport.Text = "Import...";
             this.bImport.UseVisualStyleBackColor = true;
             this.bImport.Click += new System.EventHandler(this.bImport_Click);
-            // 
-            // chkAvoidNonBinary
-            // 
-            this.chkAvoidNonBinary.AutoSize = true;
-            this.chkAvoidNonBinary.Checked = true;
-            this.chkAvoidNonBinary.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkAvoidNonBinary.Location = new System.Drawing.Point(8, 57);
-            this.chkAvoidNonBinary.Name = "chkAvoidNonBinary";
-            this.chkAvoidNonBinary.Size = new System.Drawing.Size(296, 17);
-            this.chkAvoidNonBinary.TabIndex = 2;
-            this.chkAvoidNonBinary.Text = "A&void downloading non-binary files (potentiall error pages)";
-            this.chkAvoidNonBinary.UseVisualStyleBackColor = true;
             // 
             // SettingsDialog
             // 

@@ -17,7 +17,7 @@ namespace Ketarin
 
         public string LastOutput { get; private set; } = string.Empty;
 
-        internal void Execute(ApplicationJob application)
+        internal void Execute(ApplicationJob application, ApplicationJobError errorInfo = null)
         {
             using (PowerShell powerShell = PowerShell.Create())
             {
@@ -27,6 +27,11 @@ namespace Ketarin
                 if (application != null)
                 {
                     powerShell.Runspace.SessionStateProxy.SetVariable("app", application);
+                }
+
+                if (errorInfo != null)
+                {
+                    powerShell.Runspace.SessionStateProxy.SetVariable("apperror", errorInfo);
                 }
 
                 powerShell.Runspace.SessionStateProxy.SetVariable("globalvars", UrlVariable.GlobalVariables);

@@ -695,10 +695,11 @@ namespace Ketarin
         }
 
         [XmlElement("TargetPath")]
-        public string TargetPath {
-	    get { return m_TargetPath; }
-	    set { m_TargetPath = PathEx.FixDirectorySeparator(value); }
-       	}
+        public string TargetPath
+        {
+            get { return m_TargetPath; }
+            set { m_TargetPath = PathEx.FixDirectorySeparator(value); }
+        }
 
         [XmlElement("FixedDownloadUrl")]
         public string FixedDownloadUrl { get; set; } = string.Empty;
@@ -707,7 +708,8 @@ namespace Ketarin
         public string Name
         {
             get { return this.m_Name; }
-            set {
+            set
+            {
                 this.m_Name = value.Length > 255 ? value.Substring(0, 255) : value;
             }
         }

@@ -10,7 +10,7 @@ namespace Ketarin
     /// <summary>
     /// Provides a couple of functions for external services like FileHippo.
     /// </summary>
-    static class ExternalServices
+    internal static class ExternalServices
     {
         /// <summary>
         /// If the given URL contains a FileHippo ID, it is returned.

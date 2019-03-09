@@ -15,7 +15,7 @@ namespace Ketarin
     /// This class contains a collection of functions
     /// for reading from the database.
     /// </summary>
-    class DbManager
+    internal class DbManager
     {
         #region SettingsProvider
 

@@ -7,7 +7,7 @@ namespace Ketarin
     /// This exception should be thrown, if the file to download is
     /// not a binary file type.
     /// </summary>
-    class NonBinaryFileException : Exception
+    internal class NonBinaryFileException : Exception
     {
         private static string m_Message = "The downloaded file is not a binary file type ({0}). Possibly there is an error page. Status code: {1} ({2})";
 

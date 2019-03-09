@@ -7,7 +7,7 @@ using MyDownloader.Core;
 
 namespace MyDownloader.Extension.Protocols
 {
-    class HttpFtpProtocolParametersSettingsProxy : IHttpFtpProtocolParameters
+    internal class HttpFtpProtocolParametersSettingsProxy : IHttpFtpProtocolParameters
     {
         #region IHttpFtpProtocolParameters Members
 

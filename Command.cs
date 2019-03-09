@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
+using CDBurnerXP;
 using Ketarin.Forms;
 
 namespace Ketarin
@@ -10,7 +11,7 @@ namespace Ketarin
     /// <summary>
     /// Represents a user command, which can be any kind of scripting language.
     /// </summary>
-    class Command
+    internal class Command
     {
         /// <summary>
         /// Gets or sets the scripting language.
@@ -37,16 +38,8 @@ namespace Ketarin
         /// <summary>
         /// Executes the command.
         /// </summary>
-        public virtual int Execute(ApplicationJob application)
-        {
-            return Execute(application, null);
-        }
-
-        /// <summary>
-        /// Executes the command.
-        /// </summary>
         /// <param name="targetFileName">Content for variable "{url:...}"</param>
-        public virtual int Execute(ApplicationJob application, string targetFileName)
+        public virtual int Execute(ApplicationJob application, string targetFileName = null, ApplicationJobError errorInfo = null)
         {
             switch (Type)
             {
@@ -57,8 +50,8 @@ namespace Ketarin
 
                 case ScriptType.PowerShell:
                     PowerShellScript psScript = new PowerShellScript(this.Text);
-                    psScript.Execute(application);
-                    break;
+                    psScript.Execute(application, errorInfo);
+                    return Conversion.ToInt(psScript.LastOutput);
 
                 default:
                     return ExecuteBatchCommand(application, this.Text, targetFileName);

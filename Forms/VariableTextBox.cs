@@ -8,7 +8,7 @@ namespace Ketarin.Forms
     /// <summary>
     /// A usual textbox plus variable selection tool.
     /// </summary>
-    class VariableTextBox : TextBox
+    internal class VariableTextBox : TextBox
     {
         private string[] m_VariableNames = new string[0];
         private ContextMenuCustomiser m_Customiser;

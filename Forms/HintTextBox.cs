@@ -9,7 +9,7 @@ namespace Ketarin
     /// <summary>
     /// A text box which displays a gray coloured hint.
     /// </summary>
-    class HintTextBox : PaintableTextBoxBase
+    internal class HintTextBox : PaintableTextBoxBase
     {
         private string hintText = string.Empty;
         private HorizontalAlign hintTextAlign = HorizontalAlign.Left;
