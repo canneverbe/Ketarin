@@ -31,7 +31,6 @@ namespace Ketarin.Forms
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EditVariablesDialog));
             this.lblVariables = new System.Windows.Forms.Label();
             this.lbVariables = new Ketarin.Forms.EditVariablesDialog.VariableListBox();
             this.bCancel = new System.Windows.Forms.Button();
@@ -64,12 +63,20 @@ namespace Ketarin.Forms
             this.rbContentText = new System.Windows.Forms.RadioButton();
             this.chkRightToLeft = new System.Windows.Forms.CheckBox();
             this.bPostData = new System.Windows.Forms.Button();
+            this.lnkHowTo = new System.Windows.Forms.LinkLabel();
+            this.splitContainer = new System.Windows.Forms.SplitContainer();
+            this.pnlVariables = new System.Windows.Forms.Panel();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
+            this.splitContainer.Panel1.SuspendLayout();
+            this.splitContainer.Panel2.SuspendLayout();
+            this.splitContainer.SuspendLayout();
+            this.pnlVariables.SuspendLayout();
             this.SuspendLayout();
             // 
             // lblVariables
             // 
             this.lblVariables.AutoSize = true;
-            this.lblVariables.Location = new System.Drawing.Point(12, 56);
+            this.lblVariables.Location = new System.Drawing.Point(-2, 0);
             this.lblVariables.Name = "lblVariables";
             this.lblVariables.Size = new System.Drawing.Size(53, 13);
             this.lblVariables.TabIndex = 1;
@@ -77,12 +84,15 @@ namespace Ketarin.Forms
             // 
             // lbVariables
             // 
-            this.lbVariables.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)));
+            this.lbVariables.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.lbVariables.FormattingEnabled = true;
-            this.lbVariables.Location = new System.Drawing.Point(12, 72);
+            this.lbVariables.IntegralHeight = false;
+            this.lbVariables.Location = new System.Drawing.Point(1, 16);
             this.lbVariables.Name = "lbVariables";
-            this.lbVariables.Size = new System.Drawing.Size(94, 303);
+            this.lbVariables.Size = new System.Drawing.Size(133, 402);
+            this.lbVariables.Sorted = true;
             this.lbVariables.TabIndex = 2;
             this.lbVariables.SelectedIndexChanged += new System.EventHandler(this.lbVariables_SelectedIndexChanged);
             // 
@@ -90,7 +100,7 @@ namespace Ketarin.Forms
             // 
             this.bCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.bCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.bCancel.Location = new System.Drawing.Point(527, 400);
+            this.bCancel.Location = new System.Drawing.Point(635, 503);
             this.bCancel.Name = "bCancel";
             this.bCancel.Size = new System.Drawing.Size(75, 23);
             this.bCancel.TabIndex = 22;
@@ -101,7 +111,7 @@ namespace Ketarin.Forms
             // 
             this.bOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.bOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.bOK.Location = new System.Drawing.Point(446, 400);
+            this.bOK.Location = new System.Drawing.Point(554, 503);
             this.bOK.Name = "bOK";
             this.bOK.Size = new System.Drawing.Size(75, 23);
             this.bOK.TabIndex = 21;
@@ -113,7 +123,7 @@ namespace Ketarin.Forms
             // 
             this.lblUrl.AutoSize = true;
             this.lblUrl.Enabled = false;
-            this.lblUrl.Location = new System.Drawing.Point(123, 107);
+            this.lblUrl.Location = new System.Drawing.Point(-1, 35);
             this.lblUrl.Name = "lblUrl";
             this.lblUrl.Size = new System.Drawing.Size(100, 13);
             this.lblUrl.TabIndex = 8;
@@ -121,20 +131,20 @@ namespace Ketarin.Forms
             // 
             // txtUrl
             // 
-            this.txtUrl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtUrl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.txtUrl.Enabled = false;
-            this.txtUrl.Location = new System.Drawing.Point(247, 104);
+            this.txtUrl.Location = new System.Drawing.Point(123, 32);
             this.txtUrl.Name = "txtUrl";
-            this.txtUrl.Size = new System.Drawing.Size(211, 20);
+            this.txtUrl.Size = new System.Drawing.Size(284, 20);
             this.txtUrl.TabIndex = 9;
             this.txtUrl.TextChanged += new System.EventHandler(this.txtUrl_TextChanged);
             // 
             // rtfContent
             // 
-            this.rtfContent.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.rtfContent.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.rtfContent.BackColor = System.Drawing.SystemColors.Window;
             this.rtfContent.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.rtfContent.ContextMenu = this.cmuRtf;
@@ -142,10 +152,10 @@ namespace Ketarin.Forms
             this.rtfContent.Enabled = false;
             this.rtfContent.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.rtfContent.HideSelection = false;
-            this.rtfContent.Location = new System.Drawing.Point(126, 182);
+            this.rtfContent.Location = new System.Drawing.Point(2, 110);
             this.rtfContent.Name = "rtfContent";
             this.rtfContent.ReadOnly = true;
-            this.rtfContent.Size = new System.Drawing.Size(476, 193);
+            this.rtfContent.Size = new System.Drawing.Size(549, 308);
             this.rtfContent.TabIndex = 18;
             this.rtfContent.Text = "";
             this.rtfContent.WordWrap = false;
@@ -221,7 +231,7 @@ namespace Ketarin.Forms
             // 
             this.bLoad.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.bLoad.Enabled = false;
-            this.bLoad.Location = new System.Drawing.Point(545, 102);
+            this.bLoad.Location = new System.Drawing.Point(494, 30);
             this.bLoad.Name = "bLoad";
             this.bLoad.Size = new System.Drawing.Size(57, 23);
             this.bLoad.TabIndex = 11;
@@ -233,7 +243,7 @@ namespace Ketarin.Forms
             // 
             this.bUseAsStart.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.bUseAsStart.Enabled = false;
-            this.bUseAsStart.Location = new System.Drawing.Point(126, 381);
+            this.bUseAsStart.Location = new System.Drawing.Point(2, 424);
             this.bUseAsStart.Name = "bUseAsStart";
             this.bUseAsStart.Size = new System.Drawing.Size(134, 23);
             this.bUseAsStart.TabIndex = 19;
@@ -245,7 +255,7 @@ namespace Ketarin.Forms
             // 
             this.bUseAsEnd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.bUseAsEnd.Enabled = false;
-            this.bUseAsEnd.Location = new System.Drawing.Point(266, 381);
+            this.bUseAsEnd.Location = new System.Drawing.Point(142, 424);
             this.bUseAsEnd.Name = "bUseAsEnd";
             this.bUseAsEnd.Size = new System.Drawing.Size(134, 23);
             this.bUseAsEnd.TabIndex = 20;
@@ -256,7 +266,7 @@ namespace Ketarin.Forms
             // bAdd
             // 
             this.bAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.bAdd.Location = new System.Drawing.Point(12, 381);
+            this.bAdd.Location = new System.Drawing.Point(1, 424);
             this.bAdd.Name = "bAdd";
             this.bAdd.Size = new System.Drawing.Size(45, 23);
             this.bAdd.TabIndex = 3;
@@ -268,7 +278,7 @@ namespace Ketarin.Forms
             // 
             this.bRemove.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.bRemove.Enabled = false;
-            this.bRemove.Location = new System.Drawing.Point(61, 381);
+            this.bRemove.Location = new System.Drawing.Point(52, 424);
             this.bRemove.Name = "bRemove";
             this.bRemove.Size = new System.Drawing.Size(45, 23);
             this.bRemove.TabIndex = 4;
@@ -280,7 +290,7 @@ namespace Ketarin.Forms
             // 
             this.bFind.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.bFind.Enabled = false;
-            this.bFind.Location = new System.Drawing.Point(545, 127);
+            this.bFind.Location = new System.Drawing.Point(494, 56);
             this.bFind.Name = "bFind";
             this.bFind.Size = new System.Drawing.Size(57, 23);
             this.bFind.TabIndex = 14;
@@ -292,7 +302,7 @@ namespace Ketarin.Forms
             // 
             this.lblFind.AutoSize = true;
             this.lblFind.Enabled = false;
-            this.lblFind.Location = new System.Drawing.Point(123, 133);
+            this.lblFind.Location = new System.Drawing.Point(-1, 61);
             this.lblFind.Name = "lblFind";
             this.lblFind.Size = new System.Drawing.Size(118, 13);
             this.lblFind.TabIndex = 12;
@@ -300,33 +310,35 @@ namespace Ketarin.Forms
             // 
             // txtFind
             // 
-            this.txtFind.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtFind.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.txtFind.Enabled = false;
-            this.txtFind.Location = new System.Drawing.Point(247, 130);
+            this.txtFind.Location = new System.Drawing.Point(123, 58);
             this.txtFind.Name = "txtFind";
-            this.txtFind.Size = new System.Drawing.Size(292, 20);
+            this.txtFind.Size = new System.Drawing.Size(365, 20);
             this.txtFind.TabIndex = 13;
             // 
             // lblDesc
             // 
-            this.lblDesc.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblDesc.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.lblDesc.Location = new System.Drawing.Point(12, 9);
             this.lblDesc.Name = "lblDesc";
-            this.lblDesc.Size = new System.Drawing.Size(590, 42);
+            this.lblDesc.Size = new System.Drawing.Size(698, 32);
             this.lblDesc.TabIndex = 0;
-            this.lblDesc.Text = resources.GetString("lblDesc.Text");
+            this.lblDesc.Text = "Use variables for creating dynamic links (for example URLs containing the current" +
+    " version number). To add a defined variable to a download url, use the syntax {n" +
+    "ame-of-variable}.\r\n";
             // 
             // txtRegularExpression
             // 
-            this.txtRegularExpression.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtRegularExpression.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.txtRegularExpression.Enabled = false;
             this.txtRegularExpression.HintTextAlign = System.Windows.Forms.VisualStyles.HorizontalAlign.Right;
-            this.txtRegularExpression.Location = new System.Drawing.Point(247, 156);
+            this.txtRegularExpression.Location = new System.Drawing.Point(123, 84);
             this.txtRegularExpression.Name = "txtRegularExpression";
-            this.txtRegularExpression.Size = new System.Drawing.Size(292, 20);
+            this.txtRegularExpression.Size = new System.Drawing.Size(365, 20);
             this.txtRegularExpression.TabIndex = 16;
             this.txtRegularExpression.TextChanged += new System.EventHandler(this.txtRegularExpression_TextChanged);
             // 
@@ -334,7 +346,7 @@ namespace Ketarin.Forms
             // 
             this.lblRegex.AutoSize = true;
             this.lblRegex.Enabled = false;
-            this.lblRegex.Location = new System.Drawing.Point(123, 159);
+            this.lblRegex.Location = new System.Drawing.Point(-1, 87);
             this.lblRegex.Name = "lblRegex";
             this.lblRegex.Size = new System.Drawing.Size(117, 13);
             this.lblRegex.TabIndex = 15;
@@ -344,7 +356,7 @@ namespace Ketarin.Forms
             // 
             this.rbContentUrlStartEnd.AutoSize = true;
             this.rbContentUrlStartEnd.Enabled = false;
-            this.rbContentUrlStartEnd.Location = new System.Drawing.Point(126, 72);
+            this.rbContentUrlStartEnd.Location = new System.Drawing.Point(2, 0);
             this.rbContentUrlStartEnd.Name = "rbContentUrlStartEnd";
             this.rbContentUrlStartEnd.Size = new System.Drawing.Size(162, 17);
             this.rbContentUrlStartEnd.TabIndex = 5;
@@ -356,7 +368,7 @@ namespace Ketarin.Forms
             // 
             this.rbContentUrlRegex.AutoSize = true;
             this.rbContentUrlRegex.Enabled = false;
-            this.rbContentUrlRegex.Location = new System.Drawing.Point(294, 72);
+            this.rbContentUrlRegex.Location = new System.Drawing.Point(170, 0);
             this.rbContentUrlRegex.Name = "rbContentUrlRegex";
             this.rbContentUrlRegex.Size = new System.Drawing.Size(210, 17);
             this.rbContentUrlRegex.TabIndex = 6;
@@ -368,7 +380,7 @@ namespace Ketarin.Forms
             // 
             this.rbContentText.AutoSize = true;
             this.rbContentText.Enabled = false;
-            this.rbContentText.Location = new System.Drawing.Point(510, 72);
+            this.rbContentText.Location = new System.Drawing.Point(386, 0);
             this.rbContentText.Name = "rbContentText";
             this.rbContentText.Size = new System.Drawing.Size(99, 17);
             this.rbContentText.TabIndex = 7;
@@ -381,7 +393,7 @@ namespace Ketarin.Forms
             this.chkRightToLeft.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.chkRightToLeft.AutoSize = true;
             this.chkRightToLeft.Enabled = false;
-            this.chkRightToLeft.Location = new System.Drawing.Point(545, 158);
+            this.chkRightToLeft.Location = new System.Drawing.Point(494, 86);
             this.chkRightToLeft.Name = "chkRightToLeft";
             this.chkRightToLeft.Size = new System.Drawing.Size(47, 17);
             this.chkRightToLeft.TabIndex = 17;
@@ -393,7 +405,7 @@ namespace Ketarin.Forms
             // 
             this.bPostData.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.bPostData.Enabled = false;
-            this.bPostData.Location = new System.Drawing.Point(464, 102);
+            this.bPostData.Location = new System.Drawing.Point(413, 30);
             this.bPostData.Name = "bPostData";
             this.bPostData.Size = new System.Drawing.Size(75, 23);
             this.bPostData.TabIndex = 10;
@@ -401,41 +413,90 @@ namespace Ketarin.Forms
             this.bPostData.UseVisualStyleBackColor = true;
             this.bPostData.Click += new System.EventHandler(this.bPostData_Click);
             // 
+            // lnkHowTo
+            // 
+            this.lnkHowTo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lnkHowTo.AutoSize = true;
+            this.lnkHowTo.Location = new System.Drawing.Point(12, 508);
+            this.lnkHowTo.Name = "lnkHowTo";
+            this.lnkHowTo.Size = new System.Drawing.Size(124, 13);
+            this.lnkHowTo.TabIndex = 23;
+            this.lnkHowTo.TabStop = true;
+            this.lnkHowTo.Text = "How are variables used?";
+            this.lnkHowTo.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkHowTo_LinkClicked);
+            // 
+            // splitContainer
+            // 
+            this.splitContainer.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.splitContainer.Location = new System.Drawing.Point(15, 44);
+            this.splitContainer.Name = "splitContainer";
+            // 
+            // splitContainer.Panel1
+            // 
+            this.splitContainer.Panel1.Controls.Add(this.pnlVariables);
+            this.splitContainer.Panel1MinSize = 80;
+            // 
+            // splitContainer.Panel2
+            // 
+            this.splitContainer.Panel2.Controls.Add(this.rbContentUrlStartEnd);
+            this.splitContainer.Panel2.Controls.Add(this.bPostData);
+            this.splitContainer.Panel2.Controls.Add(this.lblUrl);
+            this.splitContainer.Panel2.Controls.Add(this.chkRightToLeft);
+            this.splitContainer.Panel2.Controls.Add(this.txtUrl);
+            this.splitContainer.Panel2.Controls.Add(this.rbContentText);
+            this.splitContainer.Panel2.Controls.Add(this.rtfContent);
+            this.splitContainer.Panel2.Controls.Add(this.rbContentUrlRegex);
+            this.splitContainer.Panel2.Controls.Add(this.bLoad);
+            this.splitContainer.Panel2.Controls.Add(this.bUseAsStart);
+            this.splitContainer.Panel2.Controls.Add(this.txtRegularExpression);
+            this.splitContainer.Panel2.Controls.Add(this.bUseAsEnd);
+            this.splitContainer.Panel2.Controls.Add(this.lblRegex);
+            this.splitContainer.Panel2.Controls.Add(this.bFind);
+            this.splitContainer.Panel2.Controls.Add(this.lblFind);
+            this.splitContainer.Panel2.Controls.Add(this.txtFind);
+            this.splitContainer.Panel2MinSize = 100;
+            this.splitContainer.Size = new System.Drawing.Size(695, 450);
+            this.splitContainer.SplitterDistance = 137;
+            this.splitContainer.TabIndex = 24;
+            // 
+            // pnlVariables
+            // 
+            this.pnlVariables.Controls.Add(this.lblVariables);
+            this.pnlVariables.Controls.Add(this.lbVariables);
+            this.pnlVariables.Controls.Add(this.bRemove);
+            this.pnlVariables.Controls.Add(this.bAdd);
+            this.pnlVariables.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlVariables.Location = new System.Drawing.Point(0, 0);
+            this.pnlVariables.Name = "pnlVariables";
+            this.pnlVariables.Size = new System.Drawing.Size(137, 450);
+            this.pnlVariables.TabIndex = 0;
+            // 
             // EditVariablesDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(614, 435);
-            this.Controls.Add(this.bPostData);
-            this.Controls.Add(this.chkRightToLeft);
-            this.Controls.Add(this.rbContentText);
-            this.Controls.Add(this.rbContentUrlRegex);
-            this.Controls.Add(this.rbContentUrlStartEnd);
-            this.Controls.Add(this.txtRegularExpression);
-            this.Controls.Add(this.lblRegex);
+            this.ClientSize = new System.Drawing.Size(722, 538);
+            this.Controls.Add(this.lnkHowTo);
             this.Controls.Add(this.lblDesc);
-            this.Controls.Add(this.txtFind);
-            this.Controls.Add(this.lblFind);
-            this.Controls.Add(this.bFind);
-            this.Controls.Add(this.bRemove);
-            this.Controls.Add(this.bAdd);
-            this.Controls.Add(this.bUseAsEnd);
-            this.Controls.Add(this.bUseAsStart);
-            this.Controls.Add(this.bLoad);
-            this.Controls.Add(this.rtfContent);
-            this.Controls.Add(this.txtUrl);
-            this.Controls.Add(this.lblUrl);
             this.Controls.Add(this.bOK);
             this.Controls.Add(this.bCancel);
-            this.Controls.Add(this.lbVariables);
-            this.Controls.Add(this.lblVariables);
+            this.Controls.Add(this.splitContainer);
             this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(630, 300);
+            this.MinimumSize = new System.Drawing.Size(700, 400);
             this.Name = "EditVariablesDialog";
             this.SavePosition = true;
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.Text = "Edit Variables";
+            this.splitContainer.Panel1.ResumeLayout(false);
+            this.splitContainer.Panel2.ResumeLayout(false);
+            this.splitContainer.Panel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).EndInit();
+            this.splitContainer.ResumeLayout(false);
+            this.pnlVariables.ResumeLayout(false);
+            this.pnlVariables.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -475,5 +536,8 @@ namespace Ketarin.Forms
         private MenuItem cmnuPaste;
         private MenuItem sepWrap;
         private MenuItem cmnuWrap;
+        private LinkLabel lnkHowTo;
+        private SplitContainer splitContainer;
+        private Panel pnlVariables;
     }
 }

@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
+using CDBurnerXP;
 using CDBurnerXP.Forms;
 using CDBurnerXP.IO;
 using Microsoft.Win32;
@@ -139,6 +141,24 @@ namespace Ketarin.Forms
         {
             base.OnLoad(e);
 
+            if (this.DesignMode)
+            {
+                return;
+            }
+
+            int splitterDistance = Conversion.ToInt(Settings.GetValue(this, "VariableSplitterDistance", this.splitContainer.SplitterDistance));
+            if (splitterDistance >= this.splitContainer.Panel1MinSize)
+            {
+                try
+                {
+                    this.splitContainer.SplitterDistance = splitterDistance;
+                }
+                catch (Exception)
+                {
+                    // Ignore invalid values should they occur
+                }
+            }
+
             // Turn off auto word selection (workaround .NET bug).
             this.rtfContent.AutoWordSelection = true;
             this.rtfContent.AutoWordSelection = false;
@@ -154,6 +174,8 @@ namespace Ketarin.Forms
         protected override void OnClosed(EventArgs e)
         {
             base.OnClosed(e);
+
+            Settings.SetValue(this, "VariableSplitterDistance", this.splitContainer.SplitterDistance);
 
             // Prevent an invalid operation exception because of automcomplete
             this.txtUrl.Dispose();
@@ -798,6 +820,17 @@ namespace Ketarin.Forms
                 {
                     this.CurrentVariable.PostData = editor.PostData;
                 }
+            }
+        }
+
+        private void lnkHowTo_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            try
+            {
+                Process.Start("https://wiki.ketarin.org/index.php/Basics");
+            }
+            catch
+            {
             }
         }
 

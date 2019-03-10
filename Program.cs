@@ -71,6 +71,9 @@ namespace Ketarin
             WebRequest.RegisterPrefix("sf", new ScpWebRequestCreator());
             WebRequest.RegisterPrefix("httpx", new HttpxRequestCreator());
 
+            // Do not try using SSL3 by default since some websites make SSL3 requests fail.
+            ServicePointManager.SecurityProtocol = Updater.DefaultHttpProtocols;
+
             // Either run silently on command line...
             if (arguments["silent"] != null)
             {

@@ -636,8 +636,6 @@ namespace Ketarin
                 return true;
             };
 
-            ServicePointManager.SecurityProtocol = DefaultHttpProtocols;
-
             // If we want to download multiple files simultaneously
             // from the same server, we need to "remove" the connection limit.
             ServicePointManager.DefaultConnectionLimit = 50;
