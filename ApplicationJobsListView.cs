@@ -350,6 +350,7 @@ namespace Ketarin
         /// </summary>
         public void ShowSearch()
         {
+            // Begin/EndUpdate for Mono
             this.BeginUpdate();
             this.searchPanel.Visible = true;
             this.EndUpdate();
