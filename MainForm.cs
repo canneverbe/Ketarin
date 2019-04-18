@@ -1038,7 +1038,14 @@ namespace Ketarin
             {
                 if (job != null)
                 {
-                    Process.Start("explorer", " /select," + job.CurrentLocation);
+                    if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+                    {
+                        Process.Start("explorer", " /select," + job.CurrentLocation);
+                    }
+                    else
+                    {
+                        Process.Start(Path.GetDirectoryName(job.CurrentLocation));
+                    }
                 }
             }
             catch (Exception)
