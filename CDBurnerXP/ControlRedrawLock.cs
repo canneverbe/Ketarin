@@ -2,21 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
-#if !MONO
-using System.Runtime.InteropServices;
-#endif
 
 namespace CDBurnerXP.Forms
 {
     public class ControlRedrawLock : IDisposable
     {
-#if !MONO
-        [DllImport("user32.dll", EntryPoint="SendMessage")]
-        public static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam); 
-
-        public static int WM_SETREDRAW = 0x000B;
-#endif
-
         private Control _control;
         private bool _invalidate;
         private bool _disabledRedraw = false;
@@ -35,11 +25,7 @@ namespace CDBurnerXP.Forms
                 if (IsValidControl())
                 {
                     // Lock drawing
-#if MONO
-		    _control.SuspendLayout();
-#else
-                    SendMessage(_control.Handle, WM_SETREDRAW, 0, 0);
-#endif
+                    _control.SuspendLayout();
                     _disabledRedraw = true;
                 }
             }
@@ -49,11 +35,7 @@ namespace CDBurnerXP.Forms
 
         private bool IsValidControl()
         {
-            return ((_control != null)
-#if !MONO
-		    && (_control.IsHandleCreated)
-#endif
-		   );
+            return ((_control != null) && (_control.IsHandleCreated));
         }
 
         #region IDisposable Members
@@ -65,11 +47,7 @@ namespace CDBurnerXP.Forms
                 if (IsValidControl() && _disabledRedraw)
                 {
                     // Unlock drawing
-#if MONO
-		    _control.ResumeLayout();
-#else
-                    SendMessage(_control.Handle, WM_SETREDRAW, 1, 0);
-#endif
+                    _control.ResumeLayout();
                     if (_invalidate)
                     {
                         // Invalidate the control to trigger a re-paint.
