@@ -15,28 +15,24 @@ namespace CDBurnerXP.IO
         {
             try
             {
-                return Clipboard.GetDataObject().GetDataPresent(format);
+                IDataObject dataObject = Clipboard.GetDataObject();
+                if (dataObject != null)
+                    return dataObject.GetDataPresent(format);
             }
-            catch (NullReferenceException)
-	    {
-		return false;
-	    }
-            catch (ExternalException)
-            {
-                return false;
-            }
+            catch { }
+            return false;
         }
 
         public static object GetData(string format)
         {
             try
             {
-                return Clipboard.GetDataObject().GetData(format);
+                IDataObject dataObject = Clipboard.GetDataObject();
+                if (dataObject != null)
+                    return dataObject.GetData(format);
             }
-            catch (ExternalException)
-            {
-                return null;
-            }
+            catch { }
+	    return null;
         }
 
         public static bool SetData(object value, bool copy)
