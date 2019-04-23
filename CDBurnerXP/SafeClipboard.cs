@@ -32,7 +32,7 @@ namespace CDBurnerXP.IO
                     return dataObject.GetData(format);
             }
             catch { }
-	    return null;
+            return null;
         }
 
         public static bool SetData(object value, bool copy)
