@@ -350,7 +350,10 @@ namespace Ketarin
         /// </summary>
         public void ShowSearch()
         {
+            // Begin/EndUpdate for Mono
+            this.BeginUpdate();
             this.searchPanel.Visible = true;
+            this.EndUpdate();
             this.searchTextBox.Focus();
             this.EmptyListMsg = "No applications match your search criteria.";
         }
