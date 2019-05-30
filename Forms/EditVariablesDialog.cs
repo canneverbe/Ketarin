@@ -230,7 +230,7 @@ namespace Ketarin.Forms
 
             try
             {
-                // Uodate controls which belong to the variable
+                // Update controls which belong to the variable
                 using (new ControlRedrawLock(this))
                 {
                     // Set the auto complete of the URL text box
