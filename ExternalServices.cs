@@ -99,22 +99,22 @@ namespace Ketarin
                 overviewPage = GetNonBetaPageContent(overviewPage, fileId, false);
             }
 
-            string findUrl = string.Format("/download_{0}/post_download/", GetFileHippoCleanFileId(fileId));
-            int pos = overviewPage.IndexOf(findUrl);
-            if (pos < 0)
+            try
+            {
+                using (WebClient client = new WebClient())
+                {
+                    overviewPage = client.DownloadString($"https://filehippo.com/download_{GetFileHippoCleanFileId(fileId)}/post_download/");
+                }
+            }
+            catch (Exception)
             {
                 throw new WebException("FileHippo ID '" + fileId + "' does not exist.", WebExceptionStatus.ReceiveFailure);
-            }
-
-            using (WebClient client = new WebClient())
-            {
-                overviewPage = client.DownloadString($"https://filehippo.com/download_{GetFileHippoCleanFileId(fileId)}/post_download/");
             }
 
             // Now on the download page, find the link which redirects to the latest file
             // setTimeout(function() { downloadIframe.src = 'https://filehippo.com/launch_download/?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
             string searchText = "downloadIframe.src";
-            pos = overviewPage.IndexOf(searchText);
+            int pos = overviewPage.IndexOf(searchText);
             int urlEndPos = overviewPage.IndexOf("'", pos + 30);
             if (pos < 0)
             {
@@ -164,7 +164,7 @@ namespace Ketarin
         {
             if (string.IsNullOrEmpty(fileId)) return null;
 
-            string url = GetFileHippoBaseDownloadUrl(fileId) + "tech/";
+            string url = GetFileHippoBaseDownloadUrl(fileId);
 
             string overviewPage;
             using (WebClient client = new WebClient())
@@ -216,7 +216,7 @@ namespace Ketarin
         public static string FileHippoMd5(string fileId, bool avoidBeta)
         {
             fileId = fileId.ToLower();
-            string url = GetFileHippoBaseDownloadUrl(fileId) + "tech/";
+            string url = GetFileHippoBaseDownloadUrl(fileId);
             
             string md5Page;
             using (WebClient client = new WebClient())
@@ -227,7 +227,7 @@ namespace Ketarin
                 if (client.ResponseUri != null)
                 {
                     string newId = GetFileHippoIdFromUrl(client.ResponseUri.ToString());
-                    if (!string.IsNullOrEmpty(newId) && GetFileHippoBaseDownloadUrl(newId) + "tech/" != url && newId != client.ResponseUri.ToString())
+                    if (!string.IsNullOrEmpty(newId) && GetFileHippoBaseDownloadUrl(newId) != url && newId != client.ResponseUri.ToString())
                     {
                         return FileHippoMd5(newId, avoidBeta);
                     }
