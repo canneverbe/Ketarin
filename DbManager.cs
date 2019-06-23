@@ -193,7 +193,7 @@ namespace Ketarin
                     connString += "New=True;";
                 }
 
-                SQLiteConnection connection = new SQLiteConnection(connString);
+                SQLiteConnection connection = new SQLiteConnection(connString, true);
                 connection.Open();
 
                 return connection;
