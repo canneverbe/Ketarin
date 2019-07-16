@@ -227,6 +227,11 @@ namespace Ketarin
                     {
                         continue;
                     }
+                    catch (InvalidOperationException)
+                    {
+                        // ObjectDisposedException with FileWebRequest
+                        continue;
+                    }
                 }
                 m_Requests.Clear();
             }
