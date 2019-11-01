@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Canneverbe Limited")]
 [assembly: AssemblyProduct("Ketarin")]
-[assembly: AssemblyCopyright("© Canneverbe Limited 2008-2018")]
+[assembly: AssemblyCopyright("© Canneverbe Limited 2008-2019")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
