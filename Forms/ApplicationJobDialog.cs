@@ -196,6 +196,7 @@ namespace Ketarin.Forms
             this.rbFileHippo.Checked = (this.m_ApplicationJob.DownloadSourceType == ApplicationJob.SourceType.FileHippo);
             this.rbFixedUrl.Checked = (this.m_ApplicationJob.DownloadSourceType == ApplicationJob.SourceType.FixedUrl);
             this.chkEnabled.Checked = this.m_ApplicationJob.Enabled;
+            this.numNumberOfRevisions.Value = this.m_ApplicationJob.NumberOfRevisions;
 
             this.rbFolder.Checked = this.m_ApplicationJob.TargetIsFolder;
             // One of the two must be checked (always)
@@ -261,6 +262,7 @@ namespace Ketarin.Forms
             this.m_ApplicationJob.IgnoreFileInformation = this.chkIgnoreFileInformation.Checked;
             this.m_ApplicationJob.HashType = (HashType)this.cboHashType.SelectedIndex;
             this.m_ApplicationJob.HashVariable = this.cboHashVariable.Text;
+            this.m_ApplicationJob.NumberOfRevisions = (int)this.numNumberOfRevisions.Value;
 
             this.m_ApplicationJob.WebsiteUrl = this.txtWebsite.Text;
             this.m_ApplicationJob.UserNotes = this.txtNotes.Text;
@@ -332,15 +334,9 @@ namespace Ketarin.Forms
             }
         }
 
-        private void rbFileName_CheckedChanged(object sender, EventArgs e)
-        {
-            this.SetAutocompleteSource();
-        }
+        private void rbFileName_CheckedChanged(object sender, EventArgs e) => this.SetAutocompleteSource();
 
-        private void rbDirectory_CheckedChanged(object sender, EventArgs e)
-        {
-            this.SetAutocompleteSource();
-        }
+        private void rbDirectory_CheckedChanged(object sender, EventArgs e) => this.SetAutocompleteSource();
 
         /// <summary>
         /// Sets the appropriate auto complete source.
@@ -533,15 +529,9 @@ namespace Ketarin.Forms
             }
         }
 
-        private void rbFileHippo_CheckedChanged(object sender, EventArgs e)
-        {
-            this.RefreshVariables();
-        }
+        private void rbFileHippo_CheckedChanged(object sender, EventArgs e) => this.RefreshVariables();
 
-        private void rbFixedUrl_CheckedChanged(object sender, EventArgs e)
-        {
-            this.RefreshVariables();
-        }
+        private void rbFixedUrl_CheckedChanged(object sender, EventArgs e) => this.RefreshVariables();
 
         private void bSaveAsDefault_Click(object sender, EventArgs e)
         {
@@ -551,11 +541,10 @@ namespace Ketarin.Forms
             Settings.SetValue("DefaultApplication", xml);
         }
 
-        private void bCancel_Click(object sender, EventArgs e)
-        {
-            // Required for non modal call
-            this.Close();
-        }
+        /// <summary>
+        /// Required for non modal call
+        /// </summary>
+        private void bCancel_Click(object sender, EventArgs e) => this.Close();
 
         #region Instructions
 

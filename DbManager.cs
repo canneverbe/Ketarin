@@ -376,7 +376,8 @@ namespace Ketarin
                 {"UserAgent", "ALTER TABLE jobs ADD UserAgent TEXT"},
                 {"PreviousRelativeLocation", "ALTER TABLE jobs ADD PreviousRelativeLocation TEXT"},
                 {"HashType", "ALTER TABLE jobs ADD HashType INTEGER DEFAULT 0"},
-                {"HashVariable", "ALTER TABLE jobs ADD HashVariable TEXT"}
+                {"HashVariable", "ALTER TABLE jobs ADD HashVariable TEXT"},
+                {"NumberOfRevisions", "ALTER TABLE jobs ADD NumberOfRevisions INTEGER DEFAULT 1"}
             };
 
             ExecuteUpgradeQueries(columns, addColumns);

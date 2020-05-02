@@ -129,13 +129,7 @@ namespace Ketarin
         /// <summary>
         /// Gets the website of an application with all variables replaced.
         /// </summary>
-        public string ExpandedWebsiteUrl
-        {
-            get
-            {
-                return this.m_Variables.ReplaceAllInString(this.WebsiteUrl);
-            }
-        }
+        public string ExpandedWebsiteUrl => this.m_Variables.ReplaceAllInString(this.WebsiteUrl);
 
         /// <summary>
         /// Gets or sets a custom user agent to use for downloads.
@@ -152,6 +146,12 @@ namespace Ketarin
         /// has been downloaded for the application.
         /// </summary>
         public long LastFileSize { get; set; }
+
+        /// <summary>
+        /// Gets or sets the number of revisions of a file that should be stored.
+        /// If > 1, revisions will be saved as FileName.1.ext in the same location.
+        /// </summary>
+        public int NumberOfRevisions { get; set; }
 
         /// <summary>
         /// Gets or sets the last write time of the file which
@@ -515,9 +515,7 @@ namespace Ketarin
         [XmlElement("Variables")]
         public UrlVariableCollection Variables
         {
-            get {
-                return this.m_Variables;
-            }
+            get => this.m_Variables;
             set
             {
                 if (value != null)
@@ -585,7 +583,7 @@ namespace Ketarin
         /// </summary>
         public string PreviousLocation
         {
-            get { return this.previousLocation; }
+            get => this.previousLocation;
             set
             {
                 if (this.previousLocation != value)
@@ -599,13 +597,7 @@ namespace Ketarin
         /// <summary>
         /// Determines whether or not the file exists.
         /// </summary>
-        public bool FileExists
-        {
-            get
-            {
-                return !string.IsNullOrEmpty(this.CurrentLocation) && PathEx.TryGetFileSize(this.CurrentLocation) > 0;
-            }
-        }
+        public bool FileExists => !string.IsNullOrEmpty(this.CurrentLocation) && PathEx.TryGetFileSize(this.CurrentLocation) > 0;
 
         /// <summary>
         /// Determines the current location of the file, using the relative URI if necessary.
@@ -697,7 +689,7 @@ namespace Ketarin
         [XmlElement("TargetPath")]
         public string TargetPath
         {
-            get { return m_TargetPath; }
+            get => m_TargetPath;
             set { m_TargetPath = PathEx.FixDirectorySeparator(value); }
         }
 
@@ -707,7 +699,7 @@ namespace Ketarin
         [XmlElement("Name")]
         public string Name
         {
-            get { return this.m_Name; }
+            get => this.m_Name;
             set
             {
                 this.m_Name = value.Length > 255 ? value.Substring(0, 255) : value;
@@ -1019,6 +1011,65 @@ namespace Ketarin
             }
 
             return doc.InnerXml;
+        }
+
+        /// <summary>
+        /// Will create and rotate backups of the downloaded application.
+        /// </summary>
+        internal void BackupRevisions(string targetFileName)
+        {
+            if (this.NumberOfRevisions <= 1)
+            {
+                // No revisions need to be created, so skip this step.
+                return;
+            }
+
+            if (!File.Exists(targetFileName))
+            {
+                // No revisions need to be saved if this is the first time the file is being downloaded.
+                return;
+            }
+
+            // Now starting from the last revision, bump all file names up,
+            // then delete any number of files that exceed the number of revisions to keep.
+            for (int i = this.NumberOfRevisions - 1; i >= 1; i--)
+            {
+                string targetFileNameWithRevision = MakeRevisionTargetFileName(targetFileName, i);
+                if (File.Exists(targetFileNameWithRevision))
+                {
+                    if (i == this.NumberOfRevisions - 1)
+                    {
+                        // Max. number of revisions already there, so delete last one.
+                        File.Delete(targetFileNameWithRevision);
+                    }
+                    else
+                    {
+                        string target = MakeRevisionTargetFileName(targetFileName, i + 1);
+                        if (File.Exists(target))
+                        {
+                            File.Delete(target);
+                        }
+                        
+                        File.Move(targetFileNameWithRevision, target);
+                    }
+                }
+            }
+            
+            // Save previously downloaded file.
+            File.Copy(targetFileName, MakeRevisionTargetFileName(targetFileName, 1), true);
+        }
+
+        private string MakeRevisionTargetFileName(string targetFileName, int n)
+        {
+            string ext = Path.GetExtension(targetFileName);
+            if (string.IsNullOrEmpty(ext))
+            {
+                return targetFileName + $".{n}";
+            }
+            else
+            {
+                return Path.ChangeExtension(targetFileName, $".{n}{ext}");
+            }
         }
 
         /// <summary>
@@ -1443,7 +1494,8 @@ namespace Ketarin
                                                    SourceTemplate = @SourceTemplate,
                                                    PreviousRelativeLocation = @PreviousRelativeLocation,
                                                    HashVariable = @HashVariable,
-                                                   HashType = @HashType
+                                                   HashType = @HashType,
+                                                   NumberOfRevisions = @NumberOfRevisions
                                              WHERE JobGuid = @JobGuid";
 
                             command.Parameters.Add(new SQLiteParameter("@ApplicationName", this.Name));
@@ -1479,6 +1531,7 @@ namespace Ketarin
                             command.Parameters.Add(new SQLiteParameter("@SourceTemplate", this.SourceTemplate));
                             command.Parameters.Add(new SQLiteParameter("@HashVariable", this.HashVariable));
                             command.Parameters.Add(new SQLiteParameter("@HashType", (int)this.HashType));
+                            command.Parameters.Add(new SQLiteParameter("@NumberOfRevisions", NumberOfRevisions)); 
 
                             // In order to find files if the drive letter has changed (portable USB stick), also remember the 
                             // last relative location.
@@ -1585,6 +1638,7 @@ namespace Ketarin
             this.CheckForUpdatesOnly = Convert.ToBoolean(reader["CheckForUpdateOnly"]);
             this.CachedPadFileVersion = reader["CachedPadFileVersion"] as string;
             this.LastFileSize = Convert.ToInt64(reader["LastFileSize"]);
+            this.NumberOfRevisions = Convert.ToInt32(reader["NumberOfRevisions"]);
             this.LastFileDate = reader["LastUpdated"] as DateTime?;
             this.IgnoreFileInformation = Convert.ToBoolean(reader["IgnoreFileInformation"]);
             this.UserNotes = reader["UserNotes"] as string;

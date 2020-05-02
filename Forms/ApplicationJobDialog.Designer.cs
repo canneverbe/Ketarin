@@ -63,6 +63,8 @@ namespace Ketarin.Forms
             this.txtSpoofReferer = new Ketarin.Forms.VariableTextBox();
             this.tcApplication = new System.Windows.Forms.TabControl();
             this.tpApplication = new System.Windows.Forms.TabPage();
+            this.numNumberOfRevisions = new System.Windows.Forms.NumericUpDown();
+            this.lblNumberOfRevisions = new System.Windows.Forms.Label();
             this.chkEnabled = new System.Windows.Forms.CheckBox();
             this.tpSettings = new System.Windows.Forms.TabPage();
             this.lblHashVariable = new System.Windows.Forms.Label();
@@ -107,6 +109,7 @@ namespace Ketarin.Forms
             this.pnlTarget.SuspendLayout();
             this.tcApplication.SuspendLayout();
             this.tpApplication.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numNumberOfRevisions)).BeginInit();
             this.tpSettings.SuspendLayout();
             this.tpCommands.SuspendLayout();
             this.tableLayoutCommands.SuspendLayout();
@@ -441,6 +444,8 @@ namespace Ketarin.Forms
             // 
             // tpApplication
             // 
+            this.tpApplication.Controls.Add(this.numNumberOfRevisions);
+            this.tpApplication.Controls.Add(this.lblNumberOfRevisions);
             this.tpApplication.Controls.Add(this.chkEnabled);
             this.tpApplication.Controls.Add(this.lblApplicationName);
             this.tpApplication.Controls.Add(this.txtApplicationName);
@@ -457,6 +462,32 @@ namespace Ketarin.Forms
             this.tpApplication.TabIndex = 0;
             this.tpApplication.Text = "Application";
             this.tpApplication.UseVisualStyleBackColor = true;
+            // 
+            // numNumberOfRevisions
+            // 
+            this.numNumberOfRevisions.Location = new System.Drawing.Point(250, 262);
+            this.numNumberOfRevisions.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numNumberOfRevisions.Name = "numNumberOfRevisions";
+            this.numNumberOfRevisions.Size = new System.Drawing.Size(53, 20);
+            this.numNumberOfRevisions.TabIndex = 10;
+            this.numNumberOfRevisions.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // lblNumberOfRevisions
+            // 
+            this.lblNumberOfRevisions.AutoSize = true;
+            this.lblNumberOfRevisions.Location = new System.Drawing.Point(5, 264);
+            this.lblNumberOfRevisions.Name = "lblNumberOfRevisions";
+            this.lblNumberOfRevisions.Size = new System.Drawing.Size(239, 13);
+            this.lblNumberOfRevisions.TabIndex = 9;
+            this.lblNumberOfRevisions.Text = "Total &number of files to keep (original + backups):";
             // 
             // chkEnabled
             // 
@@ -904,6 +935,7 @@ namespace Ketarin.Forms
             this.tcApplication.ResumeLayout(false);
             this.tpApplication.ResumeLayout(false);
             this.tpApplication.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numNumberOfRevisions)).EndInit();
             this.tpSettings.ResumeLayout(false);
             this.tpSettings.PerformLayout();
             this.tpCommands.ResumeLayout(false);
@@ -991,5 +1023,7 @@ namespace Ketarin.Forms
         private ComboBox cboHashType;
         private ComboBox cboHashVariable;
         private Label lblCompareWithHash;
+        private NumericUpDown numNumberOfRevisions;
+        private Label lblNumberOfRevisions;
     }
 }

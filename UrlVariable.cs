@@ -407,12 +407,7 @@ namespace Ketarin
         /// </summary>
         /// <param name="name">Name of the variable without { and }</param>
         /// <param name="formatString">String to check</param>
-        public static bool IsVariableUsedInString(string name, string formatString)
-        {
-            int pos, length;
-            string functionPart;
-            return GetVariablePosition(formatString, name, 0, out pos, out length, out functionPart);
-        }
+        public static bool IsVariableUsedInString(string name, string formatString) => GetVariablePosition(formatString, name, 0, out _, out _, out _);
 
         /// <summary>
         /// Replaces this variable within a string with the given content.
