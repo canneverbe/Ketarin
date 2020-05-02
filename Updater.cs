@@ -793,6 +793,7 @@ namespace Ketarin
                     LogDialog.Log(job, "Pre-update command returned '3', external download");
                     job.LastUpdated = DateTime.Now;
                     job.Save();
+                    job.ExecutePostUpdateCommands();
                     return Status.UpdateSuccessful;
                 }
 
