@@ -1296,7 +1296,7 @@ namespace Ketarin
         {
             try
             {
-                Process.Start("http://wiki.ketarin.org/index.php/Basics");
+                Process.Start("https://github.com/canneverbe/Ketarin/wiki/Basics");
             }
             catch (Exception)
             {
